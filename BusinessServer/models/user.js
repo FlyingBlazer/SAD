@@ -1,17 +1,16 @@
-/**
- * Created by zhugongpu on 14/11/25.
- */
-
 var orm = require('orm');
 
-exports.model = function(db) {
+exports.setup = function(db) {
     return db.define("user", {
-        id: { type: 'serial', key:true },
-        username: { type: 'text' },
-        password: { type: 'text' }
+        id: {type: 'bigInt', mapsTo: 'user_id' },
+        name: {type: 'text', size: 50, mapsTo: 'user_name', unique: true, required: true},
+        password: {type: 'text', size: 150, mapsTo: 'user_password', required: true},
+        tel: {type: 'text', size: 50, mapsTo: 'user_tel', required: true},
+        socialId: {type: 'text', size: 50, mapsTo: 'user_socialid', required: true, unique: true},
+        credit: {type: 'integer', mapsTo: 'user_credit', required: true},
+        email: {type: 'text', size: 100, mapsTo: 'user_email', unique: true}
     },{
         validations: {
-            username: orm.enforce.unique({ ignoreCase: true }, '用户名已存在'),
             password: orm.enforce.ranges.length(6, 16, '密码长度请在6-16位之间')
         }
     });
