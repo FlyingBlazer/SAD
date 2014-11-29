@@ -30,6 +30,11 @@ server.use(function(err, req, res, next) {
                 errcode: -1,
                 errmsg: "ORM Error"
             });
+        } else {
+            res.json({
+                errcode: -1,
+                errmsg: "Internal error"
+            })
         }
     }
 });
