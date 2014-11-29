@@ -2,6 +2,8 @@ var restify = require('restify');
 var server = exports = module.exports = restify.createServer();
 var models = require('./models');
 var orm = require('orm');
+var settings = require('./lib/settings');
+var controllers = require('./controllers');
 
 server.use(restify.queryParser());
 server.use(restify.gzipResponse());
@@ -10,22 +12,24 @@ server.use(restify.bodyParser({
     mapParams: false,
     mapFiles: false
 }));
-server.use(orm.express('mysql://root:yuzhan024@localhost/sad', models));
+server.use(orm.express(settings.dbUrl, models));
 
-function respond(req, res, next) {
-    req.models.administrator.find({}, function(err, admin) {
-        if(err) throw err;
-        console.log(admin[0].name, admin[0].password, admin[0].auth);
-    });
-    res.send('hello ' + req.params.name);
-    next();
-}
+server.post('/user/login', controllers.user.login);
 
-server.get('/login/:name/:pass', require('./controllers/user').login);
 
-server.get('/hello/:name', respond);
-server.head('/hello/:name', respond);
 
 server.use(function(err, req, res, next) {
-    if(err) res.json(err);
+    if(err) {
+        if(err.name == "SADError") {
+            res.json({
+                errcode: err.code,
+                errmsg: err.message
+            });
+        } else if(err.name == "ORMError") {
+            res.json({
+                errcode: -1,
+                errmsg: "ORM Error"
+            });
+        }
+    }
 });

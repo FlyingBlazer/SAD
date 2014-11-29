@@ -1,20 +1,19 @@
+var SADError = require('../lib/SADError');
+
 module.exports = {
     login: login
 };
 
 function login(req, res, next) {
-    var username = req.params.name;
-    var password = req.params.pass;
+    var username = req.body.username;
+    var password = req.body.password;
     req.models.user.one({
         name: username,
         password: password
     }, function(err, user) {
         if(err) return next(err);
         if(!user) {
-            res.json({
-                errcode: 233,
-                errmsg: 'Username or password error'
-            });
+            return next(new SADError("Username or password error", "LOGIN_ERROR"));
         } else {
             res.json({
                 errcode: 0,
