@@ -2,7 +2,7 @@ var orm = require('orm');
 
 exports.setup = function(db) {
     return db.define("appointment", {
-        id: {type: 'serial', mapsTo: 'appointment_id' },
+        id: {type: 'serial'},
         pay_method: {type: 'integer', required: true},
         time: {type: 'timestamp', required: true},
         status: {type: 'integer', required: true},

@@ -34,7 +34,7 @@ exports.define = function(db, models, next) {
     });
     models.user = require('./user').setup(db);
     models.administrator = require('./administrator').setup(db);
-    models.hospitalLevel = require('./hospital_level').setup(db);
+    models.hospital_rating = require('./hospital_rating').setup(db);
     models.hospital = require('./hospital').setup(db);
     models.department = require('./department').setup(db);
     models.doctor = require('./doctor').setup(db);
