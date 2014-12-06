@@ -3,7 +3,8 @@ var util = require('util');
 
 module.exports = {
     LoginFail: LoginFail,
-    UserNotLogin: UserNotLogin
+    UserNotLogin: UserNotLogin,
+    HospitalNotExist: HospitalNotExist
 };
 
 function LoginFail(message) {
@@ -27,3 +28,14 @@ function UserNotLogin(message) {
     this.name = 'UserNotLogin';
 }
 util.inherits(UserNotLogin, restify.RestError);
+
+function HospitalNotExist(message) {
+    restify.RestError.call(this, {
+        restCode: '2001',
+        statusCode: 404,
+        message: message,
+        constructorOpt: HospitalNotExist
+    });
+    this.name = 'HospitalNotExist';
+}
+util.inherits(HospitalNotExist, restify.RestError);
