@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+var debug = require('debug')('SAD-Business');
+var app = require('../app');
+
+var server = app.listen(3000, function() {
+    debug('Business server listening on port ' + server.address().port);
+}).on('error', function (e) {
+    if (e.code == 'EADDRINUSE') {
+        debug('Address in use. Is the server already running?');
+    }
+});
