@@ -6,8 +6,6 @@ var express = require('express');
 var controllers = require('../controllers');
 var router = express.Router();
 
-router.route('/').get(controllers.home);
-
 /**
  * =========================================================
  * |  Front End                                            |
@@ -18,34 +16,39 @@ router.route('/').get(controllers.home);
 
 router.route('/account/register').get(controllers.user.registerPage).post(controllers.user.onRegister);
 router.route('/account/login').get(controllers.user.loginPage).post(controllers.user.onLogin);
-router.route('/account/manage').all(controllers.user.manage);
+router.route('/account/logout').get(controllers.user.onLogout);
+router.route('/account/manage').get(controllers.user.manage);
+router.route('/account/manage/info').get(controllers.user.showUserInformation).post(controllers.user.manageUserInformation);
+router.route('/account/manage/reservation').get(controllers.user.showReservationList);
 
 /* Reservation Workflow */
 
-// Choose location
-// Then redirect back to home page (to choose a hospital)
-// See: http://www.apple.com/choose-your-country/
-router.route('/choose-your-location').get(controllers.reservation.chooseLocation);
+// Home page
+router.route('/').get(controllers.home);
 
-// Review selected hospital detail （incl. all depts)
-// Choose a department
-// See: http://www.guahao.com/hospital/125336754304601
-router.route('/hospital/:hospital_id').get(controllers.reservation.chooseDept);
+// Choose a location
+// No view, just set cookie and redirect to home page (to choose a hospital)
+router.route('/choose-location').get(controllers.reservation.chooseLocation);
 
-// Start reservation, step 1 - choose a doctor
-// See: http://www.guahao.com/department/126707963142052
-router.route('/concierge/reserve/:hospital_id/:dept_id').get(controllers.reservation.chooseDoctor);
+// List hospitals - Show a list of all hospitals in user's city (determined via cookie)
+// Choose a hospital
+router.route('/:city/hospitals').get(controllers.reservation.listHospitals);
 
-// Start reservation, step 2 - choose a time
-// See: http://www.guahao.com/expert/0485132d-c95b-4623-8ff5-67aebce46c87?hospDeptId=126707963142052
-router.route('/concierge/reserve/:hospital_id/:dept_id/:expert_id').get(controllers.reservation.chooseTime);
+// Hospital page - Show all departments and doctors
+// Choose a department and a doctor
+router.route('/concierge/reserve/:hospital_id').get(controllers.reservation.showHospital);
 
-// Start reservation, step 3 - pay (optional step)
-router.route('/concierge/reserve/pay').all(controllers.reservation.pay);
+// Doctor page - Show doctor's detail and available time slots
+// Choose a time
+router.route('/concierge/reserve/:dept_id/:expert_id').get(controllers.reservation.showDoctor);
 
-// Start reservation, step 4 - show result
-// User may take actions
-router.route('/reservation/:reservation_id').all(controllers.reservation.getReservationDetail);
+// Confirmation page - Review (and possibly edit) reservation info
+// Confirm and submit
+router.route('/concierge/reserve/submit').post(controllers.reservation.confirm);
+
+// Show reservation detail
+// User may take actions like pay, print or close
+router.route('/reservation/:reservation_id').get(controllers.reservation.showReservation).post(controllers.reservation.operateReservation);
 
 /**
  * =========================================================

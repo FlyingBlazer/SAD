@@ -22,7 +22,27 @@ exports.onLogin = function(request, response) {
 
 };
 
-// all
+// get
+exports.onLogout = function(request, response) {
+
+};
+
+// get
 exports.manage = function(request, response) {
+
+};
+
+// get
+exports.showUserInformation = function(request, response) {
+
+};
+
+// post
+exports.manageUserInformation = function(request, response) {
+
+};
+
+// get
+exports.showReservationList = function(request, response) {
 
 };

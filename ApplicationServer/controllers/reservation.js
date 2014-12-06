@@ -8,26 +8,31 @@ exports.chooseLocation = function(request, response) {
 };
 
 // get
-exports.chooseDept = function(request, response) {
+exports.listHospitals = function(request, response) {
 
 };
 
 // get
-exports.chooseDoctor = function(request, response) {
+exports.showHospital = function(request, response) {
 
 };
 
 // get
-exports.chooseTime = function(request, response) {
+exports.showDoctor = function(request, response) {
 
 };
 
-// all
-exports.pay = function(request, response) {
+// post
+exports.confirm = function(request, response) {
 
 };
 
-// all
-exports.getReservationDetail = function(request, response) {
+// get
+exports.showReservation = function(request, response) {
+
+};
+
+// post
+exports.operateReservation = function(request, response) {
 
 };
