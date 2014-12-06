@@ -2,14 +2,27 @@
  * Created by renfei on 14/12/6.
  */
 
-exports.register = function(request, response) {
+// get
+exports.registerPage = function(request, response) {
 
 };
 
-exports.login = function(request, response) {
+// post
+exports.onRegister = function(request, response) {
 
 };
 
+// get
+exports.loginPage = function(request, response) {
+
+};
+
+// post
+exports.onLogin = function(request, response) {
+
+};
+
+// all
 exports.manage = function(request, response) {
 
 };
