@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2014 年 11 月 29 日 08:54
+-- 生成日期: 2014 年 12 月 07 日 06:06
 -- 服务器版本: 5.5.20
 -- PHP 版本: 5.3.10
 
@@ -31,8 +31,8 @@ USE `sad`;
 CREATE TABLE IF NOT EXISTS `administrator` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `pass` varchar(150) COLLATE utf8_bin NOT NULL,
-  `auth` int(11) NOT NULL,
+  `pass` varchar(50) COLLATE utf8_bin NOT NULL,
+  `auth` bit(1) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `administrator_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `appointment` (
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `status` int(11) NOT NULL,
   `price` decimal(8,2) NOT NULL,
-  `running_number` varchar(200) COLLATE utf8_bin NOT NULL,
+  `running_number` varchar(50) COLLATE utf8_bin NOT NULL,
   `record_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   UNIQUE KEY `running_number` (`running_number`)
@@ -66,9 +66,9 @@ CREATE TABLE IF NOT EXISTS `appointment` (
 CREATE TABLE IF NOT EXISTS `department` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `hospital_id` int(11) NOT NULL,
-  `name` varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `info` text COLLATE utf8_bin NOT NULL,
-  `tel` varchar(200) COLLATE utf8_bin NOT NULL,
+  `tel` varchar(50) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;
 
@@ -81,10 +81,10 @@ CREATE TABLE IF NOT EXISTS `department` (
 CREATE TABLE IF NOT EXISTS `doctor` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `department_id` int(11) NOT NULL,
-  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `photo` varchar(200) COLLATE utf8_bin NOT NULL,
+  `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `photo` varchar(50) COLLATE utf8_bin DEFAULT NULL,
   `info` text COLLATE utf8_bin NOT NULL,
-  `title` varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `title` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `doctor_photo` (`photo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;
@@ -99,12 +99,12 @@ CREATE TABLE IF NOT EXISTS `hospital` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `rating_id` int(11) NOT NULL,
   `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `province` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `city` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `province` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `city` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `addr` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `tel` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `info` text COLLATE utf8_bin NOT NULL,
-  `site` varchar(200) COLLATE utf8_bin NOT NULL,
+  `site` varchar(200) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `hospital_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;
@@ -120,7 +120,23 @@ CREATE TABLE IF NOT EXISTS `hospital_rating` (
   `meaning` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `meaning` (`meaning`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=11 ;
+
+--
+-- 转存表中的数据 `hospital_rating`
+--
+
+INSERT INTO `hospital_rating` (`id`, `meaning`) VALUES
+(3, '一级丙等医院'),
+(2, '一级乙等医院'),
+(1, '一级甲等医院'),
+(10, '三级丙等医院'),
+(9, '三级乙等医院'),
+(7, '三级特等医院'),
+(8, '三级甲等医院'),
+(6, '二级丙等医院'),
+(5, '二级乙等医院'),
+(4, '二级甲等医院');
 
 -- --------------------------------------------------------
 
@@ -132,12 +148,12 @@ CREATE TABLE IF NOT EXISTS `user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `realname` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `password` varchar(150) COLLATE utf8_bin NOT NULL,
+  `password` varchar(50) COLLATE utf8_bin NOT NULL,
   `tel` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `socialid` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `credit` int(11) NOT NULL,
+  `credit` tinyint(4) NOT NULL,
   `email` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `isactivated` tinyint(1) NOT NULL,
+  `isactivated` bit(1) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_name` (`name`),
   UNIQUE KEY `user_socialid` (`socialid`),
@@ -155,9 +171,8 @@ CREATE TABLE IF NOT EXISTS `working` (
   `doctor_id` int(11) NOT NULL,
   `date` date NOT NULL,
   `period` tinyint(1) NOT NULL,
-  `frequency` char(7) COLLATE utf8_bin NOT NULL,
+  `frequency` tinyint(4) NOT NULL,
   `total_app` int(11) NOT NULL,
-  `remain_app` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;
 
