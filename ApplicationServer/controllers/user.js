@@ -24,7 +24,7 @@ exports.onRegister = function (request, response) {
         });
 
         request.on('end', function () {
-            forwardRequest(queryString.stringify(postData), '/user/signup', function (res) {//TODO 路径
+            forwardRequest(queryString.stringify(postData), '/user/signup', function (res) {
                 if (res.statusCode == 200) {
                     var feedback = '';
                     res.on('data', function (chunck) {
@@ -33,7 +33,8 @@ exports.onRegister = function (request, response) {
                     res.on('end', function () {
                         var result = queryString.parse(feedback);
                         if (result['errcode'] == 0) {//注册成功
-                            //TODO 跳转到用户个人主页
+                            // 跳转到用户个人主页
+                            response.setHeader('Set-Cookie', ['token=' + result['token']]);//将token写入cookie
                             response.render('user');
                         } else {//注册失败
                             //TODO 提示错误信息 [hbs文件也要修改]
@@ -91,10 +92,32 @@ exports.onLogin = function (request, response) {
         });
 
         request.on('end', function () {
-            var params = queryString.parse(postData);
-            //TODO 解释表单数据部分
-            params['username'];
-            params['password'];
+
+            //将数据转发至业务服务器
+            forwardRequest(queryString.stringify(postData), '/user/login', function (res) {
+                if (res.errcode == 200) {
+                    var feedback = '';
+                    res.on('data', function (chunck) {
+                        feedback += chunck;
+                    });
+
+                    res.on('end', function () {
+                        var result = queryString.parse(feedback);
+                        if (result['errcode'] == 0) {//登录成功
+                            response.setHeader('Set-Cookie', ['token=' + result['token']]);//发送token
+
+                            var backURL = request.header('Referer') || '/';
+                            response.redirect(backURL);//重定向到来时的地址
+
+                        } else {//登录失败
+                            response.render('login', {
+                                errorMessage: '用户名或密码错误'
+                            });
+                        }
+                    });
+                } else
+                    console.log(res.errmsg);
+            })
         });
     }
 };
@@ -102,28 +125,63 @@ exports.onLogin = function (request, response) {
 // get
 exports.onLogout = function (request, response) {
     if (request.method.toLowerCase() == 'get') {
-//TODO 跳转到主页
+        //跳转到主页
+        response.setHeader('Set-Cookie', ['']);//清空cookie
+        response.render('index');
     }
 };
 
 // get
 exports.manage = function (request, response) {
     if (request.method.toLowerCase() == 'get') {
-//TODO 跳转到管理页面
+        //跳转到管理页面
+        response.render('user');//TODO 设置个人信息
     }
 };
 
 // get
 exports.showUserInformation = function (request, response) {
-
+    if (request.method.toLowerCase() == 'get') {
+        response.render('profile');//todo 设置个人信息
+    }
 };
 
 // post
 exports.manageUserInformation = function (request, response) {
+    if (request.method.toLowerCase() == 'post') {
+        var postData = '';
+        request.on('data', function (chunck) {
+            postData += chunck;
+        });
 
+        request.on('end', function () {
+            forwardRequest(queryString.stringify(postData), '/user/' + '/update', function (res) {
+                if (res.errcode == 200) {
+                    var feedback = '';
+                    res.on('data', function (chunck) {
+                        feedback += chunck
+                    });
+                    res.on('end', function () {
+                        var result = queryString.parse(feedback);
+                        if (result['errcode'] == 0) {
+                            response.render('profile');//TODO 设置个人信息
+                        } else {
+                            response.render('profile', {
+                                errorMessage: '修改失败'
+                            });
+                        }
+
+                    })
+                } else
+                    console.log(res.errmsg);
+            })
+        });
+    }
 };
 
 // get
 exports.showReservationList = function (request, response) {
-
+    if (request.method.toLowerCase() == 'get') {
+        //TODO
+    }
 };
