@@ -63,3 +63,47 @@ function HospitalNotExist(message) {
     this.name = 'HospitalNotExist';
 }
 util.inherits(HospitalNotExist, restify.RestError);
+
+function ListEmpty(message) {
+    restify.RestError.call(this, {
+        restCode: '1101',
+        statusCode: 404,
+        message: message,
+        constructorOpt: ListEmpty
+    });
+    this.name = 'ListEmpty';
+}
+util.inherits(ListEmpty, restify.RestError);
+
+function ApproveFail(message) {
+    restify.RestError.call(this, {
+        restCode: '1102',
+        statusCode: 404,
+        message: message,
+        constructorOpt: ApproveFail
+    });
+    this.name = 'ApproveFail';
+}
+util.inherits(ApproveFail, restify.RestError);
+
+function RejectFail(message) {
+    restify.RestError.call(this, {
+        restCode: '1103',
+        statusCode: 404,
+        message: message,
+        constructorOpt: RejectFail
+    });
+    this.name = 'RejectFail';
+}
+util.inherits(RejectFail, restify.RestError);
+
+function FailToGetStatus(message) {
+    restify.RestError.call(this, {
+        restCode: '1104',
+        statusCode: 404,
+        message: message,
+        constructorOpt: FailToGetStatus
+    });
+    this.name = 'FailToGetStatus';
+}
+util.inherits(FailToGetStatus, restify.RestError);
