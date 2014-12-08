@@ -1,0 +1,6 @@
+{
+  "port": {
+    "business": 3001,
+    "application": 3000
+  }
+}
