@@ -3,8 +3,8 @@ var orm = require('orm');
 exports.setup = function(db) {
     return db.define("department", {
         id: {type: 'serial'},
-        name: {type: 'text', size: 200, required: true},
+        name: {type: 'text', size: 50, required: true},
         info: {type: 'commonText', required: true},
-        tel: {type: 'text', size: 200, required: true}
+        tel: {type: 'text', size: 50, required: true}
     }).hasOne('hospital', db.models.hospital, {reverse: 'departments'});
 };

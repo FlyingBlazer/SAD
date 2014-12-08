@@ -5,7 +5,7 @@ exports.setup = function(db) {
         id: {type: 'bigInt'},
         name: {type: 'text', size: 50, unique: true, required: true},
         realName: {type: 'text', size: 20, required: true},
-        password: {type: 'text', size: 150, required: true},
+        password: {type: 'text', size: 50, required: true},
         tel: {type: 'text', size: 50, required: true},
         socialId: {type: 'text', size: 50, required: true, unique: true},
         credit: {type: 'integer', required: true},
