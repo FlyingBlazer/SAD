@@ -4,7 +4,8 @@ exports.setup = function(db) {
     return db.define("appointment", {
         id: {type: 'serial'},
         pay_method: {type: 'integer', required: true},
-        time: {type: 'timestamp', required: true},
+        time: {type: 'date', required: true},
+        period: {type: 'tinyInt', required : true},
         status: {type: 'integer', required: true},
         price: {type: 'number', required: true},
         running_number: {type: 'text', size: 50, required: true, unique: true},

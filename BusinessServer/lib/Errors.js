@@ -107,3 +107,113 @@ function FailToGetStatus(message) {
     this.name = 'FailToGetStatus';
 }
 util.inherits(FailToGetStatus, restify.RestError);
+
+function EmptyReservation(message) {
+    restify.RestError.call(this, {
+        restCode: '3001',
+        statusCode: 404,
+        message: message,
+        constructorOpt: EmptyReservation
+    });
+    this.name = 'EmptyReservation';
+}
+util.inherits(EmptyReservation, restify.RestError);
+
+function ReservationUserInvalidFailure(message) {
+    restify.RestError.call(this, {
+        restCode: '3002',
+        statusCode: 404,
+        message: message,
+        constructorOpt: ReservationUserInvalidFailure
+    });
+    this.name = 'ReservationUserInvalidFailure';
+}
+util.inherits(ReservationUserInvalidFailure, restify.RestError);
+
+function ReservationErrorFailure(message) {
+    restify.RestError.call(this, {
+        restCode: '3003',
+        statusCode: 404,
+        message: message,
+        constructorOpt: ReservationErrorFailure
+    });
+    this.name = 'ReservationErrorFailure';
+}
+util.inherits(ReservationErrorFailure, restify.RestError);
+
+function ReservationPeriodFailure(message) {
+    restify.RestError.call(this, {
+        restCode: '3004',
+        statusCode: 404,
+        message: message,
+        constructorOpt: ReservationPeriodFailure
+    });
+    this.name = 'ReservationPeriodFailure';
+}
+util.inherits(ReservationPeriodFailure, restify.RestError);
+
+function ReservationFullFailure(message) {
+    restify.RestError.call(this, {
+        restCode: '3005',
+        statusCode: 404,
+        message: message,
+        constructorOpt: ReservationFullFailure
+    });
+    this.name = 'ReservationFullFailure';
+}
+util.inherits(ReservationFullFailure, restify.RestError);
+
+function CancelFailure(message) {
+    restify.RestError.call(this, {
+        restCode: '3006',
+        statusCode: 404,
+        message: message,
+        constructorOpt: CancelFailure
+    });
+    this.name = 'CancelFailure';
+}
+util.inherits(CancelFailure, restify.RestError);
+
+function PaymentFailure(message) {
+    restify.RestError.call(this, {
+        restCode: '3007',
+        statusCode: 404,
+        message: message,
+        constructorOpt: PaymentFailure
+    });
+    this.name = 'PaymentFailure';
+}
+util.inherits(PaymentFailure, restify.RestError);
+
+function DetailFailure(message) {
+    restify.RestError.call(this, {
+        restCode: '3008',
+        statusCode: 404,
+        message: message,
+        constructorOpt: DetailFailure
+    });
+    this.name = 'DetailFailure';
+}
+util.inherits(DetailFailure, restify.RestError);
+
+function PrintFalure(message) {
+    restify.RestError.call(this, {
+        restCode: '3009',
+        statusCode: 404,
+        message: message,
+        constructorOpt: PrintFalure
+    });
+    this.name = 'PrintFalure';
+}
+util.inherits(PrintFalure, restify.RestError);
+
+function ConfirmFailure(message) {
+    restify.RestError.call(this, {
+        restCode: '3010',
+        statusCode: 404,
+        message: message,
+        constructorOpt: ConfirmFailure
+    });
+    this.name = 'ConfirmFailure';
+}
+util.inherits(ConfirmFailure, restify.RestError);

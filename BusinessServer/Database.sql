@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2014 年 12 月 07 日 06:06
+-- 生成日期: 2014 年 12 月 08 日 14:18
 -- 服务器版本: 5.5.20
 -- PHP 版本: 5.3.10
 
@@ -48,7 +48,8 @@ CREATE TABLE IF NOT EXISTS `appointment` (
   `user_id` bigint(20) NOT NULL,
   `doctor_id` int(11) NOT NULL,
   `pay_method` int(11) NOT NULL,
-  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `time` date NOT NULL,
+  `period` tinyint(1) NOT NULL,
   `status` int(11) NOT NULL,
   `price` decimal(8,2) NOT NULL,
   `running_number` varchar(50) COLLATE utf8_bin NOT NULL,
@@ -86,8 +87,10 @@ CREATE TABLE IF NOT EXISTS `doctor` (
   `info` text COLLATE utf8_bin NOT NULL,
   `title` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `doctor_photo` (`photo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;
+  UNIQUE KEY `doctor_photo` (`photo`),
+  FULLTEXT KEY `name` (`name`),
+  FULLTEXT KEY `info` (`info`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -106,8 +109,9 @@ CREATE TABLE IF NOT EXISTS `hospital` (
   `info` text COLLATE utf8_bin NOT NULL,
   `site` varchar(200) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `hospital_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;
+  UNIQUE KEY `name` (`name`),
+  FULLTEXT KEY `info` (`info`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -153,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `socialid` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `credit` tinyint(4) NOT NULL,
   `email` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `isactivated` bit(1) NOT NULL,
+  `isactivated` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_name` (`name`),
   UNIQUE KEY `user_socialid` (`socialid`),

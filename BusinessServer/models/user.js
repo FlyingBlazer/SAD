@@ -10,6 +10,6 @@ exports.setup = function(db) {
         socialId: {type: 'text', size: 50, required: true, unique: true},
         credit: {type: 'integer', required: true},
         email: {type: 'text', size: 100, unique: true},
-        isActivated: {type: 'boolean', required: true}
+        isActivated: {type: 'tinyInt', required: true}
     });
 };
