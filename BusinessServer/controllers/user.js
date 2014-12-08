@@ -64,15 +64,54 @@ exports.signUp = function(req, res, next) {
         phone = req.body.phone,
         name = req.body.name,
         email = req.body.email;
-    //
+    req.models.user.create({
+        name: username,
+        realName: name,
+        password: password,
+        socialId: id,
+        tel: phone,
+        email: email
+    }, function(err, user) {
+        if(err) return next(err);
+        res.json({
+            errcode: 0,
+            errmsg: 'success',
+            username: username
+        });
+    });
 };
 
 exports.checkName = function(req, res, next) {
     var username = req.params.username;
-    //
+    req.models.user.find({username: username}, function(err, users) {
+        if(err) return next(err);
+        if(users.length > 0) {
+            return next(new Errors.UserAlreadyExisted('User Already Existed'));
+        } else {
+            res.json({
+                errcode: 0,
+                errmsg: 'success',
+                username: username,
+                taken: false
+            });
+        }
+    })
 };
 
 exports.info = function(req, res, next) {
     var userId = req.params.userId;
-    //
+    req.models.user.get(userId, function(err, user) {
+        if(err) return next(err);
+        if(!user) return next(new Errors.UserNotExist('User Not Exist'));
+        res.json({
+            errocde: 0,
+            errmsg: 'success',
+            username: user.name,
+            status_code: user.isActivated,
+            sid: user.socialId,
+            name: user.realName,
+            phone: user.tel,
+            email: user.email
+        });
+    });
 };

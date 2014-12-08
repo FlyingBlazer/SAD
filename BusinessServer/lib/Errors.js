@@ -4,7 +4,9 @@ var util = require('util');
 module.exports = {
     LoginFail: LoginFail,
     UserNotLogin: UserNotLogin,
-    HospitalNotExist: HospitalNotExist
+    HospitalNotExist: HospitalNotExist,
+    UserAlreadyExisted: UserAlreadyExisted,
+    UserNotExist: UserNotExist
 };
 
 function LoginFail(message) {
@@ -28,6 +30,28 @@ function UserNotLogin(message) {
     this.name = 'UserNotLogin';
 }
 util.inherits(UserNotLogin, restify.RestError);
+
+function UserAlreadyExisted(message) {
+    restify.RestError.call(this, {
+        restCode: '1011',
+        statusCode: 403,
+        message: message,
+        constructorOpt: UserAlreadyExisted
+    });
+    this.name = 'UserAlreadyExisted';
+}
+util.inherits(UserAlreadyExisted, restify.RestError);
+
+function UserNotExist(message) {
+    restify.RestError.call(this, {
+        restCode: '1012',
+        statusCode: 404,
+        message: message,
+        constructorOpt: UserNotExist
+    });
+    this.name = 'UserNotExist';
+}
+util.inherits(UserNotExist, restify.RestError);
 
 function HospitalNotExist(message) {
     restify.RestError.call(this, {
