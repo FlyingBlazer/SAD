@@ -1,15 +1,7 @@
 var restify = require('restify');
 var util = require('util');
 
-module.exports = {
-    LoginFail: LoginFail,
-    UserNotLogin: UserNotLogin,
-    HospitalNotExist: HospitalNotExist,
-    UserAlreadyExisted: UserAlreadyExisted,
-    UserNotExist: UserNotExist
-};
-
-function LoginFail(message) {
+exports.LoginFail = function LoginFail(message) {
     restify.RestError.call(this, {
         restCode: '1001',
         statusCode: 401,
@@ -17,10 +9,10 @@ function LoginFail(message) {
         constructorOpt: LoginFail
     });
     this.name = 'LoginFail';
-}
+};
 util.inherits(LoginFail, restify.RestError);
 
-function UserNotLogin(message) {
+exports.UserNotLogin = function UserNotLogin(message) {
     restify.RestError.call(this, {
         restCode: '1002',
         statusCode: 403,
@@ -28,10 +20,10 @@ function UserNotLogin(message) {
         constructorOpt: UserNotLogin
     });
     this.name = 'UserNotLogin';
-}
+};
 util.inherits(UserNotLogin, restify.RestError);
 
-function UserAlreadyExisted(message) {
+exports.UserAlreadyExisted = function UserAlreadyExisted(message) {
     restify.RestError.call(this, {
         restCode: '1011',
         statusCode: 403,
@@ -39,10 +31,10 @@ function UserAlreadyExisted(message) {
         constructorOpt: UserAlreadyExisted
     });
     this.name = 'UserAlreadyExisted';
-}
+};
 util.inherits(UserAlreadyExisted, restify.RestError);
 
-function UserNotExist(message) {
+exports.UserNotExist = function UserNotExist(message) {
     restify.RestError.call(this, {
         restCode: '1012',
         statusCode: 404,
@@ -50,10 +42,10 @@ function UserNotExist(message) {
         constructorOpt: UserNotExist
     });
     this.name = 'UserNotExist';
-}
+};
 util.inherits(UserNotExist, restify.RestError);
 
-function HospitalNotExist(message) {
+exports.HospitalNotExist = function HospitalNotExist(message) {
     restify.RestError.call(this, {
         restCode: '2001',
         statusCode: 404,
@@ -61,10 +53,10 @@ function HospitalNotExist(message) {
         constructorOpt: HospitalNotExist
     });
     this.name = 'HospitalNotExist';
-}
+};
 util.inherits(HospitalNotExist, restify.RestError);
 
-function ListEmpty(message) {
+exports.ListEmpty = function ListEmpty(message) {
     restify.RestError.call(this, {
         restCode: '1101',
         statusCode: 404,
@@ -72,10 +64,10 @@ function ListEmpty(message) {
         constructorOpt: ListEmpty
     });
     this.name = 'ListEmpty';
-}
+};
 util.inherits(ListEmpty, restify.RestError);
 
-function ApproveFail(message) {
+exports.ApproveFail = function ApproveFail(message) {
     restify.RestError.call(this, {
         restCode: '1102',
         statusCode: 404,
@@ -83,10 +75,10 @@ function ApproveFail(message) {
         constructorOpt: ApproveFail
     });
     this.name = 'ApproveFail';
-}
+};
 util.inherits(ApproveFail, restify.RestError);
 
-function RejectFail(message) {
+exports.RejectFail = function RejectFail(message) {
     restify.RestError.call(this, {
         restCode: '1103',
         statusCode: 404,
@@ -94,10 +86,10 @@ function RejectFail(message) {
         constructorOpt: RejectFail
     });
     this.name = 'RejectFail';
-}
+};
 util.inherits(RejectFail, restify.RestError);
 
-function FailToGetStatus(message) {
+exports.FailToGetStatus = function FailToGetStatus(message) {
     restify.RestError.call(this, {
         restCode: '1104',
         statusCode: 404,
@@ -105,10 +97,10 @@ function FailToGetStatus(message) {
         constructorOpt: FailToGetStatus
     });
     this.name = 'FailToGetStatus';
-}
+};
 util.inherits(FailToGetStatus, restify.RestError);
 
-function EmptyReservation(message) {
+exports.EmptyReservation = function EmptyReservation(message) {
     restify.RestError.call(this, {
         restCode: '3001',
         statusCode: 404,
@@ -116,10 +108,10 @@ function EmptyReservation(message) {
         constructorOpt: EmptyReservation
     });
     this.name = 'EmptyReservation';
-}
+};
 util.inherits(EmptyReservation, restify.RestError);
 
-function ReservationUserInvalidFailure(message) {
+exports.ReservationUserInvalidFailure = function ReservationUserInvalidFailure(message) {
     restify.RestError.call(this, {
         restCode: '3002',
         statusCode: 404,
@@ -127,10 +119,10 @@ function ReservationUserInvalidFailure(message) {
         constructorOpt: ReservationUserInvalidFailure
     });
     this.name = 'ReservationUserInvalidFailure';
-}
+};
 util.inherits(ReservationUserInvalidFailure, restify.RestError);
 
-function ReservationErrorFailure(message) {
+exports.ReservationErrorFailure = function ReservationErrorFailure(message) {
     restify.RestError.call(this, {
         restCode: '3003',
         statusCode: 404,
@@ -138,10 +130,10 @@ function ReservationErrorFailure(message) {
         constructorOpt: ReservationErrorFailure
     });
     this.name = 'ReservationErrorFailure';
-}
+};
 util.inherits(ReservationErrorFailure, restify.RestError);
 
-function ReservationPeriodFailure(message) {
+exports.ReservationPeriodFailure = function ReservationPeriodFailure(message) {
     restify.RestError.call(this, {
         restCode: '3004',
         statusCode: 404,
@@ -152,7 +144,7 @@ function ReservationPeriodFailure(message) {
 }
 util.inherits(ReservationPeriodFailure, restify.RestError);
 
-function ReservationFullFailure(message) {
+exports.ReservationFullFailure = function ReservationFullFailure(message) {
     restify.RestError.call(this, {
         restCode: '3005',
         statusCode: 404,
@@ -160,10 +152,10 @@ function ReservationFullFailure(message) {
         constructorOpt: ReservationFullFailure
     });
     this.name = 'ReservationFullFailure';
-}
+};
 util.inherits(ReservationFullFailure, restify.RestError);
 
-function CancelFailure(message) {
+exports.CancelFailure = function CancelFailure(message) {
     restify.RestError.call(this, {
         restCode: '3006',
         statusCode: 404,
@@ -171,10 +163,10 @@ function CancelFailure(message) {
         constructorOpt: CancelFailure
     });
     this.name = 'CancelFailure';
-}
+};
 util.inherits(CancelFailure, restify.RestError);
 
-function PaymentFailure(message) {
+exports.PaymentFailure = function PaymentFailure(message) {
     restify.RestError.call(this, {
         restCode: '3007',
         statusCode: 404,
@@ -182,10 +174,10 @@ function PaymentFailure(message) {
         constructorOpt: PaymentFailure
     });
     this.name = 'PaymentFailure';
-}
+};
 util.inherits(PaymentFailure, restify.RestError);
 
-function DetailFailure(message) {
+exports.DetailFailure = function DetailFailure(message) {
     restify.RestError.call(this, {
         restCode: '3008',
         statusCode: 404,
@@ -193,10 +185,10 @@ function DetailFailure(message) {
         constructorOpt: DetailFailure
     });
     this.name = 'DetailFailure';
-}
+};
 util.inherits(DetailFailure, restify.RestError);
 
-function PrintFalure(message) {
+exports.PrintFalure = function PrintFalure(message) {
     restify.RestError.call(this, {
         restCode: '3009',
         statusCode: 404,
@@ -204,10 +196,10 @@ function PrintFalure(message) {
         constructorOpt: PrintFalure
     });
     this.name = 'PrintFalure';
-}
+};
 util.inherits(PrintFalure, restify.RestError);
 
-function ConfirmFailure(message) {
+exports.ConfirmFailure = function ConfirmFailure(message) {
     restify.RestError.call(this, {
         restCode: '3010',
         statusCode: 404,
@@ -215,5 +207,28 @@ function ConfirmFailure(message) {
         constructorOpt: ConfirmFailure
     });
     this.name = 'ConfirmFailure';
-}
+};
 util.inherits(ConfirmFailure, restify.RestError);
+
+
+exports.DepartmentNotExist = function DepartmentNotExist(message) {
+    restify.RestError.call(this, {
+        restCode: '2101',
+        statusCode: 404,
+        message: message,
+        constructorOpt: DepartmentNotExist
+    });
+    this.name = 'DepartmentNotExist';
+};
+util.inherits(DepartmentNotExist, restify.RestError);
+
+exports.DoctorNotExist = function DoctorNotExist(message) {
+    restify.RestError.call(this, {
+        restCode: '2201',
+        statusCode: 404,
+        message: message,
+        constructorOpt: DoctorNotExist
+    });
+    this.name = 'DoctorNotExist';
+};
+util.inherits(DoctorNotExist, restify.RestError);
