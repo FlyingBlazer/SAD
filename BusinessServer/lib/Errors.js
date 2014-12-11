@@ -33,7 +33,7 @@ util.inherits(UserNotLogin, restify.RestError);
 
 function UserAlreadyExisted(message) {
     restify.RestError.call(this, {
-        restCode: '1011',
+        restCode: '1003',
         statusCode: 403,
         message: message,
         constructorOpt: UserAlreadyExisted
@@ -44,7 +44,7 @@ util.inherits(UserAlreadyExisted, restify.RestError);
 
 function UserNotExist(message) {
     restify.RestError.call(this, {
-        restCode: '1012',
+        restCode: '1004',
         statusCode: 404,
         message: message,
         constructorOpt: UserNotExist
@@ -52,6 +52,17 @@ function UserNotExist(message) {
     this.name = 'UserNotExist';
 }
 util.inherits(UserNotExist, restify.RestError);
+
+function InvalidUserStatus(message) {
+    restify.RestError.call(this, {
+        restCode: '1005',
+        statusCode: 403,
+        message: message,
+        constructorOpt: InvalidUserStatus
+    });
+    this.name = 'InvalidUserStatus';
+}
+util.inherits(InvalidUserStatus, restify.RestError);
 
 function HospitalNotExist(message) {
     restify.RestError.call(this, {
