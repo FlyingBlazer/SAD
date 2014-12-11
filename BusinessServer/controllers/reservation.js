@@ -1,14 +1,15 @@
 var Errors = require('../lib/Errors');
+var uuid = require('node-uuid');
 
 exports.list = function(req, res, next) {
     var user_id = req.body.user_id;
     req.db.driver.execQuery(
-  		"SELECT appointment.id as reservation_id,appointment.time as time,doctor.name as doctor_name,hospital.name as hospital_name,department.name as department_name
-  		 FROM appointment,doctor,department,hospital
-  		 WHERE appointment.user_id=?
-  		 AND appointment.doctor_id=doctor.id
-  		 AND doctor.department_id=department.id
-  		 AND department.hospital_id=hospital.id",
+  		"SELECT appointment.id as reservation_id,appointment.time as time,doctor.name as doctor_name,hospital.name as hospital_name,department.name as department_name "+
+  		"FROM appointment,doctor,department,hospital "+
+  		"WHERE appointment.user_id=? "+
+  		"AND appointment.doctor_id=doctor.id "+
+  		"AND doctor.department_id=department.id "+
+  		"AND department.hospital_id=hospital.id",
   		[user_id],
   		function (err, data) {
   			if(err) return next(err);
@@ -34,6 +35,7 @@ exports.add = function(req, res, next) {
     var adate=req.body.date;
     var aweeknum=req.body.week;
     var aperiod=req.body.period;
+	var aprice=req.body.price;
     var acurrent=req.body.current;
     var afrequency1="00000000";
     var afrequency2="10000000";
@@ -44,24 +46,24 @@ exports.add = function(req, res, next) {
     	if(err) return next(err);
     	if(!user) return next(new Errors.ReservationUserInvalidFailure('User Not Exist!'));
     	else{
-    		req.db.driver.execQuery("SELECT COUNT(*) as number
-    								 FROM appointment
-    								 WHERE doctor_id=?
-    								 AND period=?
-    								 AND time=?",
+    		req.db.driver.execQuery("SELECT COUNT(*) as number "+
+    								"FROM appointment "+
+    								"WHERE doctor_id=? "+
+    								"AND period=? "+
+    								"AND time=?",
     			[adoctor_id,aperiod,adate],
     			function(err,data){
     				if(err) return next(err);
     				if(!data) return next(new Errors.ReservationErrorFailure('Database Error!'));
-					req.db.driver.execQuery("SELECT total_app
-											 FROM working
-											 WHERE doctor_id=?
-											 AND period=?
-											 AND (fequency=?
-											 OR frequency=?
-											 OR (frequency=? AND time=?)
-											 OR frequency like '?')",
-					[adoctor_id,aperiod,afequency1,afrequency2,afrequency4,adate,afrequency3]
+					req.db.driver.execQuery("SELECT total_app "+
+											"FROM working "+
+											"WHERE doctor_id=? "+
+											"AND period=? "+
+											"AND (fequency=? "+
+											"OR frequency=? "+
+											"OR (frequency=? AND time=?) "+
+											"OR frequency like '?')",
+					[adoctor_id,aperiod,afrequency1,afrequency2,afrequency4,adate,afrequency3],
 					function(err,data1){
 						if(err) return next(err);
 						if(!data1) return next(new Errors.ReservationPeriodFailure('No Such Working Period!'));
@@ -75,7 +77,7 @@ exports.add = function(req, res, next) {
 								period: aperiod,
 								status: 0,
 								price: aprice,
-								running_number: ,
+								running_number: uuid.v4(),
 								record_time: acurrent,
 								user: auser_id,
 								doctor: adoctor_id
@@ -130,12 +132,12 @@ exports.pay = function(req, res, next) {
 exports.detail = function(req, res, next) {
     var reservation_id=req.body.reservation_id;
     req.db.driver.execQuery(
-  		"SELECT 
-  		 FROM appointment,doctor,department,hospital
-  		 WHERE appointment.user_id=?
-  		 AND appointment.doctor_id=doctor.id
-  		 AND doctor.department_id=department.id
-  		 AND department.hospital_id=hospital.id",
+  		"SELECT "+
+  		"FROM appointment,doctor,department,hospital "+
+  		"WHERE appointment.user_id=? "+
+  		"AND appointment.doctor_id=doctor.id "+
+  		"AND doctor.department_id=department.id "+
+  		"AND department.hospital_id=hospital.id",
   		 [reservation_id],
   		 function(err,data){
   		 	if(err) return next(err);
@@ -159,12 +161,12 @@ exports.detail = function(req, res, next) {
 exports.print = function(req, res, next) {
     var reservation_id=req.body.reservation_id;
     eq.db.driver.execQuery(
-  		"SELECT 
-  		 FROM appointment,doctor,department,hospital
-  		 WHERE appointment.user_id=?
-  		 AND appointment.doctor_id=doctor.id
-  		 AND doctor.department_id=department.id
-  		 AND department.hospital_id=hospital.id",
+  		"SELECT *"+
+  		"FROM appointment,doctor,department,hospital "+
+  		"WHERE appointment.user_id=? "+
+  		"AND appointment.doctor_id=doctor.id "+
+  		"AND doctor.department_id=department.id "+
+  		"AND department.hospital_id=hospital.id",
   		 [reservation_id],
   		 function(err,data){
   		 	if(err) return next(err);
