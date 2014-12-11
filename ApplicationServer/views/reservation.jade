@@ -1,0 +1,36 @@
+extends layout
+
+block title
+    title 预约详情
+
+block content
+    link(href="/stylesheets/reservation.css", rel="stylesheet", media="all")
+
+    .order-detail
+        ul
+            li.title 取号信息
+            li
+                p
+                    span 联系电话：156*****293
+                    span 取号地点：门诊3楼挂号处
+                p
+                    span 就诊日期：2014-07-28 （具体时间以预约成功短信为准）
+                    span 挂号费：58.00元
+            li.last
+                p
+                    span 预约单号：012014072716582931
+                    span 下单时间：2014-07-27 10:40:41
+                p
+                    span 就诊人：秦秉臣
+                    span 证件号：3101**********0439
+                p
+                    span 预约医生：陈连军 复旦大学附属华山医院-皮肤科
+                    span 门诊类型：特色门诊
+                p
+                    span 就诊类型：初诊
+                p
+                    span 就诊地点：门诊3楼
+                    span 就诊卡号：
+        div
+            button.btn.btn-xs.btn-success 打印
+
