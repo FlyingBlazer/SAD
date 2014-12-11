@@ -78,6 +78,17 @@ exports.ApproveFail = function ApproveFail(message) {
 };
 util.inherits(ApproveFail, restify.RestError);
 
+exports.InvalidUserStatus=function InvalidUserStatus(message) {
+    restify.RestError.call(this, {
+        restCode: '1005',
+        statusCode: 403,
+        message: message,
+        constructorOpt: InvalidUserStatus
+    });
+    this.name = 'InvalidUserStatus';
+}
+util.inherits(InvalidUserStatus, restify.RestError);
+
 exports.RejectFail = function RejectFail(message) {
     restify.RestError.call(this, {
         restCode: '1103',
