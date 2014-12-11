@@ -27,7 +27,9 @@
     <![endif]-->
 </head>
 
-<body>
+<body style="min-width: 980px">
+
+
 
 <div class="container">
 
@@ -60,11 +62,14 @@
                 <input type="checkbox" value="approve" required> 我同意SAD挂号平台的服务协议
             </label>
         </div>
+
+        <!--todo 在该变量有值时显示label -->
+        <h2 class="label" name="errorMessage" style="color: red; font-size: larger"></h2>
+
         <button class="btn btn-lg btn-primary btn-block" type="submit">确认注册</button>
     </form>
 
 </div> <!-- /container -->
-
 
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>

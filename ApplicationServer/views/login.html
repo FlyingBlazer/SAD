@@ -10,6 +10,7 @@
 
     <title>用户登录界面</title>
 
+
     <!-- Bootstrap core CSS -->
     <link href="../public/stylesheets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
@@ -17,7 +18,8 @@
     <link href="../public/stylesheets/login.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <!--[if lt IE 9]>
+    <script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
     <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -29,27 +31,43 @@
 
 <body>
 
+<!-- left-container -->
 <div class="container">
 
-    <form class="form-login" role="form">
-        <h2 class="form-login-heading">请登录</h2>
-        <input type="username" class="form-control" placeholder="请输入用户名" required autofocus>
-        <input type="password" class="form-control" placeholder="请输入密码" required>
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" value="remember-me"> 记住我
-            </label>
-        </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">注册</button>
-    </form>
+    <div class="left-content" style="float: left;">
+        <form class="form-login" role="form">
+            <h2 class="form-login-heading">请登录</h2>
+            <input type="username" class="form-control" placeholder="手机、邮箱或用户名" required autofocus>
+            <input type="password" class="form-control" placeholder="请输入密码" required>
 
-</div> <!-- /container -->
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" value="remember-me"> 记住我
+                </label>
+            </div>
 
+            <!-- todo 在该变量有值时显示label -->
+            <h2 class="label" name="errorMessage" style="color: red; font-size: larger"></h2>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+        </form>
+    </div>
+
+    <div class="right-content" style="float: right">
+        <label class="label" style="color: #000000;font-size: larger">还没有账号？</label>
+        <br />
+        <label class="label" style="color: #000000;font-size: larger">快加入SAD！</label>
+        <br /><br /><br />
+        <label class="text-center" style="margin-left: 30px">全国各大医院聚集</label><br />
+        <label class="text-center" style="margin-left: 30px">顶尖专家在线挂号</label><br />
+        <label class="text-center" style="margin-left: 30px">便捷省心的挂号体验</label><br />
+        <br />
+        <a class="btn btn-lg btn-warning btn-block" href="signup.html">注册</a>
+    </div>
+</div>
+<!-- left-container end-->
 
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
 </body>
-</html>
 
 </html>
