@@ -3,7 +3,7 @@ var Errors = require('../lib/Errors');
 exports.list = function(req, res, next) {
     req.models.user.find({
         isActivated: 0
-    }.only("id","name","socialId","realName").run(function(err, user) {
+    }).only("id","name","socialId","realName").run(function(err, user) {
         if(err) return next(err);
         if(!user) {
             return next(new Errors.ListEmpty("All Users Have Been Activated"));

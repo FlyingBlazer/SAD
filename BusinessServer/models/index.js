@@ -32,6 +32,17 @@ exports.define = function(db, models, next) {
             return '' + value;
         }
     });
+    db.defineType('tinyInt', {
+        datastoreType: function(prop) {
+            return 'tinyint(4)';
+        },
+        valueToProperty: function(value, prop) {
+            return '' + value;
+        },
+        propertyToValue: function(value, prop) {
+            return '' + value;
+        }
+    });
     models.user = require('./user').setup(db);
     models.administrator = require('./administrator').setup(db);
     models.hospital_rating = require('./hospital_rating').setup(db);
