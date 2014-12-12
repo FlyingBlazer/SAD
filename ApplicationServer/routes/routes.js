@@ -10,7 +10,7 @@ router.get('/test', function (req, res, next) {
     res.render("hospital_list", {
         //param
     });
-})
+});
 
 /**
  * =========================================================
@@ -46,7 +46,7 @@ router.route('/concierge/reserve/:hospital_id').get(controllers.reservation.show
 
 // Doctor page - Show doctor's detail and available time slots
 // Choose a time
-router.route('/concierge/reserve/:dept_id/:expert_id').get(controllers.reservation.showDoctor);
+router.route('/concierge/reserve/:expert_id').get(controllers.reservation.showDoctor);
 
 // Confirmation page - Review (and possibly edit) reservation info
 // Confirm and submit
@@ -54,6 +54,7 @@ router.route('/concierge/reserve/submit').post(controllers.reservation.confirm);
 
 // Show reservation detail
 // User may take actions like pay, print or close
+// Optional message
 router.route('/reservation/:reservation_id').get(controllers.reservation.showReservation).post(controllers.reservation.operateReservation);
 
 /**
