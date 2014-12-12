@@ -103,11 +103,29 @@ exports.info = function(req, res, next) {
     req.models.user.get(userId, function(err, user) {
         if(err) return next(err);
         if(!user) return next(new Errors.UserNotExist('User Not Exist'));
+        var status_s;
+        switch(user.isActivated){
+            case 0:
+                status_s = 'candidating';
+                break;
+            case 1:
+                status_s = 'rejected';
+                break;
+            case 2:
+                status_s = 'approved';
+                break;
+            case 3:
+                status_s = 'deprived';
+                break;
+            default:
+                return next(new Errors.InvalidUserStatus("Incalid User Status!"));
+        }
         res.json({
             errocde: 0,
             errmsg: 'success',
             username: user.name,
-            status_code: user.isActivated,
+            status: status_s,
+            credit: user.credit,
             sid: user.socialId,
             name: user.realName,
             phone: user.tel,
