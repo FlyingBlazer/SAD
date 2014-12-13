@@ -22,6 +22,13 @@ function fireRequest(method, path, data, callback) {
     req.end();
 }
 
+Date.prototype.yymmdd = function() {
+    var yy = this.getFullYear().toString().substr(2, 2);
+    var mm = (this.getMonth() + 1).toString();
+    var dd  = this.getDate().toString();
+    return yy + (mm[1] ? mm : "0" + mm[0]) + (dd[1] ? dd : "0" + dd[0]);
+};
+
 // get
 exports.chooseLocation = function(request, response) {
     var username = request.cookies.username;
@@ -162,15 +169,20 @@ exports.showHospital = function(request, response) {
 exports.showDoctor = function(request, response) {
     var username = request.cookies.username;
     var expertId = request.params.expert_id;
+    var hospitalId = request.params.hospital_id;
+    var departmentId = request.params.department_id;
     var url = '/hospital/doctor/' + expertId + '/detail';
 
     fireRequest('GET', url, null, function(res) {
         response.render('doctor', {
             username: username,
+            hospitalId: hospitalId,
+            departmentId: departmentId,
             detail: res
         });
     });
     /*
+     detail:
      {
      "id": 1,
      "name": "张三",
@@ -183,9 +195,34 @@ exports.showDoctor = function(request, response) {
      */
 };
 
-// post
-exports.confirm = function(request, response) {
-    var username = request.cookies.username;
+// post (need x-www-form-urlencoded data)
+exports.onSubmit = function(request, response) {
+    // TODO(Gongpu Zhu): add userId to cookie (otherwise there is no known way to retrieve user id)
+    var userId = request.cookies.userId; // from cookie;
+    var hospitalId = request.body.hospitalId; // from prev page
+    var departmentId = request.body.departmentId; // from prev page
+    var doctorId = request.body.doctorId; // from prev page
+    // TODO(API Documentation): how to present reservation time?
+    var time = request.body.reservationTime; // from prev page
+    var _date = new Date();
+    var date = _date.yymmdd();
+    var paidFlag = false;
+
+    var url = '/user/reservation/add';
+    var data = {
+        user_id: userId,
+        hospital_id: hospitalId,
+        department_id: departmentId,
+        doctor_id: doctorId,
+        date: date,
+        time: time,
+        paid_flag: paidFlag
+    };
+    fireRequest('POST', url, JSON.stringify(data), function(res) {
+        // TODO(API Documentation): modify add reservation api to return mysqli_insert_id
+        var id = res.id;
+        response.redirect(302, '/reservation/' + id);
+    });
 };
 
 // get
@@ -194,10 +231,10 @@ exports.showReservation = function(request, response) {
     var resvId = request.params.reservation_id;
     var url = '/user/reservation/' + resvId + '/detail';
     fireRequest('GET', url, null, function(res) {
-       response.render('reservation', {
-           username: username,
-           detail: res
-       });
+        response.render('reservation', {
+            username: username,
+            detail: res
+        });
     });
 };
 

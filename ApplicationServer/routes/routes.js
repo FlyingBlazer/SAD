@@ -46,11 +46,11 @@ router.route('/concierge/reserve/:hospital_id').get(controllers.reservation.show
 
 // Doctor page - Show doctor's detail and available time slots
 // Choose a time
-router.route('/concierge/reserve/:expert_id').get(controllers.reservation.showDoctor);
+router.route('/concierge/reserve/:hospital_id/:department_id/:expert_id').get(controllers.reservation.showDoctor);
 
 // Confirmation page - Review (and possibly edit) reservation info
 // Confirm and submit
-router.route('/concierge/reserve/submit').post(controllers.reservation.confirm);
+router.route('/concierge/reserve/submit').post(controllers.reservation.onSubmit);
 
 // Show reservation detail
 // User may take actions like pay, print or close
