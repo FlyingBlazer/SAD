@@ -1,5 +1,41 @@
 .hospital-list {
-    width: 960px;
-    margin-left: auto;
-    margin-right: auto;
+}
+
+.hospital {
+    border: 1px solid #dddddd;
+    padding: 10px;
+    margin-bottom: 5px;
+}
+
+.hospital>.image {
+    display: inline-block;
+    background-color: red;
+    width: 100px;
+    height: 100px;
+    vertical-align: top;
+}
+
+.hospital>.hospital-info {
+    display: inline-block;
+    margin-left: 20px;
+    margin-right: 500px;
+}
+
+.hospital-info>.name {
+    display: inline-block;
+    margin-top: 5px;
+}
+
+.hospital-info>.rating {
+    display: inline-block;
+    margin-left: 10px;
+    margin-top: 5px;
+}
+
+.hospital-info>.tel {
+    margin-top: 5px;
+}
+
+.hospital-info>.addr {
+    margin-top: 5px;
 }

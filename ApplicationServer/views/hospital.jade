@@ -1,0 +1,63 @@
+extends layout
+
+block title
+    title 医院
+
+block breadcrumb
+    li
+        a(href='#') 主页
+    li
+        a(href='#') 上海
+    li.active 复旦大学附属华山医院
+
+block header-content-extra
+    h1.hospital-name 复旦大学附属华山医院
+    label.hospital-rating 三级甲等
+    ul.nav.nav-tabs
+        li.active(role='presentation')
+            a(href='#') 医院主页
+        li(role='presentation')
+            a(href='#') 预约挂号
+
+
+
+block site-content
+    style
+    link(href="/stylesheets/hospital.css", rel="stylesheet", media="all")
+
+    div#site-content
+
+
+        div.hospital-list
+            div.hospital
+                img.image
+                div.hospital-info
+                    div.name
+                        a(href="#") 复旦大学附属华山医院
+                    div.rating 三级甲等
+                    div.tel
+                        i.fa.fa-phone.fa-fw
+                        | 021-52889999
+                    div.addr
+                        i.fa.fa-map-marker.fa-fw
+                        | 上海市静安区乌鲁木齐中路12号
+                table.vertical-middle-helper
+                    tr
+                        td.vertical-middle
+                            button.register.btn.btn-primary 挂号
+            div.hospital
+                img.image
+                div.hospital-info
+                    div.name
+                        a(href="#") 复旦大学附属华山医院
+                    div.rating 三级甲等
+                    div.tel
+                        i.fa.fa-phone.fa-fw
+                        | 021-52889999
+                    div.addr
+                        i.fa.fa-map-marker.fa-fw
+                        | 上海市静安区乌鲁木齐中路12号
+                table.vertical-middle-helper
+                    tr
+                        td.vertical-middle
+                            button.register.btn.btn-primary 挂号

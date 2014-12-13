@@ -1,0 +1,43 @@
+.page-heading {
+    background-color: #f5f5f5;
+    padding-left: -100px;
+    padding-right: -100px;
+    overflow: auto;
+    width: 2000px;
+}
+
+.hospital-name {
+    display: inline-block;
+    margin-top: 10px;
+    float: left;
+}
+
+.hospital-rating {
+    display: inline-block;
+    margin-left: 15px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    line-height: 29px;
+    background-color: #ffeed1;
+    color: #f0920a;
+}
+
+.nav-tabs {
+    margin-top: 20px;
+    border: none;
+}
+
+.nav-tabs>li>a {
+    border-radius: 0;
+    border-top-width: 3px;
+}
+
+.nav-tabs>li.active>a,
+.nav-tabs>li.active>a:hover,
+.nav-tabs>li.active>a:focus {
+    border-radius: 0;
+    border-top-width: 3px;
+    border-top-color: #377bee;
+}
