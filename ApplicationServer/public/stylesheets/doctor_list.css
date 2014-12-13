@@ -1,0 +1,28 @@
+.doctor-list {
+}
+
+.doctor {
+    border: 1px solid #dddddd;
+    padding: 10px;
+    margin-bottom: 5px;
+}
+
+.doctor>.image {
+    display: inline-block;
+    background-color: red;
+    width: 70px;
+    height: 70px;
+    vertical-align: top;
+}
+
+.doctor>.doctor-info {
+    display: inline-block;
+    margin-left: 20px;
+    vertical-align: top;
+}
+
+.doctor>.doctor-intro {
+    display: inline-block;
+    margin-left: 50px;
+    width: 150px;
+}

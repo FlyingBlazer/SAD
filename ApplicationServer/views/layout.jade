@@ -11,7 +11,7 @@ html(lang="zh-cn")
         block title
 
     body
-        div#header
+        div#nav
             nav.navbar.navbar-default(role="navigation")
                 div.container-fluid
                     div.navbar-header
@@ -42,7 +42,13 @@ html(lang="zh-cn")
                             li
                                 a(href="#") 退出
 
-    block content
+        div#header
+            div#header-content
+                ol.breadcrumb
+                    block breadcrumb
+                block header-content-extra
+
+    block site-content
 
     div#footer
         p#copyright.text-center © 2014 SRF 版权所有
