@@ -34,9 +34,9 @@ Date.prototype.yymmdd = function() {
 // get
 exports.chooseLocation = function(request, response) {
     var username = request.cookies.username;
-    var city = request.query.city;
-    response.cookie('city', city);
-    response.redirect(302, '/', {
+    var province = request.query.province;
+    response.cookie('province', province);
+    response.redirect(302, '/hospitals', {
         maxAge: 999999,
         httpOnly: true
     });
@@ -68,25 +68,51 @@ exports.listHospitals = function(request, response) {
             list: res.hospitals
         });
     });
-
-    /*
-     list:
-     [
-     {
-     "id": 1,
-     "name": "协和医院"
-     },{
-     "id": 2,
-     "name": "昌平医院"
-     }
-     ]
-     */
 };
 
 // Hospital page - Show all departments and doctors
 // Choose a department and a doctor
 // get
+
 exports.showHospital = function(request, response) {
+    var username = request.cookies.username;
+    var hospitalId = request.params.hospital_id;
+    var detail = null;
+    var departments = null;
+    var doctors = null;
+
+    var url1 = '/hospital/hospital/' + hospitalId + '/detail';
+    fireRequest('GET', url1, null, function(res) {
+        detail = res;
+        onCompletion();
+    });
+
+    var url2 = '/hospital/department/' + hospitalId;
+    fireRequest('GET', url2, null, function(res) {
+        departments = res.departments_list;
+        onCompletion();
+    });
+
+    var url3 = '/hospital/doctor/list?hospitalId=' + hospitalId;
+    fireRequest('GET', url3, null, function(res) {
+        doctors = res.doctors;
+        onCompletion();
+    });
+
+    var onCompletion = function() {
+        if (detail == null || departments == null || doctors == null)
+            return;
+        response.render('hospital', {
+            username: username,
+            detail: detail,
+            departments: departments,
+            doctors: doctors
+        });
+    }
+};
+
+// (!) deprecated method
+exports.showHospital2 = function(request, response) {
     var username = request.cookies.username;
     var hospitalId = request.params.hospital_id;
     var detail = null;
@@ -139,53 +165,6 @@ exports.showHospital = function(request, response) {
 
         fireRequest('GET', url4, null, handleRes);
     };
-
-    /*
-
-     detail:
-     {
-     "errcode": 0,
-     "errmsg": "success",
-     "id": 1,
-     "name": "协和医院",
-     "level": "三级甲等",
-     "province": "北京",
-     "city": "北京",
-     "address": "xxxx",
-     "telephone": "xxxx",
-     "website": "www.google.com"
-     }
-
-     departments:
-     [
-     {"id":1,"name":"xxx","phone":"838141","description":"xxxxxx"},
-     {"id":2,"name":"xxx","phone":"838143","description":"xxxxxx"}
-     ]
-
-
-     doctors:
-     {
-     "department_1": [
-     {
-     "id": 2,
-     "name": "李四",
-     "hospital": "协和医院",
-     "department": "口腔科",
-     "title": "副主任医师",
-     "description": "擅长治疗xxx",
-     "photo_url": "http://www.example.com/383d1adc.png"
-     }
-     {
-     (other doctors)
-     }
-     ],
-
-     "department_2": [
-
-     ]
-     }
-
-     */
 };
 
 // Doctor page - Show doctor's detail and available time slots
@@ -207,18 +186,6 @@ exports.showDoctor = function(request, response) {
         });
     });
     // TODO(API Documentation): Add time slots to returned data
-    /*
-     detail:
-     {
-     "id": 1,
-     "name": "张三",
-     "hospital": "协和医院",
-     "department": "口腔科",
-     "title": "副主任医师",
-     "description": "擅长治疗xxx",
-     "photo_id": "fa7f282d1a52ddc"
-     }
-     */
 };
 
 // post (need x-www-form-urlencoded data)
