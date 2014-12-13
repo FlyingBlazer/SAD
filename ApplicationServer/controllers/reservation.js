@@ -47,9 +47,9 @@ exports.chooseLocation = function(request, response) {
 // Choose a hospital
 // get
 exports.redirectToListHospitals = function(request, response) {
-    if (typeof request.cookies.city !== 'undefined') {
-        var city = request.cookies.city;
-        response.redirect(302, '/' + city + '/hospitals');
+    if (typeof request.cookies.province !== 'undefined') {
+        var province = request.cookies.province;
+        response.redirect(302, '/' + province + '/hospitals');
     } else {
         response.redirect(302, '/beijing/hospitals');
     }
@@ -58,8 +58,9 @@ exports.redirectToListHospitals = function(request, response) {
 // get
 exports.listHospitals = function(request, response) {
     var username = request.cookies.username;
-    var city = request.params.city;
-    var url = '/hospital/hospital/list?city=' + city;
+    var province = request.params.province;
+    // TODO(API Documentation): Change query string parameter to 拼音, name to province (from city)
+    var url = '/hospital/hospital/list?province=' + province;
 
     fireRequest('GET', url, null, function(res) {
         response.render('hospital_list', {
