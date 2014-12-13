@@ -49,6 +49,8 @@ router.route('/concierge/reserve/:hospital_id').get(controllers.reservation.show
 // Choose a time
 router.route('/concierge/reserve/:hospital_id/:department_id/:expert_id').get(controllers.reservation.showDoctor);
 
+
+
 // Submit reserve request
 router.route('/concierge/reserve/submit').post(controllers.reservation.onSubmit);
 

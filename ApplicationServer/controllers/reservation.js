@@ -80,7 +80,6 @@ exports.listHospitals = function(request, response) {
      }
      ]
      */
-
 };
 
 // Hospital page - Show all departments and doctors
@@ -206,6 +205,7 @@ exports.showDoctor = function(request, response) {
             detail: res
         });
     });
+    // TODO(API Documentation): Add time slots to returned data
     /*
      detail:
      {
@@ -220,19 +220,41 @@ exports.showDoctor = function(request, response) {
      */
 };
 
-// Submit reserve request
+// post (need x-www-form-urlencoded data)
+exports.confirm = function(request, response) {
+    var username = request.cookies.username;
+    // TODO(Gongpu Zhu): add userId to cookie (otherwise there is no known way to retrieve user id)
+    var userId = request.cookies.userId;
+    // information below are from _post
+    var department = request.body.department;
+    var departmentId = request.body.departmentId;
+    var doctor = request.body.doctor;
+    var doctorId = request.body.doctorId;
+    var date = request.body.resvDate;
+    var time = request.body.resvTime;
+
+    response.render('new_reservation', {
+        username: username,
+        userId: userId,
+        department: department,
+        departmentId: departmentId,
+        doctor: doctor,
+        doctorId: doctorId,
+        date: date,
+        time: time
+    });
+};
+
+// Submit request
 // post (need x-www-form-urlencoded data)
 exports.onSubmit = function(request, response) {
-    // TODO(Gongpu Zhu): add userId to cookie (otherwise there is no known way to retrieve user id)
     var userId = request.cookies.userId; // from cookie;
     var hospitalId = request.body.hospitalId; // from prev page
     var departmentId = request.body.departmentId; // from prev page
     var doctorId = request.body.doctorId; // from prev page
     // TODO(API Documentation): how to present reservation time?
-    var time = request.body.reservationTime; // from prev page
-    var _date = new Date();
-    var date = _date.yymmdd();
-    var paidFlag = false;
+    var time = request.body.resvTime; // from prev page
+    var date = request.body.resvDate; // from prev page
 
     var url = '/user/reservation/add';
     var data = {
@@ -242,7 +264,7 @@ exports.onSubmit = function(request, response) {
         doctor_id: doctorId,
         date: date,
         time: time,
-        paid_flag: paidFlag
+        paid_flag: false
     };
     fireRequest('POST', url, JSON.stringify(data), function(res) {
         // TODO(API Documentation): modify add reservation api to return mysqli_insert_id
