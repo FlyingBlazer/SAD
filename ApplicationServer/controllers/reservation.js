@@ -29,9 +29,30 @@ Date.prototype.yymmdd = function() {
     return yy + (mm[1] ? mm : "0" + mm[0]) + (dd[1] ? dd : "0" + dd[0]);
 };
 
+// Choose a location
+// No view, just set cookie and redirect to home page
 // get
 exports.chooseLocation = function(request, response) {
     var username = request.cookies.username;
+    var city = request.query.city;
+    response.cookie('city', city);
+    response.redirect(302, '/', {
+        maxAge: 999999,
+        httpOnly: true
+    });
+};
+
+
+// List hospitals - Show a list of all hospitals in user's city
+// Choose a hospital
+// get
+exports.redirectToListHospitals = function(request, response) {
+    if (typeof request.cookies.city !== 'undefined') {
+        var city = request.cookies.city;
+        response.redirect(302, '/' + city + '/hospitals');
+    } else {
+        response.redirect(302, '/beijing/hospitals');
+    }
 };
 
 // get
@@ -62,6 +83,8 @@ exports.listHospitals = function(request, response) {
 
 };
 
+// Hospital page - Show all departments and doctors
+// Choose a department and a doctor
 // get
 exports.showHospital = function(request, response) {
     var username = request.cookies.username;
@@ -165,6 +188,8 @@ exports.showHospital = function(request, response) {
      */
 };
 
+// Doctor page - Show doctor's detail and available time slots
+// Choose a time
 // get
 exports.showDoctor = function(request, response) {
     var username = request.cookies.username;
@@ -195,6 +220,7 @@ exports.showDoctor = function(request, response) {
      */
 };
 
+// Submit reserve request
 // post (need x-www-form-urlencoded data)
 exports.onSubmit = function(request, response) {
     // TODO(Gongpu Zhu): add userId to cookie (otherwise there is no known way to retrieve user id)
@@ -221,19 +247,27 @@ exports.onSubmit = function(request, response) {
     fireRequest('POST', url, JSON.stringify(data), function(res) {
         // TODO(API Documentation): modify add reservation api to return mysqli_insert_id
         var id = res.id;
-        response.redirect(302, '/reservation/' + id);
+        response.redirect(302, '/reservation/' + id + '?state=success');
     });
 };
 
+// Show reservation detail
+// User may take actions like pay, print or close
+// Optional message
 // get
 exports.showReservation = function(request, response) {
     var username = request.cookies.username;
     var resvId = request.params.reservation_id;
+    var state = 'normal';
+    if (typeof request.query.state != 'undefined') {
+        state = request.query.state;
+    }
     var url = '/user/reservation/' + resvId + '/detail';
     fireRequest('GET', url, null, function(res) {
         response.render('reservation', {
             username: username,
-            detail: res
+            detail: res,
+            state: state
         });
     });
 };
