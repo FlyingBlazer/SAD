@@ -29,15 +29,21 @@ block site-content
                 document.getElementById("msg").innerHTML = "重新发送";
             }
         }
-
+        function Validate() {
+            if ($("#password1").val() != $("#password2").val()) {
+                alert("fuck");
+                return false;
+            }
+            return true;
+        }
     .container
-        form.form-login(role='form', action='/account/register', name='postSignupMessage', method='post')
+        form.form-login(role='form', action='/account/register', name='postSignupMessage', method='post', onsubmit="return Validate()")
             h2.form-login-heading 用户注册
             h3.label(style='color: red') 加*为必填项
             input.form-control(type='text', name='username', placeholder='请输入用户名*', style='margin-top: 10px', required='', autofocus='')
             input.form-control(type='text', name='name', placeholder='患者姓名*', required='')
             input.form-control(type='text', name='id', placeholder='身份证号*', required='')
-            input.form-control(type='text', name='tel', placeholder='手机号*', required='')
+            input.form-control(type='text', name='phone', placeholder='手机号*', required='')
             button#msg.btn.btn-link(type='button', onclick='StartCountDown()') 发送验证短信
             div
                 input(style='display: inline', type='radio', name='gender', value='male', checked='')
@@ -45,15 +51,16 @@ block site-content
                 input(style='display: inline', type='radio', name='gender', value='female')
                 | 女
             input.form-control(type='email', name='email', placeholder='邮箱(用于找回您的密码)')
-            input.form-control(type='password', name='password1', placeholder='请输入密码*', required='')
-            input.form-control(type='password', name='password2', placeholder='请再次输入确认密码*', required='')
+            input.form-control(type='password', name='password1', id='password1', placeholder='请输入密码*', required='')
+            input.form-control(type='password', name='password2', id='password2', placeholder='请再次输入确认密码*', required='')
             input.form-control(type='number', name='validationCode', placeholder='您手机收到的短信验证码*', required='')
             .checkbox
                 label
-                    input(style='display: inline', type='checkbox', value='approve', required='')
+                    input(style='display: inline', type='checkbox', value='approve')
                     | 我同意SAD挂号平台的服务许可协议
                 a(style='display: inline;', type='button', href='license.html', target='_blank') 查看
-            h2.label(name='errorMessage', style='color: red; font-size: larger')
+            h2.label(name='errorMessage', id='errorMessageLabel', style='color: red; font-size: larger', content=#{errorMessage})
+            // TODO 加上错误信息显示#{errorMessage}
             br
             button.btn.btn-lg.btn-primary.btn-block(type='submit') 确认注册
 

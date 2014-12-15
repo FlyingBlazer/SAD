@@ -9,14 +9,15 @@ block site-content
         .left-content(style='float: left;')
             form.form-login(role='form', action='/account/login', name='postLoginMessage', method='post')
                 h2.form-login-heading 请登录
-                input#username.form-control(type='username', placeholder='手机、邮箱或用户名', required='', autofocus='')
+                input#username.form-control(type='username', placeholder='用户名', required='', autofocus='')
                 input#password.form-control(type='password', placeholder='请输入密码', required='')
                 .checkbox
                     label
                         input(type='checkbox', value='remember-me')
                         | 记住我
-                // todo 在该变量有值时显示label
+                // TODO 在该变量有值时显示label
                 h2.label(name='errorMessage', style='color: red; font-size: larger')
+                // TODO 加上错误信息显示#{errorMessage}
                 a.btn.btn-lg.btn-primary.btn-block(type='submit') 登录
         .right-content(style='float: left')
             label.label(style='color: #000000;font-size: larger') 还没有账号？

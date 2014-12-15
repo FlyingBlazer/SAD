@@ -24,8 +24,11 @@
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <script src="http://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+
     <![endif]-->
 </head>
+
 
 <body>
 
@@ -52,8 +55,8 @@
 
         <input type="email" class="form-control" name="email" placeholder="邮箱(用于找回您的密码)">
 
-        <input type="password" class="form-control" name="password1" placeholder="请输入密码*" required>
-        <input type="password" class="form-control" name="password2" placeholder="请再次输入确认密码*" required>
+        <input type="password" class="form-control" name="password1" id="password1" placeholder="请输入密码*" required>
+        <input type="password" class="form-control" name="password2" id="password2" placeholder="请再次输入确认密码*" required>
 
         <input type="number" class="form-control" name="validationCode" placeholder="您手机收到的短信验证码*" required>
 
@@ -65,7 +68,7 @@
         </div>
         <h2 class="label" name="errorMessage" style="color: red; font-size: larger"></h2>
         <br />
-        <button class="btn btn-lg btn-primary btn-block" type="submit">确认注册</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" onsubmit="validate()">确认注册</button>
     </form>
 </div> <!-- /container -->
 
@@ -97,6 +100,14 @@
             clearInterval(timer);
             document.getElementById("msg").innerHTML = "重新发送";
         }
+    }
+    function validate()
+    {
+        if($("#password1").val()  != $("#password2").val()){
+            alert("fuck");
+            return false;
+        }
+        return true;
     }
     //-->
 </script>
