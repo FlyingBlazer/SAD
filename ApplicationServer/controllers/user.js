@@ -19,8 +19,8 @@ exports.onRegister = function (request, response) {
         var postData = '';
 
         //接收数据块
-        request.on('data', function (chunck) {
-            postData += chunck;
+        request.on('data', function (chunk) {
+            postData += chunk;
         });
 
         request.on('end', function () {
@@ -29,8 +29,8 @@ exports.onRegister = function (request, response) {
             forwardRequestGET('/user/' + username + '/check', function (checkResponse) {
                 if (checkResponse.statusCode == 200) {
                     var checkFeedback = '';
-                    checkFeedback.on('data', function (chunck) {
-                        checkFeedback += chunck;
+                    checkFeedback.on('data', function (chunk) {
+                        checkFeedback += chunk;
                     });
 
                     checkFeedback.on('end', function () {
@@ -41,16 +41,17 @@ exports.onRegister = function (request, response) {
                                 forwardRequestPOST(queryString.stringify(postData), '/user/signup', function (res) {//将请求转发到服务器
                                     if (res.statusCode == 200) {
                                         var feedback = '';//应用服务器返回的结果
-                                        res.on('data', function (chunck) {
-                                            feedback += chunck;
+                                        res.on('data', function (chunk) {
+                                            feedback += chunk;
                                         });
                                         res.on('end', function () {
                                             var result = queryString.parse(feedback);
                                             if (result['errcode'] == 0) {//注册成功
                                                 // 跳转到用户个人主页
-                                                setCookie(response, result['username']);//将token写入cookie
 
                                                 getUserInfo(username, function (userInfo) {
+                                                    setCookie(response, userInfo);//将个人信息写入cookie
+                                                    // 跳转到user页面
                                                     response.render('user', {
                                                         name: userInfo['name'],
                                                         status: userInfo['status'],
@@ -134,8 +135,8 @@ exports.onLogin = function (request, response) {
         var postData = '';
 
         //接收数据块
-        request.on('data', function (chunck) {
-            postData += chunck;
+        request.on('data', function (chunk) {
+            postData += chunk;
         });
 
         request.on('end', function () {
@@ -144,17 +145,19 @@ exports.onLogin = function (request, response) {
             forwardRequestPOST(queryString.stringify(postData), '/user/login', function (res) {
                 if (res.errcode == 200) {
                     var feedback = '';
-                    res.on('data', function (chunck) {
-                        feedback += chunck;
+                    res.on('data', function (chunk) {
+                        feedback += chunk;
                     });
 
                     res.on('end', function () {
                         var result = queryString.parse(feedback);
                         if (result['errcode'] == 0) {//登录成功
-                            setCookie(response, result['username']);//设置cookie
-                            var backURL = request.header('Referer') || '/';
-                            response.redirect(backURL);//重定向到来时的地址
 
+                            getUserInfo(result['username'], function (userInfo) {
+                                setCookie(response, userInfo);//设置cookie
+                                var backURL = request.header('Referer') || '/';
+                                response.redirect(backURL);//重定向到来时的地址
+                            });
                         } else {//登录失败
                             response.render('login', {
                                 errorMessage: '用户名或密码错误'
@@ -197,6 +200,7 @@ exports.manage = function (request, response) {
 /**
  * 返回用户信息
  * @param username
+ * @param onSucceedCallback 参数为userInfo
  */
 function getUserInfo(username, onSucceedCallback) {
     //从业务服务器检索用户信息
@@ -204,8 +208,8 @@ function getUserInfo(username, onSucceedCallback) {
         if (res.errcode == 200) {
             var feedback = '';
 
-            res.on('data', function (chunck) {
-                feedback += chunck;
+            res.on('data', function (chunk) {
+                feedback += chunk;
             });
 
             res.on('end', function () {
@@ -249,16 +253,16 @@ exports.manageUserInformation = function (request, response) {
         var username = getUsernameFromCookie(request);
 
         var postData = '';
-        request.on('data', function (chunck) {
-            postData += chunck;
+        request.on('data', function (chunk) {
+            postData += chunk;
         });
 
         request.on('end', function () {
             forwardRequestPOST(queryString.stringify(postData), '/user/' + username + '/update', function (res) {
                 if (res.errcode == 200) {
                     var feedback = '';
-                    res.on('data', function (chunck) {
-                        feedback += chunck
+                    res.on('data', function (chunk) {
+                        feedback += chunk
                     });
                     res.on('end', function () {
                         var result = queryString.parse(feedback);
@@ -305,8 +309,8 @@ function showReservations(username, params, response) {
     forwardRequestGET('/user/reservation/list/?' + params, function (res) {
         if (res.errcode == 200) {
             var feedback = '';
-            res.on('data', function (chunck) {
-                feedback += chunck;
+            res.on('data', function (chunk) {
+                feedback += chunk;
             });
 
             res.on('end', function () {
@@ -343,10 +347,13 @@ function getUsernameFromCookie(request) {
 
 /**
  * 在header中设置cookie
+ * cookie内包含完整的用户信息
  * @param response
+ * @param userInfo 完整的个人信息
  */
-function setCookie(response, username) {
-    response.setHeader('Set-Cookie', 'username=' + username);
+function setCookie(response, userInfo) {
+    // 设置完整用户信息
+    response.setHeader('Set-Cookie', ['username=' + userInfo['username'], 'id=' + userInfo['id'], 'name=' + userInfo['name'], 'phone=' + userInfo['phone'], 'email=' + userInfo['email']]);
 }
 
 /**
