@@ -1,12 +1,26 @@
 var Errors = require('../lib/Errors');
 
 exports.list = function(req, res, next) {
-    req.models.hospital.find({}).only("id", "name").run(function(err, result) {
+    req.models.hospital.find({province: req.query.province}, function(err, hospitals) {
         if(err) return next(err);
+        var ret = [];
+        hospitals.forEach(function(hospital) {
+            ret.push({
+                id: hospital.id,
+                name: hospital.name,
+                level: hospital.rating.meaning,
+                province: hospital.province,
+                city: hospital.city,
+                address: hospital.addr,
+                telephone: hospital.tel,
+                website: hospital.site,
+                description: hospital.info
+            })
+        });
         res.json({
             errcode: 0,
             errmsg: 'success',
-            hospitals: result
+            hospitals: ret
         });
     });
 };
@@ -26,7 +40,8 @@ exports.detail = function(req, res, next) {
             city: result.city,
             address: result.addr,
             telephone: result.tel,
-            website: result.site
+            website: result.site,
+            description: result.info
         });
     });
 };
