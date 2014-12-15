@@ -30,8 +30,8 @@ block site-content
             }
         }
         function Validate() {
-            if ($("#password1").val() != $("#password2").val()) {
-                alert("fuck");
+            if ($("#password").val() != $("#password2").val()) {
+                alert("两次输入密码不一致！");
                 return false;
             }
             return true;
@@ -51,7 +51,7 @@ block site-content
                 input(style='display: inline', type='radio', name='gender', value='female')
                 | 女
             input.form-control(type='email', name='email', placeholder='邮箱(用于找回您的密码)')
-            input.form-control(type='password', name='password1', id='password1', placeholder='请输入密码*', required='')
+            input.form-control(type='password', name='password', id='password', placeholder='请输入密码*', required='')
             input.form-control(type='password', name='password2', id='password2', placeholder='请再次输入确认密码*', required='')
             input.form-control(type='number', name='validationCode', placeholder='您手机收到的短信验证码*', required='')
             .checkbox
@@ -59,7 +59,7 @@ block site-content
                     input(style='display: inline', type='checkbox', value='approve')
                     | 我同意SAD挂号平台的服务许可协议
                 a(style='display: inline;', type='button', href='license.html', target='_blank') 查看
-            h2.label(name='errorMessage', id='errorMessageLabel', style='color: red; font-size: larger', content=#{errorMessage})
+            h2.label(name='errorMessage', style='color: red; font-size: larger') #{errorMessage}
             // TODO 加上错误信息显示#{errorMessage}
             br
             button.btn.btn-lg.btn-primary.btn-block(type='submit') 确认注册
