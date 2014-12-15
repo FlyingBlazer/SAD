@@ -1,0 +1,38 @@
+extends layout
+block title
+    title 登陆界面
+
+block site-content
+    link(href="/stylesheets/login.css", rel="stylesheet", media="all")
+
+    .container
+        .left-content(style='float: left;')
+            form.form-login(role='form', action='/account/login', name='postLoginMessage', method='post')
+                h2.form-login-heading 请登录
+                input#username.form-control(type='username', placeholder='手机、邮箱或用户名', required='', autofocus='')
+                input#password.form-control(type='password', placeholder='请输入密码', required='')
+                .checkbox
+                    label
+                        input(type='checkbox', value='remember-me')
+                        | 记住我
+                // todo 在该变量有值时显示label
+                h2.label(name='errorMessage', style='color: red; font-size: larger')
+                a.btn.btn-lg.btn-primary.btn-block(type='submit') 登录
+        .right-content(style='float: left')
+            label.label(style='color: #000000;font-size: larger') 还没有账号？
+            br
+            label.label(style='color: #000000;font-size: larger') 快加入SAD！
+            br
+            br
+            br
+            label.text-center(style='margin-left: 30px') 全国各大医院聚集
+            br
+            label.text-center(style='margin-left: 30px') 顶尖专家在线挂号
+            br
+            label.text-center(style='margin-left: 30px') 便捷省心的挂号体验
+            br
+            br
+            a.btn.btn-lg.btn-warning.btn-block(href='signup.html') 注册
+    // left-container end
+    // IE10 viewport hack for Surface/desktop Windows 8 bug
+    script(src='../../assets/js/ie10-viewport-bug-workaround.js')
