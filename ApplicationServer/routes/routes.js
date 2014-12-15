@@ -7,9 +7,13 @@ var controllers = require('../controllers');
 var router = express.Router();
 
 router.get('/test', function (req, res, next) {
-    res.render("doctor_list", {
+    res.render("signup", {
         //param
+
     });
+
+
+    next();
 });
 
 /**
