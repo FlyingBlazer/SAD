@@ -24,28 +24,60 @@ exports.onRegister = function (request, response) {
         });
 
         request.on('end', function () {
-            forwardRequestPOST(queryString.stringify(postData), '/user/signup', function (res) {//将请求转发到服务器
-                if (res.statusCode == 200) {
-                    var feedback = '';//应用服务器返回的结果
-                    res.on('data', function (chunck) {
-                        feedback += chunck;
+            //查找当前用户是否存在
+            var username = queryString.stringify(postData)['username'];
+            forwardRequestGET('/user/' + username + '/check', function (checkResponse) {
+                if (checkResponse.statusCode == 200) {
+                    var checkFeedback = '';
+                    checkFeedback.on('data', function (chunck) {
+                        checkFeedback += chunck;
                     });
-                    res.on('end', function () {
-                        var result = queryString.parse(feedback);
-                        if (result['errcode'] == 0) {//注册成功
-                            // 跳转到用户个人主页
-                            setCookie(response, result['username']);//将token写入cookie
-                            response.render('user');
-                        } else {//注册失败
-                            //提示错误信息
-                            response.render('signup', {
-                                errorMessage: result['errmsg']
-                            });
-                        }
+
+                    checkFeedback.on('end', function () {
+                        var checkResult = queryString.parse(checkFeedback);
+
+                        if (checkResult['errcode'] == 0) {
+                            if (checkResult['taken'] == false) {//未注册
+                                forwardRequestPOST(queryString.stringify(postData), '/user/signup', function (res) {//将请求转发到服务器
+                                    if (res.statusCode == 200) {
+                                        var feedback = '';//应用服务器返回的结果
+                                        res.on('data', function (chunck) {
+                                            feedback += chunck;
+                                        });
+                                        res.on('end', function () {
+                                            var result = queryString.parse(feedback);
+                                            if (result['errcode'] == 0) {//注册成功
+                                                // 跳转到用户个人主页
+                                                setCookie(response, result['username']);//将token写入cookie
+
+                                                getUserInfo(username, function (userInfo) {
+                                                    response.render('user', {
+                                                        name: userInfo['name'],
+                                                        status: userInfo['status'],
+                                                        credit: userInfo['credit']
+                                                    });
+                                                });
+                                            } else {//注册失败
+                                                //提示错误信息
+                                                response.render('signup', {
+                                                    errorMessage: result['errmsg']
+                                                });
+                                            }
+                                        });
+                                    } else {//失败
+                                        console.log(res.errmsg);
+                                    }
+                                });
+                            } else {//账号已存在
+                                response.render('signup', {
+                                    errorMessage: '账号已存在'
+                                });
+                            }
+                        } else
+                            console.log(checkResult.errmsg);
                     });
-                } else {//失败
-                    console.log(res.errmsg);
-                }
+                } else
+                    console.log(checkResponse.errmsg);
             });
         });
     }
@@ -254,6 +286,7 @@ exports.showReservationList = function (request, response) {
         var username = getUsernameFromCookie(request);
 
         var queryStirngURL = queryString.parse(request.url);
+        c
 
         var params = 'user-id=' + username + '&time=' + queryStirngURL['time'] + '&hosipital-id=' + queryStirngURL['hosipital-id']
             + '&department-id=' + queryStirngURL['department-id'];
