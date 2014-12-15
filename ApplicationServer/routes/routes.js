@@ -7,10 +7,10 @@ var controllers = require('../controllers');
 var router = express.Router();
 
 router.get('/test', function (req, res, next) {
-    res.render("hospital_list", {
+    res.render("doctor_list", {
         //param
     });
-})
+});
 
 /**
  * =========================================================
@@ -36,8 +36,9 @@ router.route('/').get(controllers.home);
 // No view, just set cookie and redirect to home page (to choose a hospital)
 router.route('/choose-location').get(controllers.reservation.chooseLocation);
 
-// List hospitals - Show a list of all hospitals in user's city (determined via cookie)
+// List hospitals - Show a list of all hospitals in user's city
 // Choose a hospital
+router.route('/hospitals').get(controllers.reservation.redirectToListHospitals);
 router.route('/:city/hospitals').get(controllers.reservation.listHospitals);
 
 // Hospital page - Show all departments and doctors
@@ -46,14 +47,17 @@ router.route('/concierge/reserve/:hospital_id').get(controllers.reservation.show
 
 // Doctor page - Show doctor's detail and available time slots
 // Choose a time
-router.route('/concierge/reserve/:dept_id/:expert_id').get(controllers.reservation.showDoctor);
+router.route('/concierge/reserve/:hospital_id/:department_id/:expert_id').get(controllers.reservation.showDoctor);
 
-// Confirmation page - Review (and possibly edit) reservation info
-// Confirm and submit
-router.route('/concierge/reserve/submit').post(controllers.reservation.confirm);
+// Confirm reservation
+router.route('/concierge/reserve/confirm').post(controllers.reservation.confirm);
+
+// Submit reserve request
+router.route('/concierge/reserve/submit').post(controllers.reservation.onSubmit);
 
 // Show reservation detail
 // User may take actions like pay, print or close
+// Optional message
 router.route('/reservation/:reservation_id').get(controllers.reservation.showReservation).post(controllers.reservation.operateReservation);
 
 /**
