@@ -2,7 +2,7 @@ var Errors = require('../lib/Errors');
 var uuid = require('node-uuid');
 
 exports.list = function(req, res, next) {
-    var user_id = req.body.user_id;
+    var user_id = req.query.userid;
     req.db.driver.execQuery(
   		"SELECT appointment.id as reservation_id,appointment.time as time,doctor.name as doctor_name,hospital.name as hospital_name,department.name as department_name "+
   		"FROM appointment,doctor,department,hospital "+
@@ -34,7 +34,7 @@ exports.add = function(req, res, next) {
     var adoctor_id=req.body.doctor_id;
     var adate=req.body.date;
     var aweeknum=req.body.week;
-    var aperiod=req.body.period;
+    var aperiod=req.body.time == 'morning' ? 1 : (req.body.time == 'afternoon' ? 2 : 3);
 	var aprice=req.body.price;
     var acurrent=req.body.current;
     var afrequency1="00000000";
@@ -71,20 +71,20 @@ exports.add = function(req, res, next) {
 							return next(new Errors.ReservationFullFailure("Appointment Full!"));
 						}
 						else{
-							req.models.appointment.create([{
+							req.models.appointment.create({
 								pay_method:apay_method,
 								time:adate,
 								period: aperiod,
 								status: 0,
 								price: aprice,
 								running_number: uuid.v4(),
-								record_time: acurrent,
 								user: auser_id,
 								doctor: adoctor_id
-							}],function(error,items){
+							},function(error,item){
 								res.json({
                 					errcode: 0,
-			                		errmsg: 'success'
+			                		errmsg: 'success',
+									id: item.id
             					});
 							});
 						}
@@ -142,40 +142,21 @@ exports.detail = function(req, res, next) {
   		 function(err,data){
   		 	if(err) return next(err);
   		 	if(!data) return next(new Errors.DetailFalure("No Such Appointment!"));
+			 var d = new Date(data[0]['time']);
   		 	res.json({
   		 		errcode: 0,
   		 		errmsg: "success",
   		 		reservation_id: data[0]['reservation'],
-  		 		runnint_number: data[0]['running_number'],
-  		 		appointment_time: data[0]['time'],
+				date: d.Format('yyyy-MM-dd'),
+				time: d.Format('hh:mm:ss'),
   		 		doctor_name: data[0]['doctor_name'],
   		 		department_name: data[0]['department_name'],
   		 		hospital_name: data[0]['hospital_name'],
-  		 		record_time: data[0]['record_time'],
+				submission_date: data[0]['record_time'],
   		 		price: data[0]['price'],
   		 		status: data[0]['status']
   		 	});
   		 });
-};
-
-exports.print = function(req, res, next) {
-    var reservation_id=req.body.reservation_id;
-    eq.db.driver.execQuery(
-  		"SELECT *"+
-  		"FROM appointment,doctor,department,hospital "+
-  		"WHERE appointment.user_id=? "+
-  		"AND appointment.doctor_id=doctor.id "+
-  		"AND doctor.department_id=department.id "+
-  		"AND department.hospital_id=hospital.id",
-  		 [reservation_id],
-  		 function(err,data){
-  		 	if(err) return next(err);
-  		 	if(!data) return next(new Errors.PrintFalure("No Such Appointment!"));
-  		 	
-  		 });
-    ///<summary>
-    ///TODO-实现打(qu)印(ta)功(miao)能(de)
-    ///</summary>
 };
 
 exports.confirm = function(req, res, next) {

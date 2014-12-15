@@ -17,6 +17,7 @@ exports.login =function(req, res, next) {
                 errcode: 0,
                 errmsg: 'success',
                 username: username,
+                userid: user.id,
                 token: 123
             });
         }
