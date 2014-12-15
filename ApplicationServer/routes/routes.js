@@ -58,7 +58,7 @@ router.route('/concierge/reserve/submit').post(controllers.reservation.onSubmit)
 // Show reservation detail
 // User may take actions like pay, print or close
 // Optional message
-router.route('/reservation/:reservation_id').get(controllers.reservation.showReservation).post(controllers.reservation.operateReservation);
+router.route('/reservation/:doctor_id/:reservation_id').get(controllers.reservation.showReservation).post(controllers.reservation.operateReservation);
 
 /**
  * =========================================================
