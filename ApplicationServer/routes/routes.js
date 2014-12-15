@@ -39,7 +39,7 @@ router.route('/choose-location').get(controllers.reservation.chooseLocation);
 // List hospitals - Show a list of all hospitals in user's city
 // Choose a hospital
 router.route('/hospitals').get(controllers.reservation.redirectToListHospitals);
-router.route('/:city/hospitals').get(controllers.reservation.listHospitals);
+router.route('/:province/hospitals').get(controllers.reservation.listHospitals);
 
 // Hospital page - Show all departments and doctors
 // Choose a department and a doctor

@@ -35,11 +35,11 @@ Date.prototype.yymmdd = function() {
 exports.chooseLocation = function(request, response) {
     var username = request.cookies.username;
     var province = request.query.province;
-    response.cookie('province', province);
-    response.redirect(302, '/hospitals', {
+    response.cookie('province', province, {
         maxAge: 999999,
         httpOnly: true
     });
+    response.redirect(302, '/hospitals');
 };
 
 // List hospitals - Show a list of all hospitals in user's city
@@ -300,7 +300,4 @@ exports.showReservation = function(request, response) {
 // post
 exports.operateReservation = function(request, response) {
     var username = request.cookies.username;
-
-
-
 };
