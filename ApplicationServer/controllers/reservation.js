@@ -11,10 +11,14 @@ function fireRequest(method, path, data, callback) {
         path: path
     };
     var http = require('http');
+    var resdata = '';
     var req = http.request(options, function(res) {
         res.setEncoding('utf8');
         res.on('data', function(chunk) {
-            callback(JSON.parse(chunk));
+            resdata += chunk;
+        });
+        res.on('end', function() {
+            callback(JSON.parse(resdata));
         });
     });
     if (data !== null)
@@ -33,12 +37,16 @@ Date.prototype.yymmdd = function() {
 // No view, just set cookie and redirect to home page
 // get
 exports.chooseLocation = function(request, response) {
-    var province = request.query.province;
-    response.cookie('province', province, {
-        maxAge: 999999,
-        httpOnly: true
-    });
-    response.redirect(302, '/hospitals');
+    if (typeof request.query.province !== 'undefined') {
+        var province = request.query.province;
+        response.cookie('province', province, {
+            maxAge: 999999,
+            httpOnly: true
+        });
+        response.redirect(302, '/hospitals');
+    } else {
+        response.redirect(302, '/');
+    }
 };
 
 // List hospitals - Show a list of all hospitals in user's city
