@@ -304,11 +304,11 @@ exports.operateReservation = function(request, response) {
 // test
 exports.test = function(request, response) {
     var file;
-    if (request.params.template == new_reservation)
+    if (request.params.template == 'new_reservation')
         file = '/new_reservation.json';
-    else if (request.params.template == hospital)
+    else if (request.params.template == 'hospital')
         file = '/hospital.json';
-    else if (request.params.template == doctor)
+    else if (request.params.template == 'doctor')
         file = '/doctor.json';
     else
         file = '/testfile.json';

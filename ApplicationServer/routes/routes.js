@@ -6,16 +6,6 @@ var express = require('express');
 var controllers = require('../controllers');
 var router = express.Router();
 
-router.get('/test', function (req, res, next) {
-    res.render("signup", {
-        //param
-
-    });
-
-
-    next();
-});
-
 /**
  * =========================================================
  * |  Front End                                            |
@@ -33,17 +23,8 @@ router.route('/account/manage/reservation').get(controllers.user.showReservation
 
 /* Reservation Workflow */
 
-if (false) {
-    router.route('/:template/').get(controllers.home);
-    router.route('/:template/choose-location').get(controllers.reservation.test);
-    router.route('/:template/hospitals').get(controllers.reservation.test);
-    router.route('/:template/:province/hospitals').get(controllers.reservation.test);
-    router.route('/:template/concierge/reserve/:hospital_id').get(controllers.reservation.test);
-    router.route('/:template/concierge/reserve/:hospital_id/:department_id/:expert_id').get(controllers.reservation.test);
-    router.route('/:template/concierge/reserve/confirm').get(controllers.reservation.test);
-    router.route('/:template/concierge/reserve/submit').get(controllers.reservation.test);
-    router.route('/:template/reservation/:doctor_id/:reservation_id').get(controllers.reservation.test);
-}
+// Test
+router.route('/test/:template/').get(controllers.reservation.test);
 
 // Home page
 router.route('/').get(controllers.home);
