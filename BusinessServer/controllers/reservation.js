@@ -4,7 +4,7 @@ var uuid = require('node-uuid');
 exports.list = function(req, res, next) {
     var user_id = req.query.userid;
     req.db.driver.execQuery(
-  		"SELECT appointment.id as reservation_id,appointment.time as time,doctor.name as doctor_name,hospital.name as hospital_name,department.name as department_name "+
+  		"SELECT appointment.id as reservation_id, appointment.price as price,appointment.status as status, appointment.time as time,doctor.name as doctor_name,hospital.name as hospital_name,department.name as department_name "+
   		"FROM appointment,doctor,department,hospital "+
   		"WHERE appointment.user_id=? "+
   		"AND appointment.doctor_id=doctor.id "+
@@ -17,7 +17,7 @@ exports.list = function(req, res, next) {
             	return next(new Errors.EmptyReservation("You Don't Have Any Appointment!"));
         	}
         	else{
-	  			res.json({
+	  			  res.json({
                 	errcode: 0,
                 	errmsg: 'success',
                 	reservations: data

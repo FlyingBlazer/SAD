@@ -4,27 +4,51 @@
 
 // util
 
-function fireRequest(method, path, data, callback) {
+var settings = require('../../settings.json');
+
+var __logError = function(errMsg) {
+    console.error('(!) #  FATAL  ERROR  #');
+    console.error(errMsg);
+};
+
+var __fatal = function(response) {
+    response.status(503).send('HTTP/1.1 Service Unavailable');
+    __logError('Invalid object received from Business server.');
+};
+
+var fireRequest = function(method, path, data, callback) {
     var options = {
         host: 'localhost',
+        port: settings.port.business,
         method: method,
         path: path
     };
     var http = require('http');
-    var resdata = '';
+    var responseData = '';
     var req = http.request(options, function(res) {
         res.setEncoding('utf8');
         res.on('data', function(chunk) {
-            resdata += chunk;
+            responseData += chunk;
         });
         res.on('end', function() {
-            callback(JSON.parse(resdata));
+            var srcObject = null;
+            try {
+                srcObject = JSON.parse(responseData);
+            } catch (e) {
+                __logError('Cannot parse response data.');
+                //console.error(e);
+            }
+            callback(srcObject);
+        });
+        res.on('error', function(e) {
+            __logError('Business server is down: ' + e.message);
+            callback(null);
         });
     });
     if (data !== null)
         req.write(data);
     req.end();
-}
+};
 
 Date.prototype.yymmdd = function() {
     var yy = this.getFullYear().toString().substr(2, 2);
@@ -68,6 +92,10 @@ exports.listHospitals = function(request, response) {
     var url = '/hospital/hospital/list?province=' + province;
 
     fireRequest('GET', url, null, function(res) {
+        if (res == null) {
+            __fatal(response);
+            return;
+        }
         response.render('hospital_list', {
             username: username,
             // TODO: search ??!!?!?!
@@ -86,28 +114,36 @@ exports.showHospital = function(request, response) {
     var detail = null;
     var departments = null;
     var doctors = null;
+    var ctr = 0;
 
     var url1 = '/hospital/hospital/' + hospitalId + '/detail';
     fireRequest('GET', url1, null, function(res) {
         detail = res;
+        ++ctr;
         onCompletion();
     });
 
     var url2 = '/hospital/department/' + hospitalId;
     fireRequest('GET', url2, null, function(res) {
-        departments = res.departments_list;
+        departments = typeof res.departments_list === 'undefined' ? null : res.departments_list;
+        ++ctr;
         onCompletion();
     });
 
     var url3 = '/hospital/doctor/list?hospitalId=' + hospitalId;
     fireRequest('GET', url3, null, function(res) {
-        doctors = res.doctors;
+        doctors = typeof res.doctors === 'undefined' ? null : res.doctors;
+        ++ctr;
         onCompletion();
     });
 
     var onCompletion = function() {
-        if (detail == null || departments == null || doctors == null)
+        if (ctr !== 3)
             return;
+        if (detail == null || departments == null || doctors == null) {
+            __fatal(response);
+            return;
+        }
         response.render('hospital', {
             username: username,
             detail: detail,
@@ -184,6 +220,10 @@ exports.showDoctor = function(request, response) {
     var url = '/hospital/doctor/' + expertId + '/detail';
 
     fireRequest('GET', url, null, function(res) {
+        if (res == null) {
+            __fatal(response);
+            return;
+        }
         response.render('doctor', {
             username: username,
             hospitalId: hospitalId,
@@ -254,6 +294,10 @@ exports.onSubmit = function(request, response) {
         paid_flag: false
     };
     fireRequest('POST', url, JSON.stringify(data), function(res) {
+        if (res == null) {
+            __fatal(response);
+            return;
+        }
         var resvId = res.id;
         response.redirect(302, '/reservation/' + doctorId + '/' + resvId + '?state=success');
     });
@@ -273,24 +317,31 @@ exports.showReservation = function(request, response) {
     var state = 'normal';
     var doctorDetail = null;
     var resvDetail = null;
+    var ctr = 0;
     if (typeof request.query.state != 'undefined') {
         state = request.query.state;
     }
     var url1 = '/user/reservation/' + resvId + '/detail';
     fireRequest('GET', url1, null, function(res) {
         resvDetail = res;
+        ++ctr;
         render();
     });
 
     var url2 = '/hospital/doctor/' + doctorId + '/detail';
     fireRequest('GET', url2, null, function(res) {
         doctorDetail = res;
+        ++ctr;
         render();
     });
 
     var render = function() {
-        if (resvDetail == null || doctorDetail == null)
+        if (ctr !== 2)
             return;
+        if (resvDetail == null || doctorDetail == null) {
+            __fatal(response);
+            return;
+        }
 
         response.render('reservation', {
             username: username,
@@ -322,6 +373,10 @@ exports.test = function(request, response) {
         file = '/testfile.json';
 
     fireRequest('GET', file, null, function(res) {
+        if (res == null) {
+            __fatal(response);
+            return;
+        }
         response.render(request.params.template, res);
     });
 };

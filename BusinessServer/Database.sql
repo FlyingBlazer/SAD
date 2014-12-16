@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2014 年 12 月 15 日 11:46
+-- 生成日期: 2014 年 12 月 16 日 16:14
 -- 服务器版本: 5.5.20
 -- PHP 版本: 5.3.10
 
@@ -3395,7 +3395,7 @@ CREATE TABLE IF NOT EXISTS `hospital` (
   `site` varchar(200) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
-  FULLTEXT KEY `info` (`info`)
+  FULLTEXT KEY `name_2` (`name`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=51 ;
 
 --
