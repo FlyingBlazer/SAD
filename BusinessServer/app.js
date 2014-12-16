@@ -15,6 +15,11 @@ server.use(restify.bodyParser({
 }));
 server.use(orm.express(settings.dbUrl, models));
 
+server.use(function(req, res, next) {
+    res.charSet('utf-8');
+    next();
+});
+
 //--------------------------------
 server.get('/user/check/list', controllers.user.check.list);
 server.post('/user/check/:userId/approve', controllers.user.check.approve);
@@ -23,15 +28,14 @@ server.get('/user/check/:userId/status', controllers.user.check.status);
 //---
 server.get('/user/reservation/list', controllers.reservation.list);
 server.post('/user/reservation/add', controllers.reservation.add);
-server.get('/user/reservation/:hospitalId/detail', controllers.reservation.detail);
-server.post('/user/reservation/:hospitalId/cancel', controllers.reservation.cancel);
-server.post('/user/reservation/:hospitalId/pay', controllers.reservation.pay);
-server.get('/user/reservation/:hospitalId/print', controllers.reservation.print);
+server.get('/user/reservation/:reservationId/detail', controllers.reservation.detail);
+server.post('/user/reservation/:reservationId/cancel', controllers.reservation.cancel);
+server.post('/user/reservation/:reservationId/pay', controllers.reservation.pay);
 //---
 server.post('/user/login', controllers.user.login);
 server.post('/user/signup', controllers.user.signUp);
 server.get('/user/:username/check', controllers.user.checkName);
-server.post('/user/:name/update', controllers.user.updateInfo);
+server.post('/user/:userId/update', controllers.user.updateInfo);
 server.get('/user/:userId/info', controllers.user.info);
 //--------------------------------
 server.get('/hospital/hospital/list', controllers.hospital.hospital.list);
@@ -46,11 +50,11 @@ server.get('/hospital/doctor/:doctorId/detail', controllers.hospital.doctor.deta
 server.get('/hospital/doctor/:doctorId/delete', controllers.hospital.doctor.remove);
 server.post('/hospital/doctor/:doctorId/update', controllers.hospital.doctor.update);
 //---
-server.get('/hospital/department/list', controllers.hospital.department.list);
 server.post('/hospital/department/add', controllers.hospital.department.add);
+server.get('/hospital/department/:hospitalId', controllers.hospital.department.list);
 server.get('/hospital/department/:departmentId/detail', controllers.hospital.department.detail);
 server.get('/hospital/department/:departmentId/delete', controllers.hospital.department.remove);
 server.post('/hospital/department/:departmentId/update', controllers.hospital.department.update);
 //---
-server.post('hospital/reservation/:reservationId/confirm', controllers.reservation.confirm);
+server.post('/hospital/reservation/:reservationId/confirm', controllers.reservation.confirm);
 //--------------------------------
