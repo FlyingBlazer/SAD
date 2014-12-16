@@ -4,8 +4,9 @@
   "state": "normal",
   "hospitalId": 1,
   "departmentId": 1,
-  "resvId": 1,
   "userRealName": "刘阳河",
+  "userTelephone": "18600863606",
+  "userSocialId": "120103199019940213",
   "list": [
     {
       "id": 1,
@@ -160,14 +161,9 @@
     "4": []
   },
   "resvDetail": {
-    "errcode": 0,
-    "errmsg": "success",
     "reservation_id": 12345,
     "date": "yymmdd",
     "time": "13:20",
-    "hospital_name": "协和医院",
-    "department_name": "心理科",
-    "doctor_name": "刘阳河",
     "submission_date": "2014-12-15 15:11:00",
     "paid": true
   },
