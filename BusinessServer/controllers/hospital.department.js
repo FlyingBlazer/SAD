@@ -4,7 +4,7 @@ exports.list = function(req, res, next) {
     req.models.hospital.get(req.params.hospitalId, function(err, hospital) {
         if(err) return next(err);
         if(!hospital) return next(new Errors.HospitalNotExist("Hospital not exist"));
-        hospital.getDepartment(function(err, departments) {
+        hospital.getDepartments(function(err, departments) {
             if(err) return next(err);
             var ret = [];
             departments.forEach(function(department) {

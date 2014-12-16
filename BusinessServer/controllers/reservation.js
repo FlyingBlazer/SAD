@@ -95,7 +95,7 @@ exports.add = function(req, res, next) {
 };
 
 exports.cancel = function(req, res, next) {
-    var reservation_id=req.body.reservation_id;
+    var reservation_id=req.params.reservationId;
     req.models.appointment.get(reservation_id,function(err,app){
     	if(err) return next(err);
     	if(!app) return next(new Errors.CancelFailure("Cannot Find Such Appointment!"));
@@ -112,7 +112,7 @@ exports.cancel = function(req, res, next) {
 };
 
 exports.pay = function(req, res, next) {
-    var reservation_id=req.body.reservation_id;
+    var reservation_id=req.params.reservationId;
     req.models.appointment.get(reservation_id,function(err,app){
     	if(err) return next(err);
     	if(!app) return next(new Errors.PaymentFailure("Unable To Pay For Your Appointment!"));
@@ -130,7 +130,7 @@ exports.pay = function(req, res, next) {
 };
 
 exports.detail = function(req, res, next) {
-    var reservation_id=req.body.reservation_id;
+    var reservation_id=req.params.reservationId;
     req.db.driver.execQuery(
   		"SELECT "+
   		"FROM appointment,doctor,department,hospital "+
@@ -160,7 +160,7 @@ exports.detail = function(req, res, next) {
 };
 
 exports.confirm = function(req, res, next) {
-    var reservation_id=req.body.reservation_id;
+    var reservation_id=req.params.reservationId;
     req.models.appointment.get(reservation_id,function(err,app){
     	if(err) return next(err);
   		if(!app) return next(new Errors.ConfirmFalure("No Such Appointment!"));

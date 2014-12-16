@@ -27,7 +27,7 @@ exports.list = function(req, res, next) {
 
 exports.detail = function(req, res, next) {
     var id = req.params.hospitalId;
-    req.models.get(id, function(err, result) {
+    req.models.hospital.get(id, function(err, result) {
         if(err) return next(err);
         if(!result) return next(new Errors.HospitalNotExist('HospitalNotExist'));
         res.json({

@@ -27,10 +27,7 @@ exports.login =function(req, res, next) {
 exports.updateInfo = function(req, res, next){
     var phone=req.body.phone;
     var email=req.body.email;
-    var myName=name;
-    req.models.user.one({
-        name: myName
-    }, function(err, user){
+    req.models.user.get(req.params.userId, function(err, user){
         if(err){
             return next(err);
         }
@@ -51,7 +48,7 @@ exports.updateInfo = function(req, res, next){
                 res.json({
                     errcode: 0,
                     errmsg: 'success',
-                    username: myName
+                    username: user.name
                 });
             });
         }
@@ -77,7 +74,7 @@ exports.signUp = function(req, res, next) {
         res.json({
             errcode: 0,
             errmsg: 'success',
-            username: username
+            userid: user.id
         });
     });
 };
@@ -105,7 +102,7 @@ exports.info = function(req, res, next) {
         if(err) return next(err);
         if(!user) return next(new Errors.UserNotExist('User Not Exist'));
         var status_s;
-        switch(user.isActivated){
+        switch(parseInt(user.isActivated)) {
             case 0:
                 status_s = 'candidating';
                 break;
@@ -119,7 +116,8 @@ exports.info = function(req, res, next) {
                 status_s = 'deprived';
                 break;
             default:
-                return next(new Errors.InvalidUserStatus("Incalid User Status!"));
+                console.log(user.isActivated);
+                return next(new Errors.InvalidUserStatus("Invalid User Status!"));
         }
         res.json({
             errocde: 0,

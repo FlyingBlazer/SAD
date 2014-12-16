@@ -142,7 +142,7 @@ exports.detail = function(req, res, next) {
                     case '2':
                         for(var j=0; j < 7; j++) {
                             if(working.frequency.charAt(j) == '1') {
-                                slot[j+day<=6?j+day:j+day-7][key] = true;
+                                slot[j+day<=6?j+day:j+day-7].slot[key] = true;
                             }
                         }
                         break;
@@ -154,6 +154,7 @@ exports.detail = function(req, res, next) {
                         break;
                 }
             });
+            console.log(doctor);
             res.json({
                 id: doctor.id,
                 name: doctor.name,
