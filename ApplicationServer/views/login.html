@@ -10,7 +10,6 @@
 
     <title>用户登录界面</title>
 
-
     <!-- Bootstrap core CSS -->
     <link href="../public/stylesheets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
@@ -35,7 +34,7 @@
 <div class="container">
 
     <div class="left-content" style="float: left;">
-        <form class="form-login" role="form">
+        <form class="form-login" role="form" action="/account/login" name="postLoginMessage" method="post">
             <h2 class="form-login-heading">请登录</h2>
             <input id="username" type="username" class="form-control" placeholder="手机、邮箱或用户名" required autofocus>
             <input id="password" type="password" class="form-control" placeholder="请输入密码" required>
@@ -52,7 +51,7 @@
         </form>
     </div>
 
-    <div class="right-content" style="float: right">
+    <div class="right-content" style="float: left">
         <label class="label" style="color: #000000;font-size: larger">还没有账号？</label>
         <br />
         <label class="label" style="color: #000000;font-size: larger">快加入SAD！</label>
