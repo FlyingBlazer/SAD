@@ -12,12 +12,12 @@ var __logError = function(errMsg) {
 };
 
 var __fatal = function(response) {
-    response.status(503).send('HTTP/1.1 Service Unavailable');
+    response.status(503).send('HTTP/1.1 Error 503 Service Unavailable');
     __logError('Invalid object received from Business server (if it exists).');
 };
 
 var __invalidArgs = function(response) {
-    response.status(503).send('HTTP/1.1 Service Unavailable');
+    response.status(418).send('HTTP/1.1 Error 418 I\'m a teapot');
     __logError('Invalid arguments provided.');
 };
 
