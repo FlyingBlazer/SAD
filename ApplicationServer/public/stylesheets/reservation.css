@@ -60,7 +60,7 @@ ol, ul {
 }
 
 .main-block .info .doc-info dl {
-	text-align: left;
+	text-align: center;
 }
 
 .main-block .info .doc-info dt span {
@@ -304,5 +304,5 @@ ol, ul {
 .order-detail .btn {
     display: block;
     width: 78px;
-    margin: 15px auto 50px
+    margin: 15px auto 15px
 }
