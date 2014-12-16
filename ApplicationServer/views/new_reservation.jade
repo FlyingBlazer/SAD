@@ -4,7 +4,6 @@ block title
     title 新的预约单
 block site-content
     link(href="/stylesheets/reservation.css", rel="stylesheet", media="all")
-
     .main-block
         form
             .info
@@ -27,39 +26,54 @@ block site-content
                                 .doc-info
                                     dl
                                         dt
-                                            a 杨国庆
-                                            span 副主任医师
+                                            a(href="/concierge/reserve/#{detail.hospitalId}/#{detail.departmentId}/#{detail.doctorId}",target="_blank") #{detail.doctor}
+                                            span  #{detail.doctorTitle}
                                         dd
                                             p
-                                                a 中国人民解放军总医院301医院
+                                                a(href="/concierge/reserve/#{detail.hospitalId}",target="_blank") #{detail.hospital}
                                             p
-                                                a 内科-内分泌科
+                                                a #{detail.department}
                             td
                                 | 专家门诊
                             td
-                                | 2014年12月14日上午
+                                | #{detail.date} #{detail.time}
                             td.money
-                                | ￥7.0
+                                | ￥#{detail.price}
                 p.tips 温馨提醒：挂号网免费提供预约挂号服务，实际挂号费由医院收取，请放心使用。
             .bookinfo
                 div
                     .title 就诊人信息
                     .user-boxes
                         dl.on
-                            dt 徐少峰
+                            dt #{detail.userRealName}
                             dd
-                                | 3208**********0019
+                                | #{detail.userSocialId}
                                 br
-                                | 131*****527
+                                | #{detail.userTelephone}
                 .verify
                     .knowit
                         label
-                            input(type='checkbox')
+                            input#check(type='checkbox')
                             | 我已了解：如遇专家停诊，您的订单会被取消，我们会以短信通知到您，请保持手机畅通，并及时关注订单状态。
             .actions
-                a.gbb.gbt-green 确认预约
+                a.btn.gbb.gbt-green(onclick='confirm()') 确认预约
                 span
                     | 预约成功的短信将发送到手机：
-                    em 131*****527
+                    em #{detail.userTelephone}
                     | ，请注意查收！
 
+    script(type='text/javascript').
+        function confirm() {
+            if (!$("#check").prop("checked")) {
+                alert("请阅读并点选“我已了解”");
+                return false;
+            } else {
+                $.post("/concierge/reserve/submit", {
+                    hospitalId: #{detail.hospitalId},
+                    departmentId: #{detail.departmentId},
+                    doctorId: #{detail.doctorId},
+                    resvDate: "#{detail.date}",
+                    resvTime: "#{detail.time}"
+                });
+            }
+        }
