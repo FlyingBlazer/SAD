@@ -4,7 +4,7 @@
 
 // util
 
-function fireRequest(method, path, data, callback) {
+var fireRequest = function(method, path, data, callback) {
     var options = {
         host: 'localhost',
         method: method,
@@ -18,13 +18,21 @@ function fireRequest(method, path, data, callback) {
             resdata += chunk;
         });
         res.on('end', function() {
-            callback(JSON.parse(resdata));
+            //console.log(resdata);
+            var srcObject = null;
+            try {
+                srcObject = JSON.parse(resdata);
+            } catch (e) {
+                console.error('(!) ########## FATAL ERROR ##########');
+                console.error(e);
+            }
+            callback(srcObject);
         });
     });
     if (data !== null)
         req.write(data);
     req.end();
-}
+};
 
 Date.prototype.yymmdd = function() {
     var yy = this.getFullYear().toString().substr(2, 2);
