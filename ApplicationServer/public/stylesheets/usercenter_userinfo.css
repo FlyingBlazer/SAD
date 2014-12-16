@@ -24,3 +24,9 @@
     height:2px;
     color: #0186c7;
 }
+.clear {
+    clear: both;
+    display: block;
+    height: 0;
+    overflow: hidden;
+}

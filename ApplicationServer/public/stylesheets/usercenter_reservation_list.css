@@ -73,6 +73,7 @@
 .person-right {
     float: right;
     width: 803px;
+    height:500px;
 }
 .order-remind {
     background:  repeat scroll -7px 0 rgba(0, 0, 0, 0);

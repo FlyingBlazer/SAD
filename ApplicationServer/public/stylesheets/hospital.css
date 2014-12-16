@@ -84,7 +84,7 @@
     margin-bottom: 5px;
 }
 
-.doctor>.image {
+.doctor>.doctor-image {
     display: inline-block;
     background-color: red;
     width: 70px;

@@ -57,16 +57,16 @@ block site-content
                 td.table-content 主治医师
 
             div.doctor-list
-                div.doctor
-                    img.image
-                    div.doctor-info
-                        div.name
-                            a(href="#") 钦伦秀
-                        div.title 主任医师
-                        div.department 普外科
-                    div.doctor-intro
-                        | 擅长： 肝胆肿瘤的诊断与外科治疗、胆道肿瘤及其...
-                    table.vertical-middle-helper
-                        tr
-                            td.vertical-middle
-                                button.register.btn.btn-primary 挂号
+                each doctor in doctors[0]
+                    div.doctor
+                        img.doctor-image
+                        div.doctor-info
+                            div.name
+                                a(href="#") #{doctor.name}
+                            div.title #{doctor.title}
+                            div.department #{doctor.department}
+                        div.doctor-intro #{doctor.description}
+                        table.vertical-middle-helper
+                            tr
+                                td.vertical-middle
+                                    button.register.btn.btn-primary 挂号

@@ -1,61 +1,59 @@
 extends layout
-!!! strict
 
 block site-content
-    link(href="/stylesheets/usercenter_reservation_list.css", rel="stylesheet", media="all")
-    link(href="/stylesheets/bootstrap/css/bootstrap.min.css", rel="stylesheet", media="all")
-div
-    .gp-person.g-container(data-fo-help='1', data-module='userinfo')
-        #g-breadcrumb
+   link(href="/stylesheets/usercenter_reservation_list.css", rel="stylesheet", media="all")
+   link(href="/stylesheets/bootstrap/css/bootstrap.min.css", rel="stylesheet", media="all")
+   div
+      .g-container(data-module='userinfo', data-fo-help='1')
+         #g-breadcrumb
             a(href='http://www.guahao.com') 首页
-            span > 我的预约单
-        .wrap
+            span > 我的预约单
+         .wrap
             .person-left
-                p.left-head
-                    img(alt='男', src='http://img.guahao.cn/img/character/young-m.png')
-                    span(style='margin-left: 3px')
-                        strong #{username}
-                ul.none-border
-                    li(style='list-style-type: none;margin-top:40px;margin-left:10px;text-align:left')
-                        a.btn.btn-primary.btn-lg.active(role='button', href='http://www.guahao.com/my/orderlist')
-                            | 预约列表
-                    li(style='list-style-type: none;margin-top:20px;margin-left:10px;text-align: left')
-                        a.btn.btn-default.btn-lg.active(href='http://www.guahao.com/my/haoyuanlist', role='button')
-                            | 个人中心
+               p.left-head
+                  img(src='http://img.guahao.cn/img/character/young-m.png', alt='男')
+                  span(style='margin-left: 3px')
+                     strong 刘笑然
+               ul.none-border
+                  li(style='list-style-type: none;margin-top:40px;margin-left:10px;text-align:left')
+                     a.btn.btn-primary.btn-lg.active(href='http://www.guahao.com/my/orderlist', role='button')
+                        | 预约列表
+                  li(style='list-style-type: none;margin-top:20px;margin-left:10px;text-align: left')
+                     a.btn.btn-default.btn-lg.active(role='button', href='http://www.guahao.com/my/haoyuanlist')
+                        | 个人中心
             .person-right
-                .order-remind.g-clear
-                    .meta
-                        h1 我的预约单
-                .list
-                    table.table
-                        colgroup
-                            col(width='144px;')
-                            col(width='160px;')
-                            col(width='100px;')
-                            col(width='70px;')
-                            col.order-cost(width='80px;')
-                            col(width='130px;')
-                        thead
-                            tr
-                                th 就诊日期
-                                th 医院
-                                th.text-left 医生
-                                th 就诊人
-                                th 挂号费
-                                th 订单状态
-                                th 操作
-                        tbody
-                            if(list.length)
+               .order-remind.g-clear
+                  .meta
+                     h1 我的预约单
+               .list
+                  table.table
+                     colgroup
+                        col(width='144px;')
+                        col(width='160px;')
+                        col(width='100px;')
+                        col(width='70px;')
+                        col.order-cost(width='80px;')
+                        col(width='130px;')
+                     thead
+                        tr
+                           th 就诊日期
+                           th 医院
+                           th.text-left 医生
+                           th 就诊人
+                           th 挂号费
+                           th 订单状态
+                           th 操作
+                     tbody
+                        if(list.length)
+                           tr for item in list
+                              td 1992-1-1
+                              td 北京三院
+                              td liuxiaoran
+                              td liuxiaran
+                              td 1
+                              td success
+                              td
+                                 a(href='###') 查看
 
-                                tr for item in obj
-                                    td item.time
-                                    td item.hospital
-                                    td item.doctor
-                                    td item.patientname
-                                    td item.cost RMB
-                                    td item.status
-                                    td
-                                        a(href='###') 查看
-
-                        tbody
-                      
+                     tbody
+   div.clear

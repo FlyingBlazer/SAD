@@ -1,0 +1,64 @@
+extends layout
+
+block site-content
+
+   link(href="/stylesheets/bootstrap/css/bootstrap.min.css", rel="stylesheet", media="all")
+   link(href="/stylesheets/usercenter_reservation_list.css",rel="stylesheet", media="all")
+   link(href="/stylesheets/usercenter_userinfo.css",rel="stylesheet", media="all")
+   div
+      .g-container(data-module='userinfo', data-fo-help='1')
+         #g-breadcrumb
+            a(href='http://www.guahao.com') 首页
+            span > 我的预约单
+         .wrap
+            .person-left
+               p.left-head
+                  img(src='http://img.guahao.cn/img/character/young-m.png', alt='男')
+                  span(style='margin-left: 3px')
+                     strong 刘笑然
+               ul.none-border
+                  li(style='list-style-type: none;margin-top:40px;margin-left:10px;text-align:left')
+                     a.btn.btn-default.btn-lg.active(href='http://www.guahao.com/my/orderlist', role='button')
+                        | 预约列表
+                  li(style='list-style-type: none;margin-top:20px;margin-left:10px;text-align: left')
+                     a.btn.btn-primary.btn-lg.active(role='button', href='http://www.guahao.com/my/haoyuanlist')
+                        | 个人中心
+            .person-right
+               .order-remind.g-clear
+                  span.icon.gi2.gi-order-big
+                  .meta
+                     h1 个人中心
+               .second_block
+                  span.second_label 账号信息
+               hr#hr_style
+               .list_content
+                  span 登录名:
+                  span 真实姓名:
+                  span 电话:
+                  span 邮箱:
+                  span 身份证号:
+                  span 信用额度:
+               .second_block
+                  span.second_label  修改信息
+               hr(style='line-width:1;', width='90%', color='#1E90FF', size='1')
+               div
+                  form(action='###', name='pwinfo_modify_form',method='post')
+                     .form-group(style='margin-left:60px')
+                        label 原密码
+                        input.form-control(type='password', style='width:40%', name='pre_pw')
+                        label 新密码
+                        input.form-control(type='password', style='width:40%', name='new-pw')
+                        label 电话
+                        input.form-control(type='text', style='width:40%', name='tel')
+                        label 邮箱
+                        input.form-control(type='email', style='width:40%', name='email')
+                        button.btn.btn-default(type='submit') 修改
+               .second_block
+                  span.second_label  上传头像
+               hr(style='line-width:1;', width='90%', color='#1E90FF', size='1')
+               div
+                  form(action='###', name='head_pic_form', method='post')
+                     .form-group(style='margin-left:60px')
+                        input(type='file', name='upload_pic')
+                        button.btn.btn-default(type='submit') 上传
+   div.clear
