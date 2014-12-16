@@ -300,3 +300,20 @@ exports.showReservation = function(request, response) {
 exports.operateReservation = function(request, response) {
     var username = request.cookies.username;
 };
+
+// test
+exports.test = function(request, response) {
+    var file;
+    if (request.params.template == new_reservation)
+        file = '/new_reservation.json';
+    else if (request.params.template == hospital)
+        file = '/hospital.json';
+    else if (request.params.template == doctor)
+        file = '/doctor.json';
+    else
+        file = '/testfile.json';
+
+    fireRequest('GET', file, null, function(res) {
+        response.render(request.params.template, res);
+    });
+};
