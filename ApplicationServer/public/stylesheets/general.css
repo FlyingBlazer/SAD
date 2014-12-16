@@ -16,6 +16,7 @@ body {
 
 #header {
     background-color: #f8f8f8;
+    border-bottom: 1px solid #dddddd;
 }
 
 .breadcrumb {
@@ -37,6 +38,7 @@ body {
     width: 960px;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 20px;
 }
 
 .vertical-middle-helper {

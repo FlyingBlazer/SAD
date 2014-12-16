@@ -5,59 +5,68 @@ block title
 
 block breadcrumb
     li
-        a(href='#') 主页
+        a(href="#") 主页
     li
-        a(href='#') 上海
-    li.active 复旦大学附属华山医院
+        a(href="#") 上海
+    li.active #{detail.name}
 
 block header-content-extra
-    h1.hospital-name 复旦大学附属华山医院
-    label.hospital-rating 三级甲等
+    h1.hospital-name #{detail.name}
+    label.hospital-rating #{detail.level}
     ul.nav.nav-tabs
-        li.active(role='presentation')
-            a(href='#') 医院主页
-        li(role='presentation')
-            a(href='#') 预约挂号
-
-
+        li.active(role="presentation")
+            a(href="#hospital-index", data-toggle="tab") 医院主页
+        li(role="presentation")
+            a(href="#reserve", data-toggle="tab") 预约挂号
 
 block site-content
     style
     link(href="/stylesheets/hospital.css", rel="stylesheet", media="all")
 
-    div#site-content
+    div#site-content.tab-content
+        div#hospital-index.tab-pane.fade.in.active(role="tabpanel")
+            img.hospital-image
+            div.hospital-info
+                div.addr
+                    span.addr-label 地址：
+                    span.addr-content #{detail.address}
+                div.tel
+                    span.tel-label 电话：
+                    span.tel-content #{detail.telephone}
+                div.site
+                    span.site-label 官网：
+                    span.site-content #{detail.website}
 
+            div.hospital-intro
+                div.intro-title
+                    h4 医院简介
+                hr
+                div.intro-content #{detail.description}
 
-        div.hospital-list
-            div.hospital
-                img.image
-                div.hospital-info
-                    div.name
-                        a(href="#") 复旦大学附属华山医院
-                    div.rating 三级甲等
-                    div.tel
-                        i.fa.fa-phone.fa-fw
-                        | 021-52889999
-                    div.addr
-                        i.fa.fa-map-marker.fa-fw
-                        | 上海市静安区乌鲁木齐中路12号
-                table.vertical-middle-helper
-                    tr
-                        td.vertical-middle
-                            button.register.btn.btn-primary 挂号
-            div.hospital
-                img.image
-                div.hospital-info
-                    div.name
-                        a(href="#") 复旦大学附属华山医院
-                    div.rating 三级甲等
-                    div.tel
-                        i.fa.fa-phone.fa-fw
-                        | 021-52889999
-                    div.addr
-                        i.fa.fa-map-marker.fa-fw
-                        | 上海市静安区乌鲁木齐中路12号
-                table.vertical-middle-helper
-                    tr
-                        td.vertical-middle
-                            button.register.btn.btn-primary 挂号
+        div#reserve.tab-pane.fade.active(role="tabpanel")
+            table.table
+                tr
+                td.table-header 科室筛选
+                td.table-content 神经外科
+                td.table-content 皮肤科
+                td.table-content 普外科
+                tr
+                td.table-header 医生职称
+                td.table-content 主任医师
+                td.table-content 副主任医师
+                td.table-content 主治医师
+
+            div.doctor-list
+                div.doctor
+                    img.image
+                    div.doctor-info
+                        div.name
+                            a(href="#") 钦伦秀
+                        div.title 主任医师
+                        div.department 普外科
+                    div.doctor-intro
+                        | 擅长： 肝胆肿瘤的诊断与外科治疗、胆道肿瘤及其...
+                    table.vertical-middle-helper
+                        tr
+                            td.vertical-middle
+                                button.register.btn.btn-primary 挂号

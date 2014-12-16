@@ -3,11 +3,36 @@ extends layout
 block title
     title 医院列表
 
+block breadcrumb
+    li
+        a(href='#') 主页
+    li.active #{city}
+
 block site-content
     link(href="/stylesheets/hospital_list.css", rel="stylesheet", media="all")
 
+
     div#site-content
         div.hospital-list
+
+            each hospital in hospital_list
+                div.hospital
+                    img.image
+                    div.hospital-info
+                        div.name
+                            a(href="#") #{hospital.name}
+                        div.rating #{hospital.rating}
+                        div.tel
+                            i.fa.fa-phone.fa-fw
+                            | #{hospital.tel}
+                        div.addr
+                            i.fa.fa-map-marker.fa-fw
+                            | #{hospital.addr}
+                    table.vertical-middle-helper
+                        tr
+                            td.vertical-middle
+                                button.register.btn.btn-primary 挂号
+
             div.hospital
                 img.image
                 div.hospital-info
