@@ -1,0 +1,20 @@
+.page-header h2 {
+    border-left: 4px solid #fa9900;
+    color: #999;
+    font-size: 24px;
+    font-weight: 400;
+    height: 24px;
+    line-height: 24px;
+    padding-left: 9px;
+}
+
+.m_tab {
+    background-color: #eee;
+    border: medium none;
+    border-radius: 0;
+    box-shadow: none;
+    color: #0e70b4;
+    outline: 0 none;
+    text-decoration: none;
+    transition: all 0.1s ease-out 0s;
+}

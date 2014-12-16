@@ -1,2 +1,120 @@
-<h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+extends layout
+block title
+    title 主页
+block site-content
+    link(href="/stylesheets/index.css", rel="stylesheet", media="all")
+    .container.theme-showcase(role='main')
+    .jumbotron
+        h1 SRF挂号平台
+        p SRF挂号平台是一款面向全国用户的线上挂号平台，用户无论是在家中或者是通过手机都可以体验简单、便捷的挂号服务。
+        p
+        .row
+            .col-lg-6
+                .input-group
+                    input.form-control(type='text')
+                    span.input-group-btn
+                        button.btn.btn-default(onclick='alert("Welcome!")', type='button') 搜索
+        p
+    .page-header
+        h2
+            | 按地点查找
+    .tabbable
+        nav.navbar.navbar-default(role='navigation')
+            ul.nav.nav-tabs
+                li.active
+                    a(data-toggle='tab', href='#tab1') A-E
+                li
+                    a(data-toggle='tab', href='#tab2') F-J
+                li
+                    a(data-toggle='tab', href='#tab3') K-O
+                li
+                    a(data-toggle='tab', href='#tab4') P-T
+                li
+                    a(data-toggle='tab', href='#tab5') U-Z
+        .tab-content
+            #tab1.tab-pane.active
+                table.table
+                    tbody
+                        tr
+                            td
+                                a(href='/choose-location?province=beijing') 北京市
+                            td
+                                a(href='/choose-location?province=chongqing') 重庆市
+                            td
+                                a(href='/choose-location?province=anhui') 安徽省
+            #tab2.tab-pane
+                table.table
+                    tbody
+                        tr
+                            td
+                                a(href='/choose-location?province=hebei') 河北省
+                            td
+                                a(href='/choose-location?province=henan') 河南省
+                            td
+                                a(href='/choose-location?province=heilongjiang') 黑龙江省
+                            td
+                                a(href='/choose-location?province=hunan') 湖南省
+                        tr
+                            td
+                                a(href='/choose-location?province=jiangsu') 江苏省
+                            td
+                                a(href='/choose-location?province=jiangxi') 江西省
+                            td
+                                a(href='/choose-location?province=hubei') 湖北省
+                            td
+                                a(href='/choose-location?province=guangxi') 广西壮族自治区
+                        tr
+                            td
+                                a(href='/choose-location?province=gansu') 甘肃省
+                            td
+                                a(href='/choose-location?province=jilin') 吉林省
+                            td
+                                a(href='/choose-location?province=fujian') 福建省
+                            td
+                                a(href='/choose-location?province=guizhou') 贵州省
+                        tr
+                            td
+                                a(href='/choose-location?province=guangdong') 广东省
+                            td
+                                a(href='/choose-location?province=hainan') 海南省
+            #tab3.tab-pane
+                table.table
+                    tbody
+                        tr
+                            td
+                                a(href='/choose-location?province=liaoning') 辽宁省
+                            td
+                                a(href='/choose-location?province=neimenggu') 内蒙古自治区
+                            td
+                                a(href='/choose-location?province=ningxia') 宁夏回族自治区
+            #tab4.tab-pane
+                table.table
+                    tbody
+                        tr
+                            td
+                                a(href='/choose-location?province=tianjin') 天津市
+                            td
+                                a(href='/choose-location?province=shanghai') 上海市
+                            td
+                                a(href='/choose-location?province=shandong') 山东省
+                            td
+                                a(href='/choose-location?province=shanxi') 山西省
+                        tr
+                            td
+                                a(href='/choose-location?province=shanxi') 陕西省
+                            td
+                                a(href='/choose-location?province=qinghai') 青海省
+                            td
+                                a(href='/choose-location?province=sichuan') 四川省
+            #tab5.tab-pane
+                table.table
+                    tbody
+                        tr
+                            td
+                                a(href='/choose-location?province=yunnan') 云南省
+                            td
+                                a(href='/choose-location?province=xinjiang') 新疆维吾尔族自治区
+                            td
+                                a(href='/choose-location?province=zhejiang') 浙江省
+                            td
+                                a(href='/choose-location?province=xizang') 西藏自治区
