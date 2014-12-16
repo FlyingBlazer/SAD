@@ -10,5 +10,8 @@ exports.setup = function(db) {
         tel: {type: 'text', size: 50, required: true},
         info: {type: 'commonText', required: true},
         site: {type: 'text', size: 200, required: true}
+    }, {
+        autoFetch: true,
+        autoFetchLimit: 5
     }).hasOne('rating', db.models.hospital_rating);
 };
