@@ -17,7 +17,7 @@ exports.list = function(req, res, next) {
             	return next(new Errors.EmptyReservation("You Don't Have Any Appointment!"));
         	}
         	else{
-	  			res.json({
+	  			  res.json({
                 	errcode: 0,
                 	errmsg: 'success',
                 	reservations: data
