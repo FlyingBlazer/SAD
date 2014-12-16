@@ -1,0 +1,320 @@
+{
+  "search": false,
+  "username": "yanghe.liu",
+  "state": "normal",
+  "hospitalId": 1,
+  "departmentId": 1,
+  "resvId": 1,
+  "userRealName": "刘阳河",
+  "list": [
+    {
+      "id": 1,
+      "name": "协和医院",
+      "level": "三级甲等",
+      "province": "北京",
+      "city": "北京",
+      "address": "北京市海淀区花园路28号",
+      "telephone": "800-8123123",
+      "website": "www.xiehehospital.com",
+      "description": "这是一家好医院"
+    },
+    {
+      "id": 2,
+      "name": "昌平医院",
+      "level": "三级甲等",
+      "province": "北京",
+      "city": "北京",
+      "address": "北京市昌平区爱国道209号",
+      "telephone": "4008-123-123",
+      "website": "www.changpingyy.com",
+      "description": "这是一家好医院"
+    },
+    {
+      "id": 3,
+      "name": "第一医院",
+      "level": "一级戊等",
+      "province": "北京",
+      "city": "北京",
+      "address": "北京市海淀区新华路129号",
+      "telephone": "4008-123-123",
+      "website": "www.dyyy.com",
+      "description": "这是一家好医院"
+    },
+    {
+      "id": 4,
+      "name": "第二医院",
+      "level": "三级丙等",
+      "province": "北京",
+      "city": "北京",
+      "address": "天津市河北区上海道1999号",
+      "telephone": "4008-123-123",
+      "website": "www.2ndh.com",
+      "description": "这是一家好医院"
+    }
+  ],
+  "departments": [
+    {
+      "id": 1,
+      "name": "口腔科",
+      "phone": "838141",
+      "description": "这是口腔科"
+    },
+    {
+      "id": 2,
+      "name": "神经内科",
+      "phone": "838143",
+      "description": "这是神经内科"
+    },
+    {
+      "id": 3,
+      "name": "耳鼻喉科",
+      "phone": "838143",
+      "description": "这是耳鼻喉科"
+    },
+    {
+      "id": 4,
+      "name": "全科",
+      "phone": "838143",
+      "description": "这是全科！！！"
+    }
+  ],
+  "doctors": {
+    "1": [
+      {
+        "id": 1,
+        "name": "上床美也",
+        "hospital": "协和医院",
+        "department": "口腔科",
+        "title": "副主任医师",
+        "description": "擅长治疗口腔溃疡",
+        "photo_url": "http://www.example.com/383d1adc.png"
+      },
+      {
+        "id": 2,
+        "name": "顾惜朝",
+        "hospital": "协和医院",
+        "department": "口腔科",
+        "title": "副主任医师",
+        "description": "擅长治疗口腔溃疡",
+        "photo_url": "http://www.example.com/383d1adc.png"
+      },
+      {
+        "id": 3,
+        "name": "程序",
+        "hospital": "协和医院",
+        "department": "口腔科",
+        "title": "副主任医师",
+        "description": "擅长治疗口腔溃疡",
+        "photo_url": "http://www.example.com/383d1adc.png"
+      },
+      {
+        "id": 4,
+        "name": "秦可卿",
+        "hospital": "协和医院",
+        "department": "口腔科",
+        "title": "副主任医师",
+        "description": "擅长治疗口腔溃疡",
+        "photo_url": "http://www.example.com/383d1adc.png"
+      }
+    ],
+    "2": [
+      {
+        "id": 5,
+        "name": "王五",
+        "hospital": "协和医院",
+        "department": "神经内科",
+        "title": "实习生",
+        "description": "擅长治疗saaby综合征",
+        "photo_url": "http://www.example.com/383d1adc.png"
+      },
+      {
+        "id": 6,
+        "name": "宋子明",
+        "hospital": "协和医院",
+        "department": "神经内科",
+        "title": "saaby",
+        "description": "擅长治疗saaby综合征",
+        "photo_url": "http://www.example.com/383d1adc.png"
+      }
+    ],
+    "3": [
+      {
+        "id": 7,
+        "name": "江若泊",
+        "hospital": "协和医院",
+        "department": "神经内科",
+        "title": "实习生",
+        "description": "擅长治疗saaby综合征",
+        "photo_url": "http://www.example.com/383d1adc.png"
+      },
+      {
+        "id": 8,
+        "name": "宋子明",
+        "hospital": "协和医院",
+        "department": "神经内科",
+        "title": "saaby",
+        "description": "擅长治疗saaby综合征",
+        "photo_url": "http://www.example.com/383d1adc.png"
+      }
+    ],
+    "4": []
+  },
+  "resvDetail": {
+    "errcode": 0,
+    "errmsg": "success",
+    "reservation_id": 12345,
+    "date": "yymmdd",
+    "time": "13:20",
+    "hospital_name": "协和医院",
+    "department_name": "心理科",
+    "doctor_name": "刘阳河",
+    "submission_date": "2014-12-15 15:11:00",
+    "paid": true
+  },
+  "doctorDetail": {
+    "id": 1,
+    "name": "婴宁",
+    "hospital": "协和医院",
+    "department": "口腔科",
+    "title": "副主任医师",
+    "description": "擅长治疗xxx",
+    "photo_id": "fa7f282d1a52ddc",
+    "price": 288
+  },
+  "-------------------------------------------1": "below_doctor",
+  "detail_1": {
+    "id": 1,
+    "name": "风清扬",
+    "hospital": "协和医院",
+    "department": "口腔科",
+    "title": "副主任医师",
+    "description": "擅长治疗xxx",
+    "photo_id": "fa7f282d1a52ddc",
+    "price": 288,
+    "time_slots": [
+      {
+        "date": {
+          "year": 2014,
+          "month": 12,
+          "date": 9,
+          "day": "星期二"
+        },
+        "slot": {
+          "morning": true,
+          "afternoon": false,
+          "evening": true
+        }
+      },
+      {
+        "date": {
+          "year": 2014,
+          "month": 12,
+          "date": 10,
+          "day": "星期三"
+        },
+        "slot": {
+          "morning": true,
+          "afternoon": true,
+          "evening": true
+        }
+      },
+      {
+        "date": {
+          "year": 2014,
+          "month": 12,
+          "date": 11,
+          "day": "星期四"
+        },
+        "slot": {
+          "morning": true,
+          "afternoon": true,
+          "evening": true
+        }
+      },
+      {
+        "date": {
+          "year": 2014,
+          "month": 12,
+          "date": 12,
+          "day": "星期五"
+        },
+        "slot": {
+          "morning": false,
+          "afternoon": false,
+          "evening": false
+        }
+      },
+      {
+        "date": {
+          "year": 2014,
+          "month": 12,
+          "date": 13,
+          "day": "星期六"
+        },
+        "slot": {
+          "morning": true,
+          "afternoon": false,
+          "evening": false
+        }
+      },
+      {
+        "date": {
+          "year": 2014,
+          "month": 12,
+          "date": 14,
+          "day": "星期日"
+        },
+        "slot": {
+          "morning": true,
+          "afternoon": true,
+          "evening": false
+        }
+      },
+      {
+        "date": {
+          "year": 2014,
+          "month": 12,
+          "date": 15,
+          "day": "星期一"
+        },
+        "slot": {
+          "morning": true,
+          "afternoon": true,
+          "evening": true
+        }
+      }
+    ]
+  },
+  "-------------------------------------------2": "below_hospital",
+  "detail_2": {
+    "errcode": 0,
+    "errmsg": "success",
+    "id": 1,
+    "name": "协和医院",
+    "level": "三级甲等",
+    "province": "北京",
+    "city": "北京",
+    "address": "xxxx",
+    "telephone": "xxxx",
+    "website": "www.google.com",
+    "description": "这是一家好医院"
+  },
+  "-------------------------------------------3": "below_new_reservation",
+  "detail": {
+    "username": "yanghe.liu",
+    "userId": 12,
+    "hospital": "协和医院",
+    "hospitalId": 123,
+    "department": "口腔科",
+    "departmentId": 1,
+    "doctor": "程序",
+    "doctorId": 1,
+    "doctorTitle": "实习生",
+    "date": "141213",
+    "time": "morning",
+    "price": 288,
+    "userTelephone": "18612345678",
+    "userSocialId": "120103199001242333",
+    "userRealName": "刘阳河"
+  }
+}

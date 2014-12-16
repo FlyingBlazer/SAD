@@ -28,6 +28,28 @@
       "telephone": "4008-123-123",
       "website": "www.changpingyy.com",
       "description": "这是一家好医院"
+    },
+    {
+      "id": 3,
+      "name": "第一医院",
+      "level": "一级戊等",
+      "province": "北京",
+      "city": "北京",
+      "address": "北京市海淀区新华路129号",
+      "telephone": "4008-123-123",
+      "website": "www.dyyy.com",
+      "description": "这是一家好医院"
+    },
+    {
+      "id": 4,
+      "name": "第二医院",
+      "level": "三级丙等",
+      "province": "北京",
+      "city": "北京",
+      "address": "天津市河北区上海道1999号",
+      "telephone": "4008-123-123",
+      "website": "www.2ndh.com",
+      "description": "这是一家好医院"
     }
   ],
   "departments": [
@@ -42,13 +64,52 @@
       "name": "神经内科",
       "phone": "838143",
       "description": "这是神经内科"
+    },
+    {
+      "id": 3,
+      "name": "耳鼻喉科",
+      "phone": "838143",
+      "description": "这是耳鼻喉科"
+    },
+    {
+      "id": 4,
+      "name": "全科",
+      "phone": "838143",
+      "description": "这是全科！！！"
     }
   ],
   "doctors": {
     "1": [
       {
+        "id": 1,
+        "name": "上床美也",
+        "hospital": "协和医院",
+        "department": "口腔科",
+        "title": "副主任医师",
+        "description": "擅长治疗口腔溃疡",
+        "photo_url": "http://www.example.com/383d1adc.png"
+      },
+      {
         "id": 2,
-        "name": "李四",
+        "name": "顾惜朝",
+        "hospital": "协和医院",
+        "department": "口腔科",
+        "title": "副主任医师",
+        "description": "擅长治疗口腔溃疡",
+        "photo_url": "http://www.example.com/383d1adc.png"
+      },
+      {
+        "id": 3,
+        "name": "程序",
+        "hospital": "协和医院",
+        "department": "口腔科",
+        "title": "副主任医师",
+        "description": "擅长治疗口腔溃疡",
+        "photo_url": "http://www.example.com/383d1adc.png"
+      },
+      {
+        "id": 4,
+        "name": "秦可卿",
         "hospital": "协和医院",
         "department": "口腔科",
         "title": "副主任医师",
@@ -58,15 +119,45 @@
     ],
     "2": [
       {
-        "id": 3,
+        "id": 5,
         "name": "王五",
         "hospital": "协和医院",
         "department": "神经内科",
         "title": "实习生",
         "description": "擅长治疗saaby综合征",
         "photo_url": "http://www.example.com/383d1adc.png"
+      },
+      {
+        "id": 6,
+        "name": "宋子明",
+        "hospital": "协和医院",
+        "department": "神经内科",
+        "title": "saaby",
+        "description": "擅长治疗saaby综合征",
+        "photo_url": "http://www.example.com/383d1adc.png"
       }
-    ]
+    ],
+    "3": [
+      {
+        "id": 7,
+        "name": "江若泊",
+        "hospital": "协和医院",
+        "department": "神经内科",
+        "title": "实习生",
+        "description": "擅长治疗saaby综合征",
+        "photo_url": "http://www.example.com/383d1adc.png"
+      },
+      {
+        "id": 8,
+        "name": "宋子明",
+        "hospital": "协和医院",
+        "department": "神经内科",
+        "title": "saaby",
+        "description": "擅长治疗saaby综合征",
+        "photo_url": "http://www.example.com/383d1adc.png"
+      }
+    ],
+    "4": []
   },
   "resvDetail": {
     "errcode": 0,
@@ -82,7 +173,7 @@
   },
   "doctorDetail": {
     "id": 1,
-    "name": "张三",
+    "name": "婴宁",
     "hospital": "协和医院",
     "department": "口腔科",
     "title": "副主任医师",
@@ -91,9 +182,9 @@
     "price": 288
   },
   "-------------------------------------------1": "below_doctor",
-  "detail_1": {
+  "detail": {
     "id": 1,
-    "name": "张三",
+    "name": "风清扬",
     "hospital": "协和医院",
     "department": "口腔科",
     "title": "副主任医师",
