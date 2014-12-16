@@ -7,13 +7,13 @@
 var settings = require('../../settings.json');
 
 var __logError = function(errMsg) {
-    console.error('(!) #  FATAL  ERROR  #');
+    console.error('(!) # FATAL ERROR #');
     console.error(errMsg);
 };
 
 var __fatal = function(response) {
     response.status(503).send('HTTP/1.1 Service Unavailable');
-    __logError('Invalid object received from Business server.');
+    __logError('Invalid object received from Business server (if it exists).');
 };
 
 var fireRequest = function(method, path, data, callback) {
@@ -40,10 +40,10 @@ var fireRequest = function(method, path, data, callback) {
             }
             callback(srcObject);
         });
-        res.on('error', function(e) {
-            __logError('Business server is down: ' + e.message);
-            callback(null);
-        });
+    });
+    req.on('error', function(e) {
+        __logError('Business server is DOWN: ' + e.message);
+        callback(null);
     });
     if (data !== null)
         req.write(data);
