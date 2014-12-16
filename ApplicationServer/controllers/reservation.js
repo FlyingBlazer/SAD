@@ -33,7 +33,6 @@ Date.prototype.yymmdd = function() {
 // No view, just set cookie and redirect to home page
 // get
 exports.chooseLocation = function(request, response) {
-    var username = request.cookies.username;
     var province = request.query.province;
     response.cookie('province', province, {
         maxAge: 999999,
