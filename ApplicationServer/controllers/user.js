@@ -3,6 +3,8 @@
  */
 var queryString = require('querystring');
 var url = require('url');
+var http = require('http');
+var settings = require('../../settings');
 
 // get
 exports.registerPage = function (request, response) {
@@ -16,10 +18,10 @@ exports.registerPage = function (request, response) {
 exports.onRegister = function (request, response) {
     //接受并向业务服务器转发注册请求
     if (request.method.toLowerCase() == 'post') {
-        var postData = request.body;
 
         //查找当前用户是否存在
-        var username = queryString.stringify(postData)['username'];
+        var username = request.body.username;
+
         forwardRequestGET('/user/' + username + '/check', function (checkResponse) {
             if (checkResponse.statusCode == 200) {
                 var checkFeedback = '';
@@ -32,7 +34,7 @@ exports.onRegister = function (request, response) {
 
                     if (checkResult['errcode'] == 0) {
                         if (checkResult['taken'] == false) {//未注册
-                            forwardRequestPOST(queryString.stringify(postData), '/user/signup', function (res) {//将请求转发到服务器
+                            forwardRequestPOST(request.body, '/user/signup', function (res) {//将请求转发到服务器
                                 if (res.statusCode == 200) {
                                     var feedback = '';//应用服务器返回的结果
                                     res.on('data', function (chunk) {
@@ -88,14 +90,12 @@ exports.onRegister = function (request, response) {
 function forwardRequestPOST(data, path, callback) {
     var options = {
         host: 'localhost',
+        port: settings.business,
         method: 'POST',
-        header: {
-            "Content-Type": 'application/json',
-            "Content-Length": data.length
-        }
+        path: path
     };
 
-    var req = http.request(options, path, callback);
+    var req = http.request(options, callback);
     req.write(data);
     req.end();
 }
@@ -107,13 +107,11 @@ function forwardRequestPOST(data, path, callback) {
 function forwardRequestGET(path, callback) {
     var options = {
         host: 'localhost',
+        port: settings.business,
         method: 'GET',
-        header: {
-            "Content-Type": 'application/json',
-            "Content-Length": data.length
-        }
+        path: path
     };
-    http.request(options, path, callback);
+    http.request(options, callback);
 }
 
 // get
@@ -129,7 +127,7 @@ exports.onLogin = function (request, response) {
         var postData = request.body;
 
         //将数据转发至业务服务器
-        forwardRequestPOST(queryString.stringify(postData), '/user/login', function (res) {
+        forwardRequestPOST(postData, '/user/login', function (res) {
             if (res.errcode == 200) {
                 var feedback = '';
                 res.on('data', function (chunk) {
@@ -239,8 +237,7 @@ exports.manageUserInformation = function (request, response) {
 
         var userId = getUserIdFromCookie(request);
 
-        var postData = request.body;
-        forwardRequestPOST(queryString.stringify(postData), '/user/' + userId + '/update', function (res) {
+        forwardRequestPOST(request.body, '/user/' + userId + '/update', function (res) {
             if (res.errcode == 200) {
                 var feedback = '';
                 res.on('data', function (chunk) {
