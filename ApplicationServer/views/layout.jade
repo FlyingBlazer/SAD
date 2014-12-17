@@ -23,25 +23,23 @@ html(lang="zh-cn")
                             span.icon-bar
                         a.navbar-brand(href="#") 挂号网
                     div#navbar-collapse.collapse.navbar-collapse
-                        ul.nav.navbar-nav
-                            li.active
-                                a(href="#")
-                                    | Link
-                                    span.sr-only (current)
-                        ul.nav.navbar-nav.navbar-right
-                            li
-                                a(href="/account/login") 登陆
-                            li
-                                a(href="/account/register") 注册
-                        ul.nav.navbar-nav.navbar-right
-                            li
-                                a(href="#") 宋任飞
-                            li
-                                a(href="#") 个人中心
-                            li
-                                a(href="#") 预约单
-                            li
-                                a(href="#") 退出
+                        if username
+                            ul.nav.navbar-nav.navbar-right
+                                li
+                                    a(href="#") #{username}
+                                li
+                                    a(href="#") 个人中心
+                                li
+                                    a(href="#") 预约单
+                                li
+                                    a(href="#") 退出
+                        else
+                            ul.nav.navbar-nav.navbar-right
+                                li
+                                    a(href="/account/login") 登陆
+                                li
+                                    a(href="/account/register") 注册
+
 
         div#header
             div#header-content
