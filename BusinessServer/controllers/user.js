@@ -81,7 +81,7 @@ exports.signUp = function(req, res, next) {
 
 exports.checkName = function(req, res, next) {
     var username = req.params.username;
-    req.models.user.find({username: username}, function(err, users) {
+    req.models.user.find({name: username}, function(err, users) {
         if(err) return next(err);
         if(users.length > 0) {
             return next(new Errors.UserAlreadyExisted('User Already Existed'));

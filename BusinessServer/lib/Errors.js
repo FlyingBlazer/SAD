@@ -10,7 +10,7 @@ exports.LoginFail = function LoginFail(message) {
     });
     this.name = 'LoginFail';
 };
-util.inherits(LoginFail, restify.RestError);
+util.inherits(exports.LoginFail, restify.RestError);
 
 exports.UserNotLogin = function UserNotLogin(message) {
     restify.RestError.call(this, {
@@ -21,7 +21,7 @@ exports.UserNotLogin = function UserNotLogin(message) {
     });
     this.name = 'UserNotLogin';
 };
-util.inherits(UserNotLogin, restify.RestError);
+util.inherits(exports.UserNotLogin, restify.RestError);
 
 exports.UserAlreadyExisted = function UserAlreadyExisted(message) {
     restify.RestError.call(this, {
@@ -32,7 +32,7 @@ exports.UserAlreadyExisted = function UserAlreadyExisted(message) {
     });
     this.name = 'UserAlreadyExisted';
 };
-util.inherits(UserAlreadyExisted, restify.RestError);
+util.inherits(exports.UserAlreadyExisted, restify.RestError);
 
 exports.UserNotExist = function UserNotExist(message) {
     restify.RestError.call(this, {
@@ -43,7 +43,7 @@ exports.UserNotExist = function UserNotExist(message) {
     });
     this.name = 'UserNotExist';
 };
-util.inherits(UserNotExist, restify.RestError);
+util.inherits(exports.UserNotExist, restify.RestError);
 
 exports.InvalidUserStatus=function InvalidUserStatus(message) {
     restify.RestError.call(this, {
@@ -54,7 +54,7 @@ exports.InvalidUserStatus=function InvalidUserStatus(message) {
     });
     this.name = 'InvalidUserStatus';
 }
-util.inherits(InvalidUserStatus, restify.RestError);
+util.inherits(exports.InvalidUserStatus, restify.RestError);
 
 exports.HospitalNotExist = function HospitalNotExist(message) {
     restify.RestError.call(this, {
@@ -65,7 +65,7 @@ exports.HospitalNotExist = function HospitalNotExist(message) {
     });
     this.name = 'HospitalNotExist';
 };
-util.inherits(HospitalNotExist, restify.RestError);
+util.inherits(exports.HospitalNotExist, restify.RestError);
 
 exports.ListEmpty = function ListEmpty(message) {
     restify.RestError.call(this, {
@@ -76,7 +76,7 @@ exports.ListEmpty = function ListEmpty(message) {
     });
     this.name = 'ListEmpty';
 };
-util.inherits(ListEmpty, restify.RestError);
+util.inherits(exports.ListEmpty, restify.RestError);
 
 exports.ApproveFail = function ApproveFail(message) {
     restify.RestError.call(this, {
@@ -87,7 +87,7 @@ exports.ApproveFail = function ApproveFail(message) {
     });
     this.name = 'ApproveFail';
 };
-util.inherits(ApproveFail, restify.RestError);
+util.inherits(exports.ApproveFail, restify.RestError);
 
 exports.RejectFail = function RejectFail(message) {
     restify.RestError.call(this, {
@@ -98,7 +98,7 @@ exports.RejectFail = function RejectFail(message) {
     });
     this.name = 'RejectFail';
 };
-util.inherits(RejectFail, restify.RestError);
+util.inherits(exports.RejectFail, restify.RestError);
 
 exports.FailToGetStatus = function FailToGetStatus(message) {
     restify.RestError.call(this, {
@@ -109,7 +109,7 @@ exports.FailToGetStatus = function FailToGetStatus(message) {
     });
     this.name = 'FailToGetStatus';
 };
-util.inherits(FailToGetStatus, restify.RestError);
+util.inherits(exports.FailToGetStatus, restify.RestError);
 
 exports.EmptyReservation = function EmptyReservation(message) {
     restify.RestError.call(this, {
@@ -120,7 +120,7 @@ exports.EmptyReservation = function EmptyReservation(message) {
     });
     this.name = 'EmptyReservation';
 };
-util.inherits(EmptyReservation, restify.RestError);
+util.inherits(exports.EmptyReservation, restify.RestError);
 
 exports.ReservationUserInvalidFailure = function ReservationUserInvalidFailure(message) {
     restify.RestError.call(this, {
@@ -131,7 +131,7 @@ exports.ReservationUserInvalidFailure = function ReservationUserInvalidFailure(m
     });
     this.name = 'ReservationUserInvalidFailure';
 };
-util.inherits(ReservationUserInvalidFailure, restify.RestError);
+util.inherits(exports.ReservationUserInvalidFailure, restify.RestError);
 
 exports.ReservationErrorFailure = function ReservationErrorFailure(message) {
     restify.RestError.call(this, {
@@ -142,7 +142,7 @@ exports.ReservationErrorFailure = function ReservationErrorFailure(message) {
     });
     this.name = 'ReservationErrorFailure';
 };
-util.inherits(ReservationErrorFailure, restify.RestError);
+util.inherits(exports.ReservationErrorFailure, restify.RestError);
 
 exports.ReservationPeriodFailure = function ReservationPeriodFailure(message) {
     restify.RestError.call(this, {
@@ -153,7 +153,7 @@ exports.ReservationPeriodFailure = function ReservationPeriodFailure(message) {
     });
     this.name = 'ReservationPeriodFailure';
 }
-util.inherits(ReservationPeriodFailure, restify.RestError);
+util.inherits(exports.ReservationPeriodFailure, restify.RestError);
 
 exports.ReservationFullFailure = function ReservationFullFailure(message) {
     restify.RestError.call(this, {
@@ -164,7 +164,7 @@ exports.ReservationFullFailure = function ReservationFullFailure(message) {
     });
     this.name = 'ReservationFullFailure';
 };
-util.inherits(ReservationFullFailure, restify.RestError);
+util.inherits(exports.ReservationFullFailure, restify.RestError);
 
 exports.CancelFailure = function CancelFailure(message) {
     restify.RestError.call(this, {
@@ -175,7 +175,7 @@ exports.CancelFailure = function CancelFailure(message) {
     });
     this.name = 'CancelFailure';
 };
-util.inherits(CancelFailure, restify.RestError);
+util.inherits(exports.CancelFailure, restify.RestError);
 
 exports.PaymentFailure = function PaymentFailure(message) {
     restify.RestError.call(this, {
@@ -186,7 +186,7 @@ exports.PaymentFailure = function PaymentFailure(message) {
     });
     this.name = 'PaymentFailure';
 };
-util.inherits(PaymentFailure, restify.RestError);
+util.inherits(exports.PaymentFailure, restify.RestError);
 
 exports.DetailFailure = function DetailFailure(message) {
     restify.RestError.call(this, {
@@ -197,7 +197,7 @@ exports.DetailFailure = function DetailFailure(message) {
     });
     this.name = 'DetailFailure';
 };
-util.inherits(DetailFailure, restify.RestError);
+util.inherits(exports.DetailFailure, restify.RestError);
 
 exports.PrintFalure = function PrintFalure(message) {
     restify.RestError.call(this, {
@@ -208,7 +208,7 @@ exports.PrintFalure = function PrintFalure(message) {
     });
     this.name = 'PrintFalure';
 };
-util.inherits(PrintFalure, restify.RestError);
+util.inherits(exports.PrintFalure, restify.RestError);
 
 exports.ConfirmFailure = function ConfirmFailure(message) {
     restify.RestError.call(this, {
@@ -219,7 +219,7 @@ exports.ConfirmFailure = function ConfirmFailure(message) {
     });
     this.name = 'ConfirmFailure';
 };
-util.inherits(ConfirmFailure, restify.RestError);
+util.inherits(exports.ConfirmFailure, restify.RestError);
 
 
 exports.DepartmentNotExist = function DepartmentNotExist(message) {
@@ -231,7 +231,7 @@ exports.DepartmentNotExist = function DepartmentNotExist(message) {
     });
     this.name = 'DepartmentNotExist';
 };
-util.inherits(DepartmentNotExist, restify.RestError);
+util.inherits(exports.DepartmentNotExist, restify.RestError);
 
 exports.DoctorNotExist = function DoctorNotExist(message) {
     restify.RestError.call(this, {
@@ -242,4 +242,4 @@ exports.DoctorNotExist = function DoctorNotExist(message) {
     });
     this.name = 'DoctorNotExist';
 };
-util.inherits(DoctorNotExist, restify.RestError);
+util.inherits(exports.DoctorNotExist, restify.RestError);
