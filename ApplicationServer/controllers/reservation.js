@@ -70,7 +70,7 @@ var __invalidArgsError = function(response) {
 
 var serialize = function(obj) {
     var str = [];
-    for(var p in obj)
+    for (var p in obj)
         if (obj.hasOwnProperty(p)) {
             str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
         }
@@ -78,9 +78,9 @@ var serialize = function(obj) {
 };
 
 var fireRequest = function(method, path, data, callback, noErrCodeCheck) {
-
+    var options;
     if (method == 'POST')
-        var options = {
+        options = {
             host: 'localhost',
             port: settings.port.business,
             method: method,
@@ -90,7 +90,7 @@ var fireRequest = function(method, path, data, callback, noErrCodeCheck) {
             }
         };
     else
-        var options = {
+        options = {
             host: 'localhost',
             port: settings.port.business,
             method: method,
@@ -439,7 +439,6 @@ exports.onSubmit = function(request, response) {
         time: time,
         paid_flag: false
     };
-    console.log(serialize(data));
     fireRequest('POST', url, serialize(data), function(res) {
         if (res == null) {
             __fatalError(response, 'Line=' + __line + ', Func=' + __function);
