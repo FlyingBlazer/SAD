@@ -41,7 +41,7 @@ exports.updateInfo = function(req, res, next){
             if(user.password!=pass_prev){
                 return next(new Errors.UpdatePasswordFail("Incorrect password"));
             }
-            else if(pass_curr)
+            else if(pass_curr){
                 user.password=pass_curr;
             }
             else{
