@@ -25,7 +25,8 @@ exports.list = function(req, res, next) {
                     '订单超时，尚未支付',
                     '订单超时，尚未确认就诊',
                     '订单超时，未就诊',
-                    '订单超时，已就诊'
+                    '订单超时，已就诊',
+                    '订单超时，未就诊'
                 ];
             for(var i = 0; i < data.length; i++){
                 data[i]['status']=statuslist[data[i]['status']];
