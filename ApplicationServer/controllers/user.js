@@ -76,7 +76,7 @@ exports.onRegister = function (request, response) {
  * @param callback 业务服务器返回的结果(JSON Object)
  */
 function forwardRequestPOST(data, path, callback) {
-    forwardRequest('POST', path, data, callback);
+    forwardRequest('POST', path, queryString.parse(data), callback);
 }
 
 /**
