@@ -178,7 +178,7 @@ exports.listHospitals = function(request, response) {
             province: province,
             list: res.hospitals
         });
-    });
+    }, false);
 };
 
 // get
@@ -198,7 +198,7 @@ exports.search = function(request, response) {
             searchText: query,
             list: res.hospitals
         });
-    });
+    }, false);
 };
 
 // Hospital page - Show all departments and doctors
@@ -217,21 +217,21 @@ exports.showHospital = function(request, response) {
         detail = res;
         ++ctr;
         onCompletion();
-    });
+    }, false);
 
     var url2 = '/hospital/department/' + hospitalId;
     fireRequest('GET', url2, null, function(res) {
         departments = res;
         ++ctr;
         onCompletion();
-    });
+    }, false);
 
     var url3 = '/hospital/doctor/list?hospitalId=' + hospitalId;
     fireRequest('GET', url3, null, function(res) {
         doctors = res;
         ++ctr;
         onCompletion();
-    });
+    }, false);
 
     var onCompletion = function() {
         if (ctr !== 3)
@@ -283,7 +283,7 @@ exports.showDoctor = function(request, response) {
             departmentId: departmentId,
             detail: res
         });
-    }, true);
+    }, false);
 };
 
 // get
@@ -425,7 +425,7 @@ exports.onSubmit = function(request, response) {
         }
         var resvId = res.id;
         response.redirect(302, '/reservation/' + doctorId + '/' + resvId + '/success');
-    });
+    }, false);
 };
 
 // Show reservation detail
@@ -452,14 +452,14 @@ exports.showReservation = function(request, response) {
         resvDetail = res;
         ++ctr;
         render();
-    });
+    }, false);
 
     var url2 = '/hospital/doctor/' + doctorId + '/detail';
     fireRequest('GET', url2, null, function(res) {
         doctorDetail = res;
         ++ctr;
         render();
-    });
+    }, false);
 
     var render = function() {
         if (ctr !== 2)
@@ -504,14 +504,14 @@ exports.showReservationWithSuccessMessage = function(request, response) {
         resvDetail = res;
         ++ctr;
         render();
-    });
+    }, false);
 
     var url2 = '/hospital/doctor/' + doctorId + '/detail';
     fireRequest('GET', url2, null, function(res) {
         doctorDetail = res;
         ++ctr;
         render();
-    });
+    }, false);
 
     var render = function() {
         if (ctr !== 2)
@@ -556,5 +556,5 @@ exports.test = function(request, response) {
             return;
         }
         response.render(request.params.template, res);
-    });
+    }, false);
 };
