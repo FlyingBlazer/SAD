@@ -4,6 +4,10 @@ block title
 
 block site-content
     link(href="/stylesheets/signup.css", rel="stylesheet", media="all")
+    script(src='/javascripts/jquery-2.1.1.min.js')
+    script(src='/javascripts/jquery.validate.min.js')
+    script(src='/javascripts/messages_zh.min.js')
+    script(src="/javascripts/md5.js")
     script(type="text/javascript").
         var maxtime = 60;
         function StartCountDown(){
@@ -29,31 +33,57 @@ block site-content
                 document.getElementById("msg").innerHTML = "重新发送";
             }
         }
-        function Validate() {
+        function validate() {
             if ($("#password").val() != $("#password2").val()) {
                 alert("两次输入密码不一致！");
                 return false;
             }
+            $("#password").set(hex_md5($("#password").val()));
+            $("#password2").set(hex_md5($("#password2").val()));
             return true;
         }
+        (function() {
+            $(document).ready(function() {
+                $("#register-form").validate();
+            });
+        })();
     .container
-        form.form-login(role='form', action='/account/register', name='postSignupMessage', method='post', onsubmit="return Validate()")
+        form.form-login(role='form', class="form-horizontal", action='/account/register', name='postSignupMessage', method='post', onsubmit="return validate()", id="register-form")
             h2.form-login-heading 用户注册
             h3.label(style='color: red') 加*为必填项
-            input.form-control(type='text', name='username', placeholder='请输入用户名*', style='margin-top: 10px', required='', autofocus='')
-            input.form-control(type='text', name='name', placeholder='患者姓名*', required='')
-            input.form-control(type='text', name='id', placeholder='身份证号*', required='')
-            input.form-control(type='text', name='phone', placeholder='手机号*', required='')
-            button#msg.btn.btn-link(type='button', onclick='StartCountDown()') 发送验证短信
-            div
-                input(style='display: inline', type='radio', name='gender', value='male', checked='')
-                | 男
-                input(style='display: inline', type='radio', name='gender', value='female')
-                | 女
-            input.form-control(type='email', name='email', placeholder='邮箱(用于找回您的密码)')
-            input.form-control(type='password', name='password', id='password', placeholder='请输入密码*', required='')
-            input.form-control(type='password', name='password2', id='password2', placeholder='请再次输入确认密码*', required='')
-            input.form-control(type='number', name='validationCode', placeholder='您手机收到的短信验证码*', required='')
+            .form-group
+                label.col-sm-2.control-label(for='username') 用户名*
+                .col-sm-10
+                    input#username.form-control(type='text', placeholder='请输入用户名*',name="username")
+            .form-group
+                label.col-sm-2.control-label(for='password') 密码*
+                .col-sm-10
+                    input#password.form-control(type='password', placeholder='请输入密码*',name="password")
+            .form-group
+                label.col-sm-2.control-label(for='password2') 确认密码*
+                .col-sm-10
+                    input#password2.form-control(type='password', placeholder='请再次输入密码*',name="password2")
+            .form-group
+                label.col-sm-2.control-label(for='name') 姓名*
+                .col-sm-10
+                    input#name.form-control(type='text', placeholder='请输入您的姓名',name="name")
+            .form-group
+                label.col-sm-2.control-label(for='id') 身份证号*
+                .col-sm-10
+                    input#id.form-control(type='text', placeholder='请输入身份证号码',name="id")
+            .form-group
+                label.col-sm-2.control-label(for='phone') 手机号*
+                .col-sm-10
+                    input#phone.form-control(type='text', placeholder='请输入您的手机号',name="phone")
+                    button#msg.btn.btn-link(type='button', onclick='StartCountDown()')                 发送验证短信
+            .form-group
+                label.col-sm-2.control-label(for='email') 电子邮箱
+                .col-sm-10
+                    input#phone.form-control(type='email', placeholder='电子邮箱（用于找回您的密码）',name="email")
+            .form-group
+                label.col-sm-2.control-label(for='vallidationCode') 验证码*
+                .col-sm-10
+                    input#phone.form-control(type='number', placeholder='您手机收到的短信验证码',name="validationCode")
             .checkbox
                 label
                     input(style='display: inline', type='checkbox', value='approve')
@@ -62,4 +92,3 @@ block site-content
             h2.label(name='errorMessage', style='color: red; font-size: larger') #{errorMessage}
             br
             button.btn.btn-lg.btn-primary.btn-block(type='submit') 确认注册
-
