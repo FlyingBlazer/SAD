@@ -13,7 +13,7 @@ block site-content
                p.left-head
                   img(src='http://img.guahao.cn/img/character/young-m.png', alt='男')
                   span(style='margin-left: 3px')
-                     strong 刘笑然
+                     strong #{username}
                ul.none-border
                   li(style='list-style-type: none;margin-top:40px;margin-left:10px;text-align:left')
                      a.btn.btn-primary.btn-lg.active(href='http://www.guahao.com/my/orderlist', role='button')
@@ -29,31 +29,31 @@ block site-content
                   table.table
                      colgroup
                         col(width='144px;')
-                        col(width='160px;')
+                        col(width='180px;')
                         col(width='100px;')
-                        col(width='70px;')
-                        col.order-cost(width='80px;')
+
+                        col.order-cost(width='130px;')
                         col(width='130px;')
                      thead
                         tr
                            th 就诊日期
                            th 医院
                            th.text-left 医生
-                           th 就诊人
+
                            th 挂号费
                            th 订单状态
                            th 操作
                      tbody
-                        if(list.length)
-                           tr for item in list
-                              td 1992-1-1
-                              td 北京三院
-                              td liuxiaoran
-                              td liuxiaran
-                              td 1
-                              td success
+                        if(reservations.length)
+                           tr for item in reservations
+                              td item.time
+                              td item.hospital_name
+                              td item.doctor_name
+
+                              td item.price
+                              td item.status
                               td
-                                 a(href='###') 查看
+                                 a(href='/user/reservation/#{item.reservation_id}/detail') 查看
 
                      tbody
    div.clear

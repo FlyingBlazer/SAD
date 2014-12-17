@@ -11,7 +11,7 @@ exports.search = function(req, res, next) {
     	}
     }
     req.db.driver.execQuery(
-  		"SELECTid as hospital_id,name as name,addr as address,tel as tel FROM hospital WHERE MATCH('name') AGAINST('?' IN BOOLEAN MODE)",
+  		"SELECT id as hospital_id,name as name,addr as address,tel as tel FROM hospital WHERE MATCH('name') AGAINST('?' IN BOOLEAN MODE)",
   		[keyword_set],
   		function (err, data) {
   			if(err) return next(err);

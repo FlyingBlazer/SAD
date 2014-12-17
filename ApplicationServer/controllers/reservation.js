@@ -7,13 +7,30 @@
 var settings = require('../../settings.json');
 
 var __logError = function(errMsg) {
-    console.error('(!) #  FATAL  ERROR  #');
+    console.error('(!) # FATAL ERROR #');
     console.error(errMsg);
 };
 
 var __fatal = function(response) {
-    response.status(503).send('HTTP/1.1 Service Unavailable');
-    __logError('Invalid object received from Business server.');
+    response.status(503).send('HTTP/1.1 Error 503 Service Unavailable');
+    __logError('Invalid object received from Business server (if it exists).');
+};
+
+var __invalidArgs = function(response) {
+    response.status(418).send('HTTP/1.1 Error 418 I\'m a teapot');
+    __logError('Invalid arguments provided.');
+};
+
+var __checkVars = function(name, object, members) {
+    var status = true;
+    for (var i = 2; i < arguments.length; ++i) {
+        if (typeof object[arguments[i]] === 'undefined') {
+            console.error('Argument not found: ' + name + '.' + arguments[i]);
+            status = false;
+        }
+    }
+
+    return status;
 };
 
 var fireRequest = function(method, path, data, callback) {
@@ -40,10 +57,10 @@ var fireRequest = function(method, path, data, callback) {
             }
             callback(srcObject);
         });
-        res.on('error', function(e) {
-            __logError('Business server is down: ' + e.message);
-            callback(null);
-        });
+    });
+    req.on('error', function(e) {
+        __logError('Business server is DOWN: ' + e.message);
+        callback(null);
     });
     if (data !== null)
         req.write(data);
@@ -87,6 +104,11 @@ exports.redirectToListHospitals = function(request, response) {
 
 // get
 exports.listHospitals = function(request, response) {
+    if (!__checkVars('cookies', request.cookies, 'username')) {
+        __invalidArgs(response);
+        return;
+    }
+
     var username = request.cookies.username;
     var province = request.params.province;
     var url = '/hospital/hospital/list?province=' + province;
@@ -109,6 +131,11 @@ exports.listHospitals = function(request, response) {
 // Choose a department and a doctor
 // get
 exports.showHospital = function(request, response) {
+    if (!__checkVars('cookies', request.cookies, 'username')) {
+        __invalidArgs(response);
+        return;
+    }
+
     var username = request.cookies.username;
     var hospitalId = request.params.hospital_id;
     var detail = null;
@@ -155,6 +182,11 @@ exports.showHospital = function(request, response) {
 
 // (!) deprecated method
 exports.showHospital2 = function(request, response) {
+    if (!__checkVars('cookies', request.cookies, 'username')) {
+        __invalidArgs(response);
+        return;
+    }
+
     var username = request.cookies.username;
     var hospitalId = request.params.hospital_id;
     var detail = null;
@@ -213,6 +245,11 @@ exports.showHospital2 = function(request, response) {
 // Choose a time
 // get
 exports.showDoctor = function(request, response) {
+    if (!__checkVars('cookies', request.cookies, 'username')) {
+        __invalidArgs(response);
+        return;
+    }
+
     var username = request.cookies.username;
     var expertId = request.params.expert_id;
     var hospitalId = request.params.hospital_id;
@@ -235,6 +272,14 @@ exports.showDoctor = function(request, response) {
 
 // post (need x-www-form-urlencoded data)
 exports.confirm = function(request, response) {
+    var _sa = __checkVars('cookies', request.cookies, 'username', 'userId', 'userTelephone', 'userSocialId', 'userRealName');
+    var _sb = __checkVars('body', request.body, 'hospital', 'hospitalId', 'department', 'departmentId', 'doctor', 'doctorId', 'resvDate', 'resvTime', 'title', 'price');
+
+    if (_sa === false || _sb === false) {
+        __invalidArgs(response);
+        return;
+    }
+
     var username = request.cookies.username;
     var userId = request.cookies.userId;
     var userTelephone = request.cookies.userTelephone;
@@ -276,6 +321,14 @@ exports.confirm = function(request, response) {
 // Submit request
 // post (need x-www-form-urlencoded data)
 exports.onSubmit = function(request, response) {
+    var _sa = __checkVars('cookies', request.cookies, 'userId');
+    var _sb = __checkVars('body', request.body, 'hospitalId', 'departmentId', 'doctorId', 'resvTime', 'resvDate');
+
+    if (_sa === false || _sb === false) {
+        __invalidArgs(response);
+        return;
+    }
+
     var userId = request.cookies.userId; // from cookie;
     var hospitalId = request.body.hospitalId; // from prev page
     var departmentId = request.body.departmentId; // from prev page
@@ -308,6 +361,11 @@ exports.onSubmit = function(request, response) {
 // Optional message
 // get
 exports.showReservation = function(request, response) {
+    if (!__checkVars('cookies', request.cookies, 'username', 'userRealName', 'userTelephone')) {
+        __invalidArgs(response);
+        return;
+    }
+
     var username = request.cookies.username;
     var resvId = request.params.reservation_id;
     var doctorId = request.params.doctor_id;
