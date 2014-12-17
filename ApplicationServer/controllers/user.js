@@ -65,7 +65,7 @@ exports.onRegister = function (request, response) {
                         email: request.body.email
                     };
 
-                    forwardRequestPOST(request.body, '/user/signup/', registerCallback);//注册
+                    forwardRequestPOST(request.body, '/user/signup', registerCallback);//注册
                 } else
                     response.render('signup', {
                         errorMessage: '账号已存在'
@@ -106,12 +106,23 @@ function forwardRequestGET(path, callback) {
  * @param callback 参数为返回的结果(JSON Object)
  */
 var forwardRequest = function (method, path, data, callback) {
-    var options = {
-        host: 'localhost',
-        port: settings.port.business,
-        method: method,
-        path: path
-    };
+    var options;
+    if (method == 'GET')
+        options = {
+            host: 'localhost',
+            port: settings.port.business,
+            method: method,
+            path: path
+        }; else if (method == 'POST')
+        options = {
+            host: 'localhost',
+            port: settings.port.business,
+            method: method,
+            path: path,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        };
 
     var responseData = '';
     var req = http.request(options, function (res) {
