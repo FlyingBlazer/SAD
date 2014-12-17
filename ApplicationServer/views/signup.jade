@@ -54,27 +54,27 @@ block site-content
             .form-group
                 label.col-sm-2.control-label(for='username') 用户名*
                 .col-sm-10
-                    input#username.form-control(type='text', placeholder='请输入用户名*',name="username")
+                    input#username.form-control(type='text', placeholder='请输入用户名*',name="username",required="required")
             .form-group
                 label.col-sm-2.control-label(for='password') 密码*
                 .col-sm-10
-                    input#password.form-control(type='password', placeholder='请输入密码*',name="password")
+                    input#password.form-control(type='password', placeholder='请输入密码*',name="password",required="required")
             .form-group
                 label.col-sm-2.control-label(for='password2') 确认密码*
                 .col-sm-10
-                    input#password2.form-control(type='password', placeholder='请再次输入密码*',name="password2")
+                    input#password2.form-control(type='password', placeholder='请再次输入密码*',name="password2",required="required")
             .form-group
                 label.col-sm-2.control-label(for='name') 姓名*
                 .col-sm-10
-                    input#name.form-control(type='text', placeholder='请输入您的姓名',name="name")
+                    input#name.form-control(type='text', placeholder='请输入您的姓名',name="name",required="required")
             .form-group
                 label.col-sm-2.control-label(for='id') 身份证号*
                 .col-sm-10
-                    input#id.form-control(type='text', placeholder='请输入身份证号码',name="id")
+                    input#id.form-control(type='text', placeholder='请输入身份证号码',name="id",required="required")
             .form-group
                 label.col-sm-2.control-label(for='phone') 手机号*
                 .col-sm-10
-                    input#phone.form-control(type='text', placeholder='请输入您的手机号',name="phone")
+                    input#phone.form-control(type='text', placeholder='请输入您的手机号',name="phone",required="required")
                     button#msg.btn.btn-link(type='button', onclick='StartCountDown()')                 发送验证短信
             .form-group
                 label.col-sm-2.control-label(for='email') 电子邮箱
@@ -83,7 +83,7 @@ block site-content
             .form-group
                 label.col-sm-2.control-label(for='vallidationCode') 验证码*
                 .col-sm-10
-                    input#phone.form-control(type='number', placeholder='您手机收到的短信验证码',name="validationCode")
+                    input#phone.form-control(type='number', placeholder='您手机收到的短信验证码',name="validationCode",required="required")
             .checkbox
                 label
                     input(style='display: inline', type='checkbox', value='approve')
