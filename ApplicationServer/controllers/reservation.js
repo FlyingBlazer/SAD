@@ -343,7 +343,8 @@ exports.recoverConfirm = function(request, response) {
             "doctorTitle": bodyParams.title,
             "date": bodyParams.resvDate,
             "time": bodyParams.resvTime,
-            "price": bodyParams.price
+            "price": bodyParams.price,
+            "day": bodyParams.day
         }
     });
 };
@@ -367,7 +368,8 @@ exports.confirm = function(request, response) {
         'resvDate': request.body.resvDate,
         'resvTime': request.body.resvTime,
         'title': request.body.title,
-        'price': request.body.price
+        'price': request.body.price,
+        'day': request.body.day
     };
 
     // if cookie is not set, save request body to cookie and retreat to login page
@@ -406,7 +408,8 @@ exports.confirm = function(request, response) {
             "doctorTitle": bodyParams.title,
             "date": bodyParams.resvDate,
             "time": bodyParams.resvTime,
-            "price": bodyParams.price
+            "price": bodyParams.price,
+            "day": bodyParams.day
         }
     });
 };
@@ -428,6 +431,7 @@ exports.onSubmit = function(request, response) {
     var doctorId = request.body.doctorId; // from prev page
     var time = request.body.resvTime; // from prev page
     var date = request.body.resvDate; // from prev page
+    var day = request.body.day;
 
     var url = '/user/reservation/add';
     var data = {
@@ -437,6 +441,7 @@ exports.onSubmit = function(request, response) {
         doctor_id: doctorId,
         date: date,
         time: time,
+        week: day,
         paid_flag: false
     };
     fireRequest('POST', url, serialize(data), function(res) {
