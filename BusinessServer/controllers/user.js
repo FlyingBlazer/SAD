@@ -27,6 +27,8 @@ exports.login =function(req, res, next) {
 exports.updateInfo = function(req, res, next){
     var phone=req.body.phone;
     var email=req.body.email;
+    var pass_prev=req.body.pre_pw;
+    var pass_curr=req.body.new_pw;
     req.models.user.get(req.params.userId, function(err, user){
         if(err){
             return next(err);
@@ -34,24 +36,35 @@ exports.updateInfo = function(req, res, next){
         else if(!user){
             return next(new Errors.UserNotLogin("User not login"));
         }
-        else{
-            if(phone){
-                user.tel=phone;
+
+        if(pass_prev){
+            if(user.password!=pass_prev){
+                return next(new Errors.UpdatePasswordFail("Incorrect password"));
             }
-            if(email){
-                user.email=email;
+            else if(pass_curr){
+                user.password=pass_curr;
             }
-            user.save(function(err) {
-                if(err) {
-                    return next(err);
-                }
-                res.json({
-                    errcode: 0,
-                    errmsg: 'success',
-                    username: user.name
-                });
-            });
+            else{
+                return next(new Errors.UpdatePasswordFail("No new password"));
+            }
         }
+        
+        if(phone){
+            user.tel=phone;
+        }
+        if(email){
+            user.email=email;
+        }
+        user.save(function(err) {
+            if(err) {
+               return next(err);
+            }
+            res.json({
+                errcode: 0,
+                errmsg: 'success',
+                username: user.name
+            });
+        });
     });
 };
 
@@ -68,7 +81,9 @@ exports.signUp = function(req, res, next) {
         password: password,
         socialId: id,
         tel: phone,
-        email: email
+        email: email,
+        credit: 5,
+        isActivited: 0
     }, function(err, user) {
         if(err) return next(err);
         res.json({
@@ -81,7 +96,7 @@ exports.signUp = function(req, res, next) {
 
 exports.checkName = function(req, res, next) {
     var username = req.params.username;
-    req.models.user.find({username: username}, function(err, users) {
+    req.models.user.find({name: username}, function(err, users) {
         if(err) return next(err);
         if(users.length > 0) {
             return next(new Errors.UserAlreadyExisted('User Already Existed'));

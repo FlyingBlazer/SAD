@@ -6,22 +6,19 @@ exports.list = function(req, res, next) {
         if(err) return next(err);
         if(!hospital) return next(new Errors.HospitalNotExist("Department Not Exist"));
         var ret = {};
-        hospital.getDepartment(function(err, department) {
-            if(err) return next(err);
-            department.getDoctors(function(err, doctors) {
-                doctors.forEach(function(doctor) {
-                    if(!Array.isArray(ret[department.name])) {
-                        ret[department.name] = [];
-                    }
-                    ret[department.name].push({
-                        id: doctor.id,
-                        name: doctor.name,
-                        hospital: hospital.name,
-                        department: department.name,
-                        title: doctor.title,
-                        description: doctor.info,
-                        photo_url: doctor.photo
-                    });
+        hospital.departments.forEach(function(department) {
+            if(!Array.isArray(ret[department.name])) {
+                ret[department.name] = [];
+            }
+            department.doctors.forEach(function(doctor) {
+                ret[department.name].push({
+                    id: doctor.id,
+                    name: doctor.name,
+                    hospital: hospital.name,
+                    department: department.name,
+                    title: doctor.title,
+                    description: doctor.info,
+                    photo_url: doctor.photo
                 });
             });
         });
