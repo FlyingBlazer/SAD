@@ -13,7 +13,7 @@ module.exports = function(req, res, next) {
     req.db.driver.execQuery(
         "SELECT a.id as id, a.name as name, b.meaning as level, a.province as province, a.city as city, a.addr as address, " +
         "a.tel as telephone, a.site as website, a.info as description FROM hospital as a, hospital_rating as b WHERE a.rating_id = b.id AND " +
-        "a.id IN (SELECT id FROM hospital WHERE MATCH('name') AGAINST('?' IN BOOLEAN MODE))"
+        "a.id IN (SELECT id FROM hospital WHERE MATCH(name) AGAINST('?' IN BOOLEAN MODE))"
             [keyword_set],
         function (err, data) {
             if(err) return next(err);
