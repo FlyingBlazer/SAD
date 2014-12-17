@@ -58,8 +58,9 @@ var __fatalError = function(response, identifier) {
         'Terminating...');
 };
 
-var __entityNotFound = function(response) {
+var __entityNotFound = function(response, identifier) {
     response.status(200).send('Entity Not Found');
+    console.error('Entity Not Found: ' + identifier);
 };
 
 var __invalidArgsError = function(response) {
@@ -168,7 +169,7 @@ exports.listHospitals = function(request, response) {
             return;
         }
         if (res == stdNotFound) {
-            __entityNotFound(response);
+            __entityNotFound(response, 'Line=' + __line + ', Func=' + __function);
             return;
         }
         response.render('hospital_list', {
@@ -241,7 +242,7 @@ exports.showHospital = function(request, response) {
             return;
         }
         if (detail == stdNotFound || departments == stdNotFound || doctors == stdNotFound) {
-            __entityNotFound(response);
+            __entityNotFound(response, 'Line=' + __line + ', Func=' + __function);
             return;
         }
         response.render('hospital', {
@@ -274,7 +275,7 @@ exports.showDoctor = function(request, response) {
             return;
         }
         if (res == stdNotFound) {
-            __entityNotFound(response);
+            __entityNotFound(response, 'Line=' + __line + ', Func=' + __function);
             return;
         }
         response.render('doctor', {
@@ -288,7 +289,6 @@ exports.showDoctor = function(request, response) {
 
 // get
 exports.recoverConfirm = function(request, response) {
-
     // check required cookies
     if (!__checkVars('cookies', request.cookies, 'confirm_data', 'username', 'userId', 'userTelephone', 'userSocialId', 'userRealName')) {
         // still not logged in
@@ -469,7 +469,7 @@ exports.showReservation = function(request, response) {
             return;
         }
         if (resvDetail == stdNotFound || doctorDetail == stdNotFound) {
-            __entityNotFound(response);
+            __entityNotFound(response, 'Line=' + __line + ', Func=' + __function);
             return;
         }
         response.render('reservation', {
