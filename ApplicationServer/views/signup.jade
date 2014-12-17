@@ -7,7 +7,7 @@ block site-content
     script(type="text/javascript").
         var maxtime = 60;
         function StartCountDown(){
-            document.getElementById("msg").disabled = true;;
+            document.getElementById("msg").disabled = true;
             maxtime = 60;
             timer = setInterval("CountDown()", 1000);
         }
@@ -60,7 +60,6 @@ block site-content
                     | 我同意SAD挂号平台的服务许可协议
                 a(style='display: inline;', type='button', href='license.html', target='_blank') 查看
             h2.label(name='errorMessage', style='color: red; font-size: larger') #{errorMessage}
-            // TODO 加上错误信息显示#{errorMessage}
             br
             button.btn.btn-lg.btn-primary.btn-block(type='submit') 确认注册
 

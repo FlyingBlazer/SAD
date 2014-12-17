@@ -10,7 +10,9 @@ var settings = require('../../settings');
 exports.registerPage = function (request, response) {
     //渲染注册界面
     if (request.method.toLowerCase() == 'get') {
-        response.render('signup');
+        response.render('signup', {
+            errorMessage: ''
+        });
     }
 };
 
