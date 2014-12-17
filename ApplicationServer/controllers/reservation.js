@@ -122,6 +122,7 @@ exports.listHospitals = function(request, response) {
             username: username,
             search: false,
             searchText: null,
+            province: province,
             list: res.hospitals
         });
     });
