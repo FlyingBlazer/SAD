@@ -71,7 +71,7 @@ exports.add = function(req, res, next) {
     				if(!data) return next(new Errors.ReservationErrorFailure('Database Error!'));
 					req.db.driver.execQuery("SELECT total_app, price"+
 											"FROM working, doctor"+
-                      "doctor_id=doctor.id"+
+                      "WHERE doctor_id=doctor.id"+
 											"AND doctor_id=? "+
 											"AND period=? "+
 											"AND (fequency=? "+
