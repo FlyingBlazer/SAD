@@ -17,6 +17,19 @@ exports.list = function(req, res, next) {
             	return next(new Errors.EmptyReservation("You Don't Have Any Appointment!"));
         	}
         	else{
+            var statuslist={
+                    '现金付款，尚未支付',
+                    '现金付款，已支付',
+                    '在线付款，尚未支付',
+                    '在线付款，已支付',
+                    '订单超时，尚未支付',
+                    '订单超时，尚未确认就诊',
+                    '订单超时，未就诊',
+                    '订单超时，已就诊'
+                };
+            for(var i = 0; i < data.length; i++){
+                data[i]['status']=statuslist[data[i]['status']];
+            }
 	  			  res.json({
                 	errcode: 0,
                 	errmsg: 'success',
