@@ -104,12 +104,12 @@ exports.redirectToListHospitals = function(request, response) {
 
 // get
 exports.listHospitals = function(request, response) {
-    if (!__checkVars('cookies', request.cookies, 'username')) {
-        __invalidArgs(response);
-        return;
-    }
+    //if (!__checkVars('cookies', request.cookies, 'username')) {
+    //    __invalidArgs(response);
+    //    return;
+    //}
 
-    var username = request.cookies.username;
+    var username = request.cookies.username ? request.cookies.username : '';
     var province = request.params.province;
     var url = '/hospital/hospital/list?province=' + province;
 
@@ -120,8 +120,33 @@ exports.listHospitals = function(request, response) {
         }
         response.render('hospital_list', {
             username: username,
-            // TODO: search ??!!?!?!
             search: false,
+            searchText: null,
+            list: res.hospitals
+        });
+    });
+};
+
+// get
+exports.search = function(request, response) {
+    //if (!__checkVars('cookies', request.cookies, 'username')) {
+    //    __invalidArgs(response);
+    //    return;
+    //}
+
+    var username = request.cookies.username ? request.cookies.username : '';
+    var query = request.params.q;
+    var url = '/search?q=' + query;
+
+    fireRequest('GET', url, null, function(res) {
+        if (res == null) {
+            __fatal(response);
+            return;
+        }
+        response.render('hospital_list', {
+            username: username,
+            search: true,
+            searchText: query,
             list: res.hospitals
         });
     });
@@ -131,12 +156,12 @@ exports.listHospitals = function(request, response) {
 // Choose a department and a doctor
 // get
 exports.showHospital = function(request, response) {
-    if (!__checkVars('cookies', request.cookies, 'username')) {
-        __invalidArgs(response);
-        return;
-    }
+    //if (!__checkVars('cookies', request.cookies, 'username')) {
+    //    __invalidArgs(response);
+    //    return;
+    //}
 
-    var username = request.cookies.username;
+    var username = request.cookies.username ? request.cookies.username : '';
     var hospitalId = request.params.hospital_id;
     var detail = null;
     var departments = null;
@@ -184,12 +209,12 @@ exports.showHospital = function(request, response) {
 // Choose a time
 // get
 exports.showDoctor = function(request, response) {
-    if (!__checkVars('cookies', request.cookies, 'username')) {
-        __invalidArgs(response);
-        return;
-    }
+    //if (!__checkVars('cookies', request.cookies, 'username')) {
+    //    __invalidArgs(response);
+    //    return;
+    //}
 
-    var username = request.cookies.username;
+    var username = request.cookies.username ? request.cookies.username : '';
     var expertId = request.params.expert_id;
     var hospitalId = request.params.hospital_id;
     var departmentId = request.params.department_id;

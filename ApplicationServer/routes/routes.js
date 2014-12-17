@@ -57,6 +57,9 @@ router.route('/concierge/reserve/submit').post(controllers.reservation.onSubmit)
 // Optional message
 router.route('/reservation/:doctor_id/:reservation_id').get(controllers.reservation.showReservation).post(controllers.reservation.operateReservation);
 
+// Search
+router.route('/search').get(controllers.reservation.search);
+
 /**
  * =========================================================
  * |  SAD SmartBackstage (TM)                              |
