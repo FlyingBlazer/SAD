@@ -69,14 +69,14 @@ exports.add = function(req, res, next) {
     			function(err,data){
     				if(err) return next(err);
     				if(!data) return next(new Errors.ReservationErrorFailure('Database Error!'));
-					req.db.driver.execQuery("SELECT total_app, price"+
-											"FROM working, doctor"+
+					req.db.driver.execQuery("SELECT total_app,price"+
+											"FROM working,doctor"+
                       "WHERE doctor_id=doctor.id"+
 											"AND doctor_id=? "+
 											"AND period=? "+
-											"AND (fequency=? "+
+											"AND (frequency=? "+
 											"OR frequency=? "+
-											"OR (frequency=? AND time like '?') "+
+											"OR (frequency=? AND date like '?') "+
 											"OR frequency like '?') LIMIT 1",
 					[adoctor_id,aperiod,afrequency1,afrequency2,afrequency4,aggdate,afrequency3],
 					function(err,data1){
