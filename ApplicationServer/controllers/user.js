@@ -25,6 +25,8 @@ exports.onRegister = function (request, response) {
         var requestBody = request.body;
         var username = requestBody.username;
 
+        //console.log(requestBody.password);
+
         var checkPath = '/user/' + username + '/check';
 
         var registerCallback = function (result) {
@@ -92,7 +94,7 @@ function forwardRequestPOST(data, path, callback) {
  * 向业务服务器转发请求
  * GET
  * @param path 业务服务器路径
- * @param callbacl 参数为业务服务器返回的结果(JSON Object)
+ * @param callback 参数为业务服务器返回的结果(JSON Object)
  */
 function forwardRequestGET(path, callback) {
     forwardRequest('GET', path, null, callback);
@@ -249,7 +251,7 @@ function getUserInfo(userId, onSucceedCallback) {
                 console.log(result.message);
     };
 
-    forwardRequestGET(path, callback());
+    forwardRequestGET(path, callback);
 
 }
 
