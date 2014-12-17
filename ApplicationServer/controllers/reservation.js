@@ -414,7 +414,7 @@ exports.confirm = function(request, response) {
 // Submit request
 // post (need x-www-form-urlencoded data)
 exports.onSubmit = function(request, response) {
-    var _sa = true;//__checkVars('cookies', request.cookies, 'userId');
+    var _sa = __checkVars('cookies', request.cookies, 'userId');
     var _sb = __checkVars('body', request.body, 'hospitalId', 'departmentId', 'doctorId', 'resvTime', 'resvDate');
 
     if (_sa === false || _sb === false) {
@@ -422,7 +422,7 @@ exports.onSubmit = function(request, response) {
         return;
     }
 
-    var userId = 1;//request.cookies.userId; // from cookie;
+    var userId = request.cookies.userId; // from cookie;
     var hospitalId = request.body.hospitalId; // from prev page
     var departmentId = request.body.departmentId; // from prev page
     var doctorId = request.body.doctorId; // from prev page
