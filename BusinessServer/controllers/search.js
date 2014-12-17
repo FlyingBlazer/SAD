@@ -22,8 +22,8 @@ module.exports = function(req, res, next) {
             }
             else{
                 res.json({
-                    errcode: 0,
-                    errmsg: 'success',
+                    code: 0,
+                    message: 'success',
                     hospitals: data
                 });
             }

@@ -2,7 +2,7 @@ var Errors = require('../lib/Errors');
 
 exports.list = function(req, res, next) {
     req.models.hospital.get(req.params.hospitalId, function(err, hospital) {
-        if(err) return next(err);
+        if(err && err.message != 'Not found') return next(err);
         if(!hospital) return next(new Errors.HospitalNotExist("Hospital not exist"));
         hospital.getDepartments(function(err, departments) {
             if(err) return next(err);
@@ -16,8 +16,8 @@ exports.list = function(req, res, next) {
                 });
             });
             res.json({
-                errcode: 0,
-                errmsg: 'success',
+                code: 0,
+                message: 'success',
                 count: ret.length,
                 departments_list: ret
             });
@@ -35,15 +35,15 @@ exports.add = function(req, res, next) {
             department.setHospital(hospital, function(err) {
                 if(err) return next(err);
                 res.json({
-                    errcode: 0,
-                    errmsg: 'success',
+                    code: 0,
+                    message: 'success',
                     department_id: department.id
                 });
             });
         }
     }
     req.models.hospital.get(req.body.hospital_id, function(err, hospital) {
-        if(err) return next(err);
+        if(err && err.message != 'Not found') return next(err);
         if(!hospital) return next(new Errors.HospitalNotExist('Hospital not exist'));
         hospital = hospital;
         finish();
@@ -53,7 +53,7 @@ exports.add = function(req, res, next) {
         tel: req.body.phone,
         info: req.body.description
     }, function(err, dep) {
-        if(err) return next(err);
+        if(err && err.message != 'Not found') return next(err);
         department = dep;
         finish();
     });
@@ -61,13 +61,13 @@ exports.add = function(req, res, next) {
 
 exports.remove = function(req, res, next) {
     req.models.department.get(req.params.departmentId, function(err, department) {
-        if(err) return next(err);
+        if(err && err.message != 'Not found') return next(err);
         if(!department) return next(new Errors.DepartmentNotExist("Department not exist"));
         department.remove(function(err) {
             if(err) return next(err);
             res.json({
-                errcode: 0,
-                errmsg: 'success'
+                code: 0,
+                message: 'success'
             });
         });
     });
@@ -75,7 +75,7 @@ exports.remove = function(req, res, next) {
 
 exports.update = function(req, res, next) {
     req.models.department.get(req.params.departmentId, function(err, department) {
-        if(err) return next(err);
+        if(err && err.message != 'Not found') return next(err);
         if(!department) return next(new Errors.DepartmentNotExist("Department not exist"));
         for(var index in req.body) {
             if(typeof department[index] != 'undefined') {
@@ -83,10 +83,10 @@ exports.update = function(req, res, next) {
             }
         }
         department.save(function(err) {
-            if(err) return next(err);
+            if(err && err.message != 'Not found') return next(err);
             res.json({
-                errcode: 0,
-                errmsg: 'success'
+                code: 0,
+                message: 'success'
             });
         });
     });
@@ -94,11 +94,11 @@ exports.update = function(req, res, next) {
 
 exports.detail = function(req, res, next) {
     req.models.department.get(req.params.departmentId, function(err, department) {
-        if(err) return next(err);
+        if(err && err.message != 'Not found') return next(err);
         if(!department) return next(new Errors.DepartmentNotExist("Department not exist"));
         res.json({
-            errcode: 0,
-            errmsg: 'success',
+            code: 0,
+            message: 'success',
             name: department.name,
             description: department.info,
             phone: department.tel

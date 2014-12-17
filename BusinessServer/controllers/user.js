@@ -9,13 +9,13 @@ exports.login =function(req, res, next) {
         name: username,
         password: password
     }, function(err, user) {
-        if(err) return next(err);
+        if(err && err.message != 'Not found') return next(err);
         if(!user) {
             return next(new Errors.LoginFail("Username or password error"));
         } else {
             res.json({
-                errcode: 0,
-                errmsg: 'success',
+                code: 0,
+                message: 'success',
                 username: username,
                 userid: user.id,
                 token: 123
@@ -30,9 +30,7 @@ exports.updateInfo = function(req, res, next){
     var pass_prev=req.body.pre_pw;
     var pass_curr=req.body.new_pw;
     req.models.user.get(req.params.userId, function(err, user){
-        if(err){
-            return next(err);
-        }
+        if(err && err.message != 'Not found') return next(err);
         else if(!user){
             return next(new Errors.UserNotLogin("User not login"));
         }
@@ -60,8 +58,8 @@ exports.updateInfo = function(req, res, next){
                return next(err);
             }
             res.json({
-                errcode: 0,
-                errmsg: 'success',
+                code: 0,
+                message: 'success',
                 username: user.name
             });
         });
@@ -85,10 +83,10 @@ exports.signUp = function(req, res, next) {
         credit: 5,
         isActivited: 0
     }, function(err, user) {
-        if(err) return next(err);
+        if(err && err.message != 'Not found') return next(err);
         res.json({
-            errcode: 0,
-            errmsg: 'success',
+            code: 0,
+            message: 'success',
             userid: user.id
         });
     });
@@ -97,13 +95,13 @@ exports.signUp = function(req, res, next) {
 exports.checkName = function(req, res, next) {
     var username = req.params.username;
     req.models.user.find({name: username}, function(err, users) {
-        if(err) return next(err);
+        if(err && err.message != 'Not found') return next(err);
         if(users.length > 0) {
             return next(new Errors.UserAlreadyExisted('User Already Existed'));
         } else {
             res.json({
-                errcode: 0,
-                errmsg: 'success',
+                code: 0,
+                message: 'success',
                 username: username,
                 taken: false
             });
@@ -114,7 +112,7 @@ exports.checkName = function(req, res, next) {
 exports.info = function(req, res, next) {
     var userId = req.params.userId;
     req.models.user.get(userId, function(err, user) {
-        if(err) return next(err);
+        if(err && err.message != 'Not found') return next(err);
         if(!user) return next(new Errors.UserNotExist('User Not Exist'));
         var status_s;
         switch(parseInt(user.isActivated)) {
@@ -135,8 +133,8 @@ exports.info = function(req, res, next) {
                 return next(new Errors.InvalidUserStatus("Invalid User Status!"));
         }
         res.json({
-            errocde: 0,
-            errmsg: 'success',
+            code: 0,
+            message: 'success',
             username: user.name,
             status: status_s,
             credit: user.credit,

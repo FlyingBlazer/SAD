@@ -12,7 +12,7 @@ exports.list = function(req, res, next) {
   		"AND department.hospital_id=hospital.id",
   		[user_id],
   		function (err, data) {
-  			if(err) return next(err);
+			if(err && err.message != 'Not found') return next(err);
         	if(!data) {
             	return next(new Errors.EmptyReservation("You Don't Have Any Appointment!"));
         	}
@@ -32,8 +32,8 @@ exports.list = function(req, res, next) {
                 data[i]['status']=statuslist[data[i]['status']];
             }
 	  			  res.json({
-                	errcode: 0,
-                	errmsg: 'success',
+                	code: 0,
+                	message: 'success',
                 	reservations: data
             	});
   			}
@@ -57,7 +57,7 @@ exports.add = function(req, res, next) {
     var afrequency4="30000000";
     afrequency3[weeknum]='1';
     req.models.user.get(user_id,function(err,user){
-    	if(err) return next(err);
+		if(err && err.message != 'Not found') return next(err);
     	if(!user) return next(new Errors.ReservationUserInvalidFailure('User Not Exist!'));
     	else{
     		req.db.driver.execQuery("SELECT COUNT(*) as number "+
@@ -79,7 +79,7 @@ exports.add = function(req, res, next) {
 											"OR frequency like '?')",
 					[adoctor_id,aperiod,afrequency1,afrequency2,afrequency4,adate,afrequency3],
 					function(err,data1){
-						if(err) return next(err);
+						if(err && err.message != 'Not found') return next(err);
 						if(!data1) return next(new Errors.ReservationPeriodFailure('No Such Working Period!'));
 						if(data1[0]['total_app']<=data['number']){
 							return next(new Errors.ReservationFullFailure("Appointment Full!"));
@@ -96,8 +96,8 @@ exports.add = function(req, res, next) {
 								doctor: adoctor_id
 							},function(error,item){
 								res.json({
-                					errcode: 0,
-			                		errmsg: 'success',
+                					code: 0,
+			                		message: 'success',
 									id: item.id
             					});
 							});
@@ -111,14 +111,14 @@ exports.add = function(req, res, next) {
 exports.cancel = function(req, res, next) {
     var reservation_id=req.params.reservationId;
     req.models.appointment.get(reservation_id,function(err,app){
-    	if(err) return next(err);
+		if(err && err.message != 'Not found') return next(err);
     	if(!app) return next(new Errors.CancelFailure("Cannot Find Such Appointment!"));
     	else{
     		app.remove(function(err){
-    			if(err) return next(err);
+				if(err && err.message != 'Not found') return next(err);
     			res.json({
-                	errcode: 0,
-			        errmsg: 'success'
+                	code: 0,
+			        message: 'success'
             	});
     		});
     	}
@@ -128,15 +128,15 @@ exports.cancel = function(req, res, next) {
 exports.pay = function(req, res, next) {
     var reservation_id=req.params.reservationId;
     req.models.appointment.get(reservation_id,function(err,app){
-    	if(err) return next(err);
+		if(err && err.message != 'Not found') return next(err);
     	if(!app) return next(new Errors.PaymentFailure("Unable To Pay For Your Appointment!"));
     	else{
     		app.status=1;
     		app.save(function(err){
-    			if(err) return next(err);
+				if(err && err.message != 'Not found') return next(err);
     			res.json({
-                	errcode: 0,
-			        errmsg: 'success'
+                	code: 0,
+			        message: 'success'
             	});
     		});
     	}
@@ -154,12 +154,12 @@ exports.detail = function(req, res, next) {
   		"AND department.hospital_id=hospital.id",
   		 [reservation_id],
   		 function(err,data){
-  		 	if(err) return next(err);
+			 if(err && err.message != 'Not found') return next(err);
   		 	if(!data) return next(new Errors.DetailFalure("No Such Appointment!"));
 			 var d = new Date(data[0]['time']);
   		 	res.json({
-  		 		errcode: 0,
-  		 		errmsg: "success",
+  		 		code: 0,
+  		 		message: "success",
   		 		reservation_id: data[0]['reservation'],
 				date: d.Format('yyyy-MM-dd'),
 				time: d.Format('hh:mm:ss'),
@@ -176,14 +176,14 @@ exports.detail = function(req, res, next) {
 exports.confirm = function(req, res, next) {
     var reservation_id=req.params.reservationId;
     req.models.appointment.get(reservation_id,function(err,app){
-    	if(err) return next(err);
+		if(err && err.message != 'Not found') return next(err);
   		if(!app) return next(new Errors.ConfirmFalure("No Such Appointment!"));
   		app.status=11;
   		app.save(function(err){
-  			if(err) return next(err);
+			if(err && err.message != 'Not found') return next(err);
   			res.json({
-  				errcode: 0,
-  				errmsg: "success"
+  				code: 0,
+  				message: "success"
   			});
   		});
     })

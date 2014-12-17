@@ -4,7 +4,7 @@ exports.list = function(req, res, next) {
     req.models.user.find({
         isActivated: 0
     }).only("id","name","socialId","realName").run(function(err, user) {
-        if(err) return next(err);
+        if(err && err.message != 'Not found') return next(err);
         if(!user) {
             return next(new Errors.ListEmpty("All Users Have Been Activated"));
         } else {
@@ -16,8 +16,8 @@ exports.list = function(req, res, next) {
 				userlist[i]["name"]=user[i].realName;
         	}
             res.json({
-                errcode: 0,
-                errmsg: 'success',
+                code: 0,
+                message: 'success',
                 users: userlist
             });
         }
@@ -29,17 +29,17 @@ exports.approve = function(req, res, next) {
     req.models.user.one({
         id: userId
     }, function(err, user) {
-        if(err) return next(err);
+        if(err && err.message != 'Not found') return next(err);
         if(!user) {
             return next(new Errors.ApproveFail("Approve Fail!"));
         } else {
         	user.isActivated=1;
         	user.save(function (err) {
-        		if(err) return next(err);
+                if(err && err.message != 'Not found') return next(err);
     		});
             res.json({
-                errcode: 0,
-                errmsg: 'success',
+                code: 0,
+                message: 'success',
                 username: user.name
             });
         }
@@ -51,17 +51,17 @@ exports.reject = function(req, res, next) {
     req.models.user.one({
         id: userId
     }, function(err, user) {
-        if(err) return next(err);
+        if(err && err.message != 'Not found') return next(err);
         if(!user) {
             return next(new Errors.RejectFail("Reject Fail!"));
         } else {
         	user.isActivated=-1;
         	user.save(function (err) {
-        		if(err) return next(err);
+                if(err && err.message != 'Not found') return next(err);
     		});
             res.json({
-                errcode: 0,
-                errmsg: 'success',
+                code: 0,
+                message: 'success',
                 username: user.name
             });
         }
@@ -73,7 +73,7 @@ exports.status = function(req, res, next) {
     req.models.user.one({
         name: userId
     }, function(err, user) {
-        if(err) return next(err);
+        if(err && err.message != 'Not found') return next(err);
         if(!user) {
             return next(new Errors.FailToGetStatus("Fail To Get Status!"));
         } else {
@@ -90,8 +90,8 @@ exports.status = function(req, res, next) {
         			break;
         	}
             res.json({
-                errcode: 0,
-                errmsg: 'success',
+                code: 0,
+                message: 'success',
                 user_id: user.id,
                 username: user.name,
                 status_code: user.isActivated,
