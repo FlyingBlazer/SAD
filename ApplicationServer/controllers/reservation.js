@@ -180,67 +180,6 @@ exports.showHospital = function(request, response) {
     }
 };
 
-// (!) deprecated method
-exports.showHospital2 = function(request, response) {
-    if (!__checkVars('cookies', request.cookies, 'username')) {
-        __invalidArgs(response);
-        return;
-    }
-
-    var username = request.cookies.username;
-    var hospitalId = request.params.hospital_id;
-    var detail = null;
-    var departments = null;
-    var doctors = '{';
-
-    var url1 = '/hospital/hospital/' + hospitalId + '/detail';
-    fireRequest('GET', url1, null, function(res) {
-        detail = res;
-        getDoctors();
-    });
-
-    var url2 = '/hospital/department/' + hospitalId;
-    fireRequest('GET', url2, null, function(res) {
-        departments = res;
-        getDoctors();
-    });
-
-    var url3 = '/hospital/doctor/list?departmentId=';
-    var getDoctors = function() {
-        if (detail == null || departments == null)
-            return;
-
-        var ix = 0;
-        var url4 = url3 + departments.departments_list[i].id;
-
-        var completeReqSeq = function() {
-            doctors += '}';
-            response.render('hospital', {
-                username: username,
-                detail: res,
-                departments: departments.departments_list,
-                doctors: JSON.parse(doctors)
-            });
-        };
-
-        var handleRes = function(res) {
-            doctors += '"department_' + ix + '": [';
-            doctors += JSON.stringify(res.doctors);
-            doctors += ']';
-            ++ix;
-            if (ix < departments.count) {
-                doctors += ',';
-                url4 = url3 +  departments.departments_list[i].id;
-                fireRequest('GET', url4, null, handleRes);
-            } else {
-                completeReqSeq();
-            }
-        };
-
-        fireRequest('GET', url4, null, handleRes);
-    };
-};
-
 // Doctor page - Show doctor's detail and available time slots
 // Choose a time
 // get
