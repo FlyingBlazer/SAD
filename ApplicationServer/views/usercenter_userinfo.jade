@@ -5,6 +5,8 @@ block site-content
    link(href="/stylesheets/bootstrap/css/bootstrap.min.css", rel="stylesheet", media="all")
    link(href="/stylesheets/usercenter_reservation_list.css",rel="stylesheet", media="all")
    link(href="/stylesheets/usercenter_userinfo.css",rel="stylesheet", media="all")
+   script(src="/javascripts/md5.js")
+   script(src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js')
    script(type="text/javascript").
       function pw()
       {
@@ -22,6 +24,22 @@ block site-content
 
          }
       }
+
+      $(document).ready(function () {
+
+         $("#submit").click(function () {
+            $.post("/account/manage/info",
+                    {
+                      pre_pw:hex_md5($("#pre_pw").val()),
+                      new_pw:hex_md5($("#pw1").val()),
+                       phone:$("#phone").val(),
+                       email:$("#email").val()
+                    },
+                    function (data, status) {
+                       alert("Data: " + data + "\nStatus: " + status);
+                    });
+         });
+      });
 
    div
       .g-container(data-module='userinfo', data-fo-help='1')
@@ -62,19 +80,19 @@ block site-content
                div
                   if (errorMessage)
                      span #{errorMessage}
-                  form(action='/account/manage/info', name='pwinfo_modify_form',method='post')
+                  form( name='pwinfo_modify_form')
                      .form-group(style='margin-left:60px')
                         label 原密码
-                        input.form-control(type='password', style='width:40%', name='pre_pw')
+                        input.form-control(type='password', style='width:40%', id='pre_pw')
                         label 新密码
-                        input.form-control(type='password', style='width:40%', name='new-pw',id='pw1')
+                        input.form-control(type='password', style='width:40%',id='pw1')
                         label 确认密码
-                        input.form-control(type='password', style='width:40%', name='confirm_new-pw',id='pw2',onkeyup='pw();')
-                        span(id='prompt')
+                        input.form-control(type='password', style='width:40%', id='pw2',onkeyup='pw();')
                         label 电话
-                        input.form-control(type='text', style='width:40%', name='tel')
+                        input.form-control(type='text', style='width:40%', id='phone')
                         label 邮箱
-                        input.form-control(type='email', style='width:40%', name='email')
+                        input.form-control(type='email', style='width:40%', id='email')
+                        span(id='prompt')
                         button.btn.btn-default(type='submit',id='submit') 修改
                .second_block
                   span.second_label  上传头像
