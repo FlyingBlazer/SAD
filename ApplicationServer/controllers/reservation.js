@@ -5,23 +5,39 @@
 // util
 
 var settings = require('../../settings.json');
+var stdNotFound = {};
+
+Object.defineProperty(global, '__stack', {
+    get: function() {
+        var orig = Error.prepareStackTrace;
+        Error.prepareStackTrace = function(_, stack) {
+            return stack;
+        };
+        var err = new Error;
+        Error.captureStackTrace(err, arguments.callee);
+        var stack = err.stack;
+        Error.prepareStackTrace = orig;
+        return stack;
+    }
+});
+
+Object.defineProperty(global, '__line', {
+    get: function() {
+        return __stack[1].getLineNumber();
+    }
+});
+
+Object.defineProperty(global, '__function', {
+    get: function() {
+        return __stack[1].getFunctionName();
+    }
+});
 
 var __logError = function(errMsg) {
     console.error('(!) # FATAL ERROR # ...');
     for (var i = 0; i < arguments.length; ++i) {
         console.error(arguments[i]);
     }
-};
-
-var __fatal = function(response) {
-    response.status(503).send('HTTP/1.1 Error 503 Service Unavailable');
-    __logError('Incorrect content received from Business server (if it exists).',
-    'Terminating...');
-};
-
-var __invalidArgs = function(response) {
-    response.status(418).send('HTTP/1.1 Error 418 I\'m a teapot');
-    __logError('Invalid arguments provided.');
 };
 
 var __checkVars = function(name, object, members) {
@@ -36,54 +52,81 @@ var __checkVars = function(name, object, members) {
     return status;
 };
 
-var fireRequest = function(method, path, data, callback) {
+var __fatalError = function(response, identifier) {
+    response.status(503).send('HTTP/1.1 Error 503 Service Unavailable');
+    __logError('Incorrect content received from Business server (if it exists). Identifier: ' + identifier,
+        'Terminating...');
+};
+
+var __entityNotFound = function(response, identifier) {
+    response.status(200).send('Entity Not Found');
+    console.error('Entity Not Found: ' + identifier);
+};
+
+var __invalidArgsError = function(response) {
+    response.status(418).send('HTTP/1.1 Error 418 I\'m a teapot');
+    __logError('Invalid arguments provided.');
+};
+
+var fireRequest = function(method, path, data, callback, noErrCodeCheck) {
     var options = {
         host: 'localhost',
         port: settings.port.business,
         method: method,
         path: path
     };
+
     var http = require('http');
     var responseData = '';
+
     var req = http.request(options, function(res) {
         res.setEncoding('utf8');
+
         res.on('data', function(chunk) {
             responseData += chunk;
         });
+
         res.on('end', function() {
             var srcObject = null;
+
+            // check if the response data is parsable
             try {
                 srcObject = JSON.parse(responseData);
             } catch (e) {
                 __logError('Cannot parse response data.',
-                'Request URL: ' + path,
-                'Server raw response: ' + responseData);
-            }
-            if (srcObject.errcode == 0) {
-                callback(srcObject);
-            } else {
-                __logError('Unsuccessful response returned from business server.',
-                    '  > Request URL: ' + path,
-                    '  > Server response: ' + responseData);
+                    'Request URL: ' + path,
+                    'Server raw response: ' + responseData);
                 callback(null);
+            }
+
+            // check response error code
+            if (srcObject) {
+                if (noErrCodeCheck || srcObject.code == 0) {
+                    callback(srcObject);
+                } else if (srcObject.code == 2001
+                    || srcObject.code == 2101
+                    || srcObject.code == 2201) {
+                    callback(stdNotFound);
+                } else {
+                    __logError('Unsuccessful response returned from business server, error not processed.',
+                        ' > Request URL: ' + path,
+                        ' > Server response: ' + responseData);
+                    callback(null);
+                }
             }
         });
     });
+
     req.on('error', function(e) {
         __logError('Business server is DOWN: ' + e.message,
-        'When requesting: ' + path);
+            ' > When requesting: ' + path);
         callback(null);
     });
+
     if (data !== null)
         req.write(data);
-    req.end();
-};
 
-Date.prototype.yymmdd = function() {
-    var yy = this.getFullYear().toString().substr(2, 2);
-    var mm = (this.getMonth() + 1).toString();
-    var dd  = this.getDate().toString();
-    return yy + (mm[1] ? mm : "0" + mm[0]) + (dd[1] ? dd : "0" + dd[0]);
+    req.end();
 };
 
 // Choose a location
@@ -116,18 +159,17 @@ exports.redirectToListHospitals = function(request, response) {
 
 // get
 exports.listHospitals = function(request, response) {
-    //if (!__checkVars('cookies', request.cookies, 'username')) {
-    //    __invalidArgs(response);
-    //    return;
-    //}
-
     var username = request.cookies.username ? request.cookies.username : '';
     var province = request.params.province;
     var url = '/hospital/hospital/list?province=' + province;
 
     fireRequest('GET', url, null, function(res) {
         if (res == null) {
-            __fatal(response);
+            __fatalError(response, 'Line=' + __line + ', Func=' + __function);
+            return;
+        }
+        if (res == stdNotFound) {
+            __entityNotFound(response, 'Line=' + __line + ', Func=' + __function);
             return;
         }
         response.render('hospital_list', {
@@ -137,23 +179,18 @@ exports.listHospitals = function(request, response) {
             province: province,
             list: res.hospitals
         });
-    });
+    }, false);
 };
 
 // get
 exports.search = function(request, response) {
-    //if (!__checkVars('cookies', request.cookies, 'username')) {
-    //    __invalidArgs(response);
-    //    return;
-    //}
-
     var username = request.cookies.username ? request.cookies.username : '';
     var query = request.params.q;
     var url = '/search?q=' + query;
 
     fireRequest('GET', url, null, function(res) {
         if (res == null) {
-            __fatal(response);
+            __fatalError(response, 'Line=' + __line + ', Func=' + __function);
             return;
         }
         response.render('hospital_list', {
@@ -162,18 +199,13 @@ exports.search = function(request, response) {
             searchText: query,
             list: res.hospitals
         });
-    });
+    }, false);
 };
 
 // Hospital page - Show all departments and doctors
 // Choose a department and a doctor
 // get
 exports.showHospital = function(request, response) {
-    //if (!__checkVars('cookies', request.cookies, 'username')) {
-    //    __invalidArgs(response);
-    //    return;
-    //}
-
     var username = request.cookies.username ? request.cookies.username : '';
     var hospitalId = request.params.hospital_id;
     var detail = null;
@@ -186,34 +218,38 @@ exports.showHospital = function(request, response) {
         detail = res;
         ++ctr;
         onCompletion();
-    });
+    }, false);
 
     var url2 = '/hospital/department/' + hospitalId;
     fireRequest('GET', url2, null, function(res) {
-        departments = res ? res.departments_list : null;
+        departments = res;
         ++ctr;
         onCompletion();
-    });
+    }, false);
 
     var url3 = '/hospital/doctor/list?hospitalId=' + hospitalId;
     fireRequest('GET', url3, null, function(res) {
-        doctors = res ? res.doctors : null;
+        doctors = res;
         ++ctr;
         onCompletion();
-    });
+    }, false);
 
     var onCompletion = function() {
         if (ctr !== 3)
             return;
         if (detail == null || departments == null || doctors == null) {
-            __fatal(response);
+            __fatalError(response, 'Line=' + __line + ', Func=' + __function);
+            return;
+        }
+        if (detail == stdNotFound || departments == stdNotFound || doctors == stdNotFound) {
+            __entityNotFound(response, 'Line=' + __line + ', Func=' + __function);
             return;
         }
         response.render('hospital', {
             username: username,
             detail: detail,
-            departments: departments,
-            doctors: doctors
+            departments: departments.departments_list,
+            doctors: doctors.doctors
         });
     }
 };
@@ -223,7 +259,7 @@ exports.showHospital = function(request, response) {
 // get
 exports.showDoctor = function(request, response) {
     //if (!__checkVars('cookies', request.cookies, 'username')) {
-    //    __invalidArgs(response);
+    //    __invalidArgsError(response);
     //    return;
     //}
 
@@ -235,7 +271,11 @@ exports.showDoctor = function(request, response) {
 
     fireRequest('GET', url, null, function(res) {
         if (res == null) {
-            __fatal(response);
+            __fatalError(response, 'Line=' + __line + ', Func=' + __function);
+            return;
+        }
+        if (res == stdNotFound) {
+            __entityNotFound(response, 'Line=' + __line + ', Func=' + __function);
             return;
         }
         response.render('doctor', {
@@ -244,17 +284,16 @@ exports.showDoctor = function(request, response) {
             departmentId: departmentId,
             detail: res
         });
-    });
+    }, false);
 };
 
 // get
 exports.recoverConfirm = function(request, response) {
-
     // check required cookies
     if (!__checkVars('cookies', request.cookies, 'confirm_data', 'username', 'userId', 'userTelephone', 'userSocialId', 'userRealName')) {
         // still not logged in
         response.clearCookie('confirm_data');
-        __invalidArgs(response);
+        __invalidArgsError(response);
         return;
     } else {
         var bodyParams = JSON.parse(request.cookie.confirm_data);
@@ -293,7 +332,7 @@ exports.confirm = function(request, response) {
 
     // if request body is incorrect, reject the request
     if (!__checkVars('body', request.body, 'hospital', 'hospitalId', 'department', 'departmentId', 'doctor', 'doctorId', 'resvDate', 'resvTime', 'title', 'price')) {
-        __invalidArgs(response);
+        __invalidArgsError(response);
         return;
     }
 
@@ -358,7 +397,7 @@ exports.onSubmit = function(request, response) {
     var _sb = __checkVars('body', request.body, 'hospitalId', 'departmentId', 'doctorId', 'resvTime', 'resvDate');
 
     if (_sa === false || _sb === false) {
-        __invalidArgs(response);
+        __invalidArgsError(response);
         return;
     }
 
@@ -381,12 +420,12 @@ exports.onSubmit = function(request, response) {
     };
     fireRequest('POST', url, JSON.stringify(data), function(res) {
         if (res == null) {
-            __fatal(response);
+            __fatalError(response, 'Line=' + __line + ', Func=' + __function);
             return;
         }
         var resvId = res.id;
         response.redirect(302, '/reservation/' + doctorId + '/' + resvId + '/success');
-    });
+    }, false);
 };
 
 // Show reservation detail
@@ -395,7 +434,7 @@ exports.onSubmit = function(request, response) {
 // get
 exports.showReservation = function(request, response) {
     if (!__checkVars('cookies', request.cookies, 'username', 'userRealName', 'userTelephone')) {
-        __invalidArgs(response);
+        __invalidArgsError(response);
         return;
     }
 
@@ -413,23 +452,26 @@ exports.showReservation = function(request, response) {
         resvDetail = res;
         ++ctr;
         render();
-    });
+    }, false);
 
     var url2 = '/hospital/doctor/' + doctorId + '/detail';
     fireRequest('GET', url2, null, function(res) {
         doctorDetail = res;
         ++ctr;
         render();
-    });
+    }, false);
 
     var render = function() {
         if (ctr !== 2)
             return;
         if (resvDetail == null || doctorDetail == null) {
-            __fatal(response);
+            __fatalError(response, 'Line=' + __line + ', Func=' + __function);
             return;
         }
-
+        if (resvDetail == stdNotFound || doctorDetail == stdNotFound) {
+            __entityNotFound(response, 'Line=' + __line + ', Func=' + __function);
+            return;
+        }
         response.render('reservation', {
             username: username,
             state: 'normal',
@@ -444,7 +486,7 @@ exports.showReservation = function(request, response) {
 
 exports.showReservationWithSuccessMessage = function(request, response) {
     if (!__checkVars('cookies', request.cookies, 'username', 'userRealName', 'userTelephone')) {
-        __invalidArgs(response);
+        __invalidArgsError(response);
         return;
     }
 
@@ -462,20 +504,20 @@ exports.showReservationWithSuccessMessage = function(request, response) {
         resvDetail = res;
         ++ctr;
         render();
-    });
+    }, false);
 
     var url2 = '/hospital/doctor/' + doctorId + '/detail';
     fireRequest('GET', url2, null, function(res) {
         doctorDetail = res;
         ++ctr;
         render();
-    });
+    }, false);
 
     var render = function() {
         if (ctr !== 2)
             return;
         if (resvDetail == null || doctorDetail == null) {
-            __fatal(response);
+            __fatalError(response, 'Line=' + __line + ', Func=' + __function);
             return;
         }
 
@@ -510,9 +552,9 @@ exports.test = function(request, response) {
 
     fireRequest('GET', file, null, function(res) {
         if (res == null) {
-            __fatal(response);
+            __fatalError(response, 'Line=' + __line + ', Func=' + __function);
             return;
         }
         response.render(request.params.template, res);
-    });
+    }, false);
 };

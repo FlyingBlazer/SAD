@@ -33,6 +33,16 @@ router.route('/').get(controllers.home);
 // No view, just set cookie and redirect to home page (to choose a hospital)
 router.route('/choose-location/:province').get(controllers.reservation.chooseLocation);
 
+// -----
+
+// Confirm reservation
+router.route('/concierge/reserve/confirm').post(controllers.reservation.confirm).get(controllers.reservation.recoverConfirm);
+
+// Submit reserve request
+router.route('/concierge/reserve/submit').post(controllers.reservation.onSubmit);
+
+// -----
+
 // List hospitals - Show a list of all hospitals in user's city
 // Choose a hospital
 router.route('/hospitals').get(controllers.reservation.redirectToListHospitals);
@@ -45,12 +55,6 @@ router.route('/concierge/reserve/:hospital_id').get(controllers.reservation.show
 // Doctor page - Show doctor's detail and available time slots
 // Choose a time
 router.route('/concierge/reserve/:hospital_id/:department_id/:expert_id').get(controllers.reservation.showDoctor);
-
-// Confirm reservation
-router.route('/concierge/reserve/confirm').post(controllers.reservation.confirm).get(controllers.reservation.recoverConfirm);
-
-// Submit reserve request
-router.route('/concierge/reserve/submit').post(controllers.reservation.onSubmit);
 
 // Show reservation detail
 // User may take actions like pay, print or close
