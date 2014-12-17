@@ -4,7 +4,9 @@ var _ = require('lodash');
 
 module.exports = {};
 
-var settingsFile = fs.readFileSync(path.join(__dirname, "../settings.json"));
+var settingsFile = fs.existsSync(path.join(__dirname, '../../../settings.json'))
+    ? fs.readFileSync(path.join(__dirname, '../../../settings.json'))
+    : fs.readFileSync(path.join(__dirname, "../settings.json"));
 var settings = JSON.parse(settingsFile);
 for(var index in settings) {
     Object.defineProperty(module.exports, index, {
