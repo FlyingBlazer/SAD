@@ -55,7 +55,17 @@ exports.onRegister = function (request, response) {
         var checkCallback = function (checkResult) {
             if (checkResult != null) {
                 if (checkResult.taken == false) {//未注册
-                    forwardRequestPOST(requestBody, '/user/signup/', registerCallback);//注册
+
+                    var data = {
+                        username: request.body.username,
+                        password: request.body.password,
+                        id: request.body.id,
+                        name: request.body.name,
+                        phone: request.body.phone,
+                        email: request.body.email
+                    };
+
+                    forwardRequestPOST(request.body, '/user/signup/', registerCallback);//注册
                 } else
                     response.render('signup', {
                         errorMessage: '账号已存在'
@@ -64,7 +74,6 @@ exports.onRegister = function (request, response) {
         };
 
         forwardRequestGET(checkPath, checkCallback);
-
     }
 };
 
@@ -76,7 +85,7 @@ exports.onRegister = function (request, response) {
  * @param callback 业务服务器返回的结果(JSON Object)
  */
 function forwardRequestPOST(data, path, callback) {
-    forwardRequest('POST', path, queryString.parse(data), callback);
+    forwardRequest('POST', path, queryString.stringify(data), callback);
 }
 
 /**
@@ -155,7 +164,7 @@ function redirectToLoginPage(response) {
 // post
 exports.onLogin = function (request, response) {
     if (request.method.toLowerCase() == 'post') {
-        var postData = request.body;
+
         var loginPath = '/user/login';
 
         var loginCallback = function (result) {
@@ -172,8 +181,13 @@ exports.onLogin = function (request, response) {
             }
         };
 
+        var data = {
+            username: request.body.username,
+            password: request.body.password
+        };
+
         //将数据转发至业务服务器
-        forwardRequestPOST(postData, loginPath, loginCallback);
+        forwardRequestPOST(request.body, loginPath, loginCallback);
     }
 };
 
@@ -270,6 +284,13 @@ exports.manageUserInformation = function (request, response) {
                     });
                 }
             }
+        };
+
+        var data = {
+            phone: request.body.phone,
+            email: request.body.email,
+            pre_pw: request.body.pre_pw,
+            new_pw: request.body.new_pw
         };
 
         forwardRequestPOST(request.body, updatePath, callback);
