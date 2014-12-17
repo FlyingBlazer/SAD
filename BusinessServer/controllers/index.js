@@ -27,5 +27,6 @@ Date.prototype.getDateOffset = function(target) {
 module.exports = {
     user: require('./user'),
     hospital: require('./hospital'),
-    reservation: require('./reservation')
+    reservation: require('./reservation'),
+    search: require('./search')
 };

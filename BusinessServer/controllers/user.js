@@ -68,7 +68,9 @@ exports.signUp = function(req, res, next) {
         password: password,
         socialId: id,
         tel: phone,
-        email: email
+        email: email,
+        credit: 5,
+        isActivited: 0
     }, function(err, user) {
         if(err) return next(err);
         res.json({
