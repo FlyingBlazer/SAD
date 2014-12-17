@@ -328,6 +328,7 @@ exports.recoverConfirm = function(request, response) {
     var userRealName = request.cookies.userRealName;
 
     response.render('new_reservation', {
+        username: username,
         detail: {
             "username": username,
             "userId": userId,
@@ -393,6 +394,7 @@ exports.confirm = function(request, response) {
     var userRealName = request.cookies.userRealName;
 
     response.render('new_reservation', {
+        username: username,
         detail: {
             "username": username,
             "userId": userId,
