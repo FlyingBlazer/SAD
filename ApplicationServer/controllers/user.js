@@ -54,7 +54,7 @@ exports.onRegister = function (request, response) {
 
         var checkCallback = function (checkResult) {
             if (checkResult != null) {
-                if (checkResult.taken = false) {//未注册
+                if (checkResult.taken == false) {//未注册
                     forwardRequestPOST(requestBody, '/user/signup/', registerCallback);//注册
                 } else
                     response.render('signup', {
