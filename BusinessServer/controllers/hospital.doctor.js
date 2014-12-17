@@ -3,7 +3,7 @@ var Errors = require('../lib/Errors');
 exports.list = function(req, res, next) {
     var hospitalId = req.query.hospitalId;
     req.models.hospital.get(hospitalId, function(err, hospital) {
-        if(err) return next(err);
+        if(err && err.message != 'Not found') return next(err);
         if(!hospital) return next(new Errors.HospitalNotExist("Department Not Exist"));
         var ret = {};
         hospital.departments.forEach(function(department) {
@@ -23,8 +23,8 @@ exports.list = function(req, res, next) {
             });
         });
         res.json({
-            errcode: 0,
-            errmsg: 'success',
+            code: 0,
+            message: 'success',
             doctors: ret
         });
     });
@@ -32,18 +32,19 @@ exports.list = function(req, res, next) {
 
 exports.add = function(req, res, next) {
     req.models.department.get(req.body.departmentId, function(err, department) {
+        if(err && err.message != 'Not found') return next(err);
         req.models.doctor.create({
             name: req.body.name,
             photo: req.body.photo,
             info: req.body.description,
             title: req.body.title
         }, function(err, doctor) {
-            if(err) return next(err);
+            if(err && err.message != 'Not found') return next(err);
             doctor.setDepartment(department, function(err) {
                 if(err) return next(err);
                 res.json({
-                    errcode: 0,
-                    errmsg: 'success',
+                    code: 0,
+                    message: 'success',
                     doctor_id: doctor.id
                 });
             });
@@ -53,13 +54,13 @@ exports.add = function(req, res, next) {
 
 exports.remove = function(req, res, next) {
     req.models.doctor.get(req.params.doctorId, function(err, doctor) {
-        if(err) return next(err);
+        if(err && err.message != 'Not found') return next(err);
         if(!doctor) return next(new Errors.DoctorNotExist('Doctor Not Exist'));
         doctor.remove(function(err) {
-            if(err) return next(err);
+            if(err && err.message != 'Not found') return next(err);
             res.json({
-                errcode: 0,
-                errmsg: 'success'
+                code: 0,
+                message: 'success'
             });
         });
     });
@@ -67,7 +68,7 @@ exports.remove = function(req, res, next) {
 
 exports.update = function(req, res, next) {
     req.models.doctor.get(req.params.doctorId, function(err, doctor) {
-        if(err) return next(err);
+        if(err && err.message != 'Not found') return next(err);
         if(!doctor) return next(new Errors.DoctorNotExist('Doctor Not Exist'));
         for(var index in req.body) {
             doctor[index] = req.body[index];
@@ -75,8 +76,8 @@ exports.update = function(req, res, next) {
         doctor.save(function(err) {
             if(err) return next(err);
             res.json({
-                errcode: 0,
-                errmsg: 'success'
+                code: 0,
+                message: 'success'
             });
         });
     });
@@ -84,7 +85,7 @@ exports.update = function(req, res, next) {
 
 exports.detail = function(req, res, next) {
     req.models.doctor.get(req.params.doctorId, function(err, doctor) {
-        if(err) return next(err);
+        if(err && err.message != 'Not found') return next(err);
         if(!doctor) return next(new Errors.DoctorNotExist('Doctor Not Exist'));
         doctor.getWorking(function(err, workings) {
             if(err) return next(err);

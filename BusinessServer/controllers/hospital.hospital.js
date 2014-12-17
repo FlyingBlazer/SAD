@@ -2,7 +2,7 @@ var Errors = require('../lib/Errors');
 
 exports.list = function(req, res, next) {
     req.models.hospital.find({province: req.query.province}, function(err, hospitals) {
-        if(err) return next(err);
+        if(err && err.message != 'Not found') return next(err);
         var ret = [];
         hospitals.forEach(function(hospital) {
             ret.push({
@@ -18,8 +18,8 @@ exports.list = function(req, res, next) {
             })
         });
         res.json({
-            errcode: 0,
-            errmsg: 'success',
+            code: 0,
+            message: 'success',
             hospitals: ret
         });
     });
@@ -28,11 +28,11 @@ exports.list = function(req, res, next) {
 exports.detail = function(req, res, next) {
     var id = req.params.hospitalId;
     req.models.hospital.get(id, function(err, result) {
-        if(err) return next(err);
+        if(err && err.message != 'Not found') return next(err);
         if(!result) return next(new Errors.HospitalNotExist('HospitalNotExist'));
         res.json({
-            errcode: 0,
-            errmsg: "success",
+            code: 0,
+            message: "success",
             id: result.id,
             name: result.name,
             level: result.rating.meaning,
@@ -48,7 +48,7 @@ exports.detail = function(req, res, next) {
 
 exports.add = function(req, res, next) {
     req.models.hospital_rating.find({meaning: req.body.level}, function(err, rating) {
-        if(err) return next(err);
+        if(err && err.message != 'Not found') return next(err);
         req.models.create({
             name: req.body.name,
             province: req.body.province,
@@ -57,9 +57,13 @@ exports.add = function(req, res, next) {
             tel: req.body.telephone,
             site: req.body.website
         }, function(err, hospital) {
-            if(err) return next(err);
+            if(err && err.message != 'Not found') return next(err);
             hospital.setRating(rating, function(err) {
-                if(err) return next(err);
+                if(err && err.message != 'Not found') return next(err);
+                res.json({
+                    code: 0,
+                    message: 'success'
+                });
             });
         });
     })
@@ -68,10 +72,14 @@ exports.add = function(req, res, next) {
 exports.remove = function(req, res, next) {
     var id = req.params.hospitalId;
     req.models.get(id, function(err, hospital) {
-        if(err) return next(err);
+        if(err && err.message != 'Not found') return next(err);
         if(!result) return next(new Errors.HospitalNotExist('HospitalNotExist'));
         hospital.remove(function(err) {
-            if(err) return next(err);
+            if(err && err.message != 'Not found') return next(err);
+            res.json({
+                code: 0,
+                message: 'success'
+            });
         });
     });
 };
@@ -84,10 +92,10 @@ exports.update = function(req, res, next) {
         if(typeof req.body.level != 'undefined') {
             var level = req.body.level;
             delete req.body.level;
-            req.models.hospital_ratinga.one({meaning: level}, function(err, rating) {
-                if(err) return next(err);
+            req.models.hospital_rating.one({meaning: level}, function(err, rating) {
+                if(err && err.message != 'Not found') return next(err);
                 hospital.setRating(rating, function(err) {
-                    if(err) return next(err);
+                    if(err && err.message != 'Not found') return next(err);
                 });
             });
         }
@@ -95,7 +103,11 @@ exports.update = function(req, res, next) {
             hospital[index] = req.body[index];
         }
         hospital.save(function(err) {
-            if(err) return next(err);
+            if(err && err.message != 'Not found') return next(err);
+            res.json({
+                code: 0,
+                message: 'success'
+            });
         });
     });
 };

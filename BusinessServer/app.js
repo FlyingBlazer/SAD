@@ -5,6 +5,7 @@ var orm = require('orm');
 var settings = require('./lib/settings');
 var controllers = require('./controllers');
 var util = require('util');
+var debug = require('debug')('business');
 
 server.use(restify.queryParser());
 server.use(restify.gzipResponse());
@@ -17,9 +18,9 @@ server.use(orm.express(settings.dbUrl, models));
 
 server.use(function(req, res, next) {
     res.charSet('utf-8');
-    console.log("body: ", req.body);
-    console.log("query: ", req.query);
-    console.log("params: ", req.params);
+    debug("body: ", req.body);
+    debug("query: ", req.query);
+    debug("params: ", req.params);
     next();
 });
 
