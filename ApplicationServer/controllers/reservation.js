@@ -135,7 +135,7 @@ exports.search = function(request, response) {
     //}
 
     var username = request.cookies.username ? request.cookies.username : '';
-    var query = request.params.q;
+    var query = request.query.q;
     var url = '/search?q=' + query;
 
     fireRequest('GET', url, null, function(res) {
