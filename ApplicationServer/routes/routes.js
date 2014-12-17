@@ -47,7 +47,7 @@ router.route('/concierge/reserve/:hospital_id').get(controllers.reservation.show
 router.route('/concierge/reserve/:hospital_id/:department_id/:expert_id').get(controllers.reservation.showDoctor);
 
 // Confirm reservation
-router.route('/concierge/reserve/confirm').post(controllers.reservation.confirm);
+router.route('/concierge/reserve/confirm').post(controllers.reservation.confirm).get(controllers.reservation.recoverConfirm);
 
 // Submit reserve request
 router.route('/concierge/reserve/submit').post(controllers.reservation.onSubmit);
