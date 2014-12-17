@@ -90,8 +90,8 @@ Date.prototype.yymmdd = function() {
 // No view, just set cookie and redirect to home page
 // get
 exports.chooseLocation = function(request, response) {
-    if (typeof request.query.province !== 'undefined') {
-        var province = request.query.province;
+    if (typeof request.params.province !== 'undefined') {
+        var province = request.params.province;
         response.cookie('province', province, {
             maxAge: 999999,
             httpOnly: true
@@ -148,7 +148,7 @@ exports.search = function(request, response) {
     //}
 
     var username = request.cookies.username ? request.cookies.username : '';
-    var query = request.query.q;
+    var query = request.params.q;
     var url = '/search?q=' + query;
 
     fireRequest('GET', url, null, function(res) {
@@ -385,7 +385,7 @@ exports.onSubmit = function(request, response) {
             return;
         }
         var resvId = res.id;
-        response.redirect(302, '/reservation/' + doctorId + '/' + resvId + '?state=success');
+        response.redirect(302, '/reservation/' + doctorId + '/' + resvId + '/success');
     });
 };
 
@@ -405,13 +405,9 @@ exports.showReservation = function(request, response) {
     var userRealName = request.cookies.userRealName;
     var userTel = request.cookies.userTelephone;
     var userSid = request.cookies.userSocialId;
-    var state = 'normal';
     var doctorDetail = null;
     var resvDetail = null;
     var ctr = 0;
-    if (typeof request.query.state != 'undefined') {
-        state = request.query.state;
-    }
     var url1 = '/user/reservation/' + resvId + '/detail';
     fireRequest('GET', url1, null, function(res) {
         resvDetail = res;
@@ -436,7 +432,56 @@ exports.showReservation = function(request, response) {
 
         response.render('reservation', {
             username: username,
-            state: state,
+            state: 'normal',
+            userRealName: userRealName,
+            userTelephone: userTel,
+            userSocialId: userSid,
+            resvDetail: resvDetail,
+            doctorDetail: doctorDetail
+        });
+    }
+};
+
+exports.showReservationWithSuccessMessage = function(request, response) {
+    if (!__checkVars('cookies', request.cookies, 'username', 'userRealName', 'userTelephone')) {
+        __invalidArgs(response);
+        return;
+    }
+
+    var username = request.cookies.username;
+    var resvId = request.params.reservation_id;
+    var doctorId = request.params.doctor_id;
+    var userRealName = request.cookies.userRealName;
+    var userTel = request.cookies.userTelephone;
+    var userSid = request.cookies.userSocialId;
+    var doctorDetail = null;
+    var resvDetail = null;
+    var ctr = 0;
+    var url1 = '/user/reservation/' + resvId + '/detail';
+    fireRequest('GET', url1, null, function(res) {
+        resvDetail = res;
+        ++ctr;
+        render();
+    });
+
+    var url2 = '/hospital/doctor/' + doctorId + '/detail';
+    fireRequest('GET', url2, null, function(res) {
+        doctorDetail = res;
+        ++ctr;
+        render();
+    });
+
+    var render = function() {
+        if (ctr !== 2)
+            return;
+        if (resvDetail == null || doctorDetail == null) {
+            __fatal(response);
+            return;
+        }
+
+        response.render('reservation', {
+            username: username,
+            state: 'success',
             userRealName: userRealName,
             userTelephone: userTel,
             userSocialId: userSid,
