@@ -51,11 +51,8 @@ block site-content
                     hr
     script.
         $(document).ready(function() {
-            $(button).click(function(e) {
-                e.preventDefault();
-                alert("121324");
-                $(this).parents(".time")removeClass("time");
-                $(".time").remove;
-                console.log("123");
+            $("button").click(function(e) {
+                $(this).parents(".time").removeClass("time");
+                $(".time").remove();
             });
         });
