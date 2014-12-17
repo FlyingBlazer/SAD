@@ -9,8 +9,8 @@ block site-content
         .left-content(style='float: left;')
             form.form-login(role='form', action='/account/login', name='postLoginMessage', method='post')
                 h2.form-login-heading 请登录
-                input#username.form-control(type='username', placeholder='用户名', required='', autofocus='')
-                input#password.form-control(type='password', placeholder='请输入密码', required='')
+                input#username.form-control(type='username', name='username', placeholder='用户名', required='', autofocus='')
+                input#password.form-control(type='password', name='password', placeholder='请输入密码', required='')
                 .checkbox
                     label
                         input(type='checkbox', value='remember-me')

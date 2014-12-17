@@ -180,16 +180,19 @@ exports.onLogin = function (request, response) {
 
         var loginPath = '/user/login';
 
+        console.log('-------- ' + request.body.username);
+        console.log('--- : ' + request.body.password);
+
         var loginCallback = function (result) {
             if (result.code == 0) {//登录成功
 
                 getUserInfo(result.userid, function (userInfo) {
                     setCookie(response, userInfo);//设置cookie
-                    response.redirect('back');//重定向到来时的地址
+                    response.redirect('/');//重定向到首页
                 });
             } else {//登录失败
                 response.render('login', {
-                    errorMessage: '用户名或密码错误'
+                    errorMessage: result.message
                 });
             }
         };
