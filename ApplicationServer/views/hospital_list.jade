@@ -5,8 +5,8 @@ block title
 
 block breadcrumb
     li
-        a(href='#') 主页
-    li.active #{city}
+        a(href="/index") 主页
+    li.active #{province}
 
 block site-content
     link(href="/stylesheets/hospital_list.css", rel="stylesheet", media="all")
@@ -18,14 +18,14 @@ block site-content
                     img.image
                     div.hospital-info
                         div.name
-                            a(href="#") #{hospital.name}
-                        div.rating #{hospital.rating}
+                            a(href="/concierge/reserve/#{hospital.id}") #{hospital.name}
+                        div.rating #{hospital.level}
                         div.tel
                             i.fa.fa-phone.fa-fw
-                            | #{hospital.tel}
+                            | #{hospital.telephone}
                         div.addr
                             i.fa.fa-map-marker.fa-fw
-                            | #{hospital.addr}
+                            | #{hospital.address}
                     table.vertical-middle-helper
                         tr
                             td.vertical-middle
