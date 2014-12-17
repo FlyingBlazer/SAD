@@ -1,18 +1,16 @@
 #!/usr/bin/env node
 var fs = require('fs');
 var path = require('path');
-var debug_A = require('debug')('SAD-Application');
-var debug_B = require('debug')('SAD-Business');
 var app_A = require('../ApplicationServer/app');
 var app_B = require('../BusinessServer/app');
-var settings = JSON.parse(fs.readFileSync(path.join(__dirname, '../settings.json')));
+var settings = require('../settings.json');
 
 app_A.set('BusinessPort', settings.port.business);
 
 var server_B = app_B.listen(settings.port.business, function() {
-    debug_B('Business server listening on port ' + server_A.address().port);
+    console.log('Business server listening on port ' + server_B.address().port);
 });
 
 var server_A = app_A.listen(settings.port.application, function() {
-    debug_A('Application server listening on port ' + server_A.address().port);
+    console.log('Application server listening on port ' + server_A.address().port);
 });

@@ -104,12 +104,12 @@ exports.redirectToListHospitals = function(request, response) {
 
 // get
 exports.listHospitals = function(request, response) {
-    if (!__checkVars('cookies', request.cookies, 'username')) {
-        __invalidArgs(response);
-        return;
-    }
+    //if (!__checkVars('cookies', request.cookies, 'username')) {
+    //    __invalidArgs(response);
+    //    return;
+    //}
 
-    var username = request.cookies.username;
+    var username = request.cookies.username ? request.cookies.username : '';
     var province = request.params.province;
     var url = '/hospital/hospital/list?province=' + province;
 
@@ -120,8 +120,33 @@ exports.listHospitals = function(request, response) {
         }
         response.render('hospital_list', {
             username: username,
-            // TODO: search ??!!?!?!
             search: false,
+            searchText: null,
+            list: res.hospitals
+        });
+    });
+};
+
+// get
+exports.search = function(request, response) {
+    //if (!__checkVars('cookies', request.cookies, 'username')) {
+    //    __invalidArgs(response);
+    //    return;
+    //}
+
+    var username = request.cookies.username ? request.cookies.username : '';
+    var query = request.params.q;
+    var url = '/search?q=' + query;
+
+    fireRequest('GET', url, null, function(res) {
+        if (res == null) {
+            __fatal(response);
+            return;
+        }
+        response.render('hospital_list', {
+            username: username,
+            search: true,
+            searchText: query,
             list: res.hospitals
         });
     });
@@ -131,12 +156,12 @@ exports.listHospitals = function(request, response) {
 // Choose a department and a doctor
 // get
 exports.showHospital = function(request, response) {
-    if (!__checkVars('cookies', request.cookies, 'username')) {
-        __invalidArgs(response);
-        return;
-    }
+    //if (!__checkVars('cookies', request.cookies, 'username')) {
+    //    __invalidArgs(response);
+    //    return;
+    //}
 
-    var username = request.cookies.username;
+    var username = request.cookies.username ? request.cookies.username : '';
     var hospitalId = request.params.hospital_id;
     var detail = null;
     var departments = null;
@@ -180,77 +205,16 @@ exports.showHospital = function(request, response) {
     }
 };
 
-// (!) deprecated method
-exports.showHospital2 = function(request, response) {
-    if (!__checkVars('cookies', request.cookies, 'username')) {
-        __invalidArgs(response);
-        return;
-    }
-
-    var username = request.cookies.username;
-    var hospitalId = request.params.hospital_id;
-    var detail = null;
-    var departments = null;
-    var doctors = '{';
-
-    var url1 = '/hospital/hospital/' + hospitalId + '/detail';
-    fireRequest('GET', url1, null, function(res) {
-        detail = res;
-        getDoctors();
-    });
-
-    var url2 = '/hospital/department/' + hospitalId;
-    fireRequest('GET', url2, null, function(res) {
-        departments = res;
-        getDoctors();
-    });
-
-    var url3 = '/hospital/doctor/list?departmentId=';
-    var getDoctors = function() {
-        if (detail == null || departments == null)
-            return;
-
-        var ix = 0;
-        var url4 = url3 + departments.departments_list[i].id;
-
-        var completeReqSeq = function() {
-            doctors += '}';
-            response.render('hospital', {
-                username: username,
-                detail: res,
-                departments: departments.departments_list,
-                doctors: JSON.parse(doctors)
-            });
-        };
-
-        var handleRes = function(res) {
-            doctors += '"department_' + ix + '": [';
-            doctors += JSON.stringify(res.doctors);
-            doctors += ']';
-            ++ix;
-            if (ix < departments.count) {
-                doctors += ',';
-                url4 = url3 +  departments.departments_list[i].id;
-                fireRequest('GET', url4, null, handleRes);
-            } else {
-                completeReqSeq();
-            }
-        };
-
-        fireRequest('GET', url4, null, handleRes);
-    };
-};
-
 // Doctor page - Show doctor's detail and available time slots
 // Choose a time
 // get
 exports.showDoctor = function(request, response) {
-    if (!__checkVars('cookies', request.cookies, 'username')) {
-        __invalidArgs(response);
-        return;
-    }
+    //if (!__checkVars('cookies', request.cookies, 'username')) {
+    //    __invalidArgs(response);
+    //    return;
+    //}
 
-    var username = request.cookies.username;
+    var username = request.cookies.username ? request.cookies.username : '';
     var expertId = request.params.expert_id;
     var hospitalId = request.params.hospital_id;
     var departmentId = request.params.department_id;
@@ -270,14 +234,18 @@ exports.showDoctor = function(request, response) {
     });
 };
 
-// post (need x-www-form-urlencoded data)
-exports.confirm = function(request, response) {
-    var _sa = __checkVars('cookies', request.cookies, 'username', 'userId', 'userTelephone', 'userSocialId', 'userRealName');
-    var _sb = __checkVars('body', request.body, 'hospital', 'hospitalId', 'department', 'departmentId', 'doctor', 'doctorId', 'resvDate', 'resvTime', 'title', 'price');
+// get
+exports.recoverConfirm = function(request, response) {
 
-    if (_sa === false || _sb === false) {
+    // check required cookies
+    if (!__checkVars('cookies', request.cookies, 'confirm_data', 'username', 'userId', 'userTelephone', 'userSocialId', 'userRealName')) {
+        // still not logged in
+        response.clearCookie('confirm_data');
         __invalidArgs(response);
         return;
+    } else {
+        var bodyParams = JSON.parse(request.cookie.confirm_data);
+        response.clearCookie('confirm_data');
     }
 
     var username = request.cookies.username;
@@ -285,35 +253,87 @@ exports.confirm = function(request, response) {
     var userTelephone = request.cookies.userTelephone;
     var userSocialId = request.cookies.userSocialId;
     var userRealName = request.cookies.userRealName;
-    // information below are from _post
-    var hospital = request.body.hospital;
-    var hospitalId = request.body.hospitalId;
-    var department = request.body.department;
-    var departmentId = request.body.departmentId;
-    var doctor = request.body.doctor;
-    var doctorId = request.body.doctorId;
-    var resvDate = request.body.resvDate;
-    var resvTime = request.body.resvTime;
-    var title = request.body.title;
-    var price = request.body.price;
 
     response.render('new_reservation', {
         detail: {
             "username": username,
             "userId": userId,
-            "hospital": hospital,
-            "hospitalId": hospitalId,
-            "department": department,
-            "departmentId": departmentId,
-            "doctor": doctor,
-            "doctorId": doctorId,
-            "doctorTitle": title,
-            "date": resvDate,
-            "time": resvTime,
-            "price": price,
             "userTelephone": userTelephone,
             "userSocialId": userSocialId,
-            "userRealName": userRealName
+            "userRealName": userRealName,
+            "hospital": bodyParams.hospital,
+            "hospitalId": bodyParams.hospitalId,
+            "department": bodyParams.department,
+            "departmentId": bodyParams.departmentId,
+            "doctor": bodyParams.doctor,
+            "doctorId": bodyParams.doctorId,
+            "doctorTitle": bodyParams.title,
+            "date": bodyParams.resvDate,
+            "time": bodyParams.resvTime,
+            "price": bodyParams.price
+        }
+    });
+};
+
+// post (need x-www-form-urlencoded data)
+exports.confirm = function(request, response) {
+
+    // if request body is incorrect, reject the request
+    if (!__checkVars('body', request.body, 'hospital', 'hospitalId', 'department', 'departmentId', 'doctor', 'doctorId', 'resvDate', 'resvTime', 'title', 'price')) {
+        __invalidArgs(response);
+        return;
+    }
+
+    var bodyParams = {
+        'hospital': request.body.hospital,
+        'hospitalId': request.body.hospitalId,
+        'department': request.body.department,
+        'departmentId': request.body.departmentId,
+        'doctor': request.body.doctor,
+        'doctorId': request.body.doctorId,
+        'resvDate': request.body.resvDate,
+        'resvTime': request.body.resvTime,
+        'title': request.body.title,
+        'price': request.body.price
+    };
+
+    // if cookie is not set, save request body to cookie and retreat to login page
+    // otherwise clear potentially existent request body cookie
+    if (!__checkVars('cookies', request.cookies, 'username', 'userId', 'userTelephone', 'userSocialId', 'userRealName')) {
+        response.cookie('confirm_data', JSON.stringify(bodyParams), {
+            maxAge: 999999,
+            httpOnly: true
+        });
+        response.redirect(302, '/account/login');
+        return;
+    } else {
+        response.clearCookie('confirm_data');
+    }
+
+    // if control reaches here, start the normal rendering process
+    var username = request.cookies.username;
+    var userId = request.cookies.userId;
+    var userTelephone = request.cookies.userTelephone;
+    var userSocialId = request.cookies.userSocialId;
+    var userRealName = request.cookies.userRealName;
+
+    response.render('new_reservation', {
+        detail: {
+            "username": username,
+            "userId": userId,
+            "userTelephone": userTelephone,
+            "userSocialId": userSocialId,
+            "userRealName": userRealName,
+            "hospital": bodyParams.hospital,
+            "hospitalId": bodyParams.hospitalId,
+            "department": bodyParams.department,
+            "departmentId": bodyParams.departmentId,
+            "doctor": bodyParams.doctor,
+            "doctorId": bodyParams.doctorId,
+            "doctorTitle": bodyParams.title,
+            "date": bodyParams.resvDate,
+            "time": bodyParams.resvTime,
+            "price": bodyParams.price
         }
     });
 };

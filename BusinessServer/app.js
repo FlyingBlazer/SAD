@@ -1,5 +1,5 @@
 var restify = require('restify');
-var server = exports = module.exports = restify.createServer();
+var server = restify.createServer();
 var models = require('./models');
 var orm = require('orm');
 var settings = require('./lib/settings');
@@ -17,6 +17,9 @@ server.use(orm.express(settings.dbUrl, models));
 
 server.use(function(req, res, next) {
     res.charSet('utf-8');
+    console.log("body: ", req.body);
+    console.log("query: ", req.query);
+    console.log("params: ", req.params);
     next();
 });
 
@@ -58,3 +61,5 @@ server.post('/hospital/department/:departmentId/update', controllers.hospital.de
 //---
 server.post('/hospital/reservation/:reservationId/confirm', controllers.reservation.confirm);
 //--------------------------------
+
+exports = module.exports = server;
