@@ -23,6 +23,17 @@ exports.UserNotLogin = function UserNotLogin(message) {
 };
 util.inherits(exports.UserNotLogin, restify.RestError);
 
+exports.UpdatePasswordFail = function UpdatePasswordFail(message) {
+    restify.RestError.call(this, {
+        restCode: '1006',
+        statusCode: 403,
+        message: message,
+        constructorOpt: UpdatePasswordFail
+    });
+    this.name = 'UpdatePasswordFail';
+};
+util.inherits(exports.UpdatePasswordFail, restify.RestError);
+
 exports.UserAlreadyExisted = function UserAlreadyExisted(message) {
     restify.RestError.call(this, {
         restCode: '1003',
