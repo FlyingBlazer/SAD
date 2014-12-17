@@ -1,29 +1,31 @@
 var Errors = require('../lib/Errors');
 
-exports.search = function(req, res, next) {
-    var keyword = req.query.keyword;
+module.exports = function(req, res, next) {
+    var keyword = req.query.q;
     var len=keyword.length;
     var keyword_set='';
     for(var i=0;i<len;i++){
-    	keyword_set+=keyword.charAt(i);
-    	if(i!=len-1){
-    		keyword_set+=' ';
-    	}
+        keyword_set+=keyword.charAt(i);
+        if(i!=len-1){
+            keyword_set+=' ';
+        }
     }
     req.db.driver.execQuery(
-  		"SELECT id as hospital_id,name as name,addr as address,tel as tel FROM hospital WHERE MATCH(name) AGAINST('?' IN BOOLEAN MODE)",
-  		[keyword_set],
-  		function (err, data) {
-  			if(err) return next(err);
-        	if(!data) {
-            	return next(new Errors.EmptySearchResult("Nothing Is Found!"));
-        	}
-        	else{
-	  			  res.json({
-                	errcode: 0,
-                	errmsg: 'success',
-                	list: data
-            	});
-  			}
-  		});
+        "SELECT a.id as id, a.name as name, b.meaning as level, a.province as province, a.city as city, a.addr as address, " +
+        "a.tel as telephone, a.site as website, a.info as description FROM hospital as a, hospital_rating as b WHERE a.rating_id = b.id AND " +
+        "a.id IN (SELECT id FROM hospital WHERE MATCH(name) AGAINST('?' IN BOOLEAN MODE))"
+            [keyword_set],
+        function (err, data) {
+            if(err) return next(err);
+            if(!data) {
+                return next(new Errors.EmptySearchResult("Nothing Is Found!"));
+            }
+            else{
+                res.json({
+                    errcode: 0,
+                    errmsg: 'success',
+                    hospitals: data
+                });
+            }
+        });
 };
