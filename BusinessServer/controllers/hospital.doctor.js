@@ -152,8 +152,9 @@ exports.detail = function(req, res, next) {
                         break;
                 }
             });
-            console.log(doctor);
             res.json({
+                code: 0,
+                message: 'success',
                 id: doctor.id,
                 name: doctor.name,
                 hospital: doctor.department.hospital.name,
