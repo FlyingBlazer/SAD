@@ -131,9 +131,24 @@ var forwardRequest = function (method, path, data, callback) {
 // get
 exports.loginPage = function (request, response) {
     if (request.method.toLowerCase() == 'get') {
-        response.render('login');
+        showLoginPage(response);
     }
 };
+
+function showLoginPage(response) {
+    response.render('login', {
+        errorMessage: ' '
+    });
+}
+
+/**
+ * 重定向到登陆界面
+ * 主要在userid为空时使用
+ * @param response
+ */
+function redirectToLoginPage(response) {
+    response.redirect('/account/login');
+}
 
 // post
 exports.onLogin = function (request, response) {
@@ -174,15 +189,18 @@ exports.manage = function (request, response) {
     if (request.method.toLowerCase() == 'get') {
         //跳转到管理页面
         var userId = getUserIdFromCookie(request);
-        //设置用户名、信用等级
-        getUserInfo(userId, function (result) {
-            response.render('user', {
-                status: result.status,
-                name: result.name,
-                credit: result.credit
-            });
-        });
 
+        if (userId == null || userId == '')
+            redirectToLoginPage(response);
+        else
+        //设置用户名、信用等级
+            getUserInfo(userId, function (result) {
+                response.render('user', {
+                    status: result.status,
+                    name: result.name,
+                    credit: result.credit
+                });
+            });
     }
 };
 
@@ -213,18 +231,21 @@ exports.showUserInformation = function (request, response) {
     if (request.method.toLowerCase() == 'get') {
 
         var userId = getUserIdFromCookie(request);
+        if (userId == null || userId == '')
+            redirectToLoginPage(response);
+        else
         //设置用户名、信用等级
-        getUserInfo(userId, function (result) {
-            response.render('profile', {
-                username: result.username,
-                status: result.status,
-                sid: result.sid,
-                name: result.name,
-                phone: result.phone,
-                email: result.email,
-                credit: result.credit
+            getUserInfo(userId, function (result) {
+                response.render('profile', {
+                    username: result.username,
+                    status: result.status,
+                    sid: result.sid,
+                    name: result.name,
+                    phone: result.phone,
+                    email: result.email,
+                    credit: result.credit
+                });
             });
-        });
     }
 };
 
@@ -259,8 +280,10 @@ exports.showReservationList = function (request, response) {
     if (request.method.toLowerCase() == 'get') {
 
         var userId = getUserIdFromCookie(request);
-
-        showReservations(userId, response);
+        if (userId == null || userId == '')
+            redirectToLoginPage(response);
+        else
+            showReservations(userId, response);
     }
 };
 
@@ -278,7 +301,7 @@ function showReservations(userId, response) {
             if (result.errcode == 0) {
                 getUserInfo(userId, function (userInfo) {
                     //渲染预约单界面
-                    response.render('reservation', {
+                    response.render('reservation_list', {
                         name: userInfo.name,
                         status: userInfo.status,
                         credit: userInfo.credit,
