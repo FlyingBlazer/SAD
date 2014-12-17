@@ -61,5 +61,6 @@ server.post('/hospital/department/:departmentId/update', controllers.hospital.de
 //---
 server.post('/hospital/reservation/:reservationId/confirm', controllers.reservation.confirm);
 //--------------------------------
+server.get('/search', controllers.search);
 
 exports = module.exports = server;
