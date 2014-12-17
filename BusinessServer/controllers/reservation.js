@@ -47,16 +47,16 @@ exports.add = function(req, res, next) {
     var adepartment_id=req.body.department_id;
     var adoctor_id=req.body.doctor_id;
     var adate=req.body.date;
+    var aggdate='%'+adate.substr(5,5);
     var aweeknum=req.body.week;
     var aperiod=req.body.time == 'morning' ? 1 : (req.body.time == 'afternoon' ? 2 : 3);
-	var aprice=req.body.price;
-    var acurrent=req.body.current;
     var afrequency1="00000000";
     var afrequency2="10000000";
-    var afrequency3="2???????";
+    var afrequency3="2_______";
     var afrequency4="30000000";
+    var weeknum=aweeknum == '星期一' ? 1: (aweeknum == '星期二' ? 2: (aweeknum == '星期三' ? 3: (aweeknum == '星期四' ? 4: (aweeknum == '星期五' ? 5: (aweeknum == '星期六' ? 6: 7)))));
     afrequency3[weeknum]='1';
-    req.models.user.get(user_id,function(err,user){
+    req.models.user.get(auser_id,function(err,user){
 		if(err && err.message != 'Not found') return next(err);
     	if(!user) return next(new Errors.ReservationUserInvalidFailure('User Not Exist!'));
     	else{
@@ -69,15 +69,16 @@ exports.add = function(req, res, next) {
     			function(err,data){
     				if(err) return next(err);
     				if(!data) return next(new Errors.ReservationErrorFailure('Database Error!'));
-					req.db.driver.execQuery("SELECT total_app "+
-											"FROM working "+
-											"WHERE doctor_id=? "+
+					req.db.driver.execQuery("SELECT total_app, price"+
+											"FROM working, doctor"+
+                      "doctor_id=doctor.id"+
+											"AND doctor_id=? "+
 											"AND period=? "+
 											"AND (fequency=? "+
 											"OR frequency=? "+
-											"OR (frequency=? AND time=?) "+
-											"OR frequency like '?')",
-					[adoctor_id,aperiod,afrequency1,afrequency2,afrequency4,adate,afrequency3],
+											"OR (frequency=? AND time like '?') "+
+											"OR frequency like '?') LIMIT 1",
+					[adoctor_id,aperiod,afrequency1,afrequency2,afrequency4,aggdate,afrequency3],
 					function(err,data1){
 						if(err && err.message != 'Not found') return next(err);
 						if(!data1) return next(new Errors.ReservationPeriodFailure('No Such Working Period!'));
@@ -90,7 +91,7 @@ exports.add = function(req, res, next) {
 								time:adate,
 								period: aperiod,
 								status: 0,
-								price: aprice,
+								price: data1[0]['price'],
 								running_number: uuid.v4(),
 								user: auser_id,
 								doctor: adoctor_id
