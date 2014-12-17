@@ -68,13 +68,34 @@ var __invalidArgsError = function(response) {
     __logError('Invalid arguments provided.');
 };
 
+var serialize = function(obj) {
+    var str = [];
+    for(var p in obj)
+        if (obj.hasOwnProperty(p)) {
+            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+        }
+    return str.join("&");
+};
+
 var fireRequest = function(method, path, data, callback, noErrCodeCheck) {
-    var options = {
-        host: 'localhost',
-        port: settings.port.business,
-        method: method,
-        path: path
-    };
+
+    if (method == 'POST')
+        var options = {
+            host: 'localhost',
+            port: settings.port.business,
+            method: method,
+            path: path,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        };
+    else
+        var options = {
+            host: 'localhost',
+            port: settings.port.business,
+            method: method,
+            path: path
+        };
 
     var http = require('http');
     var responseData = '';
@@ -393,7 +414,7 @@ exports.confirm = function(request, response) {
 // Submit request
 // post (need x-www-form-urlencoded data)
 exports.onSubmit = function(request, response) {
-    var _sa = __checkVars('cookies', request.cookies, 'userId');
+    var _sa = true;//__checkVars('cookies', request.cookies, 'userId');
     var _sb = __checkVars('body', request.body, 'hospitalId', 'departmentId', 'doctorId', 'resvTime', 'resvDate');
 
     if (_sa === false || _sb === false) {
@@ -401,7 +422,7 @@ exports.onSubmit = function(request, response) {
         return;
     }
 
-    var userId = request.cookies.userId; // from cookie;
+    var userId = 1;//request.cookies.userId; // from cookie;
     var hospitalId = request.body.hospitalId; // from prev page
     var departmentId = request.body.departmentId; // from prev page
     var doctorId = request.body.doctorId; // from prev page
@@ -418,7 +439,8 @@ exports.onSubmit = function(request, response) {
         time: time,
         paid_flag: false
     };
-    fireRequest('POST', url, JSON.stringify(data), function(res) {
+    console.log(serialize(data));
+    fireRequest('POST', url, serialize(data), function(res) {
         if (res == null) {
             __fatalError(response, 'Line=' + __line + ', Func=' + __function);
             return;
