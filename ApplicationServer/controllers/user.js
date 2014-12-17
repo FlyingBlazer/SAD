@@ -28,7 +28,7 @@ exports.onRegister = function (request, response) {
         var registerCallback = function (result) {
             if (result != null) {
 
-                if (result.errcode == 0) {//注册成功
+                if (result.code == 0) {//注册成功
                     // 跳转到用户个人主页
                     var userId = result.userid;
                     getUserInfo(userId, function (userInfo) {
@@ -43,7 +43,7 @@ exports.onRegister = function (request, response) {
                 } else {//注册失败
                     //提示错误信息
                     response.render('signup', {
-                        errorMessage: result.errmsg
+                        errorMessage: result.message
                     });
                 }
 
@@ -157,7 +157,7 @@ exports.onLogin = function (request, response) {
         var loginPath = '/user/login';
 
         var loginCallback = function (result) {
-            if (result.errcode == 0) {//登录成功
+            if (result.code == 0) {//登录成功
 
                 getUserInfo(result.userid, function (userInfo) {
                     setCookie(response, userInfo);//设置cookie
@@ -216,10 +216,10 @@ function getUserInfo(userId, onSucceedCallback) {
 
     var callback = function (result) {
         if (result != null)
-            if (result.errcode == 0) {
+            if (result.code == 0) {
                 onSucceedCallback(result);
             } else
-                console.log(result.errmsg);
+                console.log(result.message);
     };
 
     forwardRequestGET(path, callback());
@@ -258,7 +258,7 @@ exports.manageUserInformation = function (request, response) {
 
         var callback = function (result) {
             if (result != null) {
-                if (result.errcode == 0) {
+                if (result.code == 0) {
                     response.render('profile', {
                         errorMessage: '更新成功'
                     });
@@ -298,7 +298,7 @@ function showReservations(userId, response) {
 
     var callback = function (result) {
         if (result != null)
-            if (result.errcode == 0) {
+            if (result.code == 0) {
                 getUserInfo(userId, function (userInfo) {
                     //渲染预约单界面
                     response.render('reservation_list', {
@@ -309,7 +309,7 @@ function showReservations(userId, response) {
                     });
                 });
             } else
-                console.log(result.errmsg);
+                console.log(result.message);
     };
 
     forwardRequestGET(path, callback);
