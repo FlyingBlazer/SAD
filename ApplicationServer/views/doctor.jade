@@ -38,6 +38,7 @@ block site-content
                 div.time
                     div
                         input(name="resvDate", value="#{time.date.year}#{time.date.month}#{time.date.day}")
+                        input(name="day", value="#{time.date.day}")
                     div
                         if time.slot.morning
                             input(name="resvTime", value="morning")
