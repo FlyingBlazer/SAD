@@ -70,9 +70,9 @@ block site-content
                 return false;
             } else {
                 $.post("/concierge/reserve/submit", {
-                    hospitalId: #{detail.hospitalId},
-                    departmentId: #{detail.departmentId},
-                    doctorId: #{detail.doctorId},
+                    hospitalId: "#{detail.hospitalId}",
+                    departmentId: "#{detail.departmentId}",
+                    doctorId: "#{detail.doctorId}",
                     resvDate: "#{detail.date}",
                     resvTime: "#{detail.time}"
                 });
