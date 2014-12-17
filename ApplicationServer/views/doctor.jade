@@ -14,33 +14,48 @@ block breadcrumb
     li.active #{detail.name}
 
 block site-content
-link(href="/stylesheets/doctor.css", rel="stylesheet", media="all")
+    link(href="/stylesheets/doctor.css", rel="stylesheet", media="all")
 
-div#site-content
-    form
-    div.hid HOSPITAL_ID:
-        input(value="#{hospitalId}")
-    div.hname HOSPITAL:#{detail.hospital}
-    div.did DEPARTMENT_ID:#{departmentId}
-    div.dname DEPARTMENT:#{detail.department}
-    div.doid DOCTOR_ID:#{detail.id}
-    div.doname NAME:#{detail.name}
-    div.title TITLE:#{detail.title}
-    div.price PRICE:#{detail.price}
-    each time in deail.time_solts
-        div #{time.date.year}-#{time.date.month}-#{time.date.day}
-        div
-            if time.slot.morning
-                button 上午
-            if time.slot.afternoon
-                button 下午
-            if time.slot.evening
-                button 晚上
-        hr
-
+    div#site-content
+        form(method="POST", action="/concierge/reserve/confirm")
+            div.hid HOSPITAL_ID:
+                input(name="hospitalId", value="#{hospitalId}")
+            div.hname HOSPITAL:
+                input(name="hospital", value="#{detail.hospital}")
+            div.did DEPARTMENT_ID:
+                input(name="departmentId", value="#{departmentId}")
+            div.dname DEPARTMENT:
+                input(name="department",value="#{detail.department}")
+            div.doid DOCTOR_ID:
+                input(name="doctorId", value="#{detail.id}")
+            div.doname NAME:
+                input(name="doctor", value="#{detail.name}")
+            div.title TITLE:
+                input(name="title", value="#{detail.title}")
+            div.price PRICE:
+                input(name="price", value="#{detail.price}")
+            each time in detail.time_slots
+                div.time
+                    div
+                        input(name="resvDate", value="#{time.date.year}#{time.date.month}#{time.date.day}")
+                    div
+                        if time.slot.morning
+                            input(name="resvTime", value="morning")
+                            button(type="submit") 上午
+                        if time.slot.afternoon
+                            input(name="resvTime", value="afternoon")
+                            button(type="submit") 下午
+                        if time.slot.evening
+                            input(name="resvTime", value="evening")
+                            button(type="submit") 晚上
+                    hr
     script.
         $(document).ready(function() {
-            $(button).click(function() {
-                $.ajax()
+            $(button).click(function(e) {
+                e.preventDefault();
+                alert("121324");
+                $(this).parents(".time")removeClass("time");
+                $(".time").remove;
+                console.log("123");
             });
         });
