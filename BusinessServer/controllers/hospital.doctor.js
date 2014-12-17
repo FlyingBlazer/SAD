@@ -8,10 +8,10 @@ exports.list = function(req, res, next) {
         var ret = {};
         hospital.departments.forEach(function(department) {
             if(!Array.isArray(ret[department.name])) {
-                ret[department.name] = [];
+                ret[department.id] = [];
             }
             department.doctors.forEach(function(doctor) {
-                ret[department.name].push({
+                ret[department.id].push({
                     id: doctor.id,
                     name: doctor.name,
                     hospital: hospital.name,
