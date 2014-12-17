@@ -5,7 +5,7 @@ block title
 
 block breadcrumb
     li
-        a(href="/index") 主页
+        a(href="/") 主页
     li
         a(href="/#{detail.province}/hospitals") #{detail.province}
     li.active #{detail.name}
@@ -56,17 +56,20 @@ block site-content
                 td.table-content 副主任医师
                 td.table-content 主治医师
 
-            div.doctor-list
-                each doctor in doctors[0]
-                    div.doctor
-                        img.doctor-image
-                        div.doctor-info
-                            div.name
-                                a(href="#") #{doctor.name}
-                            div.title #{doctor.title}
-                            div.department #{doctor.department}
-                        div.doctor-intro #{doctor.description}
-                        table.vertical-middle-helper
-                            tr
-                                td.vertical-middle
-                                    button.register.btn.btn-primary 挂号
+
+            div.department-list
+                each department, department_id in doctors
+                    div.department(data-id="#{department_id}")
+                        each doctor in department
+                            div.doctor
+                                img.doctor-image
+                                div.doctor-info
+                                    div.name
+                                        a(href="/concierge/reserve/#{detail.id}/#{department_id}/#{doctor.id}") #{doctor.name}
+                                    div.title #{doctor.title}
+                                    div.department #{doctor.department}
+                                div.doctor-intro #{doctor.description}
+                                table.vertical-middle-helper
+                                    tr
+                                        td.vertical-middle
+                                            button.register.btn.btn-primary 挂号
