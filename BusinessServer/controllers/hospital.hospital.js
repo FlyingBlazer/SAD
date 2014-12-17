@@ -60,6 +60,10 @@ exports.add = function(req, res, next) {
             if(err && err.message != 'Not found') return next(err);
             hospital.setRating(rating, function(err) {
                 if(err && err.message != 'Not found') return next(err);
+                res.json({
+                    code: 0,
+                    message: 'success'
+                });
             });
         });
     })
@@ -72,6 +76,10 @@ exports.remove = function(req, res, next) {
         if(!result) return next(new Errors.HospitalNotExist('HospitalNotExist'));
         hospital.remove(function(err) {
             if(err && err.message != 'Not found') return next(err);
+            res.json({
+                code: 0,
+                message: 'success'
+            });
         });
     });
 };
@@ -84,7 +92,7 @@ exports.update = function(req, res, next) {
         if(typeof req.body.level != 'undefined') {
             var level = req.body.level;
             delete req.body.level;
-            req.models.hospital_ratinga.one({meaning: level}, function(err, rating) {
+            req.models.hospital_rating.one({meaning: level}, function(err, rating) {
                 if(err && err.message != 'Not found') return next(err);
                 hospital.setRating(rating, function(err) {
                     if(err && err.message != 'Not found') return next(err);
@@ -96,6 +104,10 @@ exports.update = function(req, res, next) {
         }
         hospital.save(function(err) {
             if(err && err.message != 'Not found') return next(err);
+            res.json({
+                code: 0,
+                message: 'success'
+            });
         });
     });
 };
