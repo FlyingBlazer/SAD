@@ -4,7 +4,7 @@ var uuid = require('node-uuid');
 exports.list = function(req, res, next) {
     var user_id = req.query.userid;
     req.db.driver.execQuery(
-  		"SELECT appointment.id as reservation_id,appointment.time as time,doctor.name as doctor_name,hospital.name as hospital_name,department.name as department_name "+
+  		"SELECT appointment.id as reservation_id, appointment.price as price,appointment.status as status, appointment.time as time,doctor.name as doctor_name,hospital.name as hospital_name,department.name as department_name "+
   		"FROM appointment,doctor,department,hospital "+
   		"WHERE appointment.user_id=? "+
   		"AND appointment.doctor_id=doctor.id "+
@@ -17,7 +17,20 @@ exports.list = function(req, res, next) {
             	return next(new Errors.EmptyReservation("You Don't Have Any Appointment!"));
         	}
         	else{
-	  			res.json({
+            var statuslist={
+                    '现金付款，尚未支付',
+                    '现金付款，已支付',
+                    '在线付款，尚未支付',
+                    '在线付款，已支付',
+                    '订单超时，尚未支付',
+                    '订单超时，尚未确认就诊',
+                    '订单超时，未就诊',
+                    '订单超时，已就诊'
+                };
+            for(var i = 0; i < data.length; i++){
+                data[i]['status']=statuslist[data[i]['status']];
+            }
+	  			  res.json({
                 	errcode: 0,
                 	errmsg: 'success',
                 	reservations: data

@@ -243,3 +243,14 @@ exports.DoctorNotExist = function DoctorNotExist(message) {
     this.name = 'DoctorNotExist';
 };
 util.inherits(exports.DoctorNotExist, restify.RestError);
+
+exports.EmptySearchResult = function EmptySearchResult(message) {
+    restify.RestError.call(this, {
+        restCode: '4001',
+        statusCode: 401,
+        message: message,
+        constructorOpt: EmptySearchResult
+    });
+    this.name = 'EmptySearchResult';
+};
+util.inherits(exports.EmptySearchResult, restify.RestError);
