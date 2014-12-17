@@ -1,16 +1,63 @@
 #!/usr/bin/env node
 var fs = require('fs');
 var path = require('path');
+var cluster = require('cluster');
 var app_A = require('../ApplicationServer/app');
 var app_B = require('../BusinessServer/app');
 var settings = require('../settings.json');
 
 app_A.set('BusinessPort', settings.port.business);
 
-var server_B = app_B.listen(settings.port.business, function() {
-    console.log('Business server listening on port ' + server_B.address().port);
-});
-
-var server_A = app_A.listen(settings.port.application, function() {
-    console.log('Application server listening on port ' + server_A.address().port);
-});
+if(cluster.isMaster) {
+    var A = {
+        online: false,
+        worker: null
+    }, B = {
+        online: false,
+        worker: null
+    };
+    cluster.fork();
+    cluster.fork();
+    cluster.on('online', function(worker) {
+        if(!A.online) {
+            worker.send('startA');
+            A.online = true;
+            A.worker = worker;
+        } else {
+            worker.send('startB');
+            B.online = true;
+            B.worker = worker;
+        }
+    });
+    cluster.on('exit', function(worker, code, signal) {
+        console.log('worker ' + worker.process.pid + ' died');
+        var n = cluster.fork();
+        if(worker == A.worker) {
+            n.send('startA');
+            A.online = true;
+            A.worker = n;
+        } else {
+            n.send('startB');
+            B.online = true;
+            B.worker = n;
+        }
+    });
+} else {
+    process.on('message', function(msg) {
+        switch(msg) {
+            case 'startA':
+                var server_A = app_A.listen(settings.port.application, function() {
+                    console.log('Application server listening on port ' + server_A.address().port);
+                });
+                break;
+            case 'startB':
+                var server_B = app_B.listen(settings.port.business, function() {
+                    console.log('Business server listening on port ' + server_B.address().port);
+                });
+                break;
+            default:
+                // do nothing
+                break;
+        }
+    });
+}
