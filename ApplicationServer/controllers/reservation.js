@@ -7,13 +7,16 @@
 var settings = require('../../settings.json');
 
 var __logError = function(errMsg) {
-    console.error('(!) # FATAL ERROR #');
-    console.error(errMsg);
+    console.error('(!) # FATAL ERROR # ...');
+    for (var i = 0; i < arguments.length; ++i) {
+        console.error(arguments[i]);
+    }
 };
 
 var __fatal = function(response) {
     response.status(503).send('HTTP/1.1 Error 503 Service Unavailable');
-    __logError('Invalid object received from Business server (if it exists).');
+    __logError('Incorrect content received from Business server (if it exists).',
+    'Terminating...');
 };
 
 var __invalidArgs = function(response) {
@@ -52,14 +55,23 @@ var fireRequest = function(method, path, data, callback) {
             try {
                 srcObject = JSON.parse(responseData);
             } catch (e) {
-                __logError('Cannot parse response data.');
-                //console.error(e);
+                __logError('Cannot parse response data.',
+                'Request URL: ' + path,
+                'Server raw response: ' + responseData);
             }
-            callback(srcObject);
+            if (srcObject.errcode == 0) {
+                callback(srcObject);
+            } else {
+                __logError('Unsuccessful response returned from business server.',
+                    '  > Request URL: ' + path,
+                    '  > Server response: ' + responseData);
+                callback(null);
+            }
         });
     });
     req.on('error', function(e) {
-        __logError('Business server is DOWN: ' + e.message);
+        __logError('Business server is DOWN: ' + e.message,
+        'When requesting: ' + path);
         callback(null);
     });
     if (data !== null)
@@ -178,14 +190,14 @@ exports.showHospital = function(request, response) {
 
     var url2 = '/hospital/department/' + hospitalId;
     fireRequest('GET', url2, null, function(res) {
-        departments = typeof res.departments_list === 'undefined' ? null : res.departments_list;
+        departments = res ? res.departments_list : null;
         ++ctr;
         onCompletion();
     });
 
     var url3 = '/hospital/doctor/list?hospitalId=' + hospitalId;
     fireRequest('GET', url3, null, function(res) {
-        doctors = typeof res.doctors === 'undefined' ? null : res.doctors;
+        doctors = res ? res.doctors : null;
         ++ctr;
         onCompletion();
     });
