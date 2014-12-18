@@ -200,7 +200,7 @@ exports.onLogin = function (request, response) {
         var loginPath = '/user/login';
 
         printLogMessage('-------- ' + request.body.username);
-        printLogMessage('--- : ' + request.body.password);
+        printLogMessage('--- PASSWORD : ' + request.body.password);
 
         var loginCallback = function (result) {
             if (result.code == 0) {//登录成功
@@ -233,7 +233,7 @@ exports.onLogout = function (request, response) {
     if (request.method.toLowerCase() == 'get') {
         //跳转到主页
         clearCookie(response);//清空cookie
-        response.render('index');
+        response.redirect('/');
     }
 };
 
@@ -420,21 +420,6 @@ function setCookie(response, userInfo) {
         expires: new Date(Date.now() + 900000),
         path: '/'
     });
-
-    //response.setHeader('Set-Cookie', [
-    //    'userInfo=' + userInfoInBase64
-    //]);
-
-    //response.setHeader('Set-Cookie', [
-    //    'userId=' + userInfo['userId'],
-    //    'username=' + userInfo['username'],
-    //    'status=' + userInfo['status'],
-    //    'sid=' + userInfo['sid'],
-    //    'name=' + userInfo['name'],
-    //    'phone=' + userInfo['phone'],
-    //    'email=' + userInfo['email'],
-    //    'credit=' + userInfo['credit']
-    //]);
 }
 
 /**
