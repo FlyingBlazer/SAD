@@ -173,7 +173,7 @@ exports.detail = function(req, res, next) {
   		 		message: "success",
   		 		reservation_id: data[0]['reservation'],
 				  date: data[0]['time'],
-				  period: data[0]['period'],
+				  period: data[0]['period']==1 ? 'morning' : (data[0]['period']==2 ? 'afternoon' : 'evening'),
   		 		doctor_name: data[0]['doctor_name'],
   		 		department_name: data[0]['department_name'],
   		 		hospital_name: data[0]['hospital_name'],
