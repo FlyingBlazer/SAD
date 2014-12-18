@@ -69,7 +69,7 @@ block site-content
                 alert("请阅读并点选“我已了解”");
                 return false;
             } else {
-                $.post("/concierge/reserve/submit", {
+                $.post("/concierge/reserve-submit", {
                     hospitalId: "#{detail.hospitalId}",
                     departmentId: "#{detail.departmentId}",
                     doctorId: "#{detail.doctorId}",
