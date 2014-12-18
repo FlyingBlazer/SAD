@@ -174,18 +174,24 @@ exports.detail = function(req, res, next) {
                         break;
                 }
             });
-            res.json({
-                code: 0,
-                message: 'success',
-                id: doctor.id,
-                name: doctor.name,
-                hospital: doctor.department.hospital.name,
-                department: doctor.department.name,
-                title: doctor.title,
-                description: doctor.info,
-                photo_url: doctor.photo,
-                time_slots: slot,
-                price: doctor.price
+            doctor.getDepartment(function(err, department) {
+                if(err) throw err;
+                department.getHospital(function(err, hospital) {
+                    if(err) throw err;
+                    res.json({
+                        code: 0,
+                        message: 'success',
+                        id: doctor.id,
+                        name: doctor.name,
+                        hospital: hospital.name,
+                        department: department.name,
+                        title: doctor.title,
+                        description: doctor.info,
+                        photo_url: doctor.photo,
+                        time_slots: slot,
+                        price: doctor.price
+                    });
+                });
             });
         });
     });
