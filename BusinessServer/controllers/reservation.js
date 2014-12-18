@@ -77,8 +77,8 @@ exports.add = function(req, res, next) {
 											"AND period=? "+
 											"AND (frequency=? "+
 											"OR frequency=? "+
-											"OR (frequency=? AND date like '?') "+
-											"OR frequency like '?') LIMIT 1",
+											"OR (frequency=? AND date like ?) "+
+											"OR frequency like ?) LIMIT 1",
 					[adoctor_id,aperiod,afrequency1,afrequency2,afrequency4,aggdate,afrequency3],
 					function(err,data1){
 						if(err && err.message != 'Not found') return next(err);
@@ -94,9 +94,10 @@ exports.add = function(req, res, next) {
 								status: 0,
 								price: data1[0]['price'],
 								running_number: uuid.v4(),
-								user: auser_id,
-								doctor: adoctor_id
+								user_id: auser_id,
+								doctor_id: adoctor_id
 							},function(error,item){
+								if(error) throw error;
 								res.json({
                 					code: 0,
 			                		message: 'success',
