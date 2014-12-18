@@ -442,5 +442,5 @@ function setCookie(response, userInfo) {
  * @param response
  */
 function clearCookie(response) {
-    response.setHeader('Set-Cookie', '');
+    response.clearCookie('userInfo', {path: '/'});
 }
