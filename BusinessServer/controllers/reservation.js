@@ -50,7 +50,7 @@ exports.add = function(req, res, next) {
     var adate=req.body.date;
     var aggdate='%'+adate.substr(5,5);
     var aweeknum=req.body.week;
-    var aperiod=req.body.time == 'morning' ? 1 : (req.body.time == 'afternoon' ? 2 : 3);
+    var aperiod=req.body.period == 'morning' ? 1 : (req.body.period == 'afternoon' ? 2 : 3);
     var afrequency1="00000000";
     var afrequency2="10000000";
     var afrequency3="2_______";
