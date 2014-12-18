@@ -33,16 +33,26 @@ exports.onRegister = function (request, response) {
             if (result != null) {
 
                 if (result.code == 0) {//注册成功
+                    printLogMessage('注册成功');
                     // 跳转到用户个人主页
                     var userId = result.userid;
                     getUserInfo(userId, function (userInfo) {
+
+                        printLogMessage('user info = ' + JSON.stringify(userInfo));
+
                         setCookie(response, userInfo);//将个人信息写入cookie
+
+                        //printLogMessage('before跳转到user界面');
+                        //printLogMessage('userId = ' + getUserIdFromCookie(request));//redirect之前cookie为空
+
+                        response.redirect('/');//跳转到主页
                         // 跳转到user页面
-                        response.render('user', {
-                            name: userInfo.name,
-                            status: userInfo.status,
-                            credit: userInfo.credit
-                        });
+                        //response.render('user', {
+                        //    name: userInfo.name,
+                        //    status: userInfo.status,
+                        //    credit: userInfo.credit
+                        //});
+
                     });
                 } else {//注册失败
                     //提示错误信息
@@ -137,13 +147,13 @@ var forwardRequest = function (method, path, data, callback) {
             try {
                 srcObject = JSON.parse(responseData);
             } catch (e) {
-                console.log('Cannot parse response data.');
+                printLogMessage('Cannot parse response data.');
                 //console.error(e);
             }
             callback(srcObject);
         });
         res.on('error', function (e) {
-            console.log('Business server is down: ' + e.message);
+            printLogMessage('Business server is down: ' + e.message);
             callback(null);
         });
     });
@@ -174,21 +184,31 @@ function redirectToLoginPage(response) {
     response.redirect('/account/login');
 }
 
+/**
+ * 输出调试信息
+ * @param message
+ */
+function printLogMessage(message) {
+    console.log(message);
+}
+
 // post
 exports.onLogin = function (request, response) {
     if (request.method.toLowerCase() == 'post') {
 
         var loginPath = '/user/login';
 
-        console.log('-------- ' + request.body.username);
-        console.log('--- : ' + request.body.password);
+        printLogMessage('-------- ' + request.body.username);
+        printLogMessage('--- : ' + request.body.password);
 
         var loginCallback = function (result) {
             if (result.code == 0) {//登录成功
 
                 getUserInfo(result.userid, function (userInfo) {
                     setCookie(response, userInfo);//设置cookie
+                    //response.redirect('back');//重定向到来时的页面
                     response.redirect('/');//重定向到首页
+                    printLogMessage('登录成功');
                 });
             } else {//登录失败
                 response.render('login', {
@@ -222,7 +242,7 @@ exports.manage = function (request, response) {
         //跳转到管理页面
         var userId = getUserIdFromCookie(request);
 
-        if (userId == null || userId == '')
+        if (!userId || userId == '')
             redirectToLoginPage(response);
         else
         //设置用户名、信用等级
@@ -239,7 +259,7 @@ exports.manage = function (request, response) {
 /**
  * 返回用户信息
  * @param userId
- * @param onSucceedCallback 参数为业务服务器返回的结果
+ * @param onSucceedCallback 参数为完整的个人信息(包括userId)
  */
 function getUserInfo(userId, onSucceedCallback) {
     //从业务服务器检索用户信息
@@ -249,9 +269,11 @@ function getUserInfo(userId, onSucceedCallback) {
     var callback = function (result) {
         if (result != null)
             if (result.code == 0) {
+                //加入个人信息
+                result.userId = userId;
                 onSucceedCallback(result);
             } else
-                console.log(result.message);
+                printLogMessage(result.message);
     };
 
     forwardRequestGET(path, callback);
@@ -263,7 +285,10 @@ exports.showUserInformation = function (request, response) {
     if (request.method.toLowerCase() == 'get') {
 
         var userId = getUserIdFromCookie(request);
-        if (userId == null || userId == '')
+
+        printLogMessage('show user info : ' + userId);
+
+        if (!userId || userId == '')
             redirectToLoginPage(response);
         else
         //设置用户名、信用等级
@@ -288,11 +313,17 @@ exports.manageUserInformation = function (request, response) {
         var userId = getUserIdFromCookie(request);
         var updatePath = '/user/' + userId + '/update';
 
+        printLogMessage('1 manage user info : ' + userId + '   path: ' + updatePath + '   request body = ' + JSON.stringify(request.body));
+
         var callback = function (result) {
             if (result != null) {
                 if (result.code == 0) {
-                    response.render('profile', {
-                        errorMessage: '更新成功'
+
+                    getUserInfo(userId, function (userInfo) {
+                        setCookie(response, userInfo);//更新cookie
+                        response.render('profile', {
+                            errorMessage: '更新成功'
+                        });
                     });
                 } else {
                     response.render('profile', {
@@ -348,7 +379,7 @@ function showReservations(userId, response) {
                     });
                 });
             } else
-                console.log(result.message);
+                printLogMessage(result.message);
     };
 
     forwardRequestGET(path, callback);
@@ -357,21 +388,47 @@ function showReservations(userId, response) {
 /**
  * 从请求中读取cookie获得userId
  * @param request
- * @return 返回username
+ * @return 返回userId
  */
 function getUserIdFromCookie(request) {
-    return request.cookies.userId;
+
+    var userInfo = request.cookies.userInfo;
+
+    printLogMessage('get userId from cookie : ' + userInfo);
+    //从base64编码的cookie中解析userId
+    return JSON.parse(new Buffer(userInfo, 'base64').toString()).userId;
+
+    //return request.cookies.userId;
 }
 
 /**
  * 在header中设置cookie
  * cookie内包含完整的用户信息
  * @param response
- * @param userInfo 完整的个人信息
+ * @param userInfo 完整的个人信息(需带有userId)
  */
 function setCookie(response, userInfo) {
     // 设置完整用户信息
-    response.setHeader('Set-Cookie', ['userId=' + userInfo['userId'], 'username=' + userInfo['username'], 'userSocialId=' + userInfo['userSocialId'], 'userRealName=' + userInfo['userRealName'], 'userTelephone=' + userInfo['userTelephone']]);
+
+    printLogMessage('set cookie user info : ' + JSON.stringify(userInfo));
+
+    //对user info进行base64编码，
+    var userInfoInBase64 = new Buffer(JSON.stringify(userInfo)).toString('base64');
+
+    response.setHeader('Set-Cookie', [
+        'userInfo=' + userInfoInBase64
+    ]);
+
+    //response.setHeader('Set-Cookie', [
+    //    'userId=' + userInfo['userId'],
+    //    'username=' + userInfo['username'],
+    //    'status=' + userInfo['status'],
+    //    'sid=' + userInfo['sid'],
+    //    'name=' + userInfo['name'],
+    //    'phone=' + userInfo['phone'],
+    //    'email=' + userInfo['email'],
+    //    'credit=' + userInfo['credit']
+    //]);
 }
 
 /**
