@@ -6,7 +6,10 @@ block title
 block breadcrumb
     li
         a(href="/") 主页
-    li.active #{province}
+    if search
+        li.active #{province}
+    else
+        | 搜索结果
 
 block site-content
     link(href="/stylesheets/hospital_list.css", rel="stylesheet", media="all")
