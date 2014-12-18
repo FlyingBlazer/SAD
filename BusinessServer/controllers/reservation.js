@@ -133,7 +133,12 @@ exports.pay = function(req, res, next) {
 		if(err && err.message != 'Not found') return next(err);
     	if(!app) return next(new Errors.PaymentFailure("Unable To Pay For Your Appointment!"));
     	else{
-    		app.status=1;
+        if(app.status==0){
+          app.status=1;
+        }
+        else if(app.status==2){
+          app.status=3;
+        }
     		app.save(function(err){
 				if(err && err.message != 'Not found') return next(err);
     			res.json({
