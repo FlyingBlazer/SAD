@@ -24,6 +24,12 @@ Date.prototype.getDateOffset = function(target) {
     return Math.ceil(milliSeconds/1000/60/60/24);
 };
 
+String.prototype.replaceAt = function(index, value) {
+    var str1 = this.slice(0, index);
+    var str2 = this.slice(index+1);
+    return str1 + value + str2;
+};
+
 module.exports = {
     user: require('./user'),
     hospital: require('./hospital'),

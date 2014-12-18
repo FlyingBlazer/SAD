@@ -1,4 +1,5 @@
 exports.define = function(db, models, next) {
+    db.settings.set('instance.cache', false);
     db.defineType('commonText', {
         datastoreType: function(prop) {
             return 'TEXT';
@@ -59,3 +60,4 @@ exports.define = function(db, models, next) {
     });
     next();
 };
+

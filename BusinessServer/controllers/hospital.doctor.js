@@ -2,32 +2,53 @@ var Errors = require('../lib/Errors');
 
 exports.list = function(req, res, next) {
     var hospitalId = req.query.hospitalId;
-    req.models.hospital.get(hospitalId, function(err, hospital) {
-        if(err && err.message != 'Not found') return next(err);
-        if(!hospital) return next(new Errors.HospitalNotExist("Department Not Exist"));
-        var ret = {};
-        hospital.departments.forEach(function(department) {
-            if(!Array.isArray(ret[department.name])) {
-                ret[department.id] = [];
-            }
-            department.doctors.forEach(function(doctor) {
-                ret[department.id].push({
-                    id: doctor.id,
-                    name: doctor.name,
-                    hospital: hospital.name,
-                    department: department.name,
-                    title: doctor.title,
-                    description: doctor.info,
-                    photo_url: doctor.photo
-                });
+    req.db.driver.execQuery(
+        "SELECT doctor.id as id, doctor.name as name, hospital.name as hospital, department.name as department, " +
+        "doctor.title as title, doctor.info as description, doctor.photo as photo_url, department.id as department_id " +
+        "FROM doctor, department, hospital WHERE doctor.department_id = department.id AND department.hospital_id = hospital.id " +
+        "AND hospital.id = ?",
+        [hospitalId],
+        function(err, data) {
+            var ret = [];
+            data.forEach(function(line) {
+                if(!Array.isArray(ret[line.department_id])) {
+                    ret[line.department_id] = [];
+                }
+                ret[line.department_id].push(line);
             });
-        });
-        res.json({
-            code: 0,
-            message: 'success',
-            doctors: ret
-        });
-    });
+            res.json({
+                code: 0,
+                message: 'success',
+                doctors: ret
+            });
+        }
+    );
+    //req.models.hospital.get(hospitalId, function(err, hospital) {
+    //    if(err && err.message != 'Not found') return next(err);
+    //    if(!hospital) return next(new Errors.HospitalNotExist("Department Not Exist"));
+    //    var ret = {};
+    //    hospital.departments.forEach(function(department) {
+    //        if(!Array.isArray(ret[department.id])) {
+    //            ret[department.id] = [];
+    //        }
+    //        department.doctors.forEach(function(doctor) {
+    //            ret[department.id].push({
+    //                id: doctor.id,
+    //                name: doctor.name,
+    //                hospital: hospital.name,
+    //                department: department.name,
+    //                title: doctor.title,
+    //                description: doctor.info,
+    //                photo_url: doctor.photo
+    //            });
+    //        });
+    //    });
+    //    res.json({
+    //        code: 0,
+    //        message: 'success',
+    //        doctors: ret
+    //    });
+    //});
 };
 
 exports.add = function(req, res, next) {

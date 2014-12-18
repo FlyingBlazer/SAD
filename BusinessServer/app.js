@@ -7,7 +7,9 @@ var controllers = require('./controllers');
 var util = require('util');
 var debug = require('debug')('business');
 
-server.use(restify.queryParser());
+server.use(restify.queryParser({
+    mapParams: false
+}));
 server.use(restify.gzipResponse());
 server.use(restify.bodyParser({
     maxBodySize: 0,
@@ -18,6 +20,7 @@ server.use(orm.express(settings.dbUrl, models));
 
 server.use(function(req, res, next) {
     res.charSet('utf-8');
+    debug("Request received: %s %s", req.method, req.url);
     debug("body: ", req.body);
     debug("query: ", req.query);
     debug("params: ", req.params);
@@ -63,5 +66,16 @@ server.post('/hospital/department/:departmentId/update', controllers.hospital.de
 server.post('/hospital/reservation/:reservationId/confirm', controllers.reservation.confirm);
 //--------------------------------
 server.get('/search', controllers.search);
+
+server.on('uncaughtException', function(req, res, route, err) {
+    debug("Uncaught exception occurred");
+    debug("Request :");
+    debug("\tHeaders :", req.headers);
+    debug("\tUrl :", req.url);
+    debug("\tMethod :", req.method);
+    debug("Error: ", err);
+    debug("Route: ", route);
+    res.send(500, new Error('Internal error'));
+});
 
 exports = module.exports = server;

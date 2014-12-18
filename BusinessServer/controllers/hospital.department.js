@@ -63,12 +63,24 @@ exports.remove = function(req, res, next) {
     req.models.department.get(req.params.departmentId, function(err, department) {
         if(err && err.message != 'Not found') return next(err);
         if(!department) return next(new Errors.DepartmentNotExist("Department not exist"));
-        department.remove(function(err) {
-            if(err) return next(err);
-            res.json({
-                code: 0,
-                message: 'success'
+        res.json({
+            code: 0,
+            message: 'success'
+        });
+        department.getDoctors().each(function(doctor) {
+            doctor.remove(function(err) {
+                if(err) {
+                    console.log("Error occurred while removing doctor %s.", doctor.id);
+                    throw err;
+                }
+                console.log("Doctor %s removed.", doctor.name);
             });
+        });
+        department.remove(function(err) {
+            if(err) {
+                console.log("Error occurred while removing department %s.", department.id);
+                throw err;
+            }
         });
     });
 };

@@ -7,8 +7,5 @@ exports.setup = function(db) {
         period: {type: 'integer', required: true},
         frequency: {type: 'text', size: 7, required: true},
         totalApp: {type: 'integer', required: true, mapsTo: 'total_app'}
-    }, {
-        autoFetch: true,
-        autoFetchLimit: 5
     }).hasOne('doctor', db.models.doctor, {reverse: 'working'});
 };

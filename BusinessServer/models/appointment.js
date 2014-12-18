@@ -10,9 +10,6 @@ exports.setup = function(db) {
         price: {type: 'number', required: true},
         running_number: {type: 'text', size: 50, required: true, unique: true},
         record_time: {type: 'timestamp', required: true, defaultValue: '0000-00-00 00:00:00'}
-    }, {
-        autoFetch: true,
-        autoFetchLimit: 5
     }).hasOne('user', db.models.user, {reverse: 'appointments'})
         .hasOne('doctor', db.models.doctor, {reverse: 'appointments'});
 };
