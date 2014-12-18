@@ -33,4 +33,10 @@ block site-content
             br
             br
             a.btn.btn-lg.btn-warning.btn-block(href='register') 注册
+    script(src="/javascripts/md5.js")
+    script(type="text/javascript").
+        $('.form-login').on('submit', function() {
+            $("#password").val(hex_md5($("#password").val()));
+            return true;
+        });
     // left-container end
