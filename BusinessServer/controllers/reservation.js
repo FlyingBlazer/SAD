@@ -133,7 +133,12 @@ exports.pay = function(req, res, next) {
 		if(err && err.message != 'Not found') return next(err);
     	if(!app) return next(new Errors.PaymentFailure("Unable To Pay For Your Appointment!"));
     	else{
-    		app.status=1;
+        if(app.status==0){
+          app.status=1;
+        }
+        else if(app.status==2){
+          app.status=3;
+        }
     		app.save(function(err){
 				if(err && err.message != 'Not found') return next(err);
     			res.json({
@@ -168,7 +173,6 @@ exports.detail = function(req, res, next) {
                     '订单超时，尚未确认就诊',
                     '订单超时，未就诊',
                     '订单超时，已就诊',
-                    '订单超时，未就诊'
                 ];
   		 	res.json({
   		 		code: 0,
@@ -181,7 +185,8 @@ exports.detail = function(req, res, next) {
   		 		hospital_name: data[0]['hospital_name'],
 				  submission_date: data[0]['record_time'],
   		 		price: data[0]['price'],
-  		 		status: statuslist[data[0]['status']]
+  		 		status: (data[0]['status']==0)||(data[0]['status']==2)||(data[0]['status']==4),
+          status_msg: statuslist[data[0]['status']]
   		 	});
   		 });
 };
@@ -191,7 +196,7 @@ exports.confirm = function(req, res, next) {
     req.models.appointment.get(reservation_id,function(err,app){
 		if(err && err.message != 'Not found') return next(err);
   		if(!app) return next(new Errors.ConfirmFalure("No Such Appointment!"));
-  		app.status=11;
+  		app.status=7;
   		app.save(function(err){
 			if(err && err.message != 'Not found') return next(err);
   			res.json({

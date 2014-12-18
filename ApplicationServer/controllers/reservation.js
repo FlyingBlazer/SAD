@@ -33,14 +33,18 @@ Object.defineProperty(global, '__function', {
     }
 });
 
-var __logError = function(errMsg) {
+var logError = function(errMsg) {
     console.error('(!) # FATAL ERROR # ...');
     for (var i = 0; i < arguments.length; ++i) {
         console.error(arguments[i]);
     }
 };
 
-var __checkVars = function(name, object, members) {
+var parseUserInfo = function(request) {
+    return JSON.parse(new Buffer(request.cookies.userInfo).toString('ascii'));
+};
+
+var checkVars = function(name, object, members) {
     var status = true;
     for (var i = 2; i < arguments.length; ++i) {
         if (typeof object[arguments[i]] === 'undefined') {
@@ -54,7 +58,7 @@ var __checkVars = function(name, object, members) {
 
 var __fatalError = function(response, identifier) {
     response.status(503).send('HTTP/1.1 Error 503 Service Unavailable');
-    __logError('Incorrect content received from Business server (if it exists). Identifier: ' + identifier,
+    logError('Incorrect content received from Business server (if it exists). Identifier: ' + identifier,
         'Terminating...');
 };
 
@@ -65,7 +69,7 @@ var __entityNotFound = function(response, identifier) {
 
 var __invalidArgsError = function(response) {
     response.status(418).send('HTTP/1.1 Error 418 I\'m a teapot');
-    __logError('Invalid arguments provided.');
+    logError('Invalid arguments provided.');
 };
 
 var serialize = function(obj) {
@@ -114,7 +118,7 @@ var fireRequest = function(method, path, data, callback, noErrCodeCheck) {
             try {
                 srcObject = JSON.parse(responseData);
             } catch (e) {
-                __logError('Cannot parse response data.',
+                logError('Cannot parse response data.',
                     'Request URL: ' + path,
                     'Server raw response: ' + responseData);
                 callback(null);
@@ -129,7 +133,7 @@ var fireRequest = function(method, path, data, callback, noErrCodeCheck) {
                     || srcObject.code == 2201) {
                     callback(stdNotFound);
                 } else {
-                    __logError('Unsuccessful response returned from business server, error not processed.',
+                    logError('Unsuccessful response returned from business server, error not processed.',
                         ' > Request URL: ' + path,
                         ' > Server response: ' + responseData);
                     callback(null);
@@ -139,7 +143,7 @@ var fireRequest = function(method, path, data, callback, noErrCodeCheck) {
     });
 
     req.on('error', function(e) {
-        __logError('Business server is DOWN: ' + e.message,
+        logError('Business server is DOWN: ' + e.message,
             ' > When requesting: ' + path);
         callback(null);
     });
@@ -180,7 +184,11 @@ exports.redirectToListHospitals = function(request, response) {
 
 // get
 exports.listHospitals = function(request, response) {
-    var username = request.cookies.username ? request.cookies.username : '';
+    var userInfo = {};
+    if (typeof request.cookies.userInfo !== 'undefined')
+        userInfo = parseUserInfo(request);
+
+    var username = userInfo.username ? userInfo.username : '';
     var province = request.params.province;
     var url = '/hospital/hospital/list?province=' + province;
 
@@ -205,7 +213,11 @@ exports.listHospitals = function(request, response) {
 
 // get
 exports.search = function(request, response) {
-    var username = request.cookies.username ? request.cookies.username : '';
+    var userInfo = {};
+    if (typeof request.cookies.userInfo !== 'undefined')
+        userInfo = parseUserInfo(request);
+
+    var username = userInfo.username ? userInfo.username : '';
     var query = request.params.q;
     var url = '/search?q=' + query;
 
@@ -227,7 +239,11 @@ exports.search = function(request, response) {
 // Choose a department and a doctor
 // get
 exports.showHospital = function(request, response) {
-    var username = request.cookies.username ? request.cookies.username : '';
+    var userInfo = {};
+    if (typeof request.cookies.userInfo !== 'undefined')
+        userInfo = parseUserInfo(request);
+
+    var username = userInfo.username ? userInfo.username : '';
     var hospitalId = request.params.hospital_id;
     var detail = null;
     var departments = null;
@@ -279,12 +295,11 @@ exports.showHospital = function(request, response) {
 // Choose a time
 // get
 exports.showDoctor = function(request, response) {
-    //if (!__checkVars('cookies', request.cookies, 'username')) {
-    //    __invalidArgsError(response);
-    //    return;
-    //}
+    var userInfo = {};
+    if (typeof request.cookies.userInfo !== 'undefined')
+        userInfo = parseUserInfo(request);
 
-    var username = request.cookies.username ? request.cookies.username : '';
+    var username = userInfo.username ? userInfo.username : '';
     var expertId = request.params.expert_id;
     var hospitalId = request.params.hospital_id;
     var departmentId = request.params.department_id;
@@ -311,7 +326,7 @@ exports.showDoctor = function(request, response) {
 // get
 exports.recoverConfirm = function(request, response) {
     // check required cookies
-    if (!__checkVars('cookies', request.cookies, 'confirm_data', 'username', 'userId', 'userTelephone', 'userSocialId', 'userRealName')) {
+    if (!checkVars('cookies', request.cookies, 'confirm_data', 'userInfo')) {
         // still not logged in
         response.clearCookie('confirm_data');
         __invalidArgsError(response);
@@ -321,11 +336,15 @@ exports.recoverConfirm = function(request, response) {
         response.clearCookie('confirm_data');
     }
 
-    var username = request.cookies.username;
-    var userId = request.cookies.userId;
-    var userTelephone = request.cookies.userTelephone;
-    var userSocialId = request.cookies.userSocialId;
-    var userRealName = request.cookies.userRealName;
+    var userInfo = {};
+    if (typeof request.cookies.userInfo !== 'undefined')
+        userInfo = parseUserInfo(request);
+
+    var username = userInfo.username ? userInfo.username : '';
+    var userId = userInfo.userId;
+    var userTelephone = userInfo.phone;
+    var userSocialId = userInfo.sid;
+    var userRealName = userInfo.name;
 
     response.render('new_reservation', {
         username: username,
@@ -354,7 +373,7 @@ exports.recoverConfirm = function(request, response) {
 exports.confirm = function(request, response) {
 
     // if request body is incorrect, reject the request
-    if (!__checkVars('body', request.body, 'hospital', 'hospitalId', 'department', 'departmentId', 'doctor', 'doctorId', 'resvDate', 'resvTime', 'title', 'price')) {
+    if (!checkVars('body', request.body, 'hospital', 'hospitalId', 'department', 'departmentId', 'doctor', 'doctorId', 'resvDate', 'resvTime', 'title', 'price')) {
         __invalidArgsError(response);
         return;
     }
@@ -375,7 +394,7 @@ exports.confirm = function(request, response) {
 
     // if cookie is not set, save request body to cookie and retreat to login page
     // otherwise clear potentially existent request body cookie
-    if (!__checkVars('cookies', request.cookies, 'username', 'userId', 'userTelephone', 'userSocialId', 'userRealName')) {
+    if (!checkVars('cookies', request.cookies, 'userInfo')) {
         response.cookie('confirm_data', JSON.stringify(bodyParams), {
             maxAge: 999999,
             httpOnly: true
@@ -387,11 +406,12 @@ exports.confirm = function(request, response) {
     }
 
     // if control reaches here, start the normal rendering process
-    var username = request.cookies.username;
-    var userId = request.cookies.userId;
-    var userTelephone = request.cookies.userTelephone;
-    var userSocialId = request.cookies.userSocialId;
-    var userRealName = request.cookies.userRealName;
+    var userInfo = parseUserInfo(request);
+    var username = userInfo.username ? userInfo.username : '';
+    var userId = userInfo.userId;
+    var userTelephone = userInfo.phone;
+    var userSocialId = userInfo.sid;
+    var userRealName = userInfo.name;
 
     response.render('new_reservation', {
         username: username,
@@ -419,15 +439,16 @@ exports.confirm = function(request, response) {
 // Submit request
 // post (need x-www-form-urlencoded data)
 exports.onSubmit = function(request, response) {
-    var _sa = __checkVars('cookies', request.cookies, 'userId');
-    var _sb = __checkVars('body', request.body, 'hospitalId', 'departmentId', 'doctorId', 'resvTime', 'resvDate');
+    var _sa = checkVars('cookies', request.cookies, 'userInfo');
+    var _sb = checkVars('body', request.body, 'hospitalId', 'departmentId', 'doctorId', 'resvTime', 'resvDate');
 
     if (_sa === false || _sb === false) {
         __invalidArgsError(response);
         return;
     }
 
-    var userId = request.cookies.userId; // from cookie;
+    var userInfo = parseUserInfo(request);
+    var userId = userInfo.userId; // from cookie;
     var hospitalId = request.body.hospitalId; // from prev page
     var departmentId = request.body.departmentId; // from prev page
     var doctorId = request.body.doctorId; // from prev page
@@ -442,7 +463,7 @@ exports.onSubmit = function(request, response) {
         department_id: departmentId,
         doctor_id: doctorId,
         date: date,
-        time: time,
+        period: time,
         week: day,
         paid_flag: false
     };
@@ -461,17 +482,17 @@ exports.onSubmit = function(request, response) {
 // Optional message
 // get
 exports.showReservation = function(request, response) {
-    if (!__checkVars('cookies', request.cookies, 'username', 'userRealName', 'userTelephone')) {
+    if (!checkVars('cookies', request.cookies, 'userInfo')) {
         __invalidArgsError(response);
         return;
     }
-
-    var username = request.cookies.username;
+    var userInfo = parseUserInfo(request);
+    var username = userInfo.username;
+    var userRealName = userInfo.userRealName;
+    var userTel = userInfo.userTelephone;
+    var userSid = userInfo.userSocialId;
     var resvId = request.params.reservation_id;
     var doctorId = request.params.doctor_id;
-    var userRealName = request.cookies.userRealName;
-    var userTel = request.cookies.userTelephone;
-    var userSid = request.cookies.userSocialId;
     var doctorDetail = null;
     var resvDetail = null;
     var ctr = 0;
@@ -513,17 +534,17 @@ exports.showReservation = function(request, response) {
 };
 
 exports.showReservationWithSuccessMessage = function(request, response) {
-    if (!__checkVars('cookies', request.cookies, 'username', 'userRealName', 'userTelephone')) {
+    if (!checkVars('cookies', request.cookies, 'userInfo')) {
         __invalidArgsError(response);
         return;
     }
-
-    var username = request.cookies.username;
+    var userInfo = parseUserInfo(request);
+    var username = userInfo.username;
+    var userRealName = userInfo.userRealName;
+    var userTel = userInfo.userTelephone;
+    var userSid = userInfo.userSocialId;
     var resvId = request.params.reservation_id;
     var doctorId = request.params.doctor_id;
-    var userRealName = request.cookies.userRealName;
-    var userTel = request.cookies.userTelephone;
-    var userSid = request.cookies.userSocialId;
     var doctorDetail = null;
     var resvDetail = null;
     var ctr = 0;

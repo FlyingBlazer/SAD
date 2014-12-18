@@ -30,13 +30,9 @@ block site-content
                     span 就诊类型：初诊
                 p
                     span 就诊地点：门诊3楼
-                    span 付款状态：#{resvDetail.status}
-                    //if resvDetail.paid
-                    //    span="付款状态：已付款"
-                    //else
-                    //    span="付款状态：未付款"
+                    span 付款状态：#{resvDetail.status_msg}
         div
             button.btn.btn-xs.btn-success 打印
-            //if !resvDetail.paid
-            //    button.btn.btn-xs.btn-primary 付款
+            if !resvDetail.status
+                button.btn.btn-xs.btn-primary 付款
 
