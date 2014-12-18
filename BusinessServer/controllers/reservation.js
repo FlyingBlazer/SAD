@@ -156,7 +156,7 @@ exports.detail = function(req, res, next) {
   		 [reservation_id],
   		 function(err,data){
 			 if(err && err.message != 'Not found') return next(err);
-  		 	if(!data) return next(new Errors.DetailFalure("No Such Appointment!"));
+  		 	if(!data) return next(new Errors.DetailFailure("No Such Appointment!"));
 			 var d = new Date(data[0]['time']);
   		 	res.json({
   		 		code: 0,
