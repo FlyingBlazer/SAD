@@ -41,12 +41,7 @@
     height: 73px;
     padding: 15px 0 15px 15px;
 }
-.clear {
-    clear: both;
-    display: block;
-    height: 0;
-    overflow: hidden;
-}
+
 .none-border {
 
     margin-top: 18px;
@@ -104,4 +99,5 @@
     margin: 0 auto 40px;
     position: relative;
     width: 980px;
+    height:1000px;
 }

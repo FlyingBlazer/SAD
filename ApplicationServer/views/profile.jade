@@ -24,14 +24,14 @@ block site-content
         }
         $(document).ready(function () {
             $("#submit").click(function () {
-                if (!$("pre_pw")){
-                    post_array['pre_pw']=$("#pre_pw").val();
-                    post_array['new_pw']=$("#pw2").val();
+                if (!$("pre_pw")) {
+                    post_array['pre_pw'] = $("#pre_pw").val();
+                    post_array['new_pw'] = $("#pw2").val();
                 }
                 $.post("/account/manage/info",
                         post_array,
                         function (data, status) {
-                            alert("Data: " + data + "\nStatus: " + status);
+                            //alert("Data: " + data + "\nStatus: " + status);
                         });
             });
         });
@@ -40,7 +40,6 @@ block site-content
             {
                 change_phone=true;
                 post_array['phone']=$("#phone").val();
-                alert("arrive");
             }
             else if (flag=='email')
             {
@@ -61,10 +60,10 @@ block site-content
                             strong #{username}
                     ul.none-border
                         li(style='list-style-type: none;margin-top:40px;margin-left:10px;text-align:left')
-                            a.btn.btn-default.btn-lg.active(href='http://www.guahao.com/my/orderlist', role='button')
+                            a.btn.btn-default.btn-lg.active(href='/account/manage/reservation', role='button')
                                 | 预约列表
                         li(style='list-style-type: none;margin-top:20px;margin-left:10px;text-align: left')
-                            a.btn.btn-primary.btn-lg.active(role='button', href='http://www.guahao.com/my/haoyuanlist')
+                            a.btn.btn-primary.btn-lg.active(role='button', href='/account/manage/info')
                                 | 个人中心
                 .person-right
                     .order-remind.g-clear
@@ -97,12 +96,12 @@ block site-content
                                 input.form-control(type='password', style='width:40%', id='pw2',onkeyup='pw();',placeholder='不修改密码请勿修改')
                                 span(id='prompt')
                                 label 电话
-                                input.form-control(type='text', style='width:40%;display:inline', id='phone')
-                                button(onclick='change_status(\'phone\')',style='display:block') 修改
+                                input.form-control(type='text', style='width:40%', id='phone')
+                                button.btn.btn-default(onclick='change_status(\'phone\')',style='display:block',type='button') 修改
                                 label 邮箱
-                                input.form-control(type='email', style='width:40%;display:inline', id='email')
-                                button(onclick='change_status(\'email\')',style='display:block') 修改
-                                button.btn.btn-default(type='submit',id='submit') 保存
+                                input.form-control(type='email', style='width:40%', id='email')
+                                button.btn.btn-default(onclick='change_status(\'email\')',style='display:block',type='button') 修改
+                                button.btn.btn-primary(type='submit',id='submit') 保存
                     .second_block
                         span.second_label  上传头像
                     hr(style='line-width:1;', width='90%', color='#1E90FF', size='1')
@@ -111,4 +110,5 @@ block site-content
                             .form-group(style='margin-left:60px')
                                 input(type='file', name='upload_pic')
                                 button.btn.btn-default(type='submit') 上传
+
     div.clear
