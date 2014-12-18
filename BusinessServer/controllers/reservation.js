@@ -96,6 +96,7 @@ exports.add = function(req, res, next) {
 								running_number: uuid.v4(),
 								user_id: auser_id,
 								doctor_id: adoctor_id
+                record_time: Date.prototype.Format('yyyy-MM-dd hh:mm:ss')
 							},function(error,item){
 								if(error) throw error;
 								res.json({
@@ -186,7 +187,7 @@ exports.detail = function(req, res, next) {
   		 		hospital_name: data[0]['hospital_name'],
 				  submission_date: data[0]['record_time'],
   		 		price: data[0]['price'],
-  		 		status: (data[0]['status']==0)||(data[0]['status']==2)||(data[0]['status']==4),
+  		 		status: !((data[0]['status']==0)||(data[0]['status']==2)||(data[0]['status']==4)),
           status_msg: statuslist[data[0]['status']]
   		 	});
   		 });

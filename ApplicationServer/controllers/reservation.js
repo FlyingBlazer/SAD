@@ -423,7 +423,7 @@ exports.onSubmit = function(request, response) {
             return;
         }
         var resvId = res.id;
-        response.redirect(302, '/reservation/' + doctorId + '/' + resvId + '/success');
+        response.redirect(302, '/reservation/' + doctorId + '/' + resvId);
     }, false);
 };
 
@@ -438,9 +438,9 @@ exports.showReservation = function(request, response) {
     }
     var userInfo = parseUserInfo(request);
     var username = userInfo.username;
-    var userRealName = userInfo.userRealName;
-    var userTel = userInfo.userTelephone;
-    var userSid = userInfo.userSocialId;
+    var userRealName = userInfo.name;
+    var userTel = userInfo.phone;
+    var userSid = userInfo.sid;
     var resvId = request.params.reservation_id;
     var doctorId = request.params.doctor_id;
     var doctorDetail = null;
@@ -471,7 +471,7 @@ exports.showReservation = function(request, response) {
             __entityNotFound(response, 'Line=' + __line + ', Func=' + __function);
             return;
         }
-        response.render('reservation', {
+        var r = {
             username: username,
             state: 'normal',
             userRealName: userRealName,
@@ -479,56 +479,8 @@ exports.showReservation = function(request, response) {
             userSocialId: userSid,
             resvDetail: resvDetail,
             doctorDetail: doctorDetail
-        });
-    }
-};
-
-exports.showReservationWithSuccessMessage = function(request, response) {
-    if (!checkVars('cookies', request.cookies, 'userInfo')) {
-        __invalidArgsError(response);
-        return;
-    }
-    var userInfo = parseUserInfo(request);
-    var username = userInfo.username;
-    var userRealName = userInfo.userRealName;
-    var userTel = userInfo.userTelephone;
-    var userSid = userInfo.userSocialId;
-    var resvId = request.params.reservation_id;
-    var doctorId = request.params.doctor_id;
-    var doctorDetail = null;
-    var resvDetail = null;
-    var ctr = 0;
-    var url1 = '/user/reservation/' + resvId + '/detail';
-    fireRequest('GET', url1, null, function(res) {
-        resvDetail = res;
-        ++ctr;
-        render();
-    }, false);
-
-    var url2 = '/hospital/doctor/' + doctorId + '/detail';
-    fireRequest('GET', url2, null, function(res) {
-        doctorDetail = res;
-        ++ctr;
-        render();
-    }, false);
-
-    var render = function() {
-        if (ctr !== 2)
-            return;
-        if (resvDetail == null || doctorDetail == null) {
-            __fatalError(response, 'Line=' + __line + ', Func=' + __function);
-            return;
-        }
-
-        response.render('reservation', {
-            username: username,
-            state: 'success',
-            userRealName: userRealName,
-            userTelephone: userTel,
-            userSocialId: userSid,
-            resvDetail: resvDetail,
-            doctorDetail: doctorDetail
-        });
+        };
+        response.render('reservation', r);
     }
 };
 

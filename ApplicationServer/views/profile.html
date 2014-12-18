@@ -14,18 +14,6 @@ function pw() {
         document.getElementById("submit").disable = false;
     }
 }
-function change_status(flag){
-    if (flag=='phone')
-    {
-        change_phone=true;
-        post_array['phone']=$("#phone").val();
-    }
-    else if (flag=='email')
-    {
-        change_email=true;
-        post_array['email']=$("#email").val();
-    }
-}
 $(document).ready(function () {
     $("#submit").click(function () {
         if (!$("pre_pw")){
@@ -38,6 +26,19 @@ $(document).ready(function () {
                     alert("Data: " + data + "\nStatus: " + status);
                 });
     });
-});</script><div><div data-module="userinfo" data-fo-help="1" class="g-container"><div id="g-breadcrumb"><a href="http://www.guahao.com">首页</a><span>> 我的预约单</span></div><div class="wrap"><div class="person-left"><p class="left-head"><img src="http://img.guahao.cn/img/character/young-m.png" alt="男"><span style="margin-left: 3px"><strong></strong></span></p><ul class="none-border"><li style="list-style-type: none;margin-top:40px;margin-left:10px;text-align:left"><a href="http://www.guahao.com/my/orderlist" role="button" class="btn btn-default btn-lg active">预约列表</a></li><li style="list-style-type: none;margin-top:20px;margin-left:10px;text-align: left"><a role="button" href="http://www.guahao.com/my/haoyuanlist" class="btn btn-primary btn-lg active">个人中心</a></li></ul></div><div class="person-right"><div class="order-remind g-clear"><span class="icon gi2 gi-order-big"></span><div class="meta"><h1>个人中心</h1></div></div><div class="second_block"><span class="second_label">账号信息</span></div><hr id="hr_style"><div class="list_content"><span>登录名: </span><span>真实姓名: function (name) {
+});
+function change_status(flag){
+    if (flag=='phone')
+    {
+        change_phone=true;
+        post_array['phone']=$("#phone").val();
+        alert("arrive");
+    }
+    else if (flag=='email')
+    {
+        change_email=true;
+        post_array['email']=$("#email").val();
+    }
+}</script><div><div data-module="userinfo" data-fo-help="1" class="g-container"><div id="g-breadcrumb"><a href="http://www.guahao.com">首页</a><span>> 我的预约单</span></div><div class="wrap"><div class="person-left"><p class="left-head"><img src="http://img.guahao.cn/img/character/young-m.png" alt="男"><span style="margin-left: 3px"><strong></strong></span></p><ul class="none-border"><li style="list-style-type: none;margin-top:40px;margin-left:10px;text-align:left"><a href="http://www.guahao.com/my/orderlist" role="button" class="btn btn-default btn-lg active">预约列表</a></li><li style="list-style-type: none;margin-top:20px;margin-left:10px;text-align: left"><a role="button" href="http://www.guahao.com/my/haoyuanlist" class="btn btn-primary btn-lg active">个人中心</a></li></ul></div><div class="person-right"><div class="order-remind g-clear"><span class="icon gi2 gi-order-big"></span><div class="meta"><h1>个人中心</h1></div></div><div class="second_block"><span class="second_label">账号信息</span></div><hr id="hr_style"><div class="list_content"><span>登录名: </span><span>真实姓名: function (name) {
   return this._name;
-}</span><span>电话: </span><span>邮箱: </span><span>身份证号:</span><span>信用额度:</span></div><div class="second_block"><span class="second_label"> 修改信息</span></div><hr style="line-width:1;" width="90%" color="#1E90FF" size="1"><div><form name="pwinfo_modify_form"><div style="margin-left:60px" class="form-group"><label>原密码</label><input type="password" style="width:40%" id="pre_pw" placeholder="不修改密码请勿修改" class="form-control"><label>新密码</label><input type="password" style="width:40%" id="pw1" placeholder="不修改密码请勿修改" class="form-control"><label>确认密码</label><input type="password" style="width:40%" id="pw2" onkeyup="pw();" placeholder="不修改密码请勿修改" class="form-control"><span id="prompt"></span><label>电话</label><input type="text" style="width:40%" id="phone" class="form-control"><button onclick="change_status('phone')">修改</button><label>邮箱</label><input type="email" style="width:40%" id="email" class="form-control"><button onclick="change_status('email')">修改</button><button type="submit" id="submit" class="btn btn-default">保存</button></div></form></div><div class="second_block"><span class="second_label"> 上传头像</span></div><hr style="line-width:1;" width="90%" color="#1E90FF" size="1"><div><form action="###" name="head_pic_form" method="post"><div style="margin-left:60px" class="form-group"><input type="file" name="upload_pic"><button type="submit" class="btn btn-default">上传</button></div></form></div></div></div></div></div><div class="clear"></div><div id="footer"><p id="copyright" class="text-center">© 2014 SRF 版权所有</p></div></html>
+}</span><span>电话: </span><span>邮箱: </span><span>身份证号:</span><span>信用额度:</span></div><div class="second_block"><span class="second_label"> 修改信息</span></div><hr style="line-width:1;" width="90%" color="#1E90FF" size="1"><div><form name="pwinfo_modify_form"><div style="margin-left:60px" class="form-group"><label>原密码</label><input type="password" style="width:40%" id="pre_pw" placeholder="不修改密码请勿修改" class="form-control"><label>新密码</label><input type="password" style="width:40%" id="pw1" placeholder="不修改密码请勿修改" class="form-control"><label>确认密码</label><input type="password" style="width:40%" id="pw2" onkeyup="pw();" placeholder="不修改密码请勿修改" class="form-control"><span id="prompt"></span><label>电话</label><input type="text" style="width:40%;display:inline" id="phone" class="form-control"><button onclick="change_status('phone')">修改</button><label>邮箱</label><input type="email" style="width:40%;display:inline" id="email" class="form-control"><button onclick="change_status('email')">修改</button><button type="submit" id="submit" class="btn btn-default">保存</button></div></form></div><div class="second_block"><span class="second_label"> 上传头像</span></div><hr style="line-width:1;" width="90%" color="#1E90FF" size="1"><div><form action="###" name="head_pic_form" method="post"><div style="margin-left:60px" class="form-group"><input type="file" name="upload_pic"><button type="submit" class="btn btn-default">上传</button></div></form></div></div></div></div></div><div class="clear"></div><div id="footer"><p id="copyright" class="text-center">© 2014 SRF 版权所有</p></div></html>
