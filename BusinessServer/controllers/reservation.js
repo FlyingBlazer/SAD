@@ -147,9 +147,9 @@ exports.pay = function(req, res, next) {
 exports.detail = function(req, res, next) {
     var reservation_id=req.params.reservationId;
     req.db.driver.execQuery(
-  		"SELECT "+
+  		"SELECT appointment.id AS reservation,appointment.time AS time,status,appointment.price AS price,record_time,period,doctor.name as doctor_name,department.name as department_name,hospital.name as hospital_name"+
   		"FROM appointment,doctor,department,hospital "+
-  		"WHERE appointment.user_id=? "+
+  		"WHERE appointment.id=? "+
   		"AND appointment.doctor_id=doctor.id "+
   		"AND doctor.department_id=department.id "+
   		"AND department.hospital_id=hospital.id",
@@ -157,19 +157,29 @@ exports.detail = function(req, res, next) {
   		 function(err,data){
 			 if(err && err.message != 'Not found') return next(err);
   		 	if(!data) return next(new Errors.DetailFailure("No Such Appointment!"));
-			 var d = new Date(data[0]['time']);
+       var statuslist=[
+                    '现金付款，尚未支付',
+                    '现金付款，已支付',
+                    '在线付款，尚未支付',
+                    '在线付款，已支付',
+                    '订单超时，尚未支付',
+                    '订单超时，尚未确认就诊',
+                    '订单超时，未就诊',
+                    '订单超时，已就诊',
+                    '订单超时，未就诊'
+                ];
   		 	res.json({
   		 		code: 0,
   		 		message: "success",
   		 		reservation_id: data[0]['reservation'],
-				date: d.Format('yyyy-MM-dd'),
-				time: d.Format('hh:mm:ss'),
+				  date: data[0]['time'],
+				  period: data[0]['period'],
   		 		doctor_name: data[0]['doctor_name'],
   		 		department_name: data[0]['department_name'],
   		 		hospital_name: data[0]['hospital_name'],
-				submission_date: data[0]['record_time'],
+				  submission_date: data[0]['record_time'],
   		 		price: data[0]['price'],
-  		 		status: data[0]['status']
+  		 		status: statuslist[data[0]['status']]
   		 	});
   		 });
 };
