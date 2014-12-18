@@ -22,18 +22,6 @@ block site-content
                 document.getElementById("submit").disable = false;
             }
         }
-        function change_status(flag){
-            if (flag=='phone')
-            {
-                change_phone=true;
-                post_array['phone']=$("#phone").val();
-            }
-            else if (flag=='email')
-            {
-                change_email=true;
-                post_array['email']=$("#email").val();
-            }
-        }
         $(document).ready(function () {
             $("#submit").click(function () {
                 if (!$("pre_pw")){
@@ -47,6 +35,19 @@ block site-content
                         });
             });
         });
+        function change_status(flag){
+            if (flag=='phone')
+            {
+                change_phone=true;
+                post_array['phone']=$("#phone").val();
+                alert("arrive");
+            }
+            else if (flag=='email')
+            {
+                change_email=true;
+                post_array['email']=$("#email").val();
+            }
+        }
     div
         .g-container(data-module='userinfo', data-fo-help='1')
             #g-breadcrumb
@@ -96,10 +97,10 @@ block site-content
                                 input.form-control(type='password', style='width:40%', id='pw2',onkeyup='pw();',placeholder='不修改密码请勿修改')
                                 span(id='prompt')
                                 label 电话
-                                input.form-control(type='text', style='width:40%', id='phone')
+                                input.form-control(type='text', style='width:40%;display:inline', id='phone')
                                 button(onclick='change_status(\'phone\')') 修改
                                 label 邮箱
-                                input.form-control(type='email', style='width:40%', id='email')
+                                input.form-control(type='email', style='width:40%;display:inline', id='email')
                                 button(onclick='change_status(\'email\')') 修改
                                 button.btn.btn-default(type='submit',id='submit') 保存
                     .second_block
