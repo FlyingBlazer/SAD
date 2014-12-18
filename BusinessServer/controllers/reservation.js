@@ -181,7 +181,8 @@ exports.detail = function(req, res, next) {
   		 		hospital_name: data[0]['hospital_name'],
 				  submission_date: data[0]['record_time'],
   		 		price: data[0]['price'],
-  		 		status: statuslist[data[0]['status']]
+  		 		status: (data[0]['status']==0)||(data[0]['status']==2)||(data[0]['status']==4),
+          status_msg: statuslist[data[0]['status']]
   		 	});
   		 });
 };
