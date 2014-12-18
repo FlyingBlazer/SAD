@@ -11,9 +11,10 @@ block site-content
             .row
                 .col-lg-6
                     .input-group
-                        input.form-control(type='text')
+                        input#search-field.form-control(type='text')
                         span.input-group-btn
-                            button.btn.btn-default(onclick='alert("Welcome!")', type='button') 搜索
+                            a#search-link(href="#")
+                                button.btn.btn-default(type='button') 搜索
             p
         .page-header
             h2
@@ -118,3 +119,10 @@ block site-content
                                     a(href='/choose-location/zhejiang') 浙江省
                                 td
                                     a(href='/choose-location/xizang') 西藏自治区
+
+    script.
+        $(document).ready(function() {
+            $("#search-field").keyup(function() {
+                $("#search-link").attr("href", "/search/" + $(this).val());
+            });
+        });
