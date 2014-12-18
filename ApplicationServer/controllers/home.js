@@ -3,7 +3,7 @@
  */
 
 var parseUserInfo = function(request) {
-    return JSON.parse(new Buffer(request.cookies.userInfo).toString('ascii'));
+    return JSON.parse(new Buffer(request.cookies.userInfo, 'base64').toString('ascii'));
 };
 
 module.exports = function(request, response) {
