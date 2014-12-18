@@ -95,8 +95,8 @@ exports.add = function(req, res, next) {
 								price: data1[0]['price'],
 								running_number: uuid.v4(),
 								user_id: auser_id,
-								doctor_id: adoctor_id
-                record_time: Date.prototype.Format('yyyy-MM-dd hh:mm:ss')
+								doctor_id: adoctor_id,
+                				record_time: new Date().Format('yyyy-MM-dd hh:mm:ss')
 							},function(error,item){
 								if(error) throw error;
 								res.json({
