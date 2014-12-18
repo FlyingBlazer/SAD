@@ -42,11 +42,6 @@ block site-content
             $("#password2").set(hex_md5($("#password2").val()));
             return true;
         }
-        (function() {
-            $(document).ready(function() {
-                $("#register-form").validate();
-            });
-        })();
     .container
         form.form-login(role='form', class="form-horizontal", action='/account/register', name='postSignupMessage', method='post', onsubmit="return validate()", id="register-form")
             h2.form-login-heading 用户注册
@@ -92,3 +87,13 @@ block site-content
             h2.label(name='errorMessage', style='color: red; font-size: larger') #{errorMessage}
             br
             button.btn.btn-lg.btn-primary.btn-block(type='submit') 确认注册
+    script(type="text/javascript").
+        $('#register-form').on('submit', function() {
+            if ($("#password").val() != $("#password2").val()) {
+                alert("两次输入密码不一致！");
+                return false;
+            }
+            $("#password").val(hex_md5($("#password").val()));
+            $("#password2").val(hex_md5($("#password2").val()));
+            return true;
+        });

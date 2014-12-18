@@ -40,7 +40,8 @@ exports.onRegister = function (request, response) {
 
                         printLogMessage('user info = ' + JSON.stringify(userInfo));
 
-                        setCookie(response, userInfo);//将个人信息写入cookie
+                        //TODO
+                        //setCookie(response, userInfo);//将个人信息写入cookie
 
                         //printLogMessage('before跳转到user界面');
                         //printLogMessage('userId = ' + getUserIdFromCookie(request));//redirect之前cookie为空
@@ -199,13 +200,13 @@ exports.onLogin = function (request, response) {
         var loginPath = '/user/login';
 
         printLogMessage('-------- ' + request.body.username);
-        printLogMessage('--- : ' + request.body.password);
+        printLogMessage('--- PASSWORD : ' + request.body.password);
 
         var loginCallback = function (result) {
             if (result.code == 0) {//登录成功
 
                 getUserInfo(result.userid, function (userInfo) {
-                    setCookie(response, userInfo);//设置cookie
+                    setCookie(response, userInfo);//设置cookie TODO
                     //response.redirect('back');//重定向到来时的页面
                     response.redirect('/');//重定向到首页
                     printLogMessage('登录成功');
@@ -232,7 +233,7 @@ exports.onLogout = function (request, response) {
     if (request.method.toLowerCase() == 'get') {
         //跳转到主页
         clearCookie(response);//清空cookie
-        response.render('index');
+        response.redirect('/');
     }
 };
 
@@ -415,20 +416,10 @@ function setCookie(response, userInfo) {
     //对user info进行base64编码，
     var userInfoInBase64 = new Buffer(JSON.stringify(userInfo)).toString('base64');
 
-    response.setHeader('Set-Cookie', [
-        'userInfo=' + userInfoInBase64
-    ]);
-
-    //response.setHeader('Set-Cookie', [
-    //    'userId=' + userInfo['userId'],
-    //    'username=' + userInfo['username'],
-    //    'status=' + userInfo['status'],
-    //    'sid=' + userInfo['sid'],
-    //    'name=' + userInfo['name'],
-    //    'phone=' + userInfo['phone'],
-    //    'email=' + userInfo['email'],
-    //    'credit=' + userInfo['credit']
-    //]);
+    response.cookie('userInfo', userInfoInBase64, {
+        expires: new Date(Date.now() + 900000),
+        path: '/'
+    });
 }
 
 /**
@@ -436,5 +427,5 @@ function setCookie(response, userInfo) {
  * @param response
  */
 function clearCookie(response) {
-    response.setHeader('Set-Cookie', '');
+    response.clearCookie('userInfo', {path: '/'});
 }
