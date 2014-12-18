@@ -5,7 +5,13 @@ block title
 block site-content
     link(href="/stylesheets/reservation.css", rel="stylesheet", media="all")
     .main-block
-        form
+        form(method='POST', action='/concierge/reserve-submit', onsubmit='return confirm()')
+            input(type='hidden', name='hospitalId', value='#{detail.hospitalId}')
+            input(type='hidden', name='departmentId', value='#{detail.departmentId}')
+            input(type='hidden', name='doctorId', value='#{detail.doctorId}')
+            input(type='hidden', name='resvDate', value='#{detail.date}')
+            input(type='hidden', name='resvTime', value='#{detail.time}')
+            input(type='hidden', name='day', value='#{detail.day}')
             .info
                 .title
                     | 确认预约订单信息
@@ -56,7 +62,7 @@ block site-content
                             input#check(type='checkbox')
                             |  我已了解：如遇专家停诊，您的订单会被取消，我们会以短信通知到您，请保持手机畅通，并及时关注订单状态。
             .actions
-                button.btn.gbb.gbt-green(onclick='return confirm()') 确认预约
+                button.btn.gbb.gbt-green(type='submit') 确认预约
             .verify
                 span
                     | 预约成功的短信将发送到手机：
@@ -69,13 +75,6 @@ block site-content
                 alert("请阅读并点选“我已了解”");
                 return false;
             } else {
-                $.post("/concierge/reserve-submit", {
-                    hospitalId: "#{detail.hospitalId}",
-                    departmentId: "#{detail.departmentId}",
-                    doctorId: "#{detail.doctorId}",
-                    resvDate: "#{detail.date}",
-                    resvTime: "#{detail.time}",
-                    day: "#{detail.day}"
-                });
+                return true;
             }
         }
