@@ -147,12 +147,13 @@ exports.pay = function(req, res, next) {
 exports.detail = function(req, res, next) {
     var reservation_id=req.params.reservationId;
     req.db.driver.execQuery(
-  		"SELECT appointment.id AS reservation,appointment.time AS time,status,appointment.price AS price,record_time,period,doctor.name as doctor_name,department.name as department_name,hospital.name as hospital_name"+
-  		"FROM appointment,doctor,department,hospital "+
-  		"WHERE appointment.id=? "+
-  		"AND appointment.doctor_id=doctor.id "+
-  		"AND doctor.department_id=department.id "+
-  		"AND department.hospital_id=hospital.id",
+		"SELECT appointment.id AS reservation,appointment.time AS time,status,appointment.price AS price,record_time,"+
+		"period,doctor.name as doctor_name,department.name as department_name,hospital.name as hospital_name "+
+		"FROM appointment,doctor,department,hospital "+
+		"WHERE appointment.id=? "+
+		"AND appointment.doctor_id=doctor.id "+
+		"AND doctor.department_id=department.id "+
+		"AND department.hospital_id=hospital.id",
   		 [reservation_id],
   		 function(err,data){
 			 if(err && err.message != 'Not found') return next(err);
