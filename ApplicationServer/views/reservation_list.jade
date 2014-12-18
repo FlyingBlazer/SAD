@@ -12,7 +12,7 @@ block site-content
                     p.left-head
                         img(src='http://img.guahao.cn/img/character/young-m.png', alt='男')
                         span(style='margin-left: 3px')
-                            strong #{username}
+                            strong #{name}
                     ul.none-border
                         li(style='list-style-type: none;margin-top:40px;margin-left:10px;text-align:left')
                             a.btn.btn-primary.btn-lg.active(href='/account/manage/reservation', role='button')
@@ -42,13 +42,14 @@ block site-content
                                     th 操作
                             tbody
                                 if(reservations.length)
-                                    tr for item in reservations
-                                        td item.time
-                                        td item.hospital_name
-                                        td item.doctor_name
-                                        td item.price
-                                        td item.status
-                                        td
-                                            a(href='/user/reservation/#{item.reservation_id}/detail') 查看
+                                    each item in reservations
+                                        tr
+                                            td #{item.time}
+                                            td #{item.hospital_name}
+                                            td #{item.doctor_name}
+                                            td #{item.price}
+                                            td #{item.status}
+                                            td
+                                                a(href='/user/reservation/#{item.reservation_id}/detail') 查看
                             tbody
     div.clear

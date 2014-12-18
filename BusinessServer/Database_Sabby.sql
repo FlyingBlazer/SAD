@@ -3395,7 +3395,7 @@ CREATE TABLE IF NOT EXISTS `hospital` (
   `site` varchar(200) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
-  FULLTEXT KEY `name_2` (`name`) WITH PARSER mysqlcft
+  FULLTEXT KEY `name_2` (`name`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=51 ;
 
 --

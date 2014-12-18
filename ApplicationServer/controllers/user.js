@@ -350,8 +350,11 @@ exports.manageUserInformation = function (request, response) {
 exports.showReservationList = function (request, response) {
     if (request.method.toLowerCase() == 'get') {
 
+        printLogMessage('show reservation list');
         var userId = getUserIdFromCookie(request);
-        if (userId == null || userId == '')
+        printLogMessage('show reservation list : ' + userId);
+
+        if (!userId || userId == '')
             redirectToLoginPage(response);
         else
             showReservations(userId, response);
@@ -365,7 +368,9 @@ exports.showReservationList = function (request, response) {
  */
 function showReservations(userId, response) {
 
-    var path = '/user/reservation/list/?userid=' + userId;
+    var path = '/user/reservation/list?userid=' + userId;
+
+    printLogMessage('reservation : ' + path);
 
     var callback = function (result) {
         if (result != null)
@@ -395,7 +400,12 @@ function getUserIdFromCookie(request) {
 
     var userInfo = request.cookies.userInfo;
 
-    printLogMessage('get userId from cookie : ' + userInfo);
+    var result = typeof userInfo == 'undefined';
+    printLogMessage('get userId from cookie : ' + result);
+
+    if (result)
+        return null;
+
     //从base64编码的cookie中解析userId
     return JSON.parse(new Buffer(userInfo, 'base64').toString()).userId;
 

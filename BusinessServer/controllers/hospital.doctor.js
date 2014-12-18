@@ -124,7 +124,7 @@ exports.detail = function(req, res, next) {
                         year: year,
                         month: month,
                         date: date,
-                        day: dd.nextDay().getDate()
+                        day: dd.nextDay().getDay()
                     },
                     slot: {
                         morning: false,
