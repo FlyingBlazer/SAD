@@ -36,10 +36,10 @@ router.route('/choose-location/:province').get(controllers.reservation.chooseLoc
 // ----->>>>
 
 // Confirm reservation
-router.route('/concierge/reserve/confirm').post(controllers.reservation.confirm).get(controllers.reservation.recoverConfirm);
+router.route('/concierge/reserve-confirm').post(controllers.reservation.confirm);
 
 // Submit reserve request
-router.route('/concierge/reserve/submit').post(controllers.reservation.onSubmit);
+router.route('/concierge/reserve-submit').post(controllers.reservation.onSubmit);
 
 // ----->>>>
 
