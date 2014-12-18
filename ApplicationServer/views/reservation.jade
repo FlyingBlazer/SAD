@@ -14,7 +14,7 @@ block site-content
                     span 联系电话：#{userTelephone}
                     span 取号地点：门诊3楼挂号处
                 p
-                    span 就诊日期：#{resvDetail.date} #{resvDetail.time} （具体时间以预约成功短信为准）
+                    span 就诊日期：#{resvDetail.date} #{resvDetail.period} （具体时间以预约成功短信为准）
                     span 挂号费：#{doctorDetail.price}元
             li.last
                 p
@@ -30,12 +30,13 @@ block site-content
                     span 就诊类型：初诊
                 p
                     span 就诊地点：门诊3楼
-                    if resvDetail.paid
-                        span="付款状态：已付款"
-                    else
-                        span="付款状态：未付款"
+                    span 付款状态：#{resvDetail.status}
+                    //if resvDetail.paid
+                    //    span="付款状态：已付款"
+                    //else
+                    //    span="付款状态：未付款"
         div
             button.btn.btn-xs.btn-success 打印
-            if !resvDetail.paid
-                button.btn.btn-xs.btn-primary 付款
+            //if !resvDetail.paid
+            //    button.btn.btn-xs.btn-primary 付款
 
