@@ -60,7 +60,6 @@ router.route('/concierge/reserve/:hospital_id/:department_id/:expert_id').get(co
 // User may take actions like pay, print or close
 // Optional message
 router.route('/reservation/:doctor_id/:reservation_id').get(controllers.reservation.showReservation).post(controllers.reservation.operateReservation);
-router.route('/reservation/:doctor_id/:reservation_id/success').get(controllers.reservation.showReservationWithSuccessMessage).post(controllers.reservation.operateReservation);
 
 // Search
 router.route('/search/:q').get(controllers.reservation.search);
