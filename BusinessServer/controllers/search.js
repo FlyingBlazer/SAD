@@ -1,7 +1,7 @@
 var Errors = require('../lib/Errors');
 
 module.exports = function(req, res, next) {
-    var keyword = req.body.keyword;
+    var keyword = req.body.q;
     var len=keyword.length;
     var keyword_set='';
     for(var i=0;i<len;i++){
