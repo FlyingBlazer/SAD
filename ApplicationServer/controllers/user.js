@@ -365,7 +365,9 @@ exports.showReservationList = function (request, response) {
  */
 function showReservations(userId, response) {
 
-    var path = '/user/reservation/list/?userid=' + userId;
+    var path = '/user/reservation/list?userid=' + userId;
+
+    printLogMessage('reservation : ' + path);
 
     var callback = function (result) {
         if (result != null)

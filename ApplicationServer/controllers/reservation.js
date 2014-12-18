@@ -323,52 +323,6 @@ exports.showDoctor = function(request, response) {
     }, false);
 };
 
-// get
-exports.recoverConfirm = function(request, response) {
-    // check required cookies
-    if (!checkVars('cookies', request.cookies, 'confirm_data', 'userInfo')) {
-        // still not logged in
-        response.clearCookie('confirm_data');
-        __invalidArgsError(response);
-        return;
-    } else {
-        var bodyParams = JSON.parse(request.cookie.confirm_data);
-        response.clearCookie('confirm_data');
-    }
-
-    var userInfo = {};
-    if (typeof request.cookies.userInfo !== 'undefined')
-        userInfo = parseUserInfo(request);
-
-    var username = userInfo.username ? userInfo.username : '';
-    var userId = userInfo.userId;
-    var userTelephone = userInfo.phone;
-    var userSocialId = userInfo.sid;
-    var userRealName = userInfo.name;
-
-    response.render('new_reservation', {
-        username: username,
-        detail: {
-            "username": username,
-            "userId": userId,
-            "userTelephone": userTelephone,
-            "userSocialId": userSocialId,
-            "userRealName": userRealName,
-            "hospital": bodyParams.hospital,
-            "hospitalId": bodyParams.hospitalId,
-            "department": bodyParams.department,
-            "departmentId": bodyParams.departmentId,
-            "doctor": bodyParams.doctor,
-            "doctorId": bodyParams.doctorId,
-            "doctorTitle": bodyParams.title,
-            "date": bodyParams.resvDate,
-            "time": bodyParams.resvTime,
-            "price": bodyParams.price,
-            "day": bodyParams.day
-        }
-    });
-};
-
 // post (need x-www-form-urlencoded data)
 exports.confirm = function(request, response) {
 
@@ -395,14 +349,8 @@ exports.confirm = function(request, response) {
     // if cookie is not set, save request body to cookie and retreat to login page
     // otherwise clear potentially existent request body cookie
     if (!checkVars('cookies', request.cookies, 'userInfo')) {
-        response.cookie('confirm_data', JSON.stringify(bodyParams), {
-            maxAge: 999999,
-            httpOnly: true
-        });
         response.redirect(302, '/account/login');
         return;
-    } else {
-        response.clearCookie('confirm_data');
     }
 
     // if control reaches here, start the normal rendering process
@@ -465,8 +413,10 @@ exports.onSubmit = function(request, response) {
         date: date,
         period: time,
         week: day,
-        paid_flag: false
+        paid_flag: false,
+        pay_method: 1
     };
+
     fireRequest('POST', url, serialize(data), function(res) {
         if (res == null) {
             __fatalError(response, 'Line=' + __line + ', Func=' + __function);
