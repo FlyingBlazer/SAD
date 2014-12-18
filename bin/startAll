@@ -23,7 +23,7 @@ if(cluster.isMaster) {
             worker.send('startA');
             A.online = true;
             A.worker = worker;
-        } else {
+        } else if(!B.online) {
             worker.send('startB');
             B.online = true;
             B.worker = worker;
@@ -33,26 +33,26 @@ if(cluster.isMaster) {
         console.log('worker ' + worker.process.pid + ' died');
         var n = cluster.fork();
         if(worker == A.worker) {
-            n.send('startA');
-            A.online = true;
-            A.worker = n;
+            A.online = false;
+            A.worker = null;
         } else {
-            n.send('startB');
-            B.online = true;
-            B.worker = n;
+            B.online = false;
+            B.worker = null;
         }
     });
 } else {
     process.on('message', function(msg) {
+        console.log(process.pid);
+        console.log(msg);
         switch(msg) {
             case 'startA':
                 var server_A = app_A.listen(settings.port.application, function() {
-                    console.log('Application server listening on port ' + server_A.address().port);
+                    console.log('Application server '+ process.pid +' listening on port ' + server_A.address().port);
                 });
                 break;
             case 'startB':
                 var server_B = app_B.listen(settings.port.business, function() {
-                    console.log('Business server listening on port ' + server_B.address().port);
+                    console.log('Business server '+ process.pid +' listening on port ' + server_B.address().port);
                 });
                 break;
             default:
