@@ -40,7 +40,8 @@ exports.onRegister = function (request, response) {
 
                         printLogMessage('user info = ' + JSON.stringify(userInfo));
 
-                        setCookie(response, userInfo);//将个人信息写入cookie
+                        //TODO
+                        //setCookie(response, userInfo);//将个人信息写入cookie
 
                         //printLogMessage('before跳转到user界面');
                         //printLogMessage('userId = ' + getUserIdFromCookie(request));//redirect之前cookie为空
@@ -205,7 +206,7 @@ exports.onLogin = function (request, response) {
             if (result.code == 0) {//登录成功
 
                 getUserInfo(result.userid, function (userInfo) {
-                    setCookie(response, userInfo);//设置cookie
+                    setCookie(response, userInfo);//设置cookie TODO
                     //response.redirect('back');//重定向到来时的页面
                     response.redirect('/');//重定向到首页
                     printLogMessage('登录成功');
@@ -415,9 +416,14 @@ function setCookie(response, userInfo) {
     //对user info进行base64编码，
     var userInfoInBase64 = new Buffer(JSON.stringify(userInfo)).toString('base64');
 
-    response.setHeader('Set-Cookie', [
-        'userInfo=' + userInfoInBase64
-    ]);
+    response.cookie('userInfo', userInfoInBase64, {
+        expires: new Date(Date.now() + 900000),
+        path: '/'
+    });
+
+    //response.setHeader('Set-Cookie', [
+    //    'userInfo=' + userInfoInBase64
+    //]);
 
     //response.setHeader('Set-Cookie', [
     //    'userId=' + userInfo['userId'],
