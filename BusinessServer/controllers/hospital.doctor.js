@@ -9,7 +9,8 @@ exports.list = function(req, res, next) {
         "AND hospital.id = ?",
         [hospitalId],
         function(err, data) {
-            var ret = [];
+            if(err) throw err;
+            var ret = {};
             data.forEach(function(line) {
                 if(!Array.isArray(ret[line.department_id])) {
                     ret[line.department_id] = [];
