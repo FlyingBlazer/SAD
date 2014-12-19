@@ -39,7 +39,7 @@ exports.getRaw = function(req, res, next) {
                             case '2':
                                 for(var i = 1 ; i <= 7 ; i++){
                                     if(working.frequency.charAt(i)=='1'){
-                                        week_stat[i-1][working.period]=1;
+                                        week_stat[i-1][working.period-1]=1;
                                     }
                                 }
                                 break;
@@ -90,8 +90,38 @@ exports.addWeek = function(req, res, next) {
                     if(data) {
                         return next(new Errors.AddingFailed("Working Arrangement Already Exists!"));
                     }
+                    req.models.working.create({
+                        doctor_id: doctorId,
+                        date: date.Format('yyyy-MM-dd'),
+                        period: 1,
+                        frequency: morning,
+                        price : data[0]['price']
+                    }, function(err, working) {
+                        if(err && err.message != 'Not found') return next(err);
+                    });
+                    req.models.working.create({
+                        doctor_id: doctorId,
+                        date: date.Format('yyyy-MM-dd'),
+                        period: 2,
+                        frequency: afternoon,
+                        price : data[0]['price']
+                    }, function(err, working) {
+                        if(err && err.message != 'Not found') return next(err);
+                    });
+                    req.models.working.create({
+                        doctor_id: doctorId,
+                        date: date.Format('yyyy-MM-dd'),
+                        period: 3,
+                        frequency: evening,
+                        price : data[0]['price']
+                    }, function(err, working) {
+                        if(err && err.message != 'Not found') return next(err);
+                    });
+                    res.json({
+                        code: 0,
+                        message: 'success'
+                    });
                 });
-
             });
     });
     //
@@ -100,6 +130,11 @@ exports.addWeek = function(req, res, next) {
 exports.updateWeek = function(req, res, next) {
     var adminId=req.body.adminId;
     var doctorId=req.body.doctorId;
+    var works=req.body.works;
+    var morning='20000000';
+    var afternoon='20000000';
+    var evening='20000000';
+
     req.models.administrator.get(adminId, function(err, admin) {
         if(err && err.message != 'Not found') return next(err);
         var hospital_id=parseInt(admin.name.substr(5, 8), 10);
@@ -118,37 +153,45 @@ exports.updateWeek = function(req, res, next) {
                 if(data[0]['id']!=hospital_id){
                     return next(new Errors.AdminAccessRejected("Invalid Access For This Administrator!"));
                 }
-                req.models.working.create({
-                    doctor_id: doctorId,
-                    date: date.Format('yyyy-MM-dd'),
-                    period: 1,
-                    frequency: morning,
-                    price : data[0]['price']
-                }, function(err, working) {
+                req.models.working.find({doctor_id: doctorId}, function(err, workings){
                     if(err && err.message != 'Not found') return next(err);
-                });
-                req.models.working.create({
-                    doctor_id: doctorId,
-                    date: date.Format('yyyy-MM-dd'),
-                    period: 2,
-                    frequency: afternoon,
-                    price : data[0]['price']
-                }, function(err, working) {
-                    if(err && err.message != 'Not found') return next(err);
-                });
-                req.models.working.create({
-                    doctor_id: doctorId,
-                    date: date.Format('yyyy-MM-dd'),
-                    period: 3,
-                    frequency: evening,
-                    price : data[0]['price']
-                }, function(err, working) {
-                    if(err && err.message != 'Not found') return next(err);
-                });
-                res.json({
-                    code: 0,
-                    message: 'success'
-                });
+                    var m_index=0;
+                    var a_index=0;
+                    var e_index=0;
+                    for(var i=0;i<3;i++){
+                        switch(workings[i]['period']) {
+                            case 0:
+                                m_index=i;
+                                break;
+                            case 1:
+                                a_index=i;
+                                break;
+                            case 2:
+                                e_index=i;
+                                break;
+                        }
+                    }
+                    for(var i = 0 ; i < works.length ; i++) {
+                        switch(works[i]['period']) {
+                            case 0:
+                                workings[m_index].frequency.replaceAt(works[i]['day'], works[i]['action']);
+                                break;
+                            case 1:
+                                workings[a_index].frequency.replaceAt(works[i]['day'], works[i]['action']);
+                                break;
+                            case 2:
+                                workings[e_index].frequency.replaceAt(works[i]['day'], works[i]['action']);
+                                break;
+                        }
+                    }
+                    works.save(function(err) {
+                       if(err) throw err;
+                        res.json({
+                            code: 0,
+                            message: 'success'
+                        })
+                    });
+                })
             });
     });
     //
