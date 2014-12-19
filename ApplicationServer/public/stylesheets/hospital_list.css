@@ -1,6 +1,19 @@
 .hospital {
     border: 2px solid #dddddd;
+    border-bottom-color: transparent;
     padding: 10px;
+}
+
+.hospital:hover {
+    border-color: dodgerblue;
+}
+
+.hospital:last-child {
+    border-bottom-color: #dddddd;
+}
+
+.hospital:last-child:hover {
+    border-bottom-color: dodgerblue;
 }
 
 .hospital>.image {
@@ -106,10 +119,6 @@
     margin-top: 5px;
     font-size: 12px;
     color: grey;
-}
-
-.hover {
-    border: 2px solid dodgerblue;
 }
 
 .gbt-blue {
