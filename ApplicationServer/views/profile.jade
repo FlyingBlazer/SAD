@@ -9,7 +9,15 @@ block site-content
         var change_phone=false;
         var change_email=false;
         var post_content={};
-
+        function checkEmail(str){
+            re = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
+            if (re.test(str)){
+                alert("正确");
+            }
+            else {
+                alert("quewu");
+            }
+        }
         function validate(){
             if ($("#pre_pw").val()!=$("#pw1").val())
             {
@@ -31,7 +39,8 @@ block site-content
                         }
                         $.post("/account/manage/info", post_content,
                                 function (data, status) {
-                                    location.reload(false);
+
+                                    location.replace("/account/manage/info/");
                                 }
                         );
                     }
@@ -55,6 +64,7 @@ block site-content
             #g-breadcrumb
                 a(href='/') 首页
                 span > 我的预约单
+                span(style='margin-left:140px;color:red') #{errorMessage}
             .wrap
                 .person-left
                     p.left-head
