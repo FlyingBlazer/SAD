@@ -43,21 +43,22 @@ block site-content
             return true;
         }
     .container
-        form.form-login(role='form', class="form-horizontal", action='/account/register', name='postSignupMessage', method='post', onsubmit="return validate()", id="register-form")
+        form.form-login(role='form', class="form-horizontal", action='/account/register', name='postSignupMessage', method='post',
+        onsubmit="return validate()", id="register-form")
             h2.form-login-heading 用户注册
             h3.label(style='color: red') 加*为必填项
             .form-group
                 label.col-sm-2.control-label(for='username') 用户名*
                 .col-sm-10
-                    input#username.form-control(type='text', placeholder='请输入用户名*',name="username",required="required")
+                    input#username.form-control(type='text', placeholder='请输入用户名',name="username",required="required")
             .form-group
                 label.col-sm-2.control-label(for='password') 密码*
                 .col-sm-10
-                    input#password.form-control(type='password', placeholder='请输入密码*',name="password",required="required")
+                    input#password.form-control(type='password', placeholder='请输入密码',name="password",required="required")
             .form-group
                 label.col-sm-2.control-label(for='password2') 确认密码*
                 .col-sm-10
-                    input#password2.form-control(type='password', placeholder='请再次输入密码*',name="password2",required="required")
+                    input#password2.form-control(type='password', placeholder='请再次输入密码',name="password2",required="required")
             .form-group
                 label.col-sm-2.control-label(for='name') 姓名*
                 .col-sm-10
