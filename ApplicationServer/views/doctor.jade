@@ -24,21 +24,21 @@ block site-content
                     th #{time.date.month}/#{time.date.date}<br/>#{time.date.day}
             tr#morning
                 each time in detail.time_slots
-                    td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}")
+                    td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}", data-day="#{time.date.day}")
                         if time.slot.morning
                             a(href="#") 预约
                         else
                             | -
             tr#afternoon
                 each time in detail.time_slots
-                    td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}")
+                    td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}", data-day="#{time.date.day}")
                         if time.slot.afternoon
                             a(href="#") 预约
                         else
                             | -
             tr#evening
                 each time in detail.time_slots
-                    td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}")
+                    td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}", data-day="#{time.date.day}")
                         if time.slot.evening
                             a(href="#") 预约
                         else
@@ -56,6 +56,7 @@ block site-content
             input(name="price", value="#{detail.price}")
             input(name="resvDate")
             input(name="resvTime")
+            input(name="day")
 
     script.
 
@@ -64,6 +65,7 @@ block site-content
             $("#timetable a").click(function() {
                 $("#post-form input[name='resvDate']").val($(this).parent("td").data("date"));
                 $("#post-form input[name='resvTime']").val($(this).parents("tr").attr("id"));
+                $("#post-form input[name='day']").val($(this).parent("td").data("day"));
                 $("#post-form").submit();
             });
 
