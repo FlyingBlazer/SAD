@@ -64,6 +64,7 @@ server.get('/hospital/department/:departmentId/delete', controllers.hospital.dep
 server.post('/hospital/department/:departmentId/update', controllers.hospital.department.update);
 //---
 server.post('/hospital/reservation/:reservationId/confirm', controllers.reservation.confirm);
+server.get('/reservation/:hospitalId/list', controllers.reservation.list_h);
 //--------------------------------
 server.get('/search', controllers.search);
 

@@ -386,6 +386,7 @@ function showReservations(userId, message, response) {
                 getUserInfo(userId, function (userInfo) {
                     //渲染预约单界面
                     response.render('reservation_list', {
+                        username: userInfo.username,
                         name: userInfo.name,
                         status: userInfo.status,
                         credit: userInfo.credit,

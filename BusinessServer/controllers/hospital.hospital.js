@@ -1,10 +1,22 @@
 var Errors = require('../lib/Errors');
+var crypto = require('crypto');
+var md5 = crypto.createHash('md5');
 
 exports.list = function(req, res, next) {
     var count = 0;
     var ret = [];
-    req.models.hospital.find({province: req.query.province}, function(err, hospitals) {
-        if(err && err.message != 'Not found') return next(err);
+    if(typeof req.query.province != 'undefined') {
+        req.models.hospital.find({province: req.query.province}, function(err, hospitals) {
+            if(err && err.message != 'Not found') return next(err);
+            parse(hospitals);
+        });
+    } else {
+        req.models.hospital.find({}, function(err, hospitals) {
+            if(err && err.message != 'Not found') return next(err);
+            parse(hospitals);
+        });
+    }
+    function parse(hospitals) {
         count = hospitals.length + 1;
         hospitals.forEach(function(hospital) {
             hospital.getRating(function(err, rating) {
@@ -24,7 +36,7 @@ exports.list = function(req, res, next) {
             });
         });
         finish();
-    });
+    }
     function finish() {
         if(--count == 0) {
             res.json({
@@ -74,9 +86,24 @@ exports.add = function(req, res, next) {
             if(err && err.message != 'Not found') return next(err);
             hospital.setRating(rating, function(err) {
                 if(err && err.message != 'Not found') return next(err);
-                res.json({
-                    code: 0,
-                    message: 'success'
+                var supplement = 8 - hospital.id.toString().length;
+                var admin_name ='admin';
+                for(var i = 0; i < supplement ; i++) {
+                    admin_name += '0';
+                }
+                admin_name += hospital.id;
+                var admin_password = md5.update('hosp' + admin_name).digest('hex');
+                var authentication = 1;
+                req.models.administrator.create({
+                    name: admin_name,
+                    password: admin_password,
+                    auth: authentication
+                }, function(err,admin) {
+                    if(err && err.message != 'Not found') return next(err);
+                    res.json({
+                        code: 0,
+                        message: 'success'
+                    });
                 });
             });
         });
@@ -110,6 +137,22 @@ exports.remove = function(req, res, next) {
                 console.log("Department %s removed.", department.name);
             });
         });
+        var supplement = 8 - hospital.id.toString().length;
+        var admin_name ='admin';
+        for(var i = 0; i < supplement ; i++) {
+            admin_name += '0';
+        }
+        admin_name += hospital.id;
+        req.models.administrator.one({
+           name: admin_name
+        }, function(err, admin) {
+            if(err && err.message != 'Not found') return next(err);
+            admin.remove(function(err) {
+               if(err){
+                   throw err;
+               }
+            });
+        });
         hospital.remove(function(err) {
             if(err) {
                 console.log("Error occurred while removing hospital %s.", hospital.id);
@@ -122,8 +165,14 @@ exports.remove = function(req, res, next) {
 exports.update = function(req, res, next) {
     var id = req.params.hospitalId;
     req.models.hospital.get(id, function(err, hospital) {
-        if(err) return next(err);
-        if(!hospital) return next(new Errors.HospitalNotExist('HospitalNotExist'));
+        if(err && err.message != 'Not found') {
+            res.send(500, "Internal error");
+            throw err;
+        }
+        if(!hospital) {
+            res.send(500, "Hospital not exist.");
+            return;
+        }
         if(typeof req.body.level != 'undefined') {
             var level = req.body.level;
             delete req.body.level;
@@ -138,7 +187,10 @@ exports.update = function(req, res, next) {
             hospital[index] = req.body[index];
         }
         hospital.save(function(err) {
-            if(err && err.message != 'Not found') return next(err);
+            if(err) {
+                res.send(500, "Internal error");
+                throw err;
+            }
             res.json({
                 code: 0,
                 message: 'success'

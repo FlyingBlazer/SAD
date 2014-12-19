@@ -87,8 +87,14 @@ exports.remove = function(req, res, next) {
 
 exports.update = function(req, res, next) {
     req.models.department.get(req.params.departmentId, function(err, department) {
-        if(err && err.message != 'Not found') return next(err);
-        if(!department) return next(new Errors.DepartmentNotExist("Department not exist"));
+        if(err && err.message != 'Not found') {
+            res.send(500, "Internal error");
+            throw err;
+        }
+        if(!department) {
+            res.send(500, "Department not exist.");
+            return;
+        }
         for(var index in req.body) {
             if(typeof department[index] != 'undefined') {
                 department[index] = req.body[index];
