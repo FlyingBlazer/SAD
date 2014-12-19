@@ -265,3 +265,36 @@ exports.EmptySearchResult = function EmptySearchResult(message) {
     this.name = 'EmptySearchResult';
 };
 util.inherits(exports.EmptySearchResult, restify.RestError);
+
+exports.AdminDoctorError = function AdminDoctorError(message) {
+    restify.RestError.call(this, {
+        restCode: '5001',
+        statusCode: 401,
+        message: message,
+        constructorOpt: AdminDoctorError
+    });
+    this.name = 'AdminDoctorError';
+};
+util.inherits(exports.AdminDoctorError, restify.RestError);
+
+exports.AdminAccessRejected = function AdminAccessRejected(message) {
+    restify.RestError.call(this, {
+        restCode: '5002',
+        statusCode: 401,
+        message: message,
+        constructorOpt: AdminAccessRejected
+    });
+    this.name = 'AdminAccessRejected';
+};
+util.inherits(exports.AdminAccessRejected, restify.RestError);
+
+exports.AddingFailed = function AddingFailed(message) {
+    restify.RestError.call(this, {
+        restCode: '5002',
+        statusCode: 401,
+        message: message,
+        constructorOpt: AddingFailed
+    });
+    this.name = 'AddingFailed';
+};
+util.inherits(exports.AddingFailed, restify.RestError);
