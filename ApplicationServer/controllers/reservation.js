@@ -152,6 +152,13 @@ var fireRequest = function(method, path, data, callback, noErrCodeCheck) {
         req.write(data);
 
     req.end();
+
+    // timeout
+    setTimeout(function() {
+        callback(null);
+        logError('Request timed out when requesting Business server.',
+            ' > Request URL: ' + path);
+    }, 3000);
 };
 
 // Choose a location
@@ -191,7 +198,6 @@ exports.listHospitals = function(request, response) {
     var username = userInfo.username ? userInfo.username : '';
     var province = request.params.province;
     var url = '/hospital/hospital/list?province=' + province;
-
     fireRequest('GET', url, null, function(res) {
         if (res == null) {
             __fatalError(response, 'Line=' + __line + ', Func=' + __function);
@@ -201,6 +207,7 @@ exports.listHospitals = function(request, response) {
             __entityNotFound(response, 'Line=' + __line + ', Func=' + __function);
             return;
         }
+
         response.render('hospital_list', {
             username: username,
             search: false,
