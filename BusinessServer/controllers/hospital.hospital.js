@@ -1,4 +1,6 @@
 var Errors = require('../lib/Errors');
+var crypto = require('crypto');
+var md5 = crypto.createHash('md5');
 
 exports.list = function(req, res, next) {
     var count = 0;
@@ -84,9 +86,24 @@ exports.add = function(req, res, next) {
             if(err && err.message != 'Not found') return next(err);
             hospital.setRating(rating, function(err) {
                 if(err && err.message != 'Not found') return next(err);
-                res.json({
-                    code: 0,
-                    message: 'success'
+                var supplement = 8 - hospital.id.toString().length;
+                var admin_name ='admin';
+                for(var i = 0; i < supplement ; i++) {
+                    admin_name += '0';
+                }
+                admin_name += hospital.id;
+                var admin_password = md5.update('hosp' + admin_name).digest('hex');
+                var authentication = 1;
+                req.models.administrator.create({
+                    name: admin_name,
+                    password: admin_password,
+                    auth: authentication
+                }, function(err,admin) {
+                    if(err && err.message != 'Not found') return next(err);
+                    res.json({
+                        code: 0,
+                        message: 'success'
+                    });
                 });
             });
         });
@@ -118,6 +135,22 @@ exports.remove = function(req, res, next) {
                     throw err;
                 }
                 console.log("Department %s removed.", department.name);
+            });
+        });
+        var supplement = 8 - hospital.id.toString().length;
+        var admin_name ='admin';
+        for(var i = 0; i < supplement ; i++) {
+            admin_name += '0';
+        }
+        admin_name += hospital.id;
+        req.models.administrator.one({
+           name: admin_name
+        }, function(err, admin) {
+            if(err && err.message != 'Not found') return next(err);
+            admin.remove(function(err) {
+               if(err){
+                   throw err;
+               }
             });
         });
         hospital.remove(function(err) {

@@ -25,19 +25,3 @@ exports.addDept = function(request, response) {
 exports.addDoctor = function(request, response) {
 
 };
-
-exports.editHospital = function(request, response) {
-
-};
-
-exports.editDept = function(request, response) {
-
-};
-
-exports.editDoctor = function(request, response) {
-
-};
-
-exports.editCalendar = function(request, response) {
-
-};
