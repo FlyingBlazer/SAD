@@ -1,3 +1,5 @@
+var Errors = require('../lib/errors');
+
 exports.getRaw = function(req, res, next) {
 	var adminId=req.body.adminId;
 	var doctorId=req.params.doctorId;
@@ -30,7 +32,7 @@ exports.getRaw = function(req, res, next) {
                                 var temp_working={
                                     date: working.date,
                                     period: working.period,
-                                    isworking: working.frequency.charAt(1)=='1'
+                                    isWorking: working.frequency.charAt(1)=='1'
                                 };
                                 temp_stat.push(temp_working);
                                 break;
@@ -50,7 +52,6 @@ exports.getRaw = function(req, res, next) {
                 });
             });
     });
-    //
 };
 
 exports.addWeek = function(req, res, next) {
