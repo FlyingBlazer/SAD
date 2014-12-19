@@ -301,7 +301,8 @@ exports.showUserInformation = function (request, response) {
                     name: result.name,
                     phone: result.phone,
                     email: result.email,
-                    credit: result.credit
+                    credit: result.credit,
+                    errorMessage: ''
                 });
             });
     }
@@ -319,19 +320,25 @@ exports.manageUserInformation = function (request, response) {
 
         var callback = function (result) {
             if (result != null) {
-                if (result.code == 0) {
 
-                    getUserInfo(userId, function (userInfo) {
-                        setCookie(response, userInfo);//更新cookie
-                        response.render('profile', {
-                            errorMessage: '更新成功'
-                        });
-                    });
-                } else {
+                var errorMessage = result.code == 0 ? '更新成功' : '修改失败';
+
+                getUserInfo(userId, function (userInfo) {
+                    setCookie(response, userInfo);//更新cookie
                     response.render('profile', {
-                        errorMessage: '修改失败'
+                        username: result.username,
+                        status: result.status,
+                        sid: result.sid,
+                        name: result.name,
+                        phone: result.phone,
+                        email: result.email,
+                        credit: result.credit,
+                        errorMessage: errorMessage
                     });
-                }
+
+                    printLogMessage(errorMessage);
+                });
+
             }
         };
 

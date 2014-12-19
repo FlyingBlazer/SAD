@@ -8,31 +8,26 @@ block site-content
     script(type="text/javascript").
         var change_phone=false;
         var change_email=false;
-        var post_array=new Array();
-        function pw() {
-            var pw1 = document.getElementById("pw1").value;
-            var pw2 = document.getElementById("pw2").value;
-            var prompt = document.getElementById("prompt");
-            if (pw1 != pw2) {
-                prompt.innerHTML = "两次输入的密码不一样";
-                document.getElementById("submit").disable = true;
+        var post_content={};
+        function validate(){
+            if ($("#pre_pw").val()!=$("#pw1").val())
+            {
+                alert("两次输入的密码不一样");
+                return false;
             }
-            else {
-                prompt.style.display = "gone";
-                document.getElementById("submit").disable = false;
-            }
+            else
+            return  true;
         }
         $(document).ready(function () {
                 $("#submit").click(function ()
                 {
                     if (!$("pre_pw"))
                     {
-                       post_array['pre_pw'] = $("#pre_pw").val();
-                       post_array['new_pw'] = $("#pw2").val();
+                       post_content.pre_pw = $("#pre_pw").val();
+                       post_content.new_pw = $("#pw2").val();
 
                     }
-
-                    $.post("/account/manage/info", encoded,
+                    $.post("/account/manage/info",post_content ,
                         function (data, status) {
                            // alert("Data: " + data);
                         }
@@ -43,12 +38,12 @@ block site-content
             if (flag=='phone')
             {
                 change_phone=true;
-                post_array['phone']=$("#phone").val();
+                post_content.phone=$("#phone").val();
             }
             else if (flag=='email')
             {
                 change_email=true;
-                post_array['email']=$("#email").val();
+                post_content.email=$("#email").val();
             }
         }
     div
@@ -97,7 +92,7 @@ block site-content
                                 label 新密码
                                 input.form-control(type='password', style='width:40%',id='pw1',placeholder='不修改密码请勿修改')
                                 label 确认密码
-                                input.form-control(type='password', style='width:40%', id='pw2',onkeyup='pw();',placeholder='不修改密码请勿修改')
+                                input.form-control(type='password', style='width:40%', id='pw2',placeholder='不修改密码请勿修改')
                                 span(id='prompt')
                                 label 电话
                                 input.form-control(type='text', style='width:40%', id='phone')
@@ -105,7 +100,7 @@ block site-content
                                 label 邮箱
                                 input.form-control(type='email', style='width:40%', id='email')
                                 button.btn.btn-default(onclick='change_status(\'email\')',style='display:block',type='button') 修改
-                                button.btn.btn-primary(type='submit',id='submit') 保存
+                                button.btn.btn-primary(type='submit',id='submit' onclick='return validate()') 保存
                     .second_block
                         span.second_label  上传头像
                     hr(style='line-width:1;', width='90%', color='#1E90FF', size='1')

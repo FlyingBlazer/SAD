@@ -458,7 +458,6 @@ exports.showReservation = function(request, response) {
     var userTel = userInfo.phone;
     var userSid = userInfo.sid;
     var resvId = request.params.reservation_id;
-    var doctorId = request.params.doctor_id;
     var message = request.params.message;
     var doctorDetail = null;
     var resvDetail = null;
@@ -511,7 +510,6 @@ exports.showReservation = function(request, response) {
 // get
 exports.pay = function(request, response) {
     var resvId = request.params.reservation_id;
-    var doctorId = request.params.doctor_id;
     var url = '/user/reservation/' + resvId + '/pay';
     fireRequest('POST', url, null, function() {
         response.redirect(302, '/reservation/' + resvId + '/m/pay_success');
