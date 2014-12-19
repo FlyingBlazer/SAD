@@ -19,6 +19,7 @@ router.route('/account/login').get(controllers.user.loginPage).post(controllers.
 router.route('/account/logout').get(controllers.user.onLogout);
 router.route('/account/manage').get(controllers.user.manage);
 router.route('/account/manage/info').get(controllers.user.showUserInformation).post(controllers.user.manageUserInformation);
+router.route('/account/manage/info/m/:message').get(controllers.user.showUserInformation);
 router.route('/account/manage/reservation').get(controllers.user.showReservationList);
 router.route('/account/manage/reservation/m/:message').get(controllers.user.showReservationList);
 
@@ -75,34 +76,33 @@ router.route('/search/:q').get(controllers.reservation.search);
  * =========================================================
  */
 
-// Home of backstage
 router.route('/backstage').get(controllers.backstage.home);
 
-// Users identity check
-router.route('/backstage/users').get(controllers.backstage.manageUsers);
+// account
+router.route('/backstage/login').get(controllers.backstage.login).post(controllers.backstage.onLogin);
+router.route('/backstage/login/:msgType/:message').get(controllers.backstage.login);
+router.route('/backstage/logout').get(controllers.backstage.logout);
+router.route('/backstage/account').get(controllers.backstage.changePassword).post(controllers.backstage.onChangePassword);
+router.route('/backstage/account/:msgType/:message').get(controllers.backstage.changePassword);
 
-// Manage hospitals
-router.route('/backstage/hospitals').get(controllers.backstage.manageHospitals);
+// query
+router.route('/backstage/departments').get(controllers.backstage.departments);
+router.route('/backstage/departments/:msgType/:message').get(controllers.backstage.departments);
+router.route('/backstage/doctors').get(controllers.backstage.doctors);
+router.route('/backstage/doctors/:msgType/:message').get(controllers.backstage.doctors);
+router.route('/backstage/reservations').get(controllers.backstage.reservations);
+router.route('/backstage/reservations/:msgType/:message').get(controllers.backstage.reservations);
+router.route('/backstage/doctor/:id/edit_schedule').get(controllers.backstage.editSchedule).post(controllers.backstage.onEditSchedule);
 
-// Add a hospital
-router.route('/backstage/hospital/add').get(controllers.backstage.addHospital);
 
-// Add a dept
-router.route('/backstage/hospital/:hospital_id/add-dept').get(controllers.backstage.addDept);
+// add
+router.route('/backstage/api/add/department').post(controllers.backstage.addDepartment);
+router.route('/backstage/api/add/doctor').post(controllers.backstage.addDoctor);
 
-// Add a doctor
-router.route('/backstage/dept/:dept_id/add-doctor').get(controllers.backstage.addDoctor);
+// delete - AJAX
+// router.route('/backstage/api/delete/department/:id').post(controllers.backstage.deleteDepartment);
+// router.route('/backstage/api/delete/doctor/:id').post(controllers.backstage.deleteDoctor);
 
-// Review or edit a hospital
-router.route('/backstage/hospital/:hospital_id').get(controllers.backstage.editHospital);
-
-// Review or edit a dept
-router.route('/backstage/dept/:dept_id').get(controllers.backstage.editDept);
-
-// Review or edit a doctor
-router.route('/backstage/doctor/:doctor_id').get(controllers.backstage.editDoctor);
-
-// Edit calendar
-router.route('/backstage/doctor/:doctor_id/calendar').get(controllers.backstage.editCalendar);
+// edit - AJAX
 
 module.exports = router;

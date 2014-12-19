@@ -282,6 +282,8 @@ exports.showUserInformation = function (request, response) {
     if (request.method.toLowerCase() == 'get') {
 
         var userId = getUserIdFromCookie(request);
+        var errorMessage = request.params.message;
+        errorMessage = errorMessage ? errorMessage : '';
 
         printLogMessage('show user info : ' + userId);
 
@@ -298,7 +300,7 @@ exports.showUserInformation = function (request, response) {
                     phone: result.phone,
                     email: result.email,
                     credit: result.credit,
-                    errorMessage: ''
+                    errorMessage: errorMessage
                 });
             });
     }
@@ -321,16 +323,17 @@ exports.manageUserInformation = function (request, response) {
 
                 getUserInfo(userId, function (userInfo) {
                     setCookie(response, userInfo);//更新cookie
-                    response.render('profile', {
-                        username: userInfo.username,
-                        status: userInfo.status,
-                        sid: userInfo.sid,
-                        name: userInfo.name,
-                        phone: userInfo.phone,
-                        email: userInfo.email,
-                        credit: userInfo.credit,
-                        errorMessage: errorMessage
-                    });
+                    //response.render('profile', {
+                    //    username: userInfo.username,
+                    //    status: userInfo.status,
+                    //    sid: userInfo.sid,
+                    //    name: userInfo.name,
+                    //    phone: userInfo.phone,
+                    //    email: userInfo.email,
+                    //    credit: userInfo.credit,
+                    //    errorMessage: errorMessage
+                    //});
+                    response.send(errorMessage);
 
                     printLogMessage('user info : ' + JSON.stringify(userInfo));
                     printLogMessage(errorMessage);
@@ -386,6 +389,7 @@ function showReservations(userId, message, response) {
                 getUserInfo(userId, function (userInfo) {
                     //渲染预约单界面
                     response.render('reservation_list', {
+                        username: userInfo.username,
                         name: userInfo.name,
                         status: userInfo.status,
                         credit: userInfo.credit,
