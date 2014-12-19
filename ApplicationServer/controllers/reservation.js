@@ -83,6 +83,7 @@ var serialize = function(obj) {
 
 var fireRequest = function(method, path, data, callback, noErrCodeCheck) {
     var options;
+    var callbackSent = false;
     if (method == 'POST')
         options = {
             host: 'localhost',
@@ -121,21 +122,25 @@ var fireRequest = function(method, path, data, callback, noErrCodeCheck) {
                 logError('Cannot parse response data.',
                     'Request URL: ' + path,
                     'Server raw response: ' + responseData);
+                callbackSent = true;
                 callback(null);
             }
 
             // check response error code
             if (srcObject) {
                 if (noErrCodeCheck || srcObject.code == 0) {
+                    callbackSent = true;
                     callback(srcObject);
                 } else if (srcObject.code == 2001
                     || srcObject.code == 2101
                     || srcObject.code == 2201) {
+                    callbackSent = true;
                     callback(stdNotFound);
                 } else {
                     logError('Unsuccessful response returned from business server, error not processed.',
                         ' > Request URL: ' + path,
                         ' > Server response: ' + responseData);
+                    callbackSent = true;
                     callback(null);
                 }
             }
@@ -145,6 +150,7 @@ var fireRequest = function(method, path, data, callback, noErrCodeCheck) {
     req.on('error', function(e) {
         logError('Business server is DOWN: ' + e.message,
             ' > When requesting: ' + path);
+        callbackSent = true;
         callback(null);
     });
 
@@ -155,9 +161,12 @@ var fireRequest = function(method, path, data, callback, noErrCodeCheck) {
 
     // timeout
     setTimeout(function() {
-        callback(null);
-        logError('Request timed out when requesting Business server.',
-            ' > Request URL: ' + path);
+        if (callbackSent === false) {
+            callbackSent = true;
+            callback(null);
+            logError('Request timed out when requesting Business server.',
+                ' > Request URL: ' + path);
+        }
     }, 3000);
 };
 
