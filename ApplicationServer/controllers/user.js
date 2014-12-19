@@ -40,11 +40,7 @@ exports.onRegister = function (request, response) {
 
                         printLogMessage('user info = ' + JSON.stringify(userInfo));
 
-                        //TODO
-                        //setCookie(response, userInfo);//将个人信息写入cookie
-
-                        //printLogMessage('before跳转到user界面');
-                        //printLogMessage('userId = ' + getUserIdFromCookie(request));//redirect之前cookie为空
+                        setCookie(response, userInfo);//将个人信息写入cookie
 
                         response.redirect('/');//跳转到主页
                         // 跳转到user页面
@@ -206,7 +202,7 @@ exports.onLogin = function (request, response) {
             if (result.code == 0) {//登录成功
 
                 getUserInfo(result.userid, function (userInfo) {
-                    setCookie(response, userInfo);//设置cookie TODO
+                    setCookie(response, userInfo);//设置cookie
                     //response.redirect('back');//重定向到来时的页面
                     response.redirect('/');//重定向到首页
                     printLogMessage('登录成功');
@@ -301,8 +297,8 @@ exports.showUserInformation = function (request, response) {
                     name: result.name,
                     phone: result.phone,
                     email: result.email,
-                    credit: result.credit
-
+                    credit: result.credit,
+                    errorMessage: ''
                 });
             });
     }
@@ -333,7 +329,7 @@ exports.manageUserInformation = function (request, response) {
                         phone: userInfo.phone,
                         email: userInfo.email,
                         credit: userInfo.credit,
-                        errorMessage: '123'
+                        errorMessage: errorMessage
                     });
 
                     printLogMessage('user info : ' + JSON.stringify(userInfo));
