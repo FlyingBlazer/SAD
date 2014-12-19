@@ -326,16 +326,17 @@ exports.manageUserInformation = function (request, response) {
                 getUserInfo(userId, function (userInfo) {
                     setCookie(response, userInfo);//更新cookie
                     response.render('profile', {
-                        username: result.username,
-                        status: result.status,
-                        sid: result.sid,
-                        name: result.name,
-                        phone: result.phone,
-                        email: result.email,
-                        credit: result.credit,
+                        username: userInfo.username,
+                        status: userInfo.status,
+                        sid: userInfo.sid,
+                        name: userInfo.name,
+                        phone: userInfo.phone,
+                        email: userInfo.email,
+                        credit: userInfo.credit,
                         errorMessage: errorMessage
                     });
 
+                    printLogMessage('user info : ' + JSON.stringify(userInfo));
                     printLogMessage(errorMessage);
                 });
 
