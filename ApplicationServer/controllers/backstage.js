@@ -28,6 +28,10 @@ exports.onChangePassword = function(request, response) {
 
 };
 
+exports.hospitals = function(request, response) {
+
+};
+
 exports.departments = function(request, response) {
 
 };
@@ -40,10 +44,17 @@ exports.reservations = function(request, response) {
 
 };
 
+// post
+exports.addHospital = function(request, response) {
+
+};
+
+// post
 exports.addDepartment = function(request, response) {
 
 };
 
+// post
 exports.addDoctor = function(request, response) {
 
 };
