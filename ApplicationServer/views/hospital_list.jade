@@ -19,7 +19,7 @@ block site-content
         div.hospital-list
             each hospital in list
                 div.hospital
-                    img.image
+                    img(src="/images/3.jpg").image
                     div.hospital-info
                         div.name
                             a(href="/concierge/reserve/#{hospital.id}") #{hospital.name}
@@ -30,7 +30,15 @@ block site-content
                         div.addr
                             i.fa.fa-map-marker.fa-fw
                             | #{hospital.address}
-                    table.vertical-middle-helper
-                        tr
-                            td.vertical-middle
-                                button.register.btn.btn-primary 挂号
+                    div.reservation
+                        a.gbn.gbt-blue(href="/concierge/reserve/#{hospital.id}") 挂号
+
+    script(type='text/javascript').
+        $(function() {
+           $(".hospital").mouseenter(function() {
+               $(this).addClass("hover");
+           });
+            $(".hospital").mouseleave(function() {
+                $(this).removeClass("hover");
+            });
+        });
