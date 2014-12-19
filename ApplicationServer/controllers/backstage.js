@@ -79,8 +79,7 @@ exports.onLogin = function (request, response) {
  * @param response
  */
 exports.logout = function (request, response) {
-
-
+    clearCookie(response);
     response.redirect('/login');
 };
 
