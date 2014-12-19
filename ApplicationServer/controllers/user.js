@@ -436,7 +436,7 @@ function setCookie(response, userInfo) {
     var userInfoInBase64 = new Buffer(JSON.stringify(userInfo)).toString('base64');
 
     response.cookie('userInfo', userInfoInBase64, {
-        expires: new Date(Date.now() + 900000),
+        expires: new Date(Date.now() + 900000000),
         path: '/'
     });
 }

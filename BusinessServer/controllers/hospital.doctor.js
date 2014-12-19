@@ -90,13 +90,22 @@ exports.remove = function(req, res, next) {
 
 exports.update = function(req, res, next) {
     req.models.doctor.get(req.params.doctorId, function(err, doctor) {
-        if(err && err.message != 'Not found') return next(err);
-        if(!doctor) return next(new Errors.DoctorNotExist('Doctor Not Exist'));
+        if(err && err.message != 'Not found') {
+            res.send(500, "Internal error");
+            throw err;
+        }
+        if(!doctor) {
+            res.send(500, "Doctor not exist.");
+            throw err;
+        }
         for(var index in req.body) {
             doctor[index] = req.body[index];
         }
         doctor.save(function(err) {
-            if(err) return next(err);
+            if(err) {
+                res.send(500, "Internal error");
+                throw err;
+            }
             res.json({
                 code: 0,
                 message: 'success'
