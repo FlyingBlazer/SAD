@@ -9,7 +9,6 @@
 
 .hospital>.image {
     display: inline-block;
-    background-color: red;
     width: 100px;
     height: 100px;
     vertical-align: top;
@@ -17,8 +16,13 @@
 
 .hospital>.hospital-info {
     display: inline-block;
+    width: 700px;
     margin-left: 20px;
-    margin-right: 500px;
+}
+
+.hospital>.reservation {
+    display: inline-block;
+    vertical-align: 70%;
 }
 
 .hospital-info>.name {
@@ -38,4 +42,38 @@
 
 .hospital-info>.addr {
     margin-top: 5px;
+}
+
+.hover {
+    border-color: #0186c7;
+    border-width: 2px;
+}
+
+.gbt-blue {
+    background: #dff2ff;
+    color: #377bee;
+    transition: none
+}
+
+.gbt-blue:hover {
+    background: #377bee;
+    color: #fff
+}
+
+.gbn {
+    padding: 0 16px;
+    text-align: center;
+    display: inline-block;
+    height: 32px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 32px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    transition: all .3s ease-out 0s
+}
+
+.gbn:hover {
+    text-decoration: none
 }
