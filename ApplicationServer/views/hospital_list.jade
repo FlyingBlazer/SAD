@@ -32,13 +32,3 @@ block site-content
                             | #{hospital.address}
                     div.reservation
                         a.gbn.gbt-blue(href="/concierge/reserve/#{hospital.id}") 挂号
-
-    script(type='text/javascript').
-        $(function() {
-           $(".hospital").mouseenter(function() {
-               $(this).addClass("hover");
-           });
-            $(".hospital").mouseleave(function() {
-                $(this).removeClass("hover");
-            });
-        });
