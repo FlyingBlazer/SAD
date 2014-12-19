@@ -29,9 +29,10 @@ block site-content
                     {
                        post_array['pre_pw'] = $("#pre_pw").val();
                        post_array['new_pw'] = $("#pw2").val();
+                        alert("arrive1");
                     }
-                    $.post("/account/manage/info",
-                        post_array,
+                    alert("arrive2");
+                    $.post("/account/manage/info", {phone:"12344"},
                         function (data, status) {
                            // alert("Data: " + data);
                         }
