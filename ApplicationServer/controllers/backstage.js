@@ -148,3 +148,8 @@ function clearCookie(response) {
     response.clearCookie('sb_hospitalId', {path: '/'});
     response.clearCookie('sb_hospitalName', {path: '/'});
 }
+
+exports.users = function (request, response) {
+
+};
+

@@ -86,6 +86,9 @@ router.route('/backstage/account').get(controllers.backstage.changePassword).pos
 router.route('/backstage/account/:msgType/:message').get(controllers.backstage.changePassword);
 
 // query
+router.route('/backstage/users').get(controllers.backstage.users);
+router.route('/backstage/users/:msgType/:message').get(controllers.backstage.users);
+
 router.route('/backstage/hospitals').get(controllers.backstage.hospitals);
 router.route('/backstage/hospitals/:msgType/:message').get(controllers.backstage.hospitals);
 router.route('/backstage/departments').get(controllers.backstage.departments);
