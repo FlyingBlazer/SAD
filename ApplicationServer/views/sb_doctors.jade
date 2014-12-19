@@ -1,3 +1,77 @@
-//
-   Created by renfei on 14/12/19.
+extends ./sb_layout
 
+block content
+   h2 医生管理
+
+   ul.nav.nav-tabs(role='tablist')
+      li.active(role='presentation')
+         a(href='#panel-manage', role='tab', data-toggle='tab') 现有医生管理
+      li(role='presentation')
+         a(href='#panel-add', role='tab', data-toggle='tab') 添加医生
+
+   div.tab-content
+      div#panel-manage.tab-pane.fade.in.active
+         h3 现有医生管理
+         table#doctor-table.table.table-striped.table-bordered.table-hover
+            thead
+               tr
+                  th id
+                  th 姓名
+                  th 所属科室
+                  th 职称
+                  th 描述
+                  th 操作
+            tbody
+
+
+      div#panel-add.tab-pane.fade
+         h3 添加医生
+         form
+            .form-group
+               .prompt
+                  label(for='name') 姓名
+               .control
+                  input#name.form-control(name='name', required='', type='text')
+
+            .form-group
+               .prompt
+                  label(for='title') 所属科室
+               .control
+                  select.form-control(name='title', data-placeholder='选择科室...' required='')
+                     option(value='')
+                     option(value='')
+                     option(value='')
+                     option(value='')
+                     option(value='')
+                     option(value='')
+                     option(value='')
+
+            .form-group
+               .prompt
+                  label(for='title') 职称
+               .control
+                  select.form-control(name='title', data-placeholder='选择职称...' required='')
+                     option(value='')
+                     option(value='')
+                     option(value='')
+                     option(value='')
+                     option(value='')
+                     option(value='')
+                     option(value='')
+
+            .form-group
+               .prompt
+                  label(for='price') 挂号价格（元）
+               .control
+                  input#price.form-control(name='price', required='', type='text')
+
+            .form-group
+               .prompt
+                  label(for='description') 描述
+               .control
+                  textarea#description.form-control(name='name', required='', rows='5')
+
+            input(type='hidden' name='hospitalId' value='')
+            button.button.submit-button.green-button.button-with-icon(type='submit')
+               i.fa.fa-plus
+               | &nbsp;添加医生
