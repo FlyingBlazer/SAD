@@ -83,6 +83,7 @@ block site-content
                         span 邮箱: #{email}
                         span 身份证号:#{sid}
                         span 信用额度:#{credit}
+                        span 状态：#{status}
                     .second_block
                         span.second_label  修改信息
                     hr(style='line-width:1;', width='90%', color='#1E90FF', size='1')
@@ -98,13 +99,13 @@ block site-content
                                 label 确认密码
                                 input.form-control(type='password', style='width:40%', id='pw2',placeholder='不修改密码请勿修改')
                                 span(id='prompt')
-                                label 电话
-                                input.form-control(type='text', style='width:40%', id='phone')
-                                button.btn.btn-default(onclick='change_status(\'phone\')',style='display:block',type='button') 修改
-                                label 邮箱
-                                input.form-control(type='email', style='width:40%', id='email')
-                                button.btn.btn-default(onclick='change_status(\'email\')',style='display:block',type='button') 修改
-                                button.btn.btn-primary(type='button',id='submit') 保存
+                                label(style='display:block') 电话
+                                input.form-control(type='text', style='width:40%;display:inline', id='phone')
+                                button.btn.btn-default(onclick='change_status(\'phone\')',type='button') 修改
+                                label(style='display:block') 邮箱
+                                input.form-control(type='email', style='width:40%;display:inline', id='email')
+                                button.btn.btn-default(onclick='change_status(\'email\')',type='button') 修改
+                                button.btn.btn-primary(type='button',id='submit',style="display:block") 保存
                     .second_block
                         span.second_label  上传头像
                     hr(style='line-width:1;', width='90%', color='#1E90FF', size='1')
