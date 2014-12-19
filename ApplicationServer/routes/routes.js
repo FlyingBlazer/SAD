@@ -19,6 +19,7 @@ router.route('/account/login').get(controllers.user.loginPage).post(controllers.
 router.route('/account/logout').get(controllers.user.onLogout);
 router.route('/account/manage').get(controllers.user.manage);
 router.route('/account/manage/info').get(controllers.user.showUserInformation).post(controllers.user.manageUserInformation);
+router.route('/account/manage/info/m/:message').get(controllers.user.showUserInformation);
 router.route('/account/manage/reservation').get(controllers.user.showReservationList);
 router.route('/account/manage/reservation/m/:message').get(controllers.user.showReservationList);
 
