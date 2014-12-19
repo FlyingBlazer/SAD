@@ -41,6 +41,45 @@ exports.list = function(req, res, next) {
         });
 };
 
+exports.list_h = function(req, res, next) {
+    var hospital_id = req.params.hospitalId;
+    req.db.driver.execQuery(
+        "SELECT appointment.id as reservation_id, appointment.price as price,appointment.status as status,user.realname as user_name, " +
+        "appointment.time as time,doctor.name as doctor_name,hospital.name as hospital_name,department.name as department_name "+
+        "FROM appointment,doctor,department,hospital,user "+
+        "WHERE appointment.doctor_id=doctor.id "+
+        "AND doctor.department_id=department.id AND department.hospital_id=hospital.id "+
+        "AND hospital.id = ? AND appointment.user_id = user.id",
+        [hospital_id],
+        function (err, data) {
+            if(err && err.message != 'Not found') return next(err);
+            if(!data) {
+                return next(new Errors.EmptyReservation("You Don't Have Any Appointment!"));
+            }
+            else{
+                var statuslist=[
+                    '现金付款，尚未支付',
+                    '现金付款，已支付',
+                    '在线付款，尚未支付',
+                    '在线付款，已支付',
+                    '订单超时，尚未支付',
+                    '订单超时，尚未确认就诊',
+                    '订单超时，未就诊',
+                    '订单超时，已就诊',
+                    '订单超时，未就诊'
+                ];
+                for(var i = 0; i < data.length; i++){
+                    data[i]['status']=statuslist[data[i]['status']];
+                }
+                res.json({
+                    code: 0,
+                    message: 'success',
+                    reservations: data
+                });
+            }
+        });
+};
+
 exports.add = function(req, res, next) {
     var auser_id=req.body.user_id;
     var apay_method=req.body.pay_method;

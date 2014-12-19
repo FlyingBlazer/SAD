@@ -3,8 +3,18 @@ var Errors = require('../lib/Errors');
 exports.list = function(req, res, next) {
     var count = 0;
     var ret = [];
-    req.models.hospital.find({province: req.query.province}, function(err, hospitals) {
-        if(err && err.message != 'Not found') return next(err);
+    if(typeof req.query.province != 'undefined') {
+        req.models.hospital.find({province: req.query.province}, function(err, hospitals) {
+            if(err && err.message != 'Not found') return next(err);
+            parse(hospitals);
+        });
+    } else {
+        req.models.hospital.find({}, function(err, hospitals) {
+            if(err && err.message != 'Not found') return next(err);
+            parse(hospitals);
+        });
+    }
+    function parse(hospitals) {
         count = hospitals.length + 1;
         hospitals.forEach(function(hospital) {
             hospital.getRating(function(err, rating) {
@@ -24,7 +34,7 @@ exports.list = function(req, res, next) {
             });
         });
         finish();
-    });
+    }
     function finish() {
         if(--count == 0) {
             res.json({
@@ -122,8 +132,14 @@ exports.remove = function(req, res, next) {
 exports.update = function(req, res, next) {
     var id = req.params.hospitalId;
     req.models.hospital.get(id, function(err, hospital) {
-        if(err) return next(err);
-        if(!hospital) return next(new Errors.HospitalNotExist('HospitalNotExist'));
+        if(err && err.message != 'Not found') {
+            res.send(500, "Internal error");
+            throw err;
+        }
+        if(!hospital) {
+            res.send(500, "Hospital not exist.");
+            return;
+        }
         if(typeof req.body.level != 'undefined') {
             var level = req.body.level;
             delete req.body.level;
@@ -138,7 +154,10 @@ exports.update = function(req, res, next) {
             hospital[index] = req.body[index];
         }
         hospital.save(function(err) {
-            if(err && err.message != 'Not found') return next(err);
+            if(err) {
+                res.send(500, "Internal error");
+                throw err;
+            }
             res.json({
                 code: 0,
                 message: 'success'
