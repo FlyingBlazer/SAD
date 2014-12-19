@@ -154,7 +154,7 @@ exports.detail = function(req, res, next) {
                     case '0':
                         var i = curDate.getDateOffset(tarDate);
                         if(i <= 7 && i > 0) {
-                            slot[i].slot[key] = true;
+                            slot[i].slot[key] = (working.frequency.charAt(1) == '1');
                         }
                         break;
                     case '1':
