@@ -40,7 +40,7 @@ block site-content
                         $.post("/account/manage/info", post_content,
                                 function (data, status) {
 
-                                    location.replace("/account/manage/info/");
+                                    location.replace("/account/manage/info/m/"+data);
                                 }
                         );
                     }
@@ -112,7 +112,8 @@ block site-content
                                 label(style='display:block') 电话
                                 input.form-control(type='text', style='width:40%;display:inline', id='phone')
                                 button.btn.btn-default(onclick='change_status(\'phone\')',type='button') 修改
-                                label(style='display:block') 邮箱
+                                label(style='display:block',onmouseout='checkEmail();') 邮箱
+                                span()
                                 input.form-control(type='email', style='width:40%;display:inline', id='email')
                                 button.btn.btn-default(onclick='change_status(\'email\')',type='button') 修改
                                 button.btn.btn-primary(type='button',id='submit',style="display:block") 保存
