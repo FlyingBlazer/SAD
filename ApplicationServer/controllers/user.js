@@ -314,7 +314,8 @@ exports.manageUserInformation = function (request, response) {
         var userId = getUserIdFromCookie(request);
         var updatePath = '/user/' + userId + '/update';
 
-        printLogMessage('1 manage user info : ' + userId + '   path: ' + updatePath + '   request body = ' + JSON.stringify(request.body));
+        printLogMessage('---------------- manage user info : ' + userId + '  business path: ' + updatePath + '   request body = ' + JSON.stringify(request.body));
+        printLogMessage('---------------- request headers : ' + JSON.stringify(request.headers));
 
         var callback = function (result) {
             if (result != null) {
@@ -352,21 +353,24 @@ exports.showReservationList = function (request, response) {
 
         printLogMessage('show reservation list');
         var userId = getUserIdFromCookie(request);
-        printLogMessage('show reservation list : ' + userId);
+        var message = request.params.message;
+        message = message ? message : '';
+        printLogMessage('show reservation list : userId=' + userId + '   message=' + message);
 
         if (!userId || userId == '')
             redirectToLoginPage(response);
         else
-            showReservations(userId, response);
+            showReservations(userId, message, response);
     }
 };
 
 /**
  * 显示用户的预约单
  * @param userId
+ * @param message 可选
  * @param response
  */
-function showReservations(userId, response) {
+function showReservations(userId, message, response) {
 
     var path = '/user/reservation/list?userid=' + userId;
 
@@ -381,7 +385,8 @@ function showReservations(userId, response) {
                         name: userInfo.name,
                         status: userInfo.status,
                         credit: userInfo.credit,
-                        reservations: result.reservations
+                        reservations: result.reservations,
+                        message: message
                     });
                 });
             } else
