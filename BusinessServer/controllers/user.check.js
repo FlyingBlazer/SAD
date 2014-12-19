@@ -3,7 +3,7 @@ var Errors = require('../lib/Errors');
 exports.list = function(req, res, next) {
     req.models.user.find({
         isActivated: 0
-    }).only("id","name","socialId","realName").run(function(err, user) {
+    }).only("id","name","socialId","realName","tel","email","ip").run(function(err, user) {
         if(err && err.message != 'Not found') return next(err);
         if(!user) {
             return next(new Errors.ListEmpty("All Users Have Been Activated"));
@@ -14,6 +14,9 @@ exports.list = function(req, res, next) {
 				userlist[i]["username"]=user[i].name;
 				userlist[i]["id"]=user[i].socialId;
 				userlist[i]["name"]=user[i].realName;
+                userlist[i]["phone"]=user[i].tel;
+                userlist[i]["email"]=user[i].email;
+                userlist[i]["ip"]=user[i].ip;
         	}
             res.json({
                 code: 0,
