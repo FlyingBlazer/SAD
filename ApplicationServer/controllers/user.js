@@ -25,6 +25,8 @@ exports.onRegister = function (request, response) {
         var requestBody = request.body;
         var username = requestBody.username;
 
+        printLogMessage('register : ' + JSON.stringify(requestBody));
+
         //console.log(requestBody.password);
 
         var checkPath = '/user/' + username + '/check';
