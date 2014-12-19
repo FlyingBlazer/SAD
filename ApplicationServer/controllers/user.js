@@ -301,7 +301,8 @@ exports.showUserInformation = function (request, response) {
                     name: result.name,
                     phone: result.phone,
                     email: result.email,
-                    credit: result.credit
+                    credit: result.credit,
+                    errorMessage: ''
                 });
             });
     }
