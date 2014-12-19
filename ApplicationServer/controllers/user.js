@@ -333,7 +333,7 @@ exports.manageUserInformation = function (request, response) {
                     //    credit: userInfo.credit,
                     //    errorMessage: errorMessage
                     //});
-                    response.send(errorMessage);//TODO
+                    response.send(errorMessage);
 
                     printLogMessage('user info : ' + JSON.stringify(userInfo));
                     printLogMessage(errorMessage);
