@@ -53,6 +53,6 @@ exports.editSchedule = function(request, response) {
 };
 
 // post
-exports.onEditSchedule = function(request, response) {
+exports.modifyTempWorking = function(request, response) {
 
 };
