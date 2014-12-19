@@ -29,7 +29,47 @@ exports.login = function (request, response) {
  * @param response
  */
 exports.onLogin = function (request, response) {
+    var requestBody = request.body;
+    var username = requestBody.username;
+    var password = requestBody.password;
 
+    var path = '/admin/login';
+    var data = {
+        'username': username,
+        'password': password
+    };
+
+
+    var loginCallback = function (result) {
+        //直接返回result
+        if (result.code == 0 && result.message == 'success') {//登录成功:跳转并设置cookie
+
+            var hospitalId = result.hospital;
+
+            //跳转到 /backstage 页面
+            var jump = function (hospitalInfo) {
+
+                //存入cookie
+                setCookie(response, username, hospitalId, hospitalInfo.name);
+
+                //跳转
+                var redirectPath = '/backstage';
+                response.redirect(redirectPath);
+            };
+
+            //根据hospital id获取hospital name
+            var queryUrl = '/hospital/hospital/' + hospitalId + '/detail';
+            forwardRequestGET(queryUrl, jump);
+
+        } else {
+            var redirectPath = '/backstage/login/fail/' + result.message;
+            response.redirect(redirectPath);
+
+        }
+
+    };
+
+    forwardRequestPOST(data, path, loginCallback);
 };
 
 /**
@@ -105,9 +145,14 @@ exports.modifyTempWorking = function (request, response) {
     response.redirect('/backstage/doctor/' + doctorId + '/edit_schedule');
 };
 
+
+exports.users = function (request, response) {
+
+};
+
 /**
  * 获得cookie
- * cookie 中所有的key已经去掉sb_
+ * cookie 中所有的key已经去掉sb_前缀
  * @param request
  */
 function getCookie(request) {
@@ -117,7 +162,6 @@ function getCookie(request) {
         'hospitalName': request.cookies.sb_hospitalName
     };
 }
-
 
 /**
  * 在header中设置cookie
@@ -149,7 +193,76 @@ function clearCookie(response) {
     response.clearCookie('sb_hospitalName', {path: '/'});
 }
 
-exports.users = function (request, response) {
+/**
+ * 向业务服务器转发请求
+ * POST
+ * @param data
+ * @param path 业务服务器路径
+ * @param callback 业务服务器返回的结果(JSON Object)
+ */
+function forwardRequestPOST(data, path, callback) {
+    forwardRequest('POST', path, queryString.stringify(data), callback);
+}
 
+/**
+ * 向业务服务器转发请求
+ * GET
+ * @param path 业务服务器路径
+ * @param callback 参数为业务服务器返回的结果(JSON Object)
+ */
+function forwardRequestGET(path, callback) {
+    forwardRequest('GET', path, null, callback);
+}
+
+/**
+ * 向业务服务器转发请求
+ * @param method POST/GET
+ * @param path
+ * @param data
+ * @param callback 参数为返回的结果(JSON Object)
+ */
+var forwardRequest = function (method, path, data, callback) {
+    var options;
+    if (method == 'GET')
+        options = {
+            host: 'localhost',
+            port: settings.port.business,
+            method: method,
+            path: path
+        }; else if (method == 'POST')
+        options = {
+            host: 'localhost',
+            port: settings.port.business,
+            method: method,
+            path: path,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        };
+
+    var responseData = '';
+    var req = http.request(options, function (res) {
+        res.setEncoding('utf8');
+        res.on('data', function (chunk) {
+            responseData += chunk;
+        });
+        res.on('end', function () {
+            var srcObject = null;
+            try {
+                srcObject = JSON.parse(responseData);
+            } catch (e) {
+                printLogMessage('Cannot parse response data.');
+                //console.error(e);
+            }
+            callback(srcObject);
+        });
+        res.on('error', function (e) {
+            printLogMessage('Business server is down: ' + e.message);
+            callback(null);
+        });
+    });
+    if (data !== null)
+        req.write(data);
+    req.end();
 };
 

@@ -136,17 +136,17 @@ exports.updateWeek = function(req, res, next) {
 
 exports.addTemp = function(req, res, next) {
     check(req, function(data, doctorId, adminId) {
-        var t_period=req.body.period;
-        var t_action=req.body.action;
-        var t_frequency='00000000';
+        var t_period = req.body.period;
+        var t_action = req.body.action;
+        var t_frequency = '00000000';
         frequency.replaceAt(1, t_action);
         req.models.working.one({
             doctor_id: doctorId,
             frequency: t_frequency,
             period: t_period
-        }, function(err, working){
-            if(err && err.message != 'Not found') return next(err);
-            if(working){
+        }, function (err, working) {
+            if (err && err.message != 'Not found') return next(err);
+            if (working) {
                 throw new Error.WorkingAlreadyExist("Working already Exists!");
             }
             req.models.working.create({
@@ -154,8 +154,8 @@ exports.addTemp = function(req, res, next) {
                 frequency: t_frequency,
                 period: t_period,
                 total_app: data[0]['total_app']
-            }, function(working) {
-                if(err && err.message != 'Not found') return next(err);
+            }, function (working) {
+                if (err && err.message != 'Not found') return next(err);
                 res.json({
                     code: 0,
                     message: 'success'
@@ -168,18 +168,18 @@ exports.addTemp = function(req, res, next) {
 
 exports.deleteTemp = function(req, res, next) {
     check(req, function(data, doctorId, adminId) {
-        var w_date=req.body.date;
-        var w_period=req.body.period;
+        var w_date = req.body.date;
+        var w_period = req.body.period;
         req.db.driver.execQuery(
-          "SELECT id FROM working WHERE date=? AND period=? AND frequency LIKE '?' LIMIT 1",
-            [w_date,w_period,'0_000000'],
-            function(err, w_data) {
-                if(err && err.message != 'Not found') return next(err);
-                if(!w_data) {
+            "SELECT id FROM working WHERE date=? AND period=? AND frequency LIKE '?' LIMIT 1",
+            [w_date, w_period, '0_000000'],
+            function (err, w_data) {
+                if (err && err.message != 'Not found') return next(err);
+                if (!w_data) {
                     return next(new Errors.ArrangementNotExist("Temporary arrangement not exists!"));
                 }
-                req.models.working.remove({id: w_data[0]['id']}, function(err) {
-                    if(err){
+                req.models.working.remove({id: w_data[0]['id']}, function (err) {
+                    if (err) {
                         throw err;
                     }
                 });
