@@ -20,6 +20,7 @@ router.route('/account/logout').get(controllers.user.onLogout);
 router.route('/account/manage').get(controllers.user.manage);
 router.route('/account/manage/info').get(controllers.user.showUserInformation).post(controllers.user.manageUserInformation);
 router.route('/account/manage/reservation').get(controllers.user.showReservationList);
+router.route('/account/manage/reservation/m/:message').get(controllers.user.showReservationList);
 
 /* Reservation Workflow */
 
@@ -59,7 +60,11 @@ router.route('/concierge/reserve/:hospital_id/:department_id/:expert_id').get(co
 // Show reservation detail
 // User may take actions like pay, print or close
 // Optional message
-router.route('/reservation/:doctor_id/:reservation_id').get(controllers.reservation.showReservation).post(controllers.reservation.operateReservation);
+router.route('/reservation/:doctor_id/:reservation_id').get(controllers.reservation.showReservation);
+router.route('/reservation/:doctor_id/:reservation_id/m/:message').get(controllers.reservation.showReservation);
+router.route('/reservation/:doctor_id/:reservation_id/manage/pay').get(controllers.reservation.pay);
+router.route('/reservation/:doctor_id/:reservation_id/manage/cancel').get(controllers.reservation.cancel);
+router.route('/reservation/:doctor_id/:reservation_id/manage/print').get(controllers.reservation.print);
 
 // Search
 router.route('/search/:q').get(controllers.reservation.search);
