@@ -44,7 +44,6 @@ block site-content
                 div.intro-content #{detail.description}
 
         div#reserve.tab-pane.fade.active(role="tabpanel")
-
             table.table#select-department
                 td.table-header(rowspan=100) 科室
                 - var col = 5;
@@ -79,17 +78,15 @@ block site-content
                     div.department(data-name="#{department[0].department}")
                         each doctor in department
                             div.doctor
-                                img.doctor-image
+                                img(src="/images/9.jpg").image
                                 div.doctor-info
                                     div.name
                                         a(href="/concierge/reserve/#{detail.id}/#{department_id}/#{doctor.id}") #{doctor.name}
                                     div.title #{doctor.title}
                                     div.department #{doctor.department}
                                 div.doctor-intro #{doctor.description}
-                                table.vertical-middle-helper
-                                    tr
-                                        td.vertical-middle
-                                            button.register.btn.btn-primary 挂号
+                                div.reservation
+                                    a.gbn.gbt-blue(href="/concierge/reserve/#{detail.id}/#{department_id}/#{doctor.id}") 挂号
 
             script.
 
