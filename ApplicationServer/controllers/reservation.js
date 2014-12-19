@@ -439,7 +439,7 @@ exports.onSubmit = function(request, response) {
             return;
         }
         var resvId = res.id;
-        response.redirect(302, '/reservation/' + doctorId + '/' + resvId);
+        response.redirect(302, '/reservation/' + resvId);
     }, false);
 };
 
@@ -462,32 +462,38 @@ exports.showReservation = function(request, response) {
     var message = request.params.message;
     var doctorDetail = null;
     var resvDetail = null;
-    var ctr = 0;
+
+    var getDoctorDetail = function() {
+        var url2 = '/hospital/doctor/' + resvDetail.doctor_id + '/detail';
+        fireRequest('GET', url2, null, function(res) {
+            doctorDetail = res;
+            if (doctorDetail == null) {
+                __fatalError(response, 'Line=' + __line + ', Func=' + __function);
+                return;
+            }
+            if (doctorDetail == stdNotFound) {
+                __entityNotFound(response, 'Line=' + __line + ', Func=' + __function);
+                return;
+            }
+            render();
+        }, false);
+    };
+
     var url1 = '/user/reservation/' + resvId + '/detail';
     fireRequest('GET', url1, null, function(res) {
         resvDetail = res;
-        ++ctr;
-        render();
-    }, false);
-
-    var url2 = '/hospital/doctor/' + doctorId + '/detail';
-    fireRequest('GET', url2, null, function(res) {
-        doctorDetail = res;
-        ++ctr;
-        render();
-    }, false);
-
-    var render = function() {
-        if (ctr !== 2)
-            return;
-        if (resvDetail == null || doctorDetail == null) {
+        if (resvDetail == null) {
             __fatalError(response, 'Line=' + __line + ', Func=' + __function);
             return;
         }
-        if (resvDetail == stdNotFound || doctorDetail == stdNotFound) {
+        if (resvDetail == stdNotFound) {
             __entityNotFound(response, 'Line=' + __line + ', Func=' + __function);
             return;
         }
+        getDoctorDetail();
+    }, false);
+
+    var render = function() {
         var r = {
             username: username,
             state: 'normal',
@@ -507,17 +513,16 @@ exports.pay = function(request, response) {
     var resvId = request.params.reservation_id;
     var doctorId = request.params.doctor_id;
     var url = '/user/reservation/' + resvId + '/pay';
-    fireRequest('POST', url, null, function(res) {
-        response.redirect(302, '/reservation/' + doctorId + '/' + resvId + '/m/pay_success');
+    fireRequest('POST', url, null, function() {
+        response.redirect(302, '/reservation/' + resvId + '/m/pay_success');
     });
 };
 
 // get
 exports.cancel = function(request, response) {
     var resvId = request.params.reservation_id;
-    var doctorId = request.params.doctor_id;
     var url = '/user/reservation/' + resvId + '/cancel';
-    fireRequest('POST', url, null, function(res) {
+    fireRequest('POST', url, null, function() {
         response.redirect(302, '/account/manage/reservation/m/cancel_success');
     });
 };
