@@ -17,27 +17,14 @@ exports.list = function(req, res, next) {
             if(!data) {
                 return next(new Errors.EmptyReservation("You Don't Have Any Appointment!"));
             }
-            else{
-                var statuslist=[
-                    '现金付款，尚未支付',
-                    '现金付款，已支付',
-                    '在线付款，尚未支付',
-                    '在线付款，已支付',
-                    '订单超时，尚未支付',
-                    '订单超时，尚未确认就诊',
-                    '订单超时，未就诊',
-                    '订单超时，已就诊',
-                    '订单超时，未就诊'
-                ];
-                for(var i = 0; i < data.length; i++){
-                    data[i]['status']=statuslist[data[i]['status']];
-                }
-                res.json({
-                    code: 0,
-                    message: 'success',
-                    reservations: data
-                });
+            for(var i = 0; i < data.length; i++){
+                data[i]['status_msg']=parseStatus(data[i]['status']);
             }
+            res.json({
+                code: 0,
+                message: 'success',
+                reservations: data
+            });
         });
 };
 
@@ -57,19 +44,8 @@ exports.list_h = function(req, res, next) {
                 return next(new Errors.EmptyReservation("You Don't Have Any Appointment!"));
             }
             else{
-                var statuslist=[
-                    '现金付款，尚未支付',
-                    '现金付款，已支付',
-                    '在线付款，尚未支付',
-                    '在线付款，已支付',
-                    '订单超时，尚未支付',
-                    '订单超时，尚未确认就诊',
-                    '订单超时，未就诊',
-                    '订单超时，已就诊',
-                    '订单超时，未就诊'
-                ];
                 for(var i = 0; i < data.length; i++){
-                    data[i]['status']=statuslist[data[i]['status']];
+                    data[i]['status_msg']=parseStatus(data[i]['status']);
                 }
                 res.json({
                     code: 0,
@@ -82,7 +58,6 @@ exports.list_h = function(req, res, next) {
 
 exports.add = function(req, res, next) {
     var auser_id=req.body.user_id;
-    var apay_method=req.body.pay_method;
     var ahospital_id=req.body.hospital_id;
     var adepartment_id=req.body.department_id;
     var adoctor_id=req.body.doctor_id;
@@ -143,10 +118,9 @@ exports.add = function(req, res, next) {
                             }
                             else{
                                 req.models.appointment.create({
-                                    pay_method:apay_method,
                                     time:adate,
                                     period: aperiod,
-                                    status: apay_method==0 ? 0 : 2,
+                                    status: '000000',
                                     price: data1[0]['price'],
                                     running_number: uuid.v4(),
                                     user_id: auser_id,
@@ -172,15 +146,14 @@ exports.cancel = function(req, res, next) {
     req.models.appointment.get(reservation_id,function(err,app){
         if(err && err.message != 'Not found') return next(err);
         if(!app) return next(new Errors.CancelFailure("Cannot Find Such Appointment!"));
-        else{
-            app.remove(function(err){
-                if(err && err.message != 'Not found') return next(err);
-                res.json({
-                    code: 0,
-                    message: 'success'
-                });
+        app.status = app.status.replaceAt(5, 0);
+        app.save(function(err) {
+            if(err && err.message != 'Not found') return next(err);
+            res.json({
+                code: 0,
+                message: 'success'
             });
-        }
+        });
     });
 };
 
@@ -189,21 +162,14 @@ exports.pay = function(req, res, next) {
     req.models.appointment.get(reservation_id,function(err,app){
         if(err && err.message != 'Not found') return next(err);
         if(!app) return next(new Errors.PaymentFailure("Unable To Pay For Your Appointment!"));
-        else{
-            if(app.status==0){
-                app.status=1;
-            }
-            else if(app.status==2){
-                app.status=3;
-            }
-            app.save(function(err){
-                if(err && err.message != 'Not found') return next(err);
-                res.json({
-                    code: 0,
-                    message: 'success'
-                });
+        app.status = app.status.replaceAt(0, '1').replaceAt(1, '1');
+        app.save(function(err){
+            if(err && err.message != 'Not found') return next(err);
+            res.json({
+                code: 0,
+                message: 'success'
             });
-        }
+        });
     });
 };
 
@@ -221,16 +187,6 @@ exports.detail = function(req, res, next) {
         function(err,data){
             if(err && err.message != 'Not found') return next(err);
             if(!data) return next(new Errors.DetailFailure("No Such Appointment!"));
-            var statuslist=[
-                '现金付款，尚未支付',
-                '现金付款，已支付',
-                '在线付款，尚未支付',
-                '在线付款，已支付',
-                '订单超时，尚未支付',
-                '订单超时，尚未确认就诊',
-                '订单超时，未就诊',
-                '订单超时，已就诊',
-            ];
             res.json({
                 code: 0,
                 message: "success",
@@ -243,8 +199,8 @@ exports.detail = function(req, res, next) {
                 hospital_name: data[0]['hospital_name'],
                 submission_date: data[0]['record_time'],
                 price: data[0]['price'],
-                status: !((data[0]['status']==0)||(data[0]['status']==2)||(data[0]['status']==4)),
-                status_msg: statuslist[data[0]['status']]
+                status: data[0]['status'],
+                status_msg: parseStatus(data[0]['status'])
             });
         });
 };
@@ -253,8 +209,8 @@ exports.confirm = function(req, res, next) {
     var reservation_id=req.params.reservationId;
     req.models.appointment.get(reservation_id,function(err,app){
         if(err && err.message != 'Not found') return next(err);
-        if(!app) return next(new Errors.ConfirmFalure("No Such Appointment!"));
-        app.status=7;
+        if(!app) return next(new Errors.ConfirmFailure("No Such Appointment!"));
+        app.status=app.status.replaceAt(2, '2');
         app.save(function(err){
             if(err && err.message != 'Not found') return next(err);
             res.json({
@@ -264,3 +220,28 @@ exports.confirm = function(req, res, next) {
         });
     })
 };
+
+function parseStatus(code) {
+    if(code.charAt(5) == '1') return '订单已取消';
+    var ret = '';
+    if(code.charAt(0) == '1') {
+        ret += '在线支付';
+        if(code.charAt(1) == '1') ret += '，已付款'; else ret += '，未付款';
+    } else {
+        ret += '现金支付';
+    }
+    switch(code.charAt(2)) {
+        case '0':
+            ret += '，未确认到场';
+            break;
+        case '1':
+            ret += '，未到场';
+            break;
+        case '2':
+            ret += '，确认到场';
+            break;
+    }
+    if(code.charAt(3) == '1') ret += '，已超时';
+    //if(code.charAt(4) == '1') ret += '，已被检察'; else ret += '，未被检查';
+    return ret;
+}
