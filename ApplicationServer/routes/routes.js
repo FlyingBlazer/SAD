@@ -60,11 +60,11 @@ router.route('/concierge/reserve/:hospital_id/:department_id/:expert_id').get(co
 // Show reservation detail
 // User may take actions like pay, print or close
 // Optional message
-router.route('/reservation/:doctor_id/:reservation_id').get(controllers.reservation.showReservation);
-router.route('/reservation/:doctor_id/:reservation_id/m/:message').get(controllers.reservation.showReservation);
-router.route('/reservation/:doctor_id/:reservation_id/manage/pay').get(controllers.reservation.pay);
-router.route('/reservation/:doctor_id/:reservation_id/manage/cancel').get(controllers.reservation.cancel);
-router.route('/reservation/:doctor_id/:reservation_id/manage/print').get(controllers.reservation.print);
+router.route('/reservation/:reservation_id').get(controllers.reservation.showReservation);
+router.route('/reservation/:reservation_id/m/:message').get(controllers.reservation.showReservation);
+router.route('/reservation/:reservation_id/manage/pay').get(controllers.reservation.pay);
+router.route('/reservation/:reservation_id/manage/cancel').get(controllers.reservation.cancel);
+router.route('/reservation/:reservation_id/manage/print').get(controllers.reservation.print);
 
 // Search
 router.route('/search/:q').get(controllers.reservation.search);
