@@ -22,7 +22,7 @@ block site-content
         $(document).ready(function () {
                 $("#submit").click(function ()
                 {
-                    alert("arrive");
+                    
                     if (validate()) {
                         if (!$("pre_pw")) {
                             post_content.pre_pw = $("#pre_pw").val();
@@ -31,7 +31,7 @@ block site-content
                         }
                         $.post("/account/manage/info", post_content,
                                 function (data, status) {
-                                    // alert("Data: " + data);
+                                    location.reload(false);
                                 }
                         );
                     }
