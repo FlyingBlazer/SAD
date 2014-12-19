@@ -49,7 +49,24 @@ exports.add = function(req, res, next) {
     var adoctor_id=req.body.doctor_id;
     var adate=req.body.date;
     var aggdate='%'+adate.substr(8,2);
-    var aweeknum=(req.body.week+6)%7+1;
+    var aweeknum=(function() {
+        switch(req.body.week) {
+            case '星期一':
+                return 1;
+            case '星期二':
+                return 2;
+            case '星期三':
+                return 3;
+            case '星期四':
+                return 4;
+            case '星期五':
+                return 5;
+            case '星期六':
+                return 6;
+            case '星期日':
+                return 7;
+        }
+    })();
     var aperiod=req.body.period == 'morning' ? 1 : (req.body.period == 'afternoon' ? 2 : 3);
     var afrequency1="00000000";
     var afrequency2="10000000";
