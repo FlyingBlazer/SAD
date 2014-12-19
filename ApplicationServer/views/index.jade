@@ -1,22 +1,25 @@
 extends layout
 block title
     title 主页
+
+
 block site-content
     link(href="/stylesheets/index.css", rel="stylesheet", media="all")
-    //link(href="/stylesheets/bootstrap/css/bootstrap-theme.min.css", rel="stylesheet", media="all")
-    br
-    .container.theme-showcase(role='main')
-        .jumbotron
-            h1 SRF挂号平台
-            p SRF挂号平台是一款面向全国用户的线上挂号平台，用户无论是在家中或者是通过手机都可以体验简单、便捷的挂号服务。
-            .row
-                .col-lg-6
-                    .input-group
-                        input#search-field.form-control(type='text')
-                        span.input-group-btn
-                            a#search-link(href="#")
-                                button.btn.btn-default(type='button') 搜索
+    link(href="/stylesheets/bootstrap/css/bootstrap-theme.min.css", rel="stylesheet", media="all")
+    .jumbotron(style='background-image: url(/images/index_pic0.jpg)')
+        .container
+            h1
+                font(color='#ffffff') SRF挂号平台
             p
+                font(color='#ffffff') SRF挂号平台是一款面向全国用户的线上挂号平台，用户无论是在家中或者是通过手机都可以体验简单、便捷的挂号服务。
+            p
+                .row
+                    .col-lg-6
+                        .input-group
+                            input.form-control(type='text')
+                            span.input-group-btn
+                                button.btn.btn-default(type='button', onclick="alert('Welcome!')") &#x641C;&#x7D22;
+    .container.theme-showcase(role='main')
         .page-header
             h2
                 | 按地点查找
@@ -24,15 +27,15 @@ block site-content
             nav.navbar.navbar-default(role='navigation')
                 ul.nav.nav-tabs
                     li.active
-                        a(data-toggle='tab', href='#tab1') A-E
+                        a(href='#tab1', data-toggle='tab') A-E
                     li
-                        a(data-toggle='tab', href='#tab2') F-J
+                        a(href='#tab2', data-toggle='tab') F-J
                     li
-                        a(data-toggle='tab', href='#tab3') K-O
+                        a(href='#tab3', data-toggle='tab') K-O
                     li
-                        a(data-toggle='tab', href='#tab4') P-T
+                        a(href='#tab4', data-toggle='tab') P-T
                     li
-                        a(data-toggle='tab', href='#tab5') U-Z
+                        a(href='#tab5', data-toggle='tab') U-Z
             .tab-content
                 #tab1.tab-pane.active
                     table.table
@@ -120,10 +123,23 @@ block site-content
                                     a(href='/choose-location/zhejiang') 浙江省
                                 td
                                     a(href='/choose-location/xizang') 西藏自治区
-
+        .container
+            .tiles
+                .col-xs-12.col-sm-4
+                    img(src='/images/index_pic1.png')
+                    h2 名医加盟
+                    p 足不出户享受预定国内知名医师门诊的服务
+                .col-xs-12.col-sm-4
+                    img(src='/images/index_pic2.png')
+                    h2 全国医院数据
+                    p 网站医院数据实时更新，挂号更方便
+                .col-xs-12.col-sm-4
+                    img(src='/images/index_pic3.png')
+                    h2 低廉的价格
+                    p 价格低于同类网站，同样的价钱不一样的体验
     script.
-        $(document).ready(function() {
-            $("#search-field").keyup(function() {
+        $(document).ready(function () {
+            $("#search-field").keyup(function () {
                 $("#search-link").attr("href", "/search/" + $(this).val());
             });
         });
