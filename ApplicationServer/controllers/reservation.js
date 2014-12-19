@@ -459,6 +459,7 @@ exports.showReservation = function(request, response) {
     var userSid = userInfo.sid;
     var resvId = request.params.reservation_id;
     var doctorId = request.params.doctor_id;
+    var message = request.params.message;
     var doctorDetail = null;
     var resvDetail = null;
     var ctr = 0;
@@ -494,15 +495,36 @@ exports.showReservation = function(request, response) {
             userTelephone: userTel,
             userSocialId: userSid,
             resvDetail: resvDetail,
-            doctorDetail: doctorDetail
+            doctorDetail: doctorDetail,
+            message: message ? message : ''
         };
         response.render('reservation', r);
     }
 };
 
-// post
-exports.operateReservation = function(request, response) {
-    var username = request.cookies.username;
+// get
+exports.pay = function(request, response) {
+    var resvId = request.params.reservation_id;
+    var doctorId = request.params.doctor_id;
+    var url = '/user/reservation/' + resvId + '/pay';
+    fireRequest('POST', url, null, function(res) {
+        response.redirect(302, '/reservation/' + doctorId + '/' + resvId + '/m/pay_success');
+    });
+};
+
+// get
+exports.cancel = function(request, response) {
+    var resvId = request.params.reservation_id;
+    var doctorId = request.params.doctor_id;
+    var url = '/user/reservation/' + resvId + '/cancel';
+    fireRequest('POST', url, null, function(res) {
+        response.redirect(302, '/account/manage/reservation/m/cancel_success');
+    });
+};
+
+// get
+exports.print = function(request, response) {
+
 };
 
 // test
