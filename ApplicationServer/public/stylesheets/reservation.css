@@ -1,3 +1,7 @@
+#header{
+    display: none;
+}
+
 dl, dt{
 	margin: 0;
     padding: 0;
