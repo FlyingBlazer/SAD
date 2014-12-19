@@ -301,8 +301,8 @@ exports.showUserInformation = function (request, response) {
                     name: result.name,
                     phone: result.phone,
                     email: result.email,
-                    credit: result.credit,
-                    errorMessage: ''
+                    credit: result.credit
+
                 });
             });
     }
@@ -333,7 +333,7 @@ exports.manageUserInformation = function (request, response) {
                         phone: userInfo.phone,
                         email: userInfo.email,
                         credit: userInfo.credit,
-                        errorMessage: errorMessage
+                        errorMessage: '123'
                     });
 
                     printLogMessage('user info : ' + JSON.stringify(userInfo));
