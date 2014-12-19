@@ -23,17 +23,20 @@ block site-content
             }
         }
         $(document).ready(function () {
-            $("#submit").click(function () {
-                if (!$("pre_pw")) {
-                    post_array['pre_pw'] = $("#pre_pw").val();
-                    post_array['new_pw'] = $("#pw2").val();
-                }
-                $.post("/account/manage/info",
+                $("#submit").click(function ()
+                {
+                    if (!$("pre_pw"))
+                    {
+                       post_array['pre_pw'] = $("#pre_pw").val();
+                       post_array['new_pw'] = $("#pw2").val();
+                    }
+                    $.post("/account/manage/info",
                         post_array,
                         function (data, status) {
-                            //alert("Data: " + data + "\nStatus: " + status);
-                        });
-            });
+                           // alert("Data: " + data);
+                        }
+                    );
+                });
         });
         function change_status(flag){
             if (flag=='phone')
@@ -50,7 +53,7 @@ block site-content
     div
         .g-container(data-module='userinfo', data-fo-help='1')
             #g-breadcrumb
-                a(href='http://www.guahao.com') 首页
+                a(href='/') 首页
                 span > 我的预约单
             .wrap
                 .person-left
