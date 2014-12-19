@@ -1,4 +1,5 @@
 body {
+
 }
 
 #nav {
@@ -62,6 +63,22 @@ body {
     background-color: #f8f8f8;
 }
 
+.nav-tabs {
+    margin-top: 20px;
+    border: none;
+}
+
+.nav-tabs>li>a {
+    border-radius: 0;
+    border-top-width: 2px;
+}
+
+.nav-tabs>li.active>a,
+.nav-tabs>li.active>a:hover,
+.nav-tabs>li.active>a:focus {
+    border-top: 2px solid #377bee;
+}
+
 #footer #copyright {
     margin-top: 20px;
     color: #888888;
@@ -78,4 +95,13 @@ body {
 
 .hidden {
     display: none !important;
+}
+
+.table>thead>tr>th,
+.table>tbody>tr>th,
+.table>tfoot>tr>th,
+.table>thead>tr>td,
+.table>tbody>tr>td,
+.table>tfoot>tr>td {
+    vertical-align: middle;
 }

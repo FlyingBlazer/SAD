@@ -86,23 +86,19 @@ router.route('/backstage/account').get(controllers.backstage.changePassword).pos
 router.route('/backstage/account/:msgType/:message').get(controllers.backstage.changePassword);
 
 // query
+router.route('/backstage/hospitals').get(controllers.backstage.hospitals);
+router.route('/backstage/hospitals/:msgType/:message').get(controllers.backstage.hospitals);
 router.route('/backstage/departments').get(controllers.backstage.departments);
 router.route('/backstage/departments/:msgType/:message').get(controllers.backstage.departments);
 router.route('/backstage/doctors').get(controllers.backstage.doctors);
 router.route('/backstage/doctors/:msgType/:message').get(controllers.backstage.doctors);
 router.route('/backstage/reservations').get(controllers.backstage.reservations);
 router.route('/backstage/reservations/:msgType/:message').get(controllers.backstage.reservations);
-router.route('/backstage/doctor/:id/edit_schedule').get(controllers.backstage.editSchedule).post(controllers.backstage.onEditSchedule);
-
+router.route('/backstage/doctor/:id/edit_schedule').get(controllers.backstage.editSchedule).post(controllers.backstage.modifyTempWorking);
 
 // add
 router.route('/backstage/api/add/department').post(controllers.backstage.addDepartment);
 router.route('/backstage/api/add/doctor').post(controllers.backstage.addDoctor);
-
-// delete - AJAX
-// router.route('/backstage/api/delete/department/:id').post(controllers.backstage.deleteDepartment);
-// router.route('/backstage/api/delete/doctor/:id').post(controllers.backstage.deleteDoctor);
-
-// edit - AJAX
+router.route('/backstage/hospitals').post(controllers.backstage.addHospital);
 
 module.exports = router;

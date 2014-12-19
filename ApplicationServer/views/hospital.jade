@@ -44,22 +44,39 @@ block site-content
                 div.intro-content #{detail.description}
 
         div#reserve.tab-pane.fade.active(role="tabpanel")
-            table.table
-                tr
-                td.table-header 科室筛选
-                td.table-content 神经外科
-                td.table-content 皮肤科
-                td.table-content 普外科
-                tr
-                td.table-header 医生职称
-                td.table-content 主任医师
-                td.table-content 副主任医师
-                td.table-content 主治医师
 
+            table.table#select-department
+                td.table-header(rowspan=100) 科室
+                - var col = 5;
+                each department in departments
+                    if col == 0
+                        tr
+                        - col = 5;
+                    td.table-content
+                        a(href="#") #{department.name}
+                        br
+                    - col--;
+                while col > 0
+                    td.table-content
+                    - col--;
+
+            table.table#select-title
+                tr
+                    td.table-header 医生职称
+                    td.table-content
+                        a(href="#") 特级专家
+                    td.table-content
+                        a(href="#") 海外专家
+                    td.table-content
+                        a(href="#") 专家
+                    td.table-content
+                        a(href="#") 医师
+                    td.table-content
+                        a(href="#") 实习医生
 
             div.department-list
-                each department, department_id in doctors
-                    div.department(data-id="#{department_id}")
+                each department in doctors
+                    div.department(data-name="#{department[0].department}")
                         each doctor in department
                             div.doctor
                                 img.doctor-image
@@ -73,3 +90,20 @@ block site-content
                                     tr
                                         td.vertical-middle
                                             button.register.btn.btn-primary 挂号
+
+            script.
+
+                $(document).ready(function() {
+
+                    $("#select-department a").click(function() {
+                        var selection = $(this).html();
+                        console.log(selection);
+                        $(".department").each(function() {
+                            if ($(this).data("name") != selection) {
+                                $(this).addClass("hidden");
+                            } else {
+                                $(this).removeClass("hidden");
+                            }
+                        });
+                    });
+                });

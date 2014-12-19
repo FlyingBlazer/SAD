@@ -1,5 +1,7 @@
 var Errors = require('../lib/Errors');
 
+exports.working = require('./hospital.doctor.working');
+
 exports.list = function(req, res, next) {
     var hospitalId = req.query.hospitalId;
     req.db.driver.execQuery(
