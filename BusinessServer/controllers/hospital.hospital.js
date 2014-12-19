@@ -5,7 +5,7 @@ exports.list = function(req, res, next) {
     var ret = [];
     req.models.hospital.find({province: req.query.province}, function(err, hospitals) {
         if(err && err.message != 'Not found') return next(err);
-        count = hospitals.length;
+        count = hospitals.length + 1;
         hospitals.forEach(function(hospital) {
             hospital.getRating(function(err, rating) {
                 if(err && err.message != 'Not found') return next(err);
@@ -23,6 +23,7 @@ exports.list = function(req, res, next) {
                 finish();
             });
         });
+        finish();
     });
     function finish() {
         if(--count == 0) {
