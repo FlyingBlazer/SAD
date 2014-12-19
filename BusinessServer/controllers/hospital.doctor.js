@@ -123,8 +123,8 @@ exports.detail = function(req, res, next) {
                     date: {
                         year: year,
                         month: month,
-                        date: date,
-                        day: dd.nextDay().getDay()
+                        date: dd.nextDay().getDate(),
+                        day: dd.getDay()
                     },
                     slot: {
                         morning: false,
