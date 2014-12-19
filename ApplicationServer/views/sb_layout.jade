@@ -1,3 +1,55 @@
-//
-   Created by renfei on 14/12/19.
+doctype html
+html
+   head
+      meta(charset='utf-8')
+      meta(http-equiv='X-UA-Compatible', content='IE=EDGE')
+      link(rel='stylesheet', href='/backstage/css/reset.css', media='all')
+      link(rel='stylesheet', href='/backstage/css/font-awesome.css', media='all')
+      link(rel='stylesheet', href='/backstage/plugins/toastr-notifications/toastr.css', media='all')
+      link(rel='stylesheet', href='/backstage/plugins/icheck/grey.css', media='all')
+      link(rel='stylesheet', href='/backstage/plugins/select2/select2.css', media='all')
+      link(rel='stylesheet', href='/backstage/css/select2-custom.css', media='all')
+      link(rel='stylesheet', href='/backstage/css/table.css', media='all')
+      link(rel='stylesheet', href='/backstage/css/editable.css', media='all')
+      link(rel='stylesheet', href='/backstage/css/tab.css', media='all')
+      link(rel='stylesheet', href='/backstage/css/components.css', media='all')
+      link(rel='stylesheet', href='/backstage/css/admin.css', media='all')
+      script(src='/backstage/plugins/jquery/jquery-2.1.1.min.js')
+   body
+      header#masthead.site-header
+         div.inner
+            h1.site-title
+               a.site-title-link(href='/backstage') AdminCenter
+            a.log-out(href='/backstage/logout', title='登出')
+               i.fa.fa-sign-out
+               | 登出
 
+      #main.site-main
+         .content-area
+            #primary.site-content
+               block content
+         #secondary.site-sidebar
+            ul.site-navigation
+               li.module-navigation-item
+                  a(href='/backstage/hospitals')
+                     i.fa.fa-lg.fa-fw.fa-plus-square
+                     | 医院管理
+               li.module-navigation-item
+                  a(href='/backstage/hospitals')
+                     i.fa.fa-lg.fa-fw.fa-hospital-o
+                     | 科室管理
+               li.module-navigation-item
+                  a(href='/backstage/hospitals')
+                     i.fa.fa-lg.fa-fw.fa-user-md
+                     | 医生管理
+               li.module-navigation-item
+                  a(href='/backstage/hospitals')
+                     i.fa.fa-lg.fa-fw.fa-table
+                     | 预约管理
+               li.module-navigation-item
+                  a(href='/backstage/hospitals')
+                     i.fa.fa-lg.fa-fw.fa-lock
+                     | 修改密码
+
+      footer#colophon .site-footer
+      script
