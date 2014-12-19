@@ -49,7 +49,7 @@ exports.add = function(req, res, next) {
     var adoctor_id=req.body.doctor_id;
     var adate=req.body.date;
     var aggdate='%'+adate.substr(8,2);
-    var aweeknum=req.body.week;
+    var aweeknum=(req.body.week+6)%7+1;
     var aperiod=req.body.period == 'morning' ? 1 : (req.body.period == 'afternoon' ? 2 : 3);
     var afrequency1="00000000";
     var afrequency2="10000000";
