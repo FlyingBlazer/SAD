@@ -1,4 +1,9 @@
 extends layout
+block breadcrumb
+    li
+        a(href="/") 主页
+
+    li.active 个人中心
 block site-content
     link(href="/stylesheets/bootstrap/css/bootstrap.min.css", rel="stylesheet", media="all")
     link(href="/stylesheets/usercenter_reservation_list.css",rel="stylesheet", media="all")
@@ -9,17 +14,22 @@ block site-content
         var change_phone=false;
         var change_email=false;
         var post_content={};
-        function checkEmail(str){
-            re = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
+
+        function checkEmail(){
+            re = /(\w*\.*)+@(\w?)+(\.\w{2,})+$/;
+            str=$("#email").val();
             if (re.test(str)){
-                alert("正确");
+
+                $("#email_prompt").html("");
             }
             else {
-                alert("quewu");
+
+                $("#email_prompt").html("<font color='red'>格式不正确</font>");
+                $("#change_email").disable();
             }
         }
         function validate(){
-            if ($("#pre_pw").val()!=$("#pw1").val())
+            if ($("#pw2").val()!=$("#pw1").val())
             {
                 alert("两次输入的密码不一样");
                 return false;
@@ -62,9 +72,8 @@ block site-content
     div
         .g-container(data-module='userinfo', data-fo-help='1')
             #g-breadcrumb
-                a(href='/') 首页
-                span > 我的预约单
-                span(style='margin-left:140px;color:red') #{errorMessage}
+
+                span(style='margin-left:240px;color:blue;font-size:12px') #{errorMessage}
             .wrap
                 .person-left
                     p.left-head
@@ -103,19 +112,19 @@ block site-content
                         form( name='pwinfo_modify_form')
                             .form-group(style='margin-left:60px')
                                 label 原密码
-                                input.form-control(type='password', style='width:40%', id='pre_pw',placeholder='不修改密码请勿修改')
+                                input.form-control(type='password', style='width:40%', id='pre_pw',placeholder='不修改密码请勿填写')
                                 label 新密码
-                                input.form-control(type='password', style='width:40%',id='pw1',placeholder='不修改密码请勿修改')
+                                input.form-control(type='password', style='width:40%',id='pw1',placeholder='不修改密码请勿填写')
                                 label 确认密码
-                                input.form-control(type='password', style='width:40%', id='pw2',placeholder='不修改密码请勿修改')
+                                input.form-control(type='password', style='width:40%', id='pw2',placeholder='不修改密码请勿填写',onblur='validate();')
                                 span(id='prompt')
                                 label(style='display:block') 电话
                                 input.form-control(type='text', style='width:40%;display:inline', id='phone')
                                 button.btn.btn-default(onclick='change_status(\'phone\')',type='button') 修改
-                                label(style='display:block',onmouseout='checkEmail();') 邮箱
-                                span()
-                                input.form-control(type='email', style='width:40%;display:inline', id='email')
-                                button.btn.btn-default(onclick='change_status(\'email\')',type='button') 修改
+                                label(style='display:block') 邮箱
+                                input.form-control(type='email', style='width:40%;display:inline',onblur='checkEmail();' id='email')
+                                button.btn.btn-default(onclick='change_status(\'email\')',type='button',id="change_email") 修改
+                                span(id='email_prompt',style='margin-left:10px')
                                 button.btn.btn-primary(type='button',id='submit',style="display:block") 保存
                     .second_block
                         span.second_label  上传头像

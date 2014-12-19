@@ -1,12 +1,16 @@
 extends layout
+block breadcrumb
+    li
+        a(href="/") 主页
+
+    li.active 预约列表
 block site-content
     link(href="/stylesheets/usercenter_reservation_list.css", rel="stylesheet", media="all")
     link(href="/stylesheets/bootstrap/css/bootstrap.min.css", rel="stylesheet", media="all")
     div
         .g-container(data-module='userinfo', data-fo-help='1')
             #g-breadcrumb
-                a(href='/') 首页
-                span > 我的预约单
+
             .wrap
                 .person-left
                     p.left-head
