@@ -31,8 +31,8 @@ block site-content
                        post_array['new_pw'] = $("#pw2").val();
                         alert("arrive1");
                     }
-                    alert("arrive2");
-                    $.post("/account/manage/info", post_array,
+                    var encoded = $.toJSON(post_array );
+                    $.post("/account/manage/info", encoded,
                         function (data, status) {
                            // alert("Data: " + data);
                         }
