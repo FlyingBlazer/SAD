@@ -48,15 +48,14 @@ exports.add = function(req, res, next) {
     var adepartment_id=req.body.department_id;
     var adoctor_id=req.body.doctor_id;
     var adate=req.body.date;
-    var aggdate='%'+adate.substr(5,5);
+    var aggdate='%'+adate.substr(8,2);
     var aweeknum=req.body.week;
     var aperiod=req.body.period == 'morning' ? 1 : (req.body.period == 'afternoon' ? 2 : 3);
     var afrequency1="00000000";
     var afrequency2="10000000";
     var afrequency3="2_______";
     var afrequency4="30000000";
-    var weeknum=aweeknum == '星期一' ? 1: (aweeknum == '星期二' ? 2: (aweeknum == '星期三' ? 3: (aweeknum == '星期四' ? 4: (aweeknum == '星期五' ? 5: (aweeknum == '星期六' ? 6: 7)))));
-    afrequency3 = afrequency3.replaceAt(weeknum, '1');
+    afrequency3 = afrequency3.replaceAt(aweeknum, '1');
     req.models.user.get(auser_id,function(err,user){
         if(err && err.message != 'Not found') return next(err);
         if(!user) return next(new Errors.ReservationUserInvalidFailure('User Not Exist!'));
