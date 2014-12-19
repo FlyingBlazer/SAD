@@ -32,7 +32,7 @@ block site-content
                         alert("arrive1");
                     }
                     alert("arrive2");
-                    $.post("/account/manage/info", {phone:"12344"},
+                    $.post("/account/manage/info", post_array,
                         function (data, status) {
                            // alert("Data: " + data);
                         }
