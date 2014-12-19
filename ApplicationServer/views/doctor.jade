@@ -21,7 +21,10 @@ block site-content
         table#timetable.table
             tr#date
                 each time in detail.time_slots
-                    th #{time.date.month}/#{time.date.date}<br/>#{time.date.day}
+                    th
+                        | #{time.date.month}/#{time.date.date}
+                        br
+                        | #{time.date.day}
             tr#morning
                 each time in detail.time_slots
                     td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}", data-day="#{time.date.day}")
