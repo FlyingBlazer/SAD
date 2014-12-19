@@ -290,7 +290,7 @@ util.inherits(exports.AdminAccessRejected, restify.RestError);
 
 exports.AddingFailed = function AddingFailed(message) {
     restify.RestError.call(this, {
-        restCode: '5002',
+        restCode: '5003',
         statusCode: 401,
         message: message,
         constructorOpt: AddingFailed
@@ -298,3 +298,14 @@ exports.AddingFailed = function AddingFailed(message) {
     this.name = 'AddingFailed';
 };
 util.inherits(exports.AddingFailed, restify.RestError);
+
+exports.WorkingAlreadyExist = function WorkingAlreadyExist(message) {
+    restify.RestError.call(this, {
+        restCode: '5004',
+        statusCode: 401,
+        message: message,
+        constructorOpt: WorkingAlreadyExist
+    });
+    this.name = 'WorkingAlreadyExist';
+};
+util.inherits(exports.WorkingAlreadyExist, restify.RestError);
