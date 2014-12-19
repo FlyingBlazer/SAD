@@ -47,3 +47,12 @@ exports.addDepartment = function(request, response) {
 exports.addDoctor = function(request, response) {
 
 };
+
+exports.editSchedule = function(request, response) {
+
+};
+
+// post
+exports.onEditSchedule = function(request, response) {
+
+};

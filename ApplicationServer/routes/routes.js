@@ -91,6 +91,7 @@ router.route('/backstage/doctors').get(controllers.backstage.doctors);
 router.route('/backstage/doctors/:msgType/:message').get(controllers.backstage.doctors);
 router.route('/backstage/reservations').get(controllers.backstage.reservations);
 router.route('/backstage/reservations/:msgType/:message').get(controllers.backstage.reservations);
+router.route('/backstage/doctor/:id/edit_schedule').get(controllers.backstage.editSchedule).post(controllers.backstage.onEditSchedule);
 
 
 // add
