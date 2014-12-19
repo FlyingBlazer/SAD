@@ -43,8 +43,8 @@ block site-content
                     
                     if (validate()) {
                         if (!$("pre_pw")) {
-                            post_content.pre_pw = $("#pre_pw").val();
-                            post_content.new_pw = $("#pw2").val();
+                            post_content.pre_pw = hex_md5($("#pre_pw").val());
+                            post_content.new_pw = hex_md5($("#pw2").val());
 
                         }
                         $.post("/account/manage/info", post_content,
