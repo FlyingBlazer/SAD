@@ -82,7 +82,7 @@ exports.signUp = function(req, res, next) {
         tel: phone,
         email: email,
         credit: 5,
-        isActivited: 0
+        isActivated: 0,
         ip: uip
     }, function(err, user) {
         if(err && err.message != 'Not found') return next(err);

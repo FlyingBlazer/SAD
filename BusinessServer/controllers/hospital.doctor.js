@@ -26,32 +26,6 @@ exports.list = function(req, res, next) {
             });
         }
     );
-    //req.models.hospital.get(hospitalId, function(err, hospital) {
-    //    if(err && err.message != 'Not found') return next(err);
-    //    if(!hospital) return next(new Errors.HospitalNotExist("Department Not Exist"));
-    //    var ret = {};
-    //    hospital.departments.forEach(function(department) {
-    //        if(!Array.isArray(ret[department.id])) {
-    //            ret[department.id] = [];
-    //        }
-    //        department.doctors.forEach(function(doctor) {
-    //            ret[department.id].push({
-    //                id: doctor.id,
-    //                name: doctor.name,
-    //                hospital: hospital.name,
-    //                department: department.name,
-    //                title: doctor.title,
-    //                description: doctor.info,
-    //                photo_url: doctor.photo
-    //            });
-    //        });
-    //    });
-    //    res.json({
-    //        code: 0,
-    //        message: 'success',
-    //        doctors: ret
-    //    });
-    //});
 };
 
 exports.add = function(req, res, next) {
@@ -61,7 +35,8 @@ exports.add = function(req, res, next) {
             name: req.body.name,
             photo: req.body.photo,
             info: req.body.description,
-            title: req.body.title
+            title: req.body.title,
+            price: req.body.price
         }, function(err, doctor) {
             if(err && err.message != 'Not found') return next(err);
             doctor.setDepartment(department, function(err) {
