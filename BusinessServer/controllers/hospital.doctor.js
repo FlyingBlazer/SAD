@@ -115,7 +115,7 @@ exports.detail = function(req, res, next) {
             var year = curDate.getFullYear();
             var month = curDate.getMonth();
             var date = curDate.getDate() + 1;
-            var day = curDate.getDay();
+            var day = (curDate.getDay()+6)%7+1;
             var dd = new Date();
             var slot = [];
             for(var i = 0; i < 7; i++) {
@@ -177,9 +177,9 @@ exports.detail = function(req, res, next) {
                         });
                         break;
                     case '2':
-                        for(var j=0; j < 7; j++) {
+                        for(var j=1; j <= 7; j++) {
                             if(working.frequency.charAt(j) == '1') {
-                                slot[j+day<=6?j+day:j+day-7].slot[key] = true;
+                                slot[(6-day+j)%7].slot[key] = true;
                             }
                         }
                         break;
