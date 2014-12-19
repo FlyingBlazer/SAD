@@ -1,10 +1,6 @@
-.hospital-list {
-}
-
 .hospital {
-    border: 1px solid #dddddd;
+    border: 2px solid #dddddd;
     padding: 10px;
-    margin-bottom: 5px;
 }
 
 .hospital>.image {
@@ -14,15 +10,78 @@
     vertical-align: top;
 }
 
-.hospital>.hospital-info {
-    display: inline-block;
-    width: 700px;
-    margin-left: 20px;
-}
-
 .hospital>.reservation {
     display: inline-block;
-    vertical-align: 70%;
+    vertical-align: 50%;
+}
+
+@media all and (min-width: 980px){
+
+
+    .hospital>.hospital-info {
+        display: inline-block;
+        width: 700px;
+        margin-left: 20px;
+    }
+}
+
+@media all and (max-width: 980px){
+    .hospital>.hospital-info {
+        display: inline-block;
+        width: 600px;
+        margin-left: 20px;
+    }
+}
+
+@media all and (max-width: 850px){
+    .hospital>.hospital-info {
+        display: inline-block;
+        width: 500px;
+        margin-left: 20px;
+    }
+}
+
+@media all and (max-width: 750px){
+    .hospital>.hospital-info {
+        display: inline-block;
+        width: 400px;
+        margin-left: 20px;
+    }
+}
+
+@media all and (max-width: 608px){
+    .hospital>.hospital-info {
+        display: inline-block;
+        width: 400px;
+        margin-left: 20px;
+    }
+
+    .hospital>.reservation {
+        width: 100%;
+        margin-top: 10px;
+        text-align: center;
+        vertical-align: 50%;
+    }
+}
+
+@media all and (max-width: 543px){
+    .hospital>.image {
+        display: none;
+    }
+
+    .hospital>.hospital-info {
+        display: inline-block;
+        width: 100%;
+        margin-left: 20px;
+        margin-top: 10px;
+    }
+
+    .hospital>.reservation {
+        width: 100%;
+        margin-top: 10px;
+        text-align: center;
+        vertical-align: 50%;
+    }
 }
 
 .hospital-info>.name {
@@ -32,21 +91,25 @@
 
 .hospital-info>.rating {
     display: inline-block;
+    font-size: 12px;
     margin-left: 10px;
     margin-top: 5px;
 }
 
 .hospital-info>.tel {
     margin-top: 5px;
+    font-size: 12px;
+    color: grey;
 }
 
 .hospital-info>.addr {
     margin-top: 5px;
+    font-size: 12px;
+    color: grey;
 }
 
 .hover {
-    border-color: #0186c7;
-    border-width: 2px;
+    border: 2px solid dodgerblue;
 }
 
 .gbt-blue {
