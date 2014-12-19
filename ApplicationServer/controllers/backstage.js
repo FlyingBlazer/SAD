@@ -82,3 +82,7 @@ exports.modifyTempWorking = function (request, response) {
     var doctorId = '1';
     response.redirect('/backstage/doctor/' + doctorId + '/edit_schedule');
 };
+
+exports.users = function (request, response) {
+
+};
