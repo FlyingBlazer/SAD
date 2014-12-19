@@ -6,38 +6,44 @@ exports.home = function(request, response) {
 
 };
 
-exports.manageUsers = function(request, response) {
+exports.login = function(request, response) {
 
 };
 
-exports.manageHospitals = function(request, response) {
+// post
+exports.onLogin = function(request, response) {
 
 };
 
-exports.addHospital = function(request, response) {
+exports.logout = function(request, response) {
 
 };
 
-exports.addDept = function(request, response) {
+exports.changePassword = function(request, response) {
+
+};
+
+// post
+exports.onChangePassword = function(request, response) {
+
+};
+
+exports.departments = function(request, response) {
+
+};
+
+exports.doctors = function(request, response) {
+
+};
+
+exports.reservations = function(request, response) {
+
+};
+
+exports.addDepartment = function(request, response) {
 
 };
 
 exports.addDoctor = function(request, response) {
-
-};
-
-exports.editHospital = function(request, response) {
-
-};
-
-exports.editDept = function(request, response) {
-
-};
-
-exports.editDoctor = function(request, response) {
-
-};
-
-exports.editCalendar = function(request, response) {
 
 };
