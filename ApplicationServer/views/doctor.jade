@@ -6,8 +6,8 @@ block title
 block breadcrumb
     li
         a(href="/") 主页
-    li
-        a(href="/#{detail.province}/hospitals") #{detail.province}
+    //li
+    //    a(href="/#{detail.province}/hospitals") #{detail.province}
     li
         a(href="/concierge/reserve/#{hospitalId}") #{detail.hospital}
     li #{detail.department}
@@ -17,43 +17,54 @@ block site-content
     link(href="/stylesheets/doctor.css", rel="stylesheet", media="all")
 
     div#site-content
-        form(method="POST", action="/concierge/reserve-confirm")
-            div.hid HOSPITAL_ID:
-                input(name="hospitalId", value="#{hospitalId}")
-            div.hname HOSPITAL:
-                input(name="hospital", value="#{detail.hospital}")
-            div.did DEPARTMENT_ID:
-                input(name="departmentId", value="#{departmentId}")
-            div.dname DEPARTMENT:
-                input(name="department",value="#{detail.department}")
-            div.doid DOCTOR_ID:
-                input(name="doctorId", value="#{detail.id}")
-            div.doname NAME:
-                input(name="doctor", value="#{detail.name}")
-            div.title TITLE:
-                input(name="title", value="#{detail.title}")
-            div.price PRICE:
-                input(name="price", value="#{detail.price}")
-            each time in detail.time_slots
-                div.time
-                    div
-                        input(name="resvDate", value="#{time.date.year}-#{time.date.month}-#{time.date.day}")
-                        input(name="day", value="#{time.date.day}")
-                    div
+
+        table#timetable.table
+            tr#date
+                each time in detail.time_slots
+                    th #{time.date.month}/#{time.date.date}<br/>#{time.date.day}
+            tr#morning
+                each time in detail.time_slots
+                    td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}")
                         if time.slot.morning
-                            input(name="resvTime", value="morning")
-                            button(type="submit") 上午
+                            a(href="#") 预约
+                        else
+                            | -
+            tr#afternoon
+                each time in detail.time_slots
+                    td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}")
                         if time.slot.afternoon
-                            input(name="resvTime", value="afternoon")
-                            button(type="submit") 下午
+                            a(href="#") 预约
+                        else
+                            | -
+            tr#evening
+                each time in detail.time_slots
+                    td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}")
                         if time.slot.evening
-                            input(name="resvTime", value="evening")
-                            button(type="submit") 晚上
-                    hr
+                            a(href="#") 预约
+                        else
+                            | -
+
+
+        form#post-form.hidden(method="POST", action="/concierge/reserve-confirm")
+            input(name="hospitalId", value="#{hospitalId}")
+            input(name="hospital", value="#{detail.hospital}")
+            input(name="departmentId", value="#{departmentId}")
+            input(name="department",value="#{detail.department}")
+            input(name="doctorId", value="#{detail.id}")
+            input(name="doctor", value="#{detail.name}")
+            input(name="title", value="#{detail.title}")
+            input(name="price", value="#{detail.price}")
+            input(name="resvDate")
+            input(name="resvTime")
+
     script.
+
         $(document).ready(function() {
-            $("button").click(function(e) {
-                $(this).parents(".time").removeClass("time");
-                $(".time").remove();
+
+            $("#timetable a").click(function() {
+                $("#post-form input[name='resvDate']").val($(this).parent("td").data("date"));
+                $("#post-form input[name='resvTime']").val($(this).parents("tr").attr("id"));
+                $("#post-form").submit();
             });
+
         });

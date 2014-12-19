@@ -9,6 +9,7 @@ block site-content
         var change_phone=false;
         var change_email=false;
         var post_content={};
+
         function validate(){
             if ($("#pre_pw").val()!=$("#pw1").val())
             {
@@ -21,17 +22,19 @@ block site-content
         $(document).ready(function () {
                 $("#submit").click(function ()
                 {
-                    if (!$("pre_pw"))
-                    {
-                       post_content.pre_pw = $("#pre_pw").val();
-                       post_content.new_pw = $("#pw2").val();
+                    
+                    if (validate()) {
+                        if (!$("pre_pw")) {
+                            post_content.pre_pw = $("#pre_pw").val();
+                            post_content.new_pw = $("#pw2").val();
 
-                    }
-                    $.post("/account/manage/info",post_content ,
-                        function (data, status) {
-                           // alert("Data: " + data);
                         }
-                    );
+                        $.post("/account/manage/info", post_content,
+                                function (data, status) {
+                                    location.reload(false);
+                                }
+                        );
+                    }
                 });
         });
         function change_status(flag){
@@ -46,6 +49,7 @@ block site-content
                 post_content.email=$("#email").val();
             }
         }
+
     div
         .g-container(data-module='userinfo', data-fo-help='1')
             #g-breadcrumb
@@ -83,8 +87,8 @@ block site-content
                         span.second_label  修改信息
                     hr(style='line-width:1;', width='90%', color='#1E90FF', size='1')
                     div
-                        if (errorMessage)
-                            span #{errorMessage}
+
+
                         form( name='pwinfo_modify_form')
                             .form-group(style='margin-left:60px')
                                 label 原密码
@@ -100,7 +104,7 @@ block site-content
                                 label 邮箱
                                 input.form-control(type='email', style='width:40%', id='email')
                                 button.btn.btn-default(onclick='change_status(\'email\')',style='display:block',type='button') 修改
-                                button.btn.btn-primary(type='submit',id='submit' onclick='return validate()') 保存
+                                button.btn.btn-primary(type='button',id='submit') 保存
                     .second_block
                         span.second_label  上传头像
                     hr(style='line-width:1;', width='90%', color='#1E90FF', size='1')
