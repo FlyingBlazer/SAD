@@ -1,7 +1,7 @@
 var Errors = require('../lib/errors');
 
 exports.getRaw = function(req, res, next) {
-    check(req, function(data) {
+    check(req, function(data, doctorId, adminId) {
         var week_stat=[[0,0,0],[0,0,0],[0,0,0],
             [0,0,0],[0,0,0],[0,0,0],[0,0,0]];
         var temp_stat=[];
@@ -35,7 +35,7 @@ exports.getRaw = function(req, res, next) {
 };
 
 exports.addWeek = function(req, res, next) {
-    check(req, function(data) {
+    check(req, function(data, doctorId, adminId) {
         var new_working=req.body.day;
         var morning = '20000000';
         var afternoon = '20000000';
@@ -87,7 +87,7 @@ exports.addWeek = function(req, res, next) {
 };
 
 exports.updateWeek = function(req, res, next) {
-    check(req, function(data) {
+    check(req, function(data, doctorId, adminId) {
         var works=req.body.works;
         var morning='20000000';
         var afternoon='20000000';
@@ -135,13 +135,13 @@ exports.updateWeek = function(req, res, next) {
 };
 
 exports.addTemp = function(req, res, next) {
-    check(req, function(data) {
+    check(req, function(data, doctorId, adminId) {
         //
     });
 };
 
 exports.deleteTemp = function(req, res, next) {
-    check(req, function(data) {
+    check(req, function(data, doctorId, adminId) {
         //
     });
 };
@@ -167,7 +167,7 @@ function check(req, cb) {
                 if(data[0]['id']!=hospital_id){
                     return next(new Errors.AdminAccessRejected("Invalid Access For This Administrator!"));
                 }
-                cb(data);
+                cb(data, doctorId, adminId);
             });
     });
 }
