@@ -8,20 +8,20 @@ exports.list = function(req, res, next) {
         if(!user) {
             return next(new Errors.ListEmpty("All Users Have Been Activated"));
         } else {
-        	var userlist=new Array();
-        	for(i=0;i<user.length;i++){
-        		userlist[i]["user_id"]=user[i].id;
-				userlist[i]["username"]=user[i].name;
-				userlist[i]["id"]=user[i].socialId;
-				userlist[i]["name"]=user[i].realName;
-                userlist[i]["phone"]=user[i].tel;
-                userlist[i]["email"]=user[i].email;
-                userlist[i]["ip"]=user[i].ip;
+        	var userList = [];
+        	for(var i=0;i<user.length;i++){
+        		userList[i]["user_id"]=user[i].id;
+				userList[i]["username"]=user[i].name;
+				userList[i]["id"]=user[i].socialId;
+				userList[i]["name"]=user[i].realName;
+                userList[i]["phone"]=user[i].tel;
+                userList[i]["email"]=user[i].email;
+                userList[i]["ip"]=user[i].ip;
         	}
             res.json({
                 code: 0,
                 message: 'success',
-                users: userlist
+                users: userList
             });
         }
     });

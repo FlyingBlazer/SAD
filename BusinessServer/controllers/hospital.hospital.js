@@ -81,7 +81,8 @@ exports.add = function(req, res, next) {
             city: req.body.city,
             addr: req.body.address,
             tel: req.body.telephone,
-            site: req.body.website
+            site: req.body.website,
+            info: req.body.description
         }, function(err, hospital) {
             if(err && err.message != 'Not found') return next(err);
             hospital.setRating(rating, function(err) {
