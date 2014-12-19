@@ -97,13 +97,25 @@ block site-content
 
                     $("#select-department a").click(function() {
                         var selection = $(this).html();
-                        console.log(selection);
-                        $(".department").each(function() {
+                        $(".department-list>.department").each(function() {
                             if ($(this).data("name") != selection) {
                                 $(this).addClass("hidden");
                             } else {
                                 $(this).removeClass("hidden");
                             }
                         });
+
+                        $("#select-title a").click(function() {
+                            var selection = $(this).html();
+                            $(".doctor").each(function() {
+                                console.log($(this).find(".title").html());
+                                if ($(this).find(".title").html() != selection) {
+                                    $(this).addClass("hidden");
+                                } else {
+                                    $(this).removeClass("hidden");
+                                }
+                            });
+                        });
                     });
+
                 });
