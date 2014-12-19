@@ -90,7 +90,7 @@ exports.add = function(req, res, next) {
                                     pay_method:apay_method,
                                     time:adate,
                                     period: aperiod,
-                                    status: 0,
+                                    status: apay_method==0 ? 0 : 2,
                                     price: data1[0]['price'],
                                     running_number: uuid.v4(),
                                     user_id: auser_id,
