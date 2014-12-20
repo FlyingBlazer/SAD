@@ -46,6 +46,9 @@ server.get('/user/:username/check', controllers.user.checkName);
 server.post('/user/:userId/update', controllers.user.updateInfo);
 server.get('/user/:userId/info', controllers.user.info);
 //--------------------------------
+server.post('/admin/login', controllers.admin.login);
+server.post('/admin/change_password', controllers.admin.change_password);
+//--------------------------------
 server.get('/hospital/hospital/list', controllers.hospital.hospital.list);
 server.post('/hospital/hospital/add', controllers.hospital.hospital.add);
 server.get('/hospital/hospital/:hospitalId/detail', controllers.hospital.hospital.detail);

@@ -1,5 +1,6 @@
 extends ./sb_layout
 block content
+
    script(type='javascript').
       $(document).ready(function () {
          $('#example').DataTable();
@@ -39,16 +40,16 @@ block content
             if (list.length)
                each item in list
 
-               tr
-                  td #{item.hospital_name}
-                  td #{item.doctor_name}
-                  td #{item.time}
-                  td #{item.status_msg}
-                  td #{item.department_name}
-                  td #{item.price}
-                  td
-                     if (item.status.charAt(2)!='2')
-                       button(id='confirm',name=item.reservation_id) 到场
+                  tr
+                     td #{item.hospital_name}
+                     td #{item.doctor_name}
+                     td #{item.time}
+                     td #{item.status_msg}
+                     td #{item.department_name}
+                     td #{item.price}
+                     td
+                        if (item.status.charAt(2)!='2')
+                          button(id='confirm',name=item.reservation_id) 到场
 
-                     else
-                       label 已到场
+                        else
+                          label 已到场

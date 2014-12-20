@@ -31,6 +31,7 @@ String.prototype.replaceAt = function(index, value) {
 };
 
 module.exports = {
+    admin: require('./admin'),
     user: require('./user'),
     hospital: require('./hospital'),
     reservation: require('./reservation'),
