@@ -1,3 +1,148 @@
-//
-   Created by renfei on 14/12/19.
+extends ./sb_layout
+block content
+   h2 医院管理
 
+   ul.nav.nav-tabs(role='tablist')
+      li.active(role='presentation')
+         a(href='#panel-manage', role='tab', data-toggle='tab') 现有医院管理
+      li(role='presentation')
+         a(href='#panel-add', role='tab', data-toggle='tab') 添加医院
+
+   div.tab-content
+      div#panel-manage.tab-pane.fade.in.active
+         h3 现有医院管理
+         table#doctor-table.table.table-striped.table-bordered.table-hover
+            thead
+               tr
+                  th id
+                  th 医院名称
+                  th 等级
+                  th 所在省份
+                  th 地址
+                  th 联系电话
+                  th 官方网站
+                  th 简介
+                  th 操作
+            tbody
+               //tr
+               //   td 1
+               //   td 中国人民解放军总医院301医院
+               //   td 三级甲等
+               //   td 北京
+               //   td 北京市海淀区复兴路28号
+               //   td 010-58266699
+               //   td http://jiaowu.buaa.edu.cn
+               //   td 中国人民解放军总医院301医院是一所致力于救死扶伤的知名医疗机构，位于北京市海淀区复兴路28号。医院拥有全国一流的医疗团队，自建院时起至今......
+               //   td
+               //      button.button.xs-button.blue-button.edit-hospital
+               //         i.fa.fa-edit.fa-fw 编辑
+               //      button.button.xs-button.red-button.delete-hospital
+               //         i.fa.fa-trash.fa-fw 删除
+               each hospital in list
+                  tr
+                     td #{hospital.id}
+                     td #{hospital.name}
+                     td #{hospital.level}
+                     td #{hospital.province}
+                     td #{hospital.address}
+                     td #{hospital.telephone}
+                     td #{hospital.website}
+                     td #{hospital.description}
+                     td
+                        button.button.xs-button.blue-button.edit-hospital
+                           i.fa.fa-edit.fa-fw 编辑
+                        button.button.xs-button.red-button.delete-hospital
+                           i.fa.fa-trash.fa-fw 删除
+
+      div#panel-add.tab-pane.fade
+         h3 添加医院
+         form(method='post', action='/backstage/api/add/hospitals', id='add-hospitals')
+            .form-group
+               .prompt
+                  label(for='name') 医院名称
+               .control
+                  input#name.form-control(name='name', required, type='text')
+
+            .form-group
+               .prompt
+                  label(for='level') 等级
+               .control
+                  select.form-control(name='level', data-placeholder='选择等级...' required)
+                     option(value='3') 一级丙等
+                     option(value='2') 一级乙等
+                     option(value='1') 一级甲等
+                     option(value='6') 二级丙等
+                     option(value='5') 二级乙等
+                     option(value='4') 二级甲等
+                     option(value='10') 三级丙等
+                     option(value='9') 三级乙等
+                     option(value='8') 三级甲等
+                     option(value='7') 三级特等
+
+            .form-group
+               .prompt
+                  label(for='province') 所在省份
+               .control
+                  select.form-control(name='province', data-placeholder='选择省份...' required)
+                     option(value='beijing') 北京市
+                     option(value='tianjing') 天津市
+                     option(value='hebei') 河北省
+                     option(value='shanxi') 山西省
+                     option(value='neimenggu') 内蒙古自治区
+                     option(value='liaoning') 辽宁省
+                     option(value='jilin') 吉林省
+                     option(value='heilongjiang') 黑龙江省
+                     option(value='shanghai') 上海市
+                     option(value='jiangsu') 江苏省
+                     option(value='zhejiang') 浙江省
+                     option(value='anhui') 安徽省
+                     option(value='fujian') 福建省
+                     option(value='jiangxi') 江西省
+                     option(value='shandong') 山东省
+                     option(value='henan') 河南省
+                     option(value='hubei') 湖北省
+                     option(value='hunan') 湖南省
+                     option(value='guangdong') 广东省
+                     option(value='guangxi') 广西省
+                     option(value='hainan') 海南省
+                     option(value='chongqing') 重庆市
+                     option(value='sichuan') 四川省
+                     option(value='guizhou') 贵州省
+                     option(value='yunnan') 云南省
+                     option(value='xizang') 西藏自治区
+                     option(value='shaanxi') 陕西省
+                     option(value='gansu') 甘肃省
+                     option(value='qinghai') 青海省
+                     option(value='ningxia') 宁夏回族自治区
+                     option(value='xinjiang') 新疆维吾尔族自治区
+
+            .form-group
+               .prompt
+                  label(for='address') 地址
+               .control
+                  input#address.form-control(name='address', required, type='text')
+
+            .form-group
+               .prompt
+                  label(for='tel') 联系电话
+               .control
+                  input#telephone.form-control(name='telephone', required, type='text')
+
+            .form-group
+               .prompt
+                  label(for='website') 网址
+               .control
+                  input#website.form-control(name='website', required, type='text')
+
+            .form-group
+               .prompt
+                  label(for='description') 简介
+               .control
+                  textarea#description.form-control(name='description', required, rows='5')
+
+            button.button.submit-button.green-button.button-with-icon(type='submit')
+               i.fa.fa-plus
+               | &nbsp;添加医院
+
+   script.
+      $('#add-hospitals').validate();
