@@ -46,7 +46,7 @@ block content
                .prompt
                   label(for='title') 所属科室
                .control
-                  select.form-control(name='title', data-placeholder='选择科室...' required='')
+                  select.form-control(name='title', data-placeholder='选择科室...', required)
                      option(value='')
                      option(value='')
                      option(value='')
@@ -59,7 +59,7 @@ block content
                .prompt
                   label(for='title') 称号
                .control
-                  select.form-control(name='title', data-placeholder='选择称号...' required='')
+                  select.form-control(name='title', data-placeholder='选择称号...', required)
                      option(value='医师') 医师
                      option(value='专家') 专家
                      option(value='特级专家') 特级专家
@@ -73,13 +73,13 @@ block content
                .prompt
                   label(for='price') 挂号价格（元）
                .control
-                  input#price.form-control(name='price', required='', type='text')
+                  input#price.form-control(name='price', required, type='text')
 
             .form-group
                .prompt
                   label(for='description') 描述
                .control
-                  textarea#description.form-control(name='description', required='', rows='5')
+                  textarea#description.form-control(name='description', required, rows='5')
 
             .form-group
                .prompt
