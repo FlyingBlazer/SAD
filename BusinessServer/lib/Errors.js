@@ -330,3 +330,14 @@ exports.ReservationCannotBeCanceled = function ReservationCannotBeCanceled(messa
     this.name = 'ReservationCannotBeCanceled';
 };
 util.inherits(exports.ReservationCannotBeCanceled, restify.RestError);
+
+exports.InvalidAdminId = function InvalidAdminId(message) {
+    restify.RestError.call(this, {
+        restCode: '5004',
+        statusCode: 403,
+        message: message,
+        constructorOpt: InvalidAdminId
+    });
+    this.name = 'InvalidAdminId';
+};
+util.inherits(exports.InvalidAdminId, restify.RestError);
