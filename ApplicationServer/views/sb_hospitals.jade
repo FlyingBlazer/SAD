@@ -22,7 +22,7 @@ block content
                   th 联系电话
                   th 官方网站
                   th 简介
-                  th 操作
+                  th.operation 操作
             tbody
                each hospital in list
                   tr
@@ -37,11 +37,11 @@ block content
                         a.x-editable(href='#', data-id='#{hospital.id}', data-prop='telephone')= hospital.telephone
                      td
                         a.x-editable(href='#', data-id='#{hospital.id}', data-prop='website')= hospital.website
-                     td
-                        a.x-editable(href='#', data-id='#{hospital.id}', data-prop='description')= hospital.description
-                     td
+                     td.description
+                        a.x-editable(href='#', data-id='#{hospital.id}')= hospital.description
+                     td.operation
                         button.button.xs-button.red-button.delete-hospital(data-id='#{hospital.id}', data-name='#{hospital.name}')
-                           i.fa.fa-trash.fa-fw 删除
+                           i.fa.fa-trash 删除
 
          script.
             $('#hospitals-table').DataTable();
@@ -76,6 +76,20 @@ block content
                      return {
                         "level": params.value
                      };
+                  }
+               });
+            });
+
+            $('#panel-manage .description a.x-editable').each(function(index, element) {
+               var hospitalId = $(element).data('id');
+               $(element).editable({
+                  url: 'http://#{businessServer}/hospital/hospital/' + hospitalId + '/update',
+                  type: 'textarea',
+                  send: 'always',
+                  params: function(params) {
+                     return {
+                        'description': params.value
+                     }
                   }
                });
             });
@@ -188,3 +202,7 @@ block content
 
    script.
       $('#add-hospitals').validate();
+   style.
+      .operation {
+         width: 60px;
+      }

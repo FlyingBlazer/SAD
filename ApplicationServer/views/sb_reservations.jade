@@ -4,21 +4,30 @@ block content
    script.
       $(document).ready(function () {
          $('#example').DataTable();
-         $('.confirm').bind("click", $('#confirm').attr('name'), function (params) {
-            $.post("/hospital/reservation/"+params.data[0]+"/confirm",
+         $('.confirm').click(function() {
 
-                    function (data, status) {
-                         location.reload(true);
-                    });
+               var reservationId = $(this).data('id');
+               $.ajax({
+                  url: 'http://#{businessServer}/hospital/reservation/' + reservationId + '/confirm',
+                  type: 'POST'
+               }).done(function(data) {
+                  if (data.code == 0) {
+                     toastr.success('确认到场', '成功');
+                  } else {
+                     toastr.error('系统错误。错误代码：' + data.code, '失败');
+                  }
+               }).error(function(jqXHR, textStatus, errorThrown) {
+                  toastr.error('系统发生致命错误 ' + textStatus + '。错误信息：' + errorThrown, '失败');
+               });
+
          });
 
       });
    h2 预约单管理
    div
-      table#example.table.table-bordered.table-striped.table-hover.display(cellspacing='0', width='80%')
+      table#example.table.table-bordered.table-striped.table-hover(cellspacing='0', width='80%')
          thead
             tr
-
                th 医院
                th 医生姓名
                th 时间
@@ -39,7 +48,7 @@ block content
                      td #{item.price}
                      td
                         if (item.status.charAt(2)!='2')
-                          button(class='confirm',name=item.reservation_id) 到场
+                          button.blue-button.xs-button.opnl-button(class='confirm',data-id='#{item.reservation_id}') 确认到场
 
                         else
-                          label 已到场
+                          label  已到场

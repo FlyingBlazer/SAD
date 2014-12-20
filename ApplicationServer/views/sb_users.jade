@@ -1,26 +1,46 @@
 extends ./sb_layout
 block content
-   script(type="text/javascript").
+   script.
       $(document).ready(function() {
          $('#example').DataTable();
-         $('#accept_button').bind("click",$('#accept_button').attr('name'),function (params){
-            $.post("/user/check/"+params.data[0]+"/approve",
+         $('.accept_button').click(function() {
 
-                    function(data,status){
-                        location.reload(true);
-                    });
+            var userId = $(this).data('id');
+            $.ajax({
+               url: 'http://#{businessServer}/user/check/' + userId + '/approve',
+               type: 'POST'
+            }).done(function(data) {
+               if (data.code == 0) {
+                  toastr.success('确认审核', '成功');
+               } else {
+                  toastr.error('系统错误。错误代码：' + data.code, '失败');
+               }
+            }).error(function(jqXHR, textStatus, errorThrown) {
+               toastr.error('系统发生致命错误 ' + textStatus + '。错误信息：' + errorThrown, '失败');
+            });
+
          });
-         $('#refuse_button').bind("click",$('#refuse_button').attr('name'),function (params){
-            $.post("/user/check/"+params.data[0]+"/reject",
+         $('.refuse_button').click(function() {
 
-                    function(data,status){
-                          location.reload(true);
-                    });
+            var userId = $(this).data('id');
+            $.ajax({
+               url: 'http://#{businessServer}/user/check/' + userId + '/reject',
+               type: 'POST'
+            }).done(function(data) {
+               if (data.code == 0) {
+                  toastr.success('拒绝', '该用户');
+               } else {
+                  toastr.error('系统错误。错误代码：' + data.code, '失败');
+               }
+            }).error(function(jqXHR, textStatus, errorThrown) {
+               toastr.error('系统发生致命错误 ' + textStatus + '。错误信息：' + errorThrown, '失败');
+            });
+
          });
       } );
    h2 用户管理
    div
-      table#example.display(cellspacing='0', width='80%')
+      table#example(cellspacing='0', width='80%')
          thead
             tr
 
@@ -30,15 +50,7 @@ block content
                th 邮箱
                th ip
                th 操作
-         tfoot
-            tr
 
-               th 真实姓名
-               th id
-               th 电话
-               th 邮箱
-               th ip
-               th 操作
          tbody
             if (list.length)
                each item in list
@@ -50,7 +62,7 @@ block content
                      td #{item.email}
                      td #{item.ip}
                      td
-                        button.button.green-button(id=accept_button,name=item.id)  接受
-                        button.button.red-button(id=refuse_button,name=item.id)  拒绝
+                        button.blue-button.xs-button.opnl-button(class='accept_button',data-id='#{item.id}')  接受
+                        button..button.red-button.xs-button(class='refuse_button',data-id='#{item.id}')  拒绝
 
 
