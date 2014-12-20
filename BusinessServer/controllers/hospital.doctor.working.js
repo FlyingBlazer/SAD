@@ -13,14 +13,14 @@ exports.getRaw = function(req, res, next) {
                         var temp_working={
                             date: working.date,
                             period: working.period,
-                            isWorking: working.frequency.charAt(1)=='1'
+                            capacity: working.frequency.charAt(1)=='1'? working.totalApp : 0
                         };
                         temp_stat.push(temp_working);
                         break;
                     case '2':
                         for(var i = 1 ; i <= 7 ; i++){
                             if(working.frequency.charAt(i)=='1'){
-                                week_stat[i-1][working.period-1]=1;
+                                week_stat[i-1][working.period-1]=working.totalApp;
                             }
                         }
                         break;
@@ -49,10 +49,16 @@ exports.addWeek = function(req, res, next) {
         var morning = '20000000';
         var afternoon = '20000000';
         var evening = '20000000';
+        var morning_app = 0;
+        var afternoon_app = 0;
+        var evening_app = 0;
         for(var i = 0 ; i < 7 ; i++) {
-            morning.replaceAt(i + 1, new_working[i][0]);
-            afternoon.replaceAt(i + 1, new_working[i][1]);
-            evening.replaceAt(i + 1, new_working[i][2]);
+            morning.replaceAt(i + 1, new_working[i][0]!=0 ? 1 : 0);
+            afternoon.replaceAt(i + 1, new_working[i][1]!=0 ? 1 : 0);
+            evening.replaceAt(i + 1, new_working[i][2]!=0 ? 1 : 0);
+            morning_app=new_working[i][0]!=0 ? new_working[i][0] : morning_app;
+            afternoon_app=new_working[i][1]!=0 ? new_working[i][1] : afternoon_app;
+            evening_app=new_working[i][2]!=0 ? new_working[i][2] : evening_app;
         }
         var date=new Date();
         req.models.working.get(doctorId, function(err, workings) {
@@ -65,7 +71,8 @@ exports.addWeek = function(req, res, next) {
                 date: date.Format('yyyy-MM-dd'),
                 period: 1,
                 frequency: morning,
-                price : data[0]['price']
+                price : data[0]['price'],
+                totalApp: morning_app
             }, function(err, working) {
                 if(err && err.message != 'Not found') return next(err);
                 finish();
@@ -75,7 +82,8 @@ exports.addWeek = function(req, res, next) {
                 date: date.Format('yyyy-MM-dd'),
                 period: 2,
                 frequency: afternoon,
-                price : data[0]['price']
+                price : data[0]['price'],
+                totalApp: afternoon_app
             }, function(err, working) {
                 if(err && err.message != 'Not found') return next(err);
                 finish();
@@ -85,7 +93,8 @@ exports.addWeek = function(req, res, next) {
                 date: date.Format('yyyy-MM-dd'),
                 period: 3,
                 frequency: evening,
-                price : data[0]['price']
+                price : data[0]['price'],
+                totalApp: evening_app
             }, function(err, working) {
                 if(err && err.message != 'Not found') return next(err);
                 finish();
@@ -121,13 +130,16 @@ exports.updateWeek = function(req, res, next) {
             for(var i = 0 ; i < works.length ; i++) {
                 switch(works[i]['period']) {
                     case 0:
-                        workings[m_index].frequency.replaceAt(works[i]['day'], works[i]['action']);
+                        workings[m_index].frequency.replaceAt(works[i]['day'], works[i]['action']!=0 ? 1 : 0);
+                        workings[m_index].totalApp=works[i]['action'];
                         break;
                     case 1:
-                        workings[a_index].frequency.replaceAt(works[i]['day'], works[i]['action']);
+                        workings[a_index].frequency.replaceAt(works[i]['day'], works[i]['action']!=0 ? 1 : 0);
+                        workings[a_index].totalApp=works[i]['action'];
                         break;
                     case 2:
-                        workings[e_index].frequency.replaceAt(works[i]['day'], works[i]['action']);
+                        workings[e_index].frequency.replaceAt(works[i]['day'], works[i]['action']!=0 ? 1 : 0);
+                        workings[e_index].totalApp=works[i]['action'];
                         break;
                 }
             }
@@ -146,8 +158,8 @@ exports.addTemp = function(req, res, next) {
     check(req, function(data, doctorId, adminId) {
         var t_period = req.body.period;
         var t_action = req.body.action;
-        var t_frequency = '00000000';
-        frequency.replaceAt(1, t_action);
+        var t_capacity = req.body.capacity;
+        var t_frequency = '0_000000';
         req.models.working.one({
             doctor_id: doctorId,
             frequency: t_frequency,
@@ -157,11 +169,12 @@ exports.addTemp = function(req, res, next) {
             if (working) {
                 throw new Error.WorkingAlreadyExist("Working already Exists!");
             }
+            frequency.replaceAt(1, t_action==0 ? 0 : 1);
             req.models.working.create({
                 doctor_id: doctorId,
                 frequency: t_frequency,
                 period: t_period,
-                total_app: data[0]['total_app']
+                totalApp: t_capacity
             }, function (working) {
                 if (err && err.message != 'Not found') return next(err);
                 res.json({

@@ -179,7 +179,7 @@ exports.detail = function(req, res, next) {
                         var i = curDate.getDateOffset(tarDate);
                         if(i <= 7 && i > 0) {
                             slot[i].slot[key][0] = (working.frequency.charAt(1) == '1');
-                            slot[i].slot[key][1] =working.total_app;
+                            slot[i].slot[key][1] =working.totalApp;
                             hasTemp[i][key] = 1;
                         }
                         break;
@@ -192,7 +192,7 @@ exports.detail = function(req, res, next) {
                         for(var j=1; j <= 7; j++) {
                             if(working.frequency.charAt(j) == '1'&&hasTemp[(6-day+j)%7][key] == 0) {
                                 slot[(6-day+j)%7].slot[key][0] = true;
-                                slot[(6-day+j)%7].slot[key][1] =working.total_app;
+                                slot[(6-day+j)%7].slot[key][1] =working.totalApp;
                             }
                         }
                         break;
