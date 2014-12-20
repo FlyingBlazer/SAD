@@ -24,7 +24,17 @@ exports.home = function (request, response) {
  * @param response
  */
 exports.login = function (request, response) {
-    response.render('sb_login');
+    var initTimestamp = request.params.initTimestamp;
+    var msgType = request.params.msgType;
+    var message = request.params.message;
+
+    var params = {
+        initTimestamp: typeof initTimestamp == 'undefined' ? '' : initTimestamp,
+        msgType: typeof msgType == 'undefined' ? '' : msgType,
+        message: typeof  message == 'undefined' ? '' : message
+    };
+
+    response.render('sb_login', params);
 };
 
 /**
@@ -110,8 +120,19 @@ exports.logout = function (request, response) {
 exports.changePassword = function (request, response) {
     if (!getCookie(request).username)
         response.redirect('/backstage/login');
-    else
-        response.render('sb_changePassword');
+    else {
+        var initTimestamp = request.params.initTimestamp;
+        var msgType = request.params.msgType;
+        var message = request.params.message;
+
+        var params = {
+            initTimestamp: typeof initTimestamp == 'undefined' ? '' : initTimestamp,
+            msgType: typeof msgType == 'undefined' ? '' : msgType,
+            message: typeof  message == 'undefined' ? '' : message
+        };
+
+        response.render('sb_changePassword', params);
+    }
 };
 
 /**
@@ -155,17 +176,25 @@ exports.onChangePassword = function (request, response) {
  */
 exports.hospitals = function (request, response) {
 
-
     if (!getCookie(request).username)
         response.redirect('/backstage/login');
     else {
         var callback = function (result) {
-            if (result.code == 0)
-            //传参并渲染页面
-                response.render('sb_hospitals', {
+            if (result.code == 0) {
+                //传参并渲染页面
+                var initTimestamp = request.params.initTimestamp;
+                var msgType = request.params.msgType;
+                var message = request.params.message;
+
+                var params = {
+                    initTimestamp: typeof initTimestamp == 'undefined' ? '' : initTimestamp,
+                    msgType: typeof msgType == 'undefined' ? '' : msgType,
+                    message: typeof  message == 'undefined' ? '' : message,
                     list: result.hospitals
-                });
-            else {
+                };
+
+                response.render('sb_hospitals', params);
+            } else {
                 printLogMessage(result.message);
             }
         };
@@ -192,9 +221,19 @@ exports.departments = function (request, response) {
             printLogMessage('hospital id 不能为空');
         else {
             var callback = function (departments_list) {
-                response.render('sb_departments', {
+
+                var initTimestamp = request.params.initTimestamp;
+                var msgType = request.params.msgType;
+                var message = request.params.message;
+
+                var params = {
+                    initTimestamp: typeof initTimestamp == 'undefined' ? '' : initTimestamp,
+                    msgType: typeof msgType == 'undefined' ? '' : msgType,
+                    message: typeof  message == 'undefined' ? '' : message,
                     list: departments_list
-                });
+                };
+
+                response.render('sb_departments', params);
             };
             //forwardRequestGET('/hospital/department/' + hospitalId, callback);
             retrieveDepartmentList(hospitalId, callback);
@@ -222,10 +261,20 @@ exports.doctors = function (request, response) {
             //获取科室信息和医生信息
             retrieveDepartmentList(hospitalId, function (departments_list) {
                 retrieveDoctorList(hospitalId, function (doctors) {
-                    response.render('sb_doctors', {
+
+                    var initTimestamp = request.params.initTimestamp;
+                    var msgType = request.params.msgType;
+                    var message = request.params.message;
+
+                    var params = {
+                        initTimestamp: typeof initTimestamp == 'undefined' ? '' : initTimestamp,
+                        msgType: typeof msgType == 'undefined' ? '' : msgType,
+                        message: typeof  message == 'undefined' ? '' : message,
                         departments: departments_list,
                         list: doctors
-                    });
+                    };
+
+                    response.render('sb_doctors', params);
                 });
             });
         }
