@@ -14,67 +14,117 @@ block content
 
       div#panel-current.tab-pane.fade.in.active
          h3 当前排班情况
+         h4 未来一周
          table.time-slots.table.table-bordered
-            tr
+            tr.title
                td
-               td 星期一
-               td 星期二
-               td 星期三
-               td 星期四
-               td 星期五
-               td 星期六
-               td 星期日
+               td.tcell(data-plus-day='0')
+               td.tcell(data-plus-day='1')
+               td.tcell(data-plus-day='2')
+               td.tcell(data-plus-day='3')
+               td.tcell(data-plus-day='4')
+               td.tcell(data-plus-day='5')
+               td.tcell(data-plus-day='6')
             tr
-               td 上午
-               td.checkable(data-row='1', data-col='1')
+               td.title 上午
+               td.cell(data-row='1', data-col='1')
                   a.x-editable
-               td.checkable(data-row='2', data-col='1')
+               td.cell(data-row='2', data-col='1')
                   a.x-editable
-               td.checkable(data-row='3', data-col='1')
+               td.cell(data-row='3', data-col='1')
                   a.x-editable
-               td.checkable(data-row='4', data-col='1')
+               td.cell(data-row='4', data-col='1')
                   a.x-editable
-               td.checkable(data-row='5', data-col='1')
+               td.cell(data-row='5', data-col='1')
                   a.x-editable
-               td.checkable(data-row='6', data-col='1')
+               td.cell(data-row='6', data-col='1')
                   a.x-editable
-               td.checkable(data-row='7', data-col='1')
+               td.cell(data-row='7', data-col='1')
                   a.x-editable
 
             tr
-               td 下午
-               td.checkable(data-row='1', data-col='2')
+               td.title 下午
+               td.cell(data-row='1', data-col='2')
                   a.x-editable
-               td.checkable(data-row='2', data-col='2')
+               td.cell(data-row='2', data-col='2')
                   a.x-editable
-               td.checkable(data-row='3', data-col='2')
+               td.cell(data-row='3', data-col='2')
                   a.x-editable
-               td.checkable(data-row='4', data-col='2')
+               td.cell(data-row='4', data-col='2')
                   a.x-editable
-               td.checkable(data-row='5', data-col='2')
+               td.cell(data-row='5', data-col='2')
                   a.x-editable
-               td.checkable(data-row='6', data-col='2')
+               td.cell(data-row='6', data-col='2')
                   a.x-editable
-               td.checkable(data-row='7', data-col='2')
+               td.cell(data-row='7', data-col='2')
                   a.x-editable
 
             tr
-               td 晚上
-               td.checkable(data-row='1', data-col='3')
+               td.title 晚上
+               td.cell(data-row='1', data-col='3')
                   a.x-editable
-               td.checkable(data-row='2', data-col='3')
+               td.cell(data-row='2', data-col='3')
                   a.x-editable
-               td.checkable(data-row='3', data-col='3')
+               td.cell(data-row='3', data-col='3')
                   a.x-editable
-               td.checkable(data-row='4', data-col='3')
+               td.cell(data-row='4', data-col='3')
                   a.x-editable
-               td.checkable(data-row='5', data-col='3')
+               td.cell(data-row='5', data-col='3')
                   a.x-editable
-               td.checkable(data-row='6', data-col='3')
+               td.cell(data-row='6', data-col='3')
                   a.x-editable
-               td.checkable(data-row='7', data-col='3')
+               td.cell(data-row='7', data-col='3')
                   a.x-editable
+                  
+         script.
+            var date = new Date();
+            var dayToChinese = [
+               '星期日',
+               '星期一',
+               '星期二',
+               '星期三',
+               '星期四',
+               '星期五',
+               '星期六'
+            ];
+            Date.prototype.yyyy_mm_dd = function () {
+               var yyyy = this.getFullYear().toString();
+               var mm = (this.getMonth() + 1).toString();
+               var dd = this.getDate().toString();
+               return yyyy + '-' + (mm[1] ? mm : "0" + mm[0]) + '-' + (dd[1] ? dd : "0" + dd[0]);
+            };
+            var shiftDate = function(date, what, count) {
+               var proc1 = 'get' + what,
+                       proc2 = 'set' + what;
+               var value = Date.prototype[proc1].call(date);
+               Date.prototype[proc2].call(date, value + count);
+               return date;
+            }
+            var dates = [];
+            for (var i = 0; i < 7; ++i) {
+               dates[i] = shiftDate(new Date(), 'Date', i);
+            }
+            $('.cell').each(function(index, element) {
+               var row = $(element).data('row');
+               var col = $(element).data('col');
 
+               $(element).data('period', col);
+               $(element).attr('data-period', col);
+               $(element).data('date', dates[row - 1].yyyy_mm_dd());
+               $(element).attr('data-date', dates[row - 1].yyyy_mm_dd());
+            });
+            $('.tcell').each(function(index, element) {
+               var date = shiftDate(new Date(), 'Date', parseInt($(element).data('plus-day')));
+               $(element).html(dayToChinese[date.getDay()] + '<br>' + date.yyyy_mm_dd());
+            });
+
+         style.
+            #panel-current .time-slots {
+               text-align: center;
+            }
+            .time-slots .title {
+               font-weight: bold;
+            }
       div#panel-weekly.tab-pane.fade
          h3 修改每周排班
          table.time-slots.table.table-bordered
@@ -89,53 +139,53 @@ block content
                td 星期日
             tr
                td 上午
-               td.checkable(data-row='1', data-col='1')
+               td.cell(data-row='1', data-col='1')
                   a.x-editable
-               td.checkable(data-row='2', data-col='1')
+               td.cell(data-row='2', data-col='1')
                   a.x-editable
-               td.checkable(data-row='3', data-col='1')
+               td.cell(data-row='3', data-col='1')
                   a.x-editable
-               td.checkable(data-row='4', data-col='1')
+               td.cell(data-row='4', data-col='1')
                   a.x-editable
-               td.checkable(data-row='5', data-col='1')
+               td.cell(data-row='5', data-col='1')
                   a.x-editable
-               td.checkable(data-row='6', data-col='1')
+               td.cell(data-row='6', data-col='1')
                   a.x-editable
-               td.checkable(data-row='7', data-col='1')
+               td.cell(data-row='7', data-col='1')
                   a.x-editable
 
             tr
                td 下午
-               td.checkable(data-row='1', data-col='2')
+               td.cell(data-row='1', data-col='2')
                   a.x-editable
-               td.checkable(data-row='2', data-col='2')
+               td.cell(data-row='2', data-col='2')
                   a.x-editable
-               td.checkable(data-row='3', data-col='2')
+               td.cell(data-row='3', data-col='2')
                   a.x-editable
-               td.checkable(data-row='4', data-col='2')
+               td.cell(data-row='4', data-col='2')
                   a.x-editable
-               td.checkable(data-row='5', data-col='2')
+               td.cell(data-row='5', data-col='2')
                   a.x-editable
-               td.checkable(data-row='6', data-col='2')
+               td.cell(data-row='6', data-col='2')
                   a.x-editable
-               td.checkable(data-row='7', data-col='2')
+               td.cell(data-row='7', data-col='2')
                   a.x-editable
 
             tr
                td 晚上
-               td.checkable(data-row='1', data-col='3')
+               td.cell(data-row='1', data-col='3')
                   a.x-editable
-               td.checkable(data-row='2', data-col='3')
+               td.cell(data-row='2', data-col='3')
                   a.x-editable
-               td.checkable(data-row='3', data-col='3')
+               td.cell(data-row='3', data-col='3')
                   a.x-editable
-               td.checkable(data-row='4', data-col='3')
+               td.cell(data-row='4', data-col='3')
                   a.x-editable
-               td.checkable(data-row='5', data-col='3')
+               td.cell(data-row='5', data-col='3')
                   a.x-editable
-               td.checkable(data-row='6', data-col='3')
+               td.cell(data-row='6', data-col='3')
                   a.x-editable
-               td.checkable(data-row='7', data-col='3')
+               td.cell(data-row='7', data-col='3')
                   a.x-editable
 
       div#panel-temp.tab-pane.fade
