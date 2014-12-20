@@ -21,21 +21,19 @@ block content
                   th 名称
                   th 电话
                   th 简介
-                  th 操作
+                  th.operation 操作
             tbody
                each department in list
                   tr
                      td #{department.id}
                      td #{department.name}
                      td
-                        a.x-editable(href='#', data-id='#{department.id}', data-prop='phone')= department.phone
-                     td
-                        -var description = department.description;
-                        - description = description.substr(0, 20) + '...';
-                        a.x-editable(href='#', data-id='#{department.id}', data-prop='description') #{description}.
-                     td
+                        a.x-editable(href='#', data-id='#{department.id}')= department.phone
+                     td.description
+                        a.x-editable(href='#', data-id='#{department.id}')= department.description
+                     td.operation
                         button.button.xs-button.red-button.delete-department(data-id='#{department.id}', data-name='#{department.name}')
-                           i.fa.fa-trash.fa-fw 删除
+                           i.fa.fa-trash 删除
 
          script.
             $('#department-table').DataTable();
@@ -57,6 +55,20 @@ block content
                }
             });
 
+            $('#panel-manage .description a.x-editable').each(function(index, element) {
+               var departmentId = $(element).data('id');
+               $(element).editable({
+                  url: 'http://#{businessServer}/hospital/department/' + departmentId + '/update',
+                  type: 'textarea',
+                  send: 'always',
+                  params: function(params) {
+                     return {
+                        'description': params.value
+                     }
+                  }
+               });
+            });
+
             $('#panel-manage a.x-editable').each(function(index, element) {
                var departmentId = $(element).data('id');
                var prop = $(element).data('prop');
@@ -65,9 +77,9 @@ block content
                   type: 'text',
                   send: 'always',
                   params: function(params) {
-                     var r = {};
-                     r[prop] = params.value;
-                     return r;
+                     return {
+                        'phone': params.value
+                     }
                   }
                });
             });
@@ -100,3 +112,8 @@ block content
 
    script.
       $('#add-department').validate();
+
+   style.
+      .operation {
+         width: 60px;
+      }
