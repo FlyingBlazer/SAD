@@ -9,6 +9,7 @@ exports.getRaw = function(req, res, next) {
         req.models.working.find({doctor_id: doctorId}, function(err, workings) {
             if(err && err.message != 'Not found') return next(err);
             workings.forEach(function(working){
+                console.log(working.frequency);
                 switch(working.frequency.charAt(0)){
                     case '0':
                         var date = new Date(working.date);
@@ -32,7 +33,9 @@ exports.getRaw = function(req, res, next) {
             });
             res.json({
                 code: 0,
-                message: 'success'
+                message: 'success',
+                week: week_stat,
+                temp: temp_stat
             });
         });
     });
