@@ -29,31 +29,28 @@ DELIMITER $$
 --
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AfternoonCheck`()
 BEGIN
-	START TRANSACTION;
-	UPDATE appointment SET status=concat(substring(status,1,3),'1',substring(status,5,2)) WHERE period=2 AND UNIX_TIMESTAMP(time)<=UNIX_TIMESTAMP();
+  START TRANSACTION;
+  UPDATE appointment SET status=concat(substring(status,1,3),'11',substring(status,6,1)) WHERE period=2 AND UNIX_TIMESTAMP(time)<=UNIX_TIMESTAMP();
     UPDATE user SET credit=credit-(SELECT count(*) FROM appointment WHERE appointment.status LIKE '__1100' AND appointment.user_id=user.id);
     UPDATE user SET isactivated=-2 WHERE credit<=0;
-    UPDATE appointment SET status=concat(substring(status,1,4),'1',substring(status,6,1));
     COMMIT;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `EveningCheck`()
 BEGIN
-	START TRANSACTION;
-	UPDATE appointment SET status=concat(substring(status,1,3),'1',substring(status,5,2)) WHERE period=3 AND UNIX_TIMESTAMP(time)<=UNIX_TIMESTAMP();
+  START TRANSACTION;
+  UPDATE appointment SET status=concat(substring(status,1,3),'11',substring(status,6,1)) WHERE period=3 AND UNIX_TIMESTAMP(time)<=UNIX_TIMESTAMP();
     UPDATE user SET credit=credit-(SELECT count(*) FROM appointment WHERE appointment.status LIKE '__1100' AND appointment.user_id=user.id);
     UPDATE user SET isactivated=-2 WHERE credit<=0;
-    UPDATE appointment SET status=concat(substring(status,1,4),'1',substring(status,6,1));
     COMMIT;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `MorningCheck`()
 BEGIN
-	START TRANSACTION;
-	UPDATE appointment SET status=concat(substring(status,1,3),'1',substring(status,5,2)) WHERE period=1 AND UNIX_TIMESTAMP(time)<=UNIX_TIMESTAMP();
+  START TRANSACTION;
+  UPDATE appointment SET status=concat(substring(status,1,3),'11',substring(status,6,1)) WHERE period=1 AND UNIX_TIMESTAMP(time)<=UNIX_TIMESTAMP();
     UPDATE user SET credit=credit-(SELECT count(*) FROM appointment WHERE appointment.status LIKE '__1100' AND appointment.user_id=user.id);
     UPDATE user SET isactivated=-2 WHERE credit<=0;
-    UPDATE appointment SET status=concat(substring(status,1,4),'1',substring(status,6,1));
     COMMIT;
 END$$
 
