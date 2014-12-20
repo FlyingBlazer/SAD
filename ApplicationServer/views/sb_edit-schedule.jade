@@ -125,6 +125,8 @@ block content
             .time-slots .title {
                font-weight: bold;
             }
+
+
       div#panel-weekly.tab-pane.fade
          h3 修改每周排班
          table.time-slots.table.table-bordered
@@ -139,81 +141,88 @@ block content
                td 星期日
             tr
                td 上午
-               td.cell(data-row='1', data-col='1')
-                  a.x-editable
-               td.cell(data-row='2', data-col='1')
-                  a.x-editable
-               td.cell(data-row='3', data-col='1')
-                  a.x-editable
-               td.cell(data-row='4', data-col='1')
-                  a.x-editable
-               td.cell(data-row='5', data-col='1')
-                  a.x-editable
-               td.cell(data-row='6', data-col='1')
-                  a.x-editable
-               td.cell(data-row='7', data-col='1')
-                  a.x-editable
+               td.cell
+                  a.x-editable(href='#', data-day='1', data-period='1')
+               td.cell
+                  a.x-editable(href='#', data-day='2', data-period='1')
+               td.cell
+                  a.x-editable(href='#', data-day='3', data-period='1')
+               td.cell
+                  a.x-editable(href='#', data-day='4', data-period='1')
+               td.cell
+                  a.x-editable(href='#', data-day='5', data-period='1')
+               td.cell
+                  a.x-editable(href='#', data-day='6', data-period='1')
+               td.cell
+                  a.x-editable(href='#', data-day='7', data-period='1')
 
             tr
                td 下午
-               td.cell(data-row='1', data-col='2')
-                  a.x-editable
-               td.cell(data-row='2', data-col='2')
-                  a.x-editable
-               td.cell(data-row='3', data-col='2')
-                  a.x-editable
-               td.cell(data-row='4', data-col='2')
-                  a.x-editable
-               td.cell(data-row='5', data-col='2')
-                  a.x-editable
-               td.cell(data-row='6', data-col='2')
-                  a.x-editable
-               td.cell(data-row='7', data-col='2')
-                  a.x-editable
+               td.cell
+                  a.x-editable(href='#', data-day='1', data-period='2')
+               td.cell
+                  a.x-editable(href='#', data-day='2', data-period='2')
+               td.cell
+                  a.x-editable(href='#', data-day='3', data-period='2')
+               td.cell
+                  a.x-editable(href='#', data-day='4', data-period='2')
+               td.cell
+                  a.x-editable(href='#', data-day='5', data-period='2')
+               td.cell
+                  a.x-editable(href='#', data-day='6', data-period='2')
+               td.cell
+                  a.x-editable(href='#', data-day='7', data-period='2')
 
             tr
                td 晚上
-               td.cell(data-row='1', data-col='3')
-                  a.x-editable
-               td.cell(data-row='2', data-col='3')
-                  a.x-editable
-               td.cell(data-row='3', data-col='3')
-                  a.x-editable
-               td.cell(data-row='4', data-col='3')
-                  a.x-editable
-               td.cell(data-row='5', data-col='3')
-                  a.x-editable
-               td.cell(data-row='6', data-col='3')
-                  a.x-editable
-               td.cell(data-row='7', data-col='3')
-                  a.x-editable
+               td.cell
+                  a.x-editable(href='#', data-day='1', data-period='3')
+               td.cell
+                  a.x-editable(href='#', data-day='2', data-period='3')
+               td.cell
+                  a.x-editable(href='#', data-day='3', data-period='3')
+               td.cell
+                  a.x-editable(href='#', data-day='4', data-period='3')
+               td.cell
+                  a.x-editable(href='#', data-day='5', data-period='3')
+               td.cell
+                  a.x-editable(href='#', data-day='6', data-period='3')
+               td.cell
+                  a.x-editable(href='#', data-day='7', data-period='3')
+
+         script.
+            $('#panel-weekly a').each(function(index, element) {
+               $(element).editable({
+
+               });
+            });
 
       div#panel-temp.tab-pane.fade
          h3 临时排班管理
          h4 添加记录
-         form(method='post', action='/hospital/doctor/1/working/temp/add', id='add-temp')
+         form(id='add-temp')
             .form-group
                .prompt
                   label(for='date') 日期
                .control
-                  input#date.form-control.date-picker(name='date', required, type='text')
+                  input#date.form-control.date-picker(name='date', type='text', required)
 
             .form-group
                .prompt
                   label(for='period') 时间段
                .control
-                  select#period.form-control(name='period', data-placeholder='选择称号...', required)
-                     option(value='上午') 上午
-                     option(value='下午') 下午
-                     option(value='晚上') 晚上
+                  select#period.form-control(name='period', data-placeholder='选择时间段...', required)
+                     option(value='1') 上午
+                     option(value='2') 下午
+                     option(value='3') 晚上
 
             .form-group
                .prompt
                   label(for='capacity') 可预约人数
                .control
-                  input#capacity.form-control(name='capacity', required, type='number')
+                  input#capacity.form-control(name='capacity', type='number', required)
                   .note 设为 0 即表示不开放预约。
-            button.button.submit-button.green-button.button-with-icon(type='submit')
+            button#submit-button.button.submit-button.green-button.button-with-icon(type='submit', data-doctor_id='1')
                i.fa.fa-plus
                | &nbsp;添加临时排班记录
 
@@ -233,6 +242,7 @@ block content
                   td: button.button.red-button.xs-button.delete-temp(data-date='2014-12-31', data-period='3', data-doctor_id='1') 删除记录
 
          script.
+            $('#add-temp').validate();
             $('.date-picker').datepicker({
                format: "yyyy-mm-dd",
                todayBtn: "linked",
@@ -241,15 +251,42 @@ block content
                autoclose: true,
                todayHighlight: true
             });
+            $('#submit-button').on('click', function(e) {
+               e.preventDefault();
+               var date = $('#date').val();
+               var period = $('#period').val();
+               var capacity = $('#capacity').val();
+               var doctorId = $(this).data('doctor_id');
+               if (date != '' && period != '' && capacity != '') {
+                  $.ajax({
+                     url: '/hospital/doctor/' + doctorId + '/working/temp/add',
+                     type: 'POST',
+                     dataType: '',
+                     data: '' // TODO-API 2-2-6-4
+                  }).done(function(data) {
+                     if (data.code == 0) {
+                        toastr.success('临时排班已添加', '成功');
+                        $('#date').val(null);
+                        $('#period').val(null);
+                        $('#capacity').val(null);
+                     } else {
+                        toastr.error('系统错误。错误代码：' + data.code, '添加失败');
+                     }
+                  }).error(function() {
+                     toastr.error('系统发生致命错误。错误信息：ECONNECTREFUSED', '添加失败');
+                  });
+               }
+            });
+
             $('#temp-table').DataTable();
             $('.delete-temp').click(function() {
                if (confirm('是否确定删除该排班项？')) {
-                  var id = $(this).data('doctor_id');
+                  var doctorId = $(this).data('doctor_id');
                   $.ajax({
-                     url: '/hospital/doctor/' + id + '/working/temp/delete',
+                     url: '/hospital/doctor/' + doctorId + '/working/temp/delete',
                      type: 'POST',
-                     dataType: 'json',
-                     data: ''
+                     dataType: '',
+                     data: '' // TODO-API 2-2-6-5
                   }).done(function(data) {
                      if (data.code == 0) {
                         toastr.success('排班已经删除', '成功');

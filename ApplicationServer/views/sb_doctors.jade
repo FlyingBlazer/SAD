@@ -159,11 +159,11 @@ block content
                   label 可预约人数
                .control
                   label(for='morning') 上午
-                  input#morning.form-control.inline(name='morning', type='number')
+                  input#morning.form-control.inline(name='morning', type='number', value='0', required)
                   label(for='afternoon') 下午
-                  input#afternoon.form-control.inline(name='afternoon', type='number')
+                  input#afternoon.form-control.inline(name='afternoon', type='number', value='0', required)
                   label(for='evening') 晚上
-                  input#evening.form-control.inline(name='evening', type='number')
+                  input#evening.form-control.inline(name='evening', type='number', value='0', required)
                   .note 详细的预约人数控制可以在添加医生之后设定。
 
             input(type='hidden', name='hospitalId', id='hospital-id' value='')
@@ -228,6 +228,7 @@ block content
       });
 
    script.
+      $('#add-doctor').validate();
       var $cell = $('.time-slots .checkable');
       $cell.click(function() {
          $(this).toggleClass('checked');

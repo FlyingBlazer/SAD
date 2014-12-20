@@ -96,7 +96,7 @@ router.route('/backstage/departments/:initTimestamp/:msgType/:message').get(cont
 router.route('/backstage/doctors').get(controllers.backstage.doctors);
 router.route('/backstage/doctors/:initTimestamp/:msgType/:message').get(controllers.backstage.doctors);
 router.route('/backstage/reservations').get(controllers.backstage.reservations);
-router.route('/backstage/doctor/:id/edit_schedule').get(controllers.backstage.editSchedule).post(controllers.backstage.modifyTempWorking);
+router.route('/backstage/doctor/:id/edit_schedule').get(controllers.backstage.editSchedule);
 
 // add
 router.route('/backstage/api/add/department').post(controllers.backstage.addDepartment);
