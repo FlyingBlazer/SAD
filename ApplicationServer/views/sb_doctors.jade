@@ -1,3 +1,186 @@
-//
-   Created by renfei on 14/12/19.
+extends ./sb_layout
 
+block content
+   h2 医生管理
+
+   ul.nav.nav-tabs(role='tablist')
+      li.active(role='presentation')
+         a(href='#panel-manage', role='tab', data-toggle='tab') 现有医生管理
+      li(role='presentation')
+         a(href='#panel-add', role='tab', data-toggle='tab') 添加医生
+
+   div.tab-content
+      div#panel-manage.tab-pane.fade.in.active
+         h3 现有医生管理
+         table#doctor-table.table.table-striped.table-bordered.table-hover
+            thead
+               tr
+                  th id
+                  th 姓名
+                  th 所属科室
+                  th 职称
+                  th 描述
+                  th 操作
+            tbody
+
+
+      div#panel-add.tab-pane.fade
+         h3 添加医生
+         form
+            .form-group
+               .prompt
+                  label(for='name') 姓名
+               .control
+                  input#name.form-control(name='name', required='', type='text')
+
+            .form-group
+               .prompt
+                  label(for='title') 所属科室
+               .control
+                  select.form-control(name='title', data-placeholder='选择科室...' required='')
+                     option(value='')
+                     option(value='')
+                     option(value='')
+                     option(value='')
+                     option(value='')
+                     option(value='')
+                     option(value='')
+
+            .form-group
+               .prompt
+                  label(for='title') 称号
+               .control
+                  select.form-control(name='title', data-placeholder='选择称号...' required='')
+                     option(value='医师') 医师
+                     option(value='专家') 专家
+                     option(value='特级专家') 特级专家
+                     option(value='海外专家') 海外专家
+                     option(value='实习医生') 实习医生
+                     option(value='主治医生') 主治医生
+                     option(value='主任') 主任
+                     option(value='副主任') 副主任
+
+            .form-group
+               .prompt
+                  label(for='price') 挂号价格（元）
+               .control
+                  input#price.form-control(name='price', required='', type='text')
+
+            .form-group
+               .prompt
+                  label(for='description') 描述
+               .control
+                  textarea#description.form-control(name='description', required='', rows='5')
+
+            .form-group
+               .prompt
+                  label 出诊时间
+               .control
+                  table.time-slots.table.table-bordered
+                     tr
+                        td
+                        td 星期一
+                        td 星期二
+                        td 星期三
+                        td 星期四
+                        td 星期五
+                        td 星期六
+                        td 星期日
+                     tr
+                        td 上午
+                        td.checkable(data-row='1', data-col='1')
+                           i.fa-check.fa.fa-fw
+                        td.checkable(data-row='2', data-col='1')
+                           i.fa-check.fa.fa-fw
+                        td.checkable(data-row='3', data-col='1')
+                           i.fa-check.fa.fa-fw
+                        td.checkable(data-row='4', data-col='1')
+                           i.fa-check.fa.fa-fw
+                        td.checkable(data-row='5', data-col='1')
+                           i.fa-check.fa.fa-fw
+                        td.checkable(data-row='6', data-col='1')
+                           i.fa-check.fa.fa-fw
+                        td.checkable(data-row='7', data-col='1')
+                           i.fa-check.fa.fa-fw
+
+                     tr
+                        td 下午
+                        td.checkable(data-row='1', data-col='2')
+                           i.fa-check.fa.fa-fw
+                        td.checkable(data-row='2', data-col='2')
+                           i.fa-check.fa.fa-fw
+                        td.checkable(data-row='3', data-col='2')
+                           i.fa-check.fa.fa-fw
+                        td.checkable(data-row='4', data-col='2')
+                           i.fa-check.fa.fa-fw
+                        td.checkable(data-row='5', data-col='2')
+                           i.fa-check.fa.fa-fw
+                        td.checkable(data-row='6', data-col='2')
+                           i.fa-check.fa.fa-fw
+                        td.checkable(data-row='7', data-col='2')
+                           i.fa-check.fa.fa-fw
+
+                     tr
+                        td 晚上
+                        td.checkable(data-row='1', data-col='3')
+                           i.fa-check.fa.fa-fw
+                        td.checkable(data-row='2', data-col='3')
+                           i.fa-check.fa.fa-fw
+                        td.checkable(data-row='3', data-col='3')
+                           i.fa-check.fa.fa-fw
+                        td.checkable(data-row='4', data-col='3')
+                           i.fa-check.fa.fa-fw
+                        td.checkable(data-row='5', data-col='3')
+                           i.fa-check.fa.fa-fw
+                        td.checkable(data-row='6', data-col='3')
+                           i.fa-check.fa.fa-fw
+                        td.checkable(data-row='7', data-col='3')
+                           i.fa-check.fa.fa-fw
+
+                  span.button.gray-button.xs-button.select-all
+                     i.fa.fa-check-square-o
+                     | &nbsp;全选
+                  span.button.gray-button.xs-button.select-none
+                     i.fa.fa-close
+                     | &nbsp;清除选择
+
+            input(type='hidden' name='hospitalId' value='')
+            button.button.submit-button.green-button.button-with-icon(type='submit')
+               i.fa.fa-plus
+               | &nbsp;添加医生
+
+   style.
+      .time-slots td {
+         text-align: center;
+      }
+      .time-slots i {
+         display: none;
+      }
+      .time-slots td.checked i {
+         display: inline-block;
+      }
+      .time-slots td.checkable {
+         background: #fff;
+         cursor: pointer;
+      }
+      .time-slots td.checkable:hover {
+         background: #f4f4f4;
+      }
+      .time-slots td.checkable.checked {
+         background: #f4f4f4;
+      }
+      .select-all,
+      .select-none {
+         margin-right: 15px;
+      }
+
+   script.
+      $('.time-slots .checkable').click(function() {
+         $(this).toggleClass('checked');
+      });
+      $('.select-all').click(function() {
+         $('.time-slots .checkable').addClass('checked');
+      });
+      $('.select-none').click(function() {
+         $('.time-slots .checkable').removeClass('checked');
+      });

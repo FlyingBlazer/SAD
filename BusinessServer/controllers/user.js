@@ -72,7 +72,8 @@ exports.signUp = function(req, res, next) {
         id = req.body.id,
         phone = req.body.phone,
         name = req.body.name,
-        email = req.body.email;
+        email = req.body.email,
+        uip = req.body.ip;
     req.models.user.create({
         name: username,
         realName: name,
@@ -81,7 +82,8 @@ exports.signUp = function(req, res, next) {
         tel: phone,
         email: email,
         credit: 5,
-        isActivited: 0
+        isActivated: 0,
+        ip: uip
     }, function(err, user) {
         if(err && err.message != 'Not found') return next(err);
         res.json({

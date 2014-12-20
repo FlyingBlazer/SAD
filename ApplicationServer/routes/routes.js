@@ -89,8 +89,8 @@ router.route('/backstage/account/:msgType/:message').get(controllers.backstage.c
 router.route('/backstage/users').get(controllers.backstage.users);
 router.route('/backstage/users/:msgType/:message').get(controllers.backstage.users);
 
-router.route('/backstage/hospitals').get(controllers.backstage.hospitals);
-router.route('/backstage/hospitals/:msgType/:message').get(controllers.backstage.hospitals);
+router.route('/backstage/manage-hospitals').get(controllers.backstage.hospitals);
+router.route('/backstage/manage-hospitals/:msgType/:message').get(controllers.backstage.hospitals);
 router.route('/backstage/departments').get(controllers.backstage.departments);
 router.route('/backstage/departments/:msgType/:message').get(controllers.backstage.departments);
 router.route('/backstage/doctors').get(controllers.backstage.doctors);

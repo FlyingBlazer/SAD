@@ -26,32 +26,6 @@ exports.list = function(req, res, next) {
             });
         }
     );
-    //req.models.hospital.get(hospitalId, function(err, hospital) {
-    //    if(err && err.message != 'Not found') return next(err);
-    //    if(!hospital) return next(new Errors.HospitalNotExist("Department Not Exist"));
-    //    var ret = {};
-    //    hospital.departments.forEach(function(department) {
-    //        if(!Array.isArray(ret[department.id])) {
-    //            ret[department.id] = [];
-    //        }
-    //        department.doctors.forEach(function(doctor) {
-    //            ret[department.id].push({
-    //                id: doctor.id,
-    //                name: doctor.name,
-    //                hospital: hospital.name,
-    //                department: department.name,
-    //                title: doctor.title,
-    //                description: doctor.info,
-    //                photo_url: doctor.photo
-    //            });
-    //        });
-    //    });
-    //    res.json({
-    //        code: 0,
-    //        message: 'success',
-    //        doctors: ret
-    //    });
-    //});
 };
 
 exports.add = function(req, res, next) {
@@ -61,7 +35,8 @@ exports.add = function(req, res, next) {
             name: req.body.name,
             photo: req.body.photo,
             info: req.body.description,
-            title: req.body.title
+            title: req.body.title,
+            price: req.body.price
         }, function(err, doctor) {
             if(err && err.message != 'Not found') return next(err);
             doctor.setDepartment(department, function(err) {
@@ -129,6 +104,9 @@ exports.detail = function(req, res, next) {
             var day = (curDate.getDay()+6)%7+1;
             var dd = new Date();
             var slot = [];
+            var hasTemp=[{morning: 0, afternoon: 0,evening: 0},{morning: 0, afternoon: 0,evening: 0},{morning: 0, afternoon: 0,evening: 0},
+                        {morning: 0, afternoon: 0,evening: 0},{morning: 0, afternoon: 0,evening: 0},{morning: 0, afternoon: 0,evening: 0},
+                        {morning: 0, afternoon: 0,evening: 0}];
             for(var i = 0; i < 7; i++) {
                 slot.push({
                     date: {
@@ -155,9 +133,9 @@ exports.detail = function(req, res, next) {
                         })()
                     },
                     slot: {
-                        morning: false,
-                        afternoon: false,
-                        evening: false
+                        morning: [false, 0, 0],
+                        afternoon: [false, 0, 0],
+                        evening: [false, 0, 0]
                     }
                 });
             }
@@ -179,29 +157,47 @@ exports.detail = function(req, res, next) {
                     case '0':
                         var i = curDate.getDateOffset(tarDate);
                         if(i <= 7 && i > 0) {
-                            slot[i].slot[key] = true;
+                            slot[i].slot[key][0] = (working.frequency.charAt(1) == '1');
+                            slot[i].slot[key][1] =working.total_app;
+                            hasTemp[i][key] = 1;
                         }
                         break;
                     case '1':
                         slot.forEach(function(s) {
-                            s.slot[key] = true;
+                            s.slot[key][0] = true;
                         });
                         break;
                     case '2':
                         for(var j=1; j <= 7; j++) {
-                            if(working.frequency.charAt(j) == '1') {
-                                slot[(6-day+j)%7].slot[key] = true;
+                            if(working.frequency.charAt(j) == '1'&&hasTemp[(6-day+j)%7][key] == 0) {
+                                slot[(6-day+j)%7].slot[key][0] = true;
+                                slot[(6-day+j)%7].slot[key][1] =working.total_app;
                             }
                         }
                         break;
                     case '3':
                         var i = tarDate.getDate() - date;
                         if(i < 7 && i >= 0) {
-                            slot[i].slot[key] = true;
+                            slot[i].slot[key][0] = true;
                         }
                         break;
                 }
             });
+            for(var i = 0; i < 7; i++){
+                var t_date=slot[i].date.year+'-'+slot[i].date.month+'-'+slot[i].date.date;
+                req.models.appointment.aggregate({time: t_date,doctor_id: req.params.doctorId, period: 1}).count('id').get(function(err, app_count) {
+                   if(err) throw err;
+                    slot[i].slot['morning'][2] = app_count;
+                });
+                req.models.appointment.aggregate({time: t_date,doctor_id: req.params.doctorId, period: 2}).count('id').get(function(err, app_count) {
+                    if(err) throw err;
+                    slot[i].slot['afternoon'][2] = app_count;
+                });
+                req.models.appointment.aggregate({time: t_date,doctor_id: req.params.doctorId, period: 3}).count('id').get(function(err, app_count) {
+                    if(err) throw err;
+                    slot[i].slot['evening'][2] = app_count;
+                });
+            }
             doctor.getDepartment(function(err, department) {
                 if(err) throw err;
                 department.getHospital(function(err, hospital) {
