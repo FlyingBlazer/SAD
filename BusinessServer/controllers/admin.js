@@ -11,7 +11,7 @@ exports.login = function(req, res, next) {
                 code: 0,
                 message: 'success',
                 adminId: admin.id,
-                hospitalId: parseInt(admin.id.toString().slice(5)).toString()
+                hospitalId: parseInt(admin.name.toString().slice(5)).toString()
             });
         }
     });
