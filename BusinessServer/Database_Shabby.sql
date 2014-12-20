@@ -3439,7 +3439,7 @@ INSERT INTO `doctor` (`id`, `department_id`, `name`, `photo`, `info`, `title`, `
 
 CREATE TABLE IF NOT EXISTS `hospital` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `rating_id` int(11) NOT NULL,
+  `rating_id` int(11),
   `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `province` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `city` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
