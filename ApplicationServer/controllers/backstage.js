@@ -559,7 +559,7 @@ exports.users = function (request, response) {
                 hospitalId: getCookie(request).hospitalId,
                 hospitalName: getCookie(request).hospitalName,
                 businessServer: getCookie(request).businessServer,
-                list: result.users
+                list: result.users.validating//TODO 依API而定
             };
 
             printLogMessage(JSON.stringify(result.users));
