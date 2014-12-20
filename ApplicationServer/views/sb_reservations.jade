@@ -1,3 +1,54 @@
-//
-   Created by renfei on 14/12/19.
+extends ./sb_layout
+block content
+   script(type='javascript').
+      $(document).ready(function () {
+         $('#example').DataTable();
+         $('#confirm').bind("click", $('#confirm').attr('name'), function (params) {
+            $.post("/hospital/reservation/"+params.data[0]+"/cofirm",
 
+                    function (data, status) {
+                         location.reload(true);
+                    });
+         });
+
+      });
+   h2 预约单管理
+   div
+      table#example.display(cellspacing='0', width='80%')
+         thead
+            tr
+
+               th 医院
+               th 医生姓名
+               th 时间
+               th 状态
+               th 科室
+               th 价格
+               th 操作
+         tfoot
+            tr
+
+               th 医院
+               th 医生姓名
+               th 时间
+               th 状态
+               th 科室
+               th 价格
+               th 操作
+         tbody
+            if (reservations.length)
+               each item in reservations
+
+               tr
+                  td #{item.hospital_name}
+                  td #{item.doctor_name}
+                  td #{item.time}
+                  td #{item.status_msg}
+                  td #{item.department_name}
+                  td #{item.price}
+                  td
+                     if (item.status.charAt(2)!='2')
+                       button(id='confirm',name=item.reservation_id) 到场
+
+                     else
+                       label 已到场
