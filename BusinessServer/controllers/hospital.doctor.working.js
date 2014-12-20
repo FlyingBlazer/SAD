@@ -58,9 +58,9 @@ exports.addWeek = function(req, res, next) {
         var afternoon_app = 0;
         var evening_app = 0;
         for(var i = 0 ; i < 7 ; i++) {
-            morning.replaceAt(i + 1, new_working[i][0]!=0 ? 1 : 0);
-            afternoon.replaceAt(i + 1, new_working[i][1]!=0 ? 1 : 0);
-            evening.replaceAt(i + 1, new_working[i][2]!=0 ? 1 : 0);
+            morning = morning.replaceAt(i + 1, new_working[i][0]!=0 ? 1 : 0);
+            afternoon = afternoon.replaceAt(i + 1, new_working[i][1]!=0 ? 1 : 0);
+            evening = evening.replaceAt(i + 1, new_working[i][2]!=0 ? 1 : 0);
             morning_app=new_working[i][0]!=0 ? new_working[i][0] : morning_app;
             afternoon_app=new_working[i][1]!=0 ? new_working[i][1] : afternoon_app;
             evening_app=new_working[i][2]!=0 ? new_working[i][2] : evening_app;
@@ -136,26 +136,34 @@ exports.updateWeek = function(req, res, next) {
             for(var i = 0 ; i < works.length ; i++) {
                 switch(works[i]['period']) {
                     case 0:
-                        workings[m_index].frequency.replaceAt(works[i]['day'], works[i]['action']!=0 ? 1 : 0);
+                        workings[m_index].frequency = workings[m_index].frequency.replaceAt(works[i]['day'], works[i]['action']!=0 ? 1 : 0);
                         workings[m_index].totalApp=works[i]['action'];
                         break;
                     case 1:
-                        workings[a_index].frequency.replaceAt(works[i]['day'], works[i]['action']!=0 ? 1 : 0);
+                        workings[a_index].frequency = workings[a_index].frequency.replaceAt(works[i]['day'], works[i]['action']!=0 ? 1 : 0);
                         workings[a_index].totalApp=works[i]['action'];
                         break;
                     case 2:
-                        workings[e_index].frequency.replaceAt(works[i]['day'], works[i]['action']!=0 ? 1 : 0);
+                        workings[e_index].frequency = workings[e_index].frequency.replaceAt(works[i]['day'], works[i]['action']!=0 ? 1 : 0);
                         workings[e_index].totalApp=works[i]['action'];
                         break;
                 }
             }
-            works.save(function(err) {
-                if(err) throw err;
-                res.json({
-                    code: 0,
-                    message: 'success'
+            var count = workings.length;
+            workings.forEach(function(working) {
+                working.save(function(err) {
+                    if(err) throw err;
+                    finish();
                 });
             });
+            function finish() {
+                if(--count == 0) {
+                    res.json({
+                        code: 0,
+                        message: 'success'
+                    });
+                }
+            }
         });
     });
 };
@@ -176,7 +184,7 @@ exports.addTemp = function(req, res, next) {
             if (working) {
                 throw new Error.WorkingAlreadyExist("Working already Exists!");
             }
-            frequency.replaceAt(1, t_action==0 ? 0 : 1);
+            t_frequency = t_frequency.replaceAt(1, t_action==0 ? 0 : 1);
             req.models.working.create({
                 doctor_id: doctorId,
                 frequency: t_frequency,
@@ -232,10 +240,10 @@ function check(req, cb) {
             function(err, data){
                 if(err && err.message != 'Not found') return cb(err);
                 if(!data) {
-                    return next(new Errors.AdminDoctorError("No Such Doctor!"));
+                    return cb(new Errors.AdminDoctorError("No Such Doctor!"));
                 }
                 if(data[0]['id']!=hospital_id){
-                    return next(new Errors.AdminAccessRejected("Invalid Access For This Administrator!"));
+                    return cb(new Errors.AdminAccessRejected("Invalid Access For This Administrator!"));
                 }
                 cb(err, data, doctorId, adminId);
             });
