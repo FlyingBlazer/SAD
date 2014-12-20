@@ -228,38 +228,26 @@ exports.detail = function(req, res, next) {
                         break;
                 }
             });
-            var i = 0 ;
-            while( i < 7 ){
-                var cnt=3;
-                function nextturn(){
-                    if(--cnt==0){
-                        i++;
-                        cnt+3;
+            var startdate=slot[0].date.year+'-'+slot[0].date.month+'-'+slot[0].date.date;
+            var enddate=slot[6].date.year+'-'+slot[6].date.month+'-'+slot[6].date.date;
+            req.db.driver.execQuery("SELECT period as period, (DAYOFWEEK(time)+6)%7 as day, count(user_id) as appnum "+
+            "FROM appointment "+
+            "WHERE doctor_id=? "+
+            "AND time>='?' AND time<='?' "+
+            "GROUP BY period,time "+
+            "ORDER BY time",
+            [req.params.doctorId, startdate, enddate], function(err, datas) {
+                    if(err && err.message != 'Not found') {
+                        res.send(500, "Internal error");
+                        throw err;
                     }
-                }
-                var t_date=slot[i].date.year+'-'+slot[i].date.month+'-'+slot[i].date.date;
-                req.models.appointment.aggregate({time: t_date,doctor_id: req.params.doctorId, period: 1}).count('id').get(function(err, app_count) {
-                   if(err) throw err;
-                    console.log(i);
-                    nextturn();
-                    //slot[i].slot['morning'][2] = app_count;
-                });
-                req.models.appointment.aggregate({time: t_date,doctor_id: req.params.doctorId, period: 2}).count('id').get(function(err, app_count) {
-                    if(err) throw err;
-                    console.log(i);
-                    nextturn();
-                    //slot[i].slot['afternoon'][2] = app_count;
-                });
-                req.models.appointment.aggregate({time: t_date,doctor_id: req.params.doctorId, period: 3}).count('id').get(function(err, app_count) {
-                    if(err) throw err;
-                    console.log(i);
-                    nextturn();
-                    //slot[i].slot['evening'][2] = app_count;
-                });
-                if(i==7){
+                    if(datas){
+                        datas.forEach(function(adata){
+                            slot[(6-adata.day+j)%7].slot[adata.period==1? 'morning': (adata.period==2 ? 'afternoon' : 'evening')][1] =adata.appnum;
+                        });
+                    }
                     finish();
-                }
-            }
+            });
         });
     });
 };
