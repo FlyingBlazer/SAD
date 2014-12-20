@@ -101,6 +101,6 @@ router.route('/backstage/doctor/:id/edit_schedule').get(controllers.backstage.ed
 // add
 router.route('/backstage/api/add/department').post(controllers.backstage.addDepartment);
 router.route('/backstage/api/add/doctor').post(controllers.backstage.addDoctor);
-router.route('/backstage/hospitals').post(controllers.backstage.addHospital);
+router.route('/backstage/api/add/hospitals').post(controllers.backstage.addHospital);
 
 module.exports = router;
