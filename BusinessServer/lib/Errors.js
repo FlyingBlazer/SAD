@@ -232,6 +232,16 @@ exports.ConfirmFailure = function ConfirmFailure(message) {
 };
 util.inherits(exports.ConfirmFailure, restify.RestError);
 
+exports.ReservationConflict = function ReservationConflict(message) {
+    restify.RestError.call(this, {
+        restCode: '3011',
+        statusCode: 404,
+        message: message,
+        constructorOpt: ReservationConflict
+    });
+    this.name = 'ReservationConflict';
+};
+util.inherits(exports.ReservationConflict, restify.RestError);
 
 exports.DepartmentNotExist = function DepartmentNotExist(message) {
     restify.RestError.call(this, {

@@ -117,21 +117,32 @@ exports.add = function(req, res, next) {
                                 return next(new Errors.ReservationFullFailure("Appointment Full!"));
                             }
                             else{
-                                req.models.appointment.create({
-                                    time:adate,
-                                    period: aperiod,
-                                    status: '000000',
-                                    price: data1[0]['price'],
-                                    running_number: uuid.v4(),
-                                    user_id: auser_id,
-                                    doctor_id: adoctor_id,
-                                    record_time: new Date().Format('yyyy-MM-dd hh:mm:ss')
-                                },function(error,item){
-                                    if(error) throw error;
-                                    res.json({
-                                        code: 0,
-                                        message: 'success',
-                                        id: item.id
+                                req.models.appointment.find({user_id: auser_id, time: adate, period: aperiod}, function(err, appointments) {
+                                    if(err && err.message != 'Not found') return next(err);
+                                    if(!data1){}
+                                    appointments.forEach(function(appointment) {
+                                        appointment.getDoctor(function(err, doctor){
+                                           if(doctor.department_id == adepartment_id){
+                                               return next(new Errors.ReservationConflict('You have already had one appointment at that period for the same department'));
+                                           }
+                                        });
+                                    });
+                                    req.models.appointment.create({
+                                        time:adate,
+                                        period: aperiod,
+                                        status: '000000',
+                                        price: data1[0]['price'],
+                                        running_number: uuid.v4(),
+                                        user_id: auser_id,
+                                        doctor_id: adoctor_id,
+                                        record_time: new Date().Format('yyyy-MM-dd hh:mm:ss')
+                                    },function(error,item){
+                                        if(error) throw error;
+                                        res.json({
+                                            code: 0,
+                                            message: 'success',
+                                            id: item.id
+                                        });
                                     });
                                 });
                             }
