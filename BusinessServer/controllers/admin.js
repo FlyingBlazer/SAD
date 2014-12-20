@@ -11,7 +11,7 @@ exports.login = function(req, res, next) {
                 code: 0,
                 message: 'success',
                 adminId: admin.id,
-                hospitalId: parseInt(admin.name.toString().slice(5)).toString()
+                hospitalId: admin.auth == 0 ? 0 : parseInt(admin.name.toString().slice(5)).toString()
             });
         } else return next(new Errors.LoginFail('Invalid Username or Password'));
     });
@@ -30,9 +30,7 @@ exports.change_password = function(req, res, next) {
                 if(err) throw err;
                 res.json({
                     code: 0,
-                    message: 'success',
-                    adminId: admin.id,
-                    hospitalId: parseInt(admin.id.toString().slice(5)).toString()
+                    message: 'success'
                 });
             });
         } else return next(new Errors.UpdatePasswordFail('Invalid Original Password'));
