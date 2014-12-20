@@ -26,7 +26,7 @@ block content
 
       div#panel-add.tab-pane.fade
          h3 添加医生
-         form
+         form(method='post', action='/backstage/api/add/doctor', id='add-doctor')
             .form-group
                .prompt
                   label(for='name') 姓名
@@ -145,6 +145,7 @@ block content
                      | &nbsp;清除选择
 
             input(type='hidden' name='hospitalId' value='')
+            input(type='hidden' name='timeSlots' value='')
             button.button.submit-button.green-button.button-with-icon(type='submit')
                i.fa.fa-plus
                | &nbsp;添加医生
@@ -183,4 +184,18 @@ block content
       });
       $('.select-none').click(function() {
          $('.time-slots .checkable').removeClass('checked');
+      });
+      $('#add-doctor').on('submit', function() {
+         var timeSlots = [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0]
+         ];
+         $('td.clickable').each(function(idx, elm) {
+
+         });
       });

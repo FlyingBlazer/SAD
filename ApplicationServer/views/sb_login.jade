@@ -8,6 +8,7 @@ html
         link(rel="stylesheet", href="/backstage/css/admin.css", media="all")
         script(src="/backstage/plugins/jquery/jquery-2.1.1.min.js")
         script(src="/backstage/plugins/icheck/icheck.min.js")
+        script(src="/javascripts/md5.js")
         title 后台登陆
     body.login
         h1.site-title(style='color:white') SRF 管理后台
@@ -19,18 +20,25 @@ html
             form(method='POST')
                .input
                   i.fa.fa-user
-                  input.form-control(name='username', type='text', placeholder='用户名')
+                  input.form-control.input-username(name='username', type='text', placeholder='用户名')
                .input
                   i.fa.fa-lock
-                  input.form-control(name='password', type='password', placeholder='密码')
+                  input.form-control.input-password(name='password', type='password', placeholder='密码')
                label
                   input(type='checkbox', name='remember', value='1')
                   | 记住我
-               button.button.submit-button.green-button(name='submit', type='submit')
+               button#submit.button.submit-button.green-button(name='submit', type='submit')
                   | 登陆 &nbsp;
                   i.fa.fa-sign-in
-      script.
-            $('input').iCheck({
-                checkboxClass: 'icheckbox_minimal-grey',
-                radioClass: 'iradio_minimal-grey'
-            });
+
+
+    script.
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_minimal-grey',
+            radioClass: 'iradio_minimal-grey'
+        });
+        $('form').on('submit', function() {
+            var $p = $('.input-password');
+            $p.val(hex_md5($p.val()));
+            return true;
+        });

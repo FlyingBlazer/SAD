@@ -2,7 +2,7 @@
  * Created by renfei on 14/12/6.
  */
 
-var queryString = required('queryString');
+//var queryString = required('queryString');
 
 /**
  * 渲染主页
@@ -299,7 +299,7 @@ function clearCookie(response) {
  * @param callback 业务服务器返回的结果(JSON Object)
  */
 function forwardRequestPOST(data, path, callback) {
-    forwardRequest('POST', path, queryString.stringify(data), callback);
+    //forwardRequest('POST', path, queryString.stringify(data), callback);
 }
 
 /**
