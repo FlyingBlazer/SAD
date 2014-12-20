@@ -20,6 +20,7 @@ server.use(orm.express(settings.dbUrl, models));
 
 server.use(function(req, res, next) {
     res.charSet('utf-8');
+    res.header('Access-Control-Allow-Origin', '*');
     debug("Request received: %s %s", req.method, req.url);
     debug("body: ", req.body);
     debug("query: ", req.query);
