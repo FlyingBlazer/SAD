@@ -10,6 +10,9 @@ exports.getRaw = function(req, res, next) {
             workings.forEach(function(working){
                 switch(working.frequency.charAt(0)){
                     case '0':
+                        var date = new Date(working.date);
+                        var curDate = new Date();
+                        if(date.Format('yyyyMMdd') < curDate.Format('yyyyMMdd')) break;
                         var temp_working={
                             date: working.date,
                             period: working.period,
