@@ -1,145 +1,139 @@
 extends layout
 block title
+    link(href="/stylesheets/index.css", rel="stylesheet", media="all")
     title 主页
 
-
 block site-content
-    link(href="/stylesheets/index.css", rel="stylesheet", media="all")
-    link(href="/stylesheets/bootstrap/css/bootstrap-theme.min.css", rel="stylesheet", media="all")
-    .jumbotron(style='background-image: url(/images/index_pic0.jpg)')
+    .jumbotron
         .container
-            h1
-                font(color='#ffffff') SRF挂号平台
-            p
-                font(color='#ffffff') SRF挂号平台是一款面向全国用户的线上挂号平台，用户无论是在家中或者是通过手机都可以体验简单、便捷的挂号服务。
-            p
-                .row
-                    .col-lg-6
-                        .input-group
-                            input.form-control(type='text')
-                            span.input-group-btn
-                                button.btn.btn-default(type='button', onclick="alert('Welcome!')") &#x641C;&#x7D22;
-    .container.theme-showcase(role='main')
-        .page-header
-            h2
-                | 按地点查找
-        .tabbable
-            nav.navbar.navbar-default(role='navigation')
-                ul.nav.nav-tabs
-                    li.active
-                        a(href='#tab1', data-toggle='tab') A-E
-                    li
-                        a(href='#tab2', data-toggle='tab') F-J
-                    li
-                        a(href='#tab3', data-toggle='tab') K-O
-                    li
-                        a(href='#tab4', data-toggle='tab') P-T
-                    li
-                        a(href='#tab5', data-toggle='tab') U-Z
-            .tab-content
-                #tab1.tab-pane.active
-                    table.table
-                        tbody
-                            tr
-                                td
-                                    a(href='/choose-location/beijing') 北京市
-                                td
-                                    a(href='/choose-location/chongqing') 重庆市
-                                td
-                                    a(href='/choose-location/anhui') 安徽省
-                #tab2.tab-pane
-                    table.table
-                        tbody
-                            tr
-                                td
-                                    a(href='/choose-location/hebei') 河北省
-                                td
-                                    a(href='/choose-location/henan') 河南省
-                                td
-                                    a(href='/choose-location/heilongjiang') 黑龙江省
-                                td
-                                    a(href='/choose-location/hunan') 湖南省
-                            tr
-                                td
-                                    a(href='/choose-location/jiangsu') 江苏省
-                                td
-                                    a(href='/choose-location/jiangxi') 江西省
-                                td
-                                    a(href='/choose-location/hubei') 湖北省
-                                td
-                                    a(href='/choose-location/guangxi') 广西壮族自治区
-                            tr
-                                td
-                                    a(href='/choose-location/gansu') 甘肃省
-                                td
-                                    a(href='/choose-location/jilin') 吉林省
-                                td
-                                    a(href='/choose-location/fujian') 福建省
-                                td
-                                    a(href='/choose-location/guizhou') 贵州省
-                            tr
-                                td
-                                    a(href='/choose-location/guangdong') 广东省
-                                td
-                                    a(href='/choose-location/hainan') 海南省
-                #tab3.tab-pane
-                    table.table
-                        tbody
-                            tr
-                                td
-                                    a(href='/choose-location/liaoning') 辽宁省
-                                td
-                                    a(href='/choose-location/neimenggu') 内蒙古自治区
-                                td
-                                    a(href='/choose-location/ningxia') 宁夏回族自治区
-                #tab4.tab-pane
-                    table.table
-                        tbody
-                            tr
-                                td
-                                    a(href='/choose-location/tianjin') 天津市
-                                td
-                                    a(href='/choose-location/shanghai') 上海市
-                                td
-                                    a(href='/choose-location/shandong') 山东省
-                                td
-                                    a(href='/choose-location/shanxi') 山西省
-                            tr
-                                td
-                                    a(href='/choose-location/shanxi') 陕西省
-                                td
-                                    a(href='/choose-location/qinghai') 青海省
-                                td
-                                    a(href='/choose-location/sichuan') 四川省
-                #tab5.tab-pane
-                    table.table
-                        tbody
-                            tr
-                                td
-                                    a(href='/choose-location/yunnan') 云南省
-                                td
-                                    a(href='/choose-location/xinjiang') 新疆维吾尔族自治区
-                                td
-                                    a(href='/choose-location/zhejiang') 浙江省
-                                td
-                                    a(href='/choose-location/xizang') 西藏自治区
-        .container
-            .tiles
-                .col-xs-12.col-sm-4
-                    img(src='/images/index_pic1.png')
-                    h2 名医加盟
-                    p 足不出户享受预定国内知名医师门诊的服务
-                .col-xs-12.col-sm-4
-                    img(src='/images/index_pic2.png')
-                    h2 全国医院数据
-                    p 网站医院数据实时更新，挂号更方便
-                .col-xs-12.col-sm-4
-                    img(src='/images/index_pic3.png')
-                    h2 低廉的价格
-                    p 价格低于同类网站，同样的价钱不一样的体验
+            h1 SRF挂号平台
+            p SRF挂号平台是一款面向全国用户的线上挂号平台
+            p 无论是在家中还是通过手机都可以体验到简单便捷的挂号服务
+            .row
+                .col-lg-6
+                    .input-group
+                        input#search-field.form-control
+                        span.input-group-btn
+                            button#search-button.btn.btn-default 搜索
+
+    .container
+        .tiles
+            .col-xs-12.col-sm-4
+                img(src='/images/index_pic1.png')
+                h2 名医加盟
+                p 足不出户，预定国内知名医师门诊服务
+            .col-xs-12.col-sm-4
+                img(src='/images/index_pic2.png')
+                h2 全国医院数据
+                p 网站医院数据实时更新，挂号更方便
+            .col-xs-12.col-sm-4
+                img(src='/images/index_pic3.png')
+                h2 低廉的价格
+                p 价格低于同类网站，同样的价钱不一样的体验
+
+    .container
+        div
+            h2#choose-location-label 按地点查找
+
+        ul.nav.nav-tabs
+            li.active
+                a(href='#north', data-toggle='tab') 华北
+            li
+                a(href='#east-north', data-toggle='tab') 东北
+            li
+                a(href='#east', data-toggle='tab') 华东
+            li
+                a(href='#middle-south', data-toggle='tab') 中南
+            li
+                a(href='#west-south', data-toggle='tab') 西南
+            li
+                a(href='#west-north', data-toggle='tab') 西北
+        .tab-content
+            #north.tab-pane.fade.in.active
+                table.table
+                    tr
+                        td
+                            a(href='/choose-location/beijing') 北京市
+                        td
+                            a(href='/choose-location/tianjin') 天津市
+                        td
+                            a(href='/choose-location/hebei') 河北省
+                        td
+                            a(href='/choose-location/shanxi') 山西省
+                        td
+                            a(href='/choose-location/neimenggu') 内蒙古自治区
+            #east-north.tab-pane.fade
+                table.table
+                    tr
+                        td
+                            a(href='/choose-location/liaoning') 辽宁省
+                        td
+                            a(href='/choose-location/jilin') 吉林省
+                        td
+                            a(href='/choose-location/heilongjiang') 黑龙江省
+            #east.tab-pane.fade
+                table.table
+                    tr
+                        td
+                            a(href='/choose-location/shanghai') 上海市
+                        td
+                            a(href='/choose-location/jiangsu') 江苏省
+                        td
+                            a(href='/choose-location/zhejiang') 浙江省
+                        td
+                            a(href='/choose-location/anhui') 安徽省
+                        td
+                            a(href='/choose-location/fujian') 福建省
+                        td
+                            a(href='/choose-location/jiangxi') 江西省
+                        td
+                            a(href='/choose-location/jiangxi') 山东省
+            #middle-south.tab-pane.fade
+                table.table
+                    tr
+                        td
+                            a(href='/choose-location/henan') 河南省
+                        td
+                            a(href='/choose-location/hubei') 湖北省
+                        td
+                            a(href='/choose-location/hunan') 湖南省
+                        td
+                            a(href='/choose-location/guangdong') 广东省
+                        td
+                            a(href='/choose-location/guangxi') 广西省
+                        td
+                            a(href='/choose-location/hainan') 海南省
+            #west-south.tab-pane.fade
+                table.table
+                    tr
+                        td
+                            a(href='/choose-location/chongqing') 重庆市
+                        td
+                            a(href='/choose-location/sichuan') 四川省
+                        td
+                            a(href='/choose-location/guizhou') 贵州省
+                        td
+                            a(href='/choose-location/yunnan') 云南省
+                        td
+                            a(href='/choose-location/xizang') 西藏自治区
+            #west-north.tab-pane.fade
+                table.table
+                    tr
+                        td
+                            a(href='/choose-location/shaanxi') 陕西省
+                        td
+                            a(href='/choose-location/gansu') 甘肃省
+                        td
+                            a(href='/choose-location/qinghai') 青海省
+                        td
+                            a(href='/choose-location/ningxia') 宁夏回族自治区
+                        td
+                            a(href='/choose-location/xinjiang') 新疆维吾尔族自治区
+
     script.
         $(document).ready(function () {
-            $("#search-field").keyup(function () {
-                $("#search-link").attr("href", "/search/" + $(this).val());
+            $("#search-button").click(function () {
+                var href = "/search/" + $("#search-field").val();
+                window.location.href = href;
             });
         });

@@ -1,7 +1,8 @@
 var Errors = require('../lib/errors');
 
 exports.getRaw = function(req, res, next) {
-    check(req, function(data, doctorId, adminId) {
+    check(req, function(err, data, doctorId, adminId) {
+        if(err) return next(err);
         var week_stat=[[0,0,0],[0,0,0],[0,0,0],
             [0,0,0],[0,0,0],[0,0,0],[0,0,0]];
         var temp_stat=[];
@@ -10,6 +11,9 @@ exports.getRaw = function(req, res, next) {
             workings.forEach(function(working){
                 switch(working.frequency.charAt(0)){
                     case '0':
+                        var date = new Date(working.date);
+                        var curDate = new Date();
+                        if(date.Format('yyyyMMdd') < curDate.Format('yyyyMMdd')) break;
                         var temp_working={
                             date: working.date,
                             period: working.period,
@@ -44,7 +48,8 @@ exports.addWeek = function(req, res, next) {
             });
         }
     }
-    check(req, function(data, doctorId, adminId) {
+    check(req, function(err, data, doctorId, adminId) {
+        if(err) return next(err);
         var new_working=req.body.day;
         var morning = '20000000';
         var afternoon = '20000000';
@@ -104,7 +109,8 @@ exports.addWeek = function(req, res, next) {
 };
 
 exports.updateWeek = function(req, res, next) {
-    check(req, function(data, doctorId, adminId) {
+    check(req, function(err, data, doctorId, adminId) {
+        if(err) return next(err);
         var works=req.body.works;
         var morning='20000000';
         var afternoon='20000000';
@@ -155,7 +161,8 @@ exports.updateWeek = function(req, res, next) {
 };
 
 exports.addTemp = function(req, res, next) {
-    check(req, function(data, doctorId, adminId) {
+    check(req, function(err, data, doctorId, adminId) {
+        if(err) return next(err);
         var t_period = req.body.period;
         var t_action = req.body.action;
         var t_capacity = req.body.capacity;
@@ -188,7 +195,8 @@ exports.addTemp = function(req, res, next) {
 };
 
 exports.deleteTemp = function(req, res, next) {
-    check(req, function(data, doctorId, adminId) {
+    check(req, function(err, data, doctorId, adminId) {
+        if(err) return next(err);
         var w_date = req.body.date;
         var w_period = req.body.period;
         req.db.driver.execQuery(
@@ -212,7 +220,7 @@ function check(req, cb) {
     var adminId=req.body.adminId;
     var doctorId=req.body.doctorId;
     req.models.administrator.get(adminId, function(err, admin) {
-        if(err && err.message != 'Not found') return next(err);
+        if(err && err.message != 'Not found') return cb(err);
         var hospital_id=parseInt(admin.name.substr(5, 8), 10);
         req.db.driver.execQuery(
             "SELECT hospital.id as id, doctor.price as price "+
@@ -222,14 +230,14 @@ function check(req, cb) {
             "AND doctor.id=? LIMIT 1",
             [doctorId],
             function(err, data){
-                if(err && err.message != 'Not found') return next(err);
+                if(err && err.message != 'Not found') return cb(err);
                 if(!data) {
                     return next(new Errors.AdminDoctorError("No Such Doctor!"));
                 }
                 if(data[0]['id']!=hospital_id){
                     return next(new Errors.AdminAccessRejected("Invalid Access For This Administrator!"));
                 }
-                cb(data, doctorId, adminId);
+                cb(err, data, doctorId, adminId);
             });
     });
 }

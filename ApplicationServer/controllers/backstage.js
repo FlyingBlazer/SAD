@@ -2,7 +2,11 @@
  * Created by renfei on 14/12/6.
  */
 
-//var queryString = required('queryString');
+var queryString = require('querystring');
+var url = require('url');
+var http = require('http');
+var settings = require('../../settings');
+var businessServerInfo = 'localhost:' + settings.port.business;
 
 /**
  * 渲染主页
@@ -20,7 +24,17 @@ exports.home = function (request, response) {
  * @param response
  */
 exports.login = function (request, response) {
-    response.render('sb_login');
+    var initTimestamp = request.params.initTimestamp;
+    var msgType = request.params.msgType;
+    var message = request.params.message;
+
+    var params = {
+        initTimestamp: typeof initTimestamp == 'undefined' ? '' : initTimestamp,
+        msgType: typeof msgType == 'undefined' ? '' : msgType,
+        message: typeof  message == 'undefined' ? '' : message
+    };
+
+    response.render('sb_login', params);
 };
 
 /**
@@ -42,18 +56,32 @@ exports.onLogin = function (request, response) {
         'password': password
     };
 
+    printLogMessage('on login: username=' + username + '  password=' + password);
+
+
+    //TODO dummy implementation
+    setCookie(response, username, '1', '1', 'hospital name', businessServerInfo);
+    printLogMessage('cookie : ' + JSON.stringify(getCookie(request)));
+    var redirectPath = '/backstage';
+    response.redirect(redirectPath);
+    return;
+
 
     var loginCallback = function (result) {
+
+        printLogMessage('result : ' + JSON.stringify(result));
+
         //直接返回result
         if (result.code == 0 && result.message == 'success') {//登录成功:跳转并设置cookie
 
-            var hospitalId = result.hospital;
+            var hospitalId = result.hospitalId;
+            var adminId = result.adminId;
 
             //跳转到 /backstage 页面
             var jump = function (hospitalInfo) {
 
                 //存入cookie
-                setCookie(response, username, hospitalId, hospitalInfo.name);
+                setCookie(response, username, adminId, hospitalId, hospitalInfo.name, businessServerInfo);
 
                 //跳转
                 var redirectPath = '/backstage';
@@ -65,11 +93,9 @@ exports.onLogin = function (request, response) {
             forwardRequestGET(queryUrl, jump);
 
         } else {
-            var redirectPath = '/backstage/login/fail/wrong_credentials';
+            var redirectPath = '/backstage/login/' + getCurrentTimeInSeconds() + '/fail/wrong_credentials';
             response.redirect(redirectPath);
-
         }
-
     };
 
     forwardRequestPOST(data, path, loginCallback);
@@ -94,8 +120,19 @@ exports.logout = function (request, response) {
 exports.changePassword = function (request, response) {
     if (!getCookie(request).username)
         response.redirect('/backstage/login');
-    else
-        response.render('sb_changePassword');
+    else {
+        var initTimestamp = request.params.initTimestamp;
+        var msgType = request.params.msgType;
+        var message = request.params.message;
+
+        var params = {
+            initTimestamp: typeof initTimestamp == 'undefined' ? '' : initTimestamp,
+            msgType: typeof msgType == 'undefined' ? '' : msgType,
+            message: typeof  message == 'undefined' ? '' : message
+        };
+
+        response.render('sb_changePassword', params);
+    }
 };
 
 /**
@@ -138,19 +175,26 @@ exports.onChangePassword = function (request, response) {
  * @param response
  */
 exports.hospitals = function (request, response) {
-    response.render('sb_hospitals');
-    return;
 
     if (!getCookie(request).username)
         response.redirect('/backstage/login');
     else {
         var callback = function (result) {
-            if (result.code == 0)
-            //传参并渲染页面
-                response.render('sb_hospitals', {
+            if (result.code == 0) {
+                //传参并渲染页面
+                var initTimestamp = request.params.initTimestamp;
+                var msgType = request.params.msgType;
+                var message = request.params.message;
+
+                var params = {
+                    initTimestamp: typeof initTimestamp == 'undefined' ? '' : initTimestamp,
+                    msgType: typeof msgType == 'undefined' ? '' : msgType,
+                    message: typeof  message == 'undefined' ? '' : message,
                     list: result.hospitals
-                });
-            else {
+                };
+
+                response.render('sb_hospitals', params);
+            } else {
                 printLogMessage(result.message);
             }
         };
@@ -165,8 +209,6 @@ exports.hospitals = function (request, response) {
  * @param response
  */
 exports.departments = function (request, response) {
-    response.render('sb_departments');
-    return;
 
     if (!getCookie(request).username)
         response.redirect('/backstage/login');
@@ -177,9 +219,19 @@ exports.departments = function (request, response) {
             printLogMessage('hospital id 不能为空');
         else {
             var callback = function (departments_list) {
-                response.render('sb_departments', {
+
+                var initTimestamp = request.params.initTimestamp;
+                var msgType = request.params.msgType;
+                var message = request.params.message;
+
+                var params = {
+                    initTimestamp: typeof initTimestamp == 'undefined' ? '' : initTimestamp,
+                    msgType: typeof msgType == 'undefined' ? '' : msgType,
+                    message: typeof  message == 'undefined' ? '' : message,
                     list: departments_list
-                });
+                };
+
+                response.render('sb_departments', params);
             };
             //forwardRequestGET('/hospital/department/' + hospitalId, callback);
             retrieveDepartmentList(hospitalId, callback);
@@ -193,9 +245,6 @@ exports.departments = function (request, response) {
  * @param response
  */
 exports.doctors = function (request, response) {
-    response.render('sb_doctors');
-    return;
-
 
     if (!getCookie(request).username)
         response.redirect('/backstage/login');
@@ -207,10 +256,20 @@ exports.doctors = function (request, response) {
             //获取科室信息和医生信息
             retrieveDepartmentList(hospitalId, function (departments_list) {
                 retrieveDoctorList(hospitalId, function (doctors) {
-                    response.render('sb_doctors', {
+
+                    var initTimestamp = request.params.initTimestamp;
+                    var msgType = request.params.msgType;
+                    var message = request.params.message;
+
+                    var params = {
+                        initTimestamp: typeof initTimestamp == 'undefined' ? '' : initTimestamp,
+                        msgType: typeof msgType == 'undefined' ? '' : msgType,
+                        message: typeof  message == 'undefined' ? '' : message,
                         departments: departments_list,
                         list: doctors
-                    });
+                    };
+
+                    response.render('sb_doctors', params);
                 });
             });
         }
@@ -246,16 +305,9 @@ exports.editSchedule = function (request, response) {
     response.render('sb_edit-schedule');
 };
 
-// post
-exports.modifyTempWorking = function (request, response) {
-
-    var doctorId = '1';//todo temp
-    response.redirect('/backstage/doctor/' + doctorId + '/edit_schedule');
-};
-
-
 exports.users = function (request, response) {
 
+    response.render('sb_users');
 };
 
 /**
@@ -266,8 +318,10 @@ exports.users = function (request, response) {
 function getCookie(request) {
     return {
         'username': request.cookies.sb_username,
+        'userId': request.cookies.sb_userId,
         'hospitalId': request.cookies.sb_hospitalId,
-        'hospitalName': request.cookies.sb_hospitalName
+        'hospitalName': request.cookies.sb_hospitalName,
+        'businessServer': request.cookies.sb_businessServer
     };
 }
 
@@ -276,10 +330,12 @@ function getCookie(request) {
  * cookie内包含完整的用户信息
  * @param response
  * @param username
+ * @param userId
  * @param hospitalId
  * @param hospitalName
+ * @param businessServer
  */
-function setCookie(response, username, hospitalId, hospitalName) {
+function setCookie(response, username, userId, hospitalId, hospitalName, businessServer) {
 
     var options = {
         expires: new Date(Date.now() + 900000000),
@@ -287,8 +343,10 @@ function setCookie(response, username, hospitalId, hospitalName) {
     };
 
     response.cookie('sb_username', username, options);
+    response.cookie('sb_userId', userId, options);
     response.cookie('sb_hospitalId', hospitalId, options);
     response.cookie('sb_hospitalName', hospitalName, options);
+    response.cookie('sb_businessServer', businessServer, options);
 }
 
 /**
@@ -296,9 +354,12 @@ function setCookie(response, username, hospitalId, hospitalName) {
  * @param response
  */
 function clearCookie(response) {
-    response.clearCookie('sb_username', {path: '/'});
-    response.clearCookie('sb_hospitalId', {path: '/'});
-    response.clearCookie('sb_hospitalName', {path: '/'});
+    var options = {path: '/'};
+    response.clearCookie('sb_username', options);
+    response.clearCookie('sb_userId', options);
+    response.clearCookie('sb_hospitalId', options);
+    response.clearCookie('sb_hospitalName', options);
+    response.clearCookie('sb_businessServer', options);
 }
 
 /**
@@ -309,7 +370,9 @@ function clearCookie(response) {
  * @param callback 业务服务器返回的结果(JSON Object)
  */
 function forwardRequestPOST(data, path, callback) {
-    //forwardRequest('POST', path, queryString.stringify(data), callback);
+    printLogMessage('forwardRequestPOST : path =' + path + '  data=' + queryString.stringify(data));
+
+    forwardRequest('POST', path, queryString.stringify(data), callback);
 }
 
 /**
@@ -382,6 +445,14 @@ function printLogMessage(message) {
 }
 
 /**
+ * 返回当前时间戳
+ * 单位为秒
+ */
+function getCurrentTimeInSeconds() {
+    return Date.parse(new Date()) / 1000;
+}
+
+/**
  * 根据hospital id获取所有科室信息
  *
  * @param hospitalId
@@ -415,3 +486,4 @@ function retrieveDoctorList(hospitalId, callback) {
 
     forwardRequestGET('/hospital/department/' + hospitalId, handler);
 }
+

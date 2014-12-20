@@ -33,6 +33,7 @@ exports.list_h = function(req, res, next) {
     req.db.driver.execQuery(
         "SELECT appointment.id as reservation_id, appointment.price as price,appointment.status as status,user.realname as user_name, " +
         "appointment.time as time,doctor.name as doctor_name,hospital.name as hospital_name,department.name as department_name "+
+        "user.tel as user_phone, user.socialId as user_sid " +
         "FROM appointment,doctor,department,hospital,user "+
         "WHERE appointment.doctor_id=doctor.id "+
         "AND doctor.department_id=department.id AND department.hospital_id=hospital.id "+
@@ -157,6 +158,9 @@ exports.cancel = function(req, res, next) {
     req.models.appointment.get(reservation_id,function(err,app){
         if(err && err.message != 'Not found') return next(err);
         if(!app) return next(new Errors.CancelFailure("Cannot Find Such Appointment!"));
+        var date = new Date(app.time);
+        var curDate = new Date(new Date().Format('yyyy-MM-dd'));
+        if(date.getTime() - curDate.getTime() <= 0) return next(new Errors.AppointmentCannotBeCanceled('Appointment Cannot Be Canceled'));
         app.status = app.status.replaceAt(5, 1);
         app.save(function(err) {
             if(err && err.message != 'Not found') return next(err);

@@ -20,6 +20,7 @@ server.use(orm.express(settings.dbUrl, models));
 
 server.use(function(req, res, next) {
     res.charSet('utf-8');
+    res.header('Access-Control-Allow-Origin', '*');
     debug("Request received: %s %s", req.method, req.url);
     debug("body: ", req.body);
     debug("query: ", req.query);
@@ -58,10 +59,10 @@ server.get('/hospital/doctor/:doctorId/delete', controllers.hospital.doctor.remo
 server.post('/hospital/doctor/:doctorId/update', controllers.hospital.doctor.update);
 //---
 server.get('/hospital/doctor/:doctorId/working/getraw', controllers.hospital.doctor.working.getRaw);
-server.get('/hospital/doctor/:doctorId/working/week/add', controllers.hospital.doctor.working.addWeek);
-server.get('/hospital/doctor/:doctorId/working/week/update', controllers.hospital.doctor.working.updateWeek);
-server.get('/hospital/doctor/:doctorId/working/temp/add', controllers.hospital.doctor.working.addTemp);
-server.get('/hospital/doctor/:doctorId/working/temp/delete', controllers.hospital.doctor.working.deleteTemp);
+server.post('/hospital/doctor/:doctorId/working/week/add', controllers.hospital.doctor.working.addWeek);
+server.post('/hospital/doctor/:doctorId/working/week/update', controllers.hospital.doctor.working.updateWeek);
+server.post('/hospital/doctor/:doctorId/working/temp/add', controllers.hospital.doctor.working.addTemp);
+server.post('/hospital/doctor/:doctorId/working/temp/delete', controllers.hospital.doctor.working.deleteTemp);
 //---
 server.post('/hospital/department/add', controllers.hospital.department.add);
 server.get('/hospital/department/:hospitalId', controllers.hospital.department.list);

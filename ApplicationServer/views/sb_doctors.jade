@@ -40,13 +40,13 @@ block content
                .prompt
                   label(for='name') 姓名
                .control
-                  input#name.form-control(name='name', required='', type='text')
+                  input#name.form-control(name='name', required, type='text')
 
             .form-group
                .prompt
-                  label(for='title') 所属科室
+                  label(for='department') 所属科室
                .control
-                  select.form-control(name='title', data-placeholder='选择科室...', required)
+                  select#department.form-control(name='department', data-placeholder='选择科室...', required)
                      option(value='')
                      option(value='')
                      option(value='')
@@ -59,7 +59,7 @@ block content
                .prompt
                   label(for='title') 称号
                .control
-                  select.form-control(name='title', data-placeholder='选择称号...', required)
+                  select#title.form-control(name='title', data-placeholder='选择称号...', required)
                      option(value='医师') 医师
                      option(value='专家') 专家
                      option(value='特级专家') 特级专家
@@ -77,13 +77,14 @@ block content
 
             .form-group
                .prompt
-                  label(for='description') 描述
+                  label(for='description') 医生描述
                .control
                   textarea#description.form-control(name='description', required, rows='5')
 
             .form-group
                .prompt
                   label 出诊时间
+                  .note 点击右侧单元格设定
                .control
                   table.time-slots.table.table-bordered
                      tr
@@ -158,11 +159,11 @@ block content
                   label 可预约人数
                .control
                   label(for='morning') 上午
-                  input#morning.form-control.inline(name='morning', type='number')
+                  input#morning.form-control.inline(name='morning', type='number', value='0', required)
                   label(for='afternoon') 下午
-                  input#afternoon.form-control.inline(name='afternoon', type='number')
+                  input#afternoon.form-control.inline(name='afternoon', type='number', value='0', required)
                   label(for='evening') 晚上
-                  input#evening.form-control.inline(name='evening', type='number')
+                  input#evening.form-control.inline(name='evening', type='number', value='0', required)
                   .note 详细的预约人数控制可以在添加医生之后设定。
 
             input(type='hidden', name='hospitalId', id='hospital-id' value='')
@@ -227,6 +228,7 @@ block content
       });
 
    script.
+      $('#add-doctor').validate();
       var $cell = $('.time-slots .checkable');
       $cell.click(function() {
          $(this).toggleClass('checked');
