@@ -14,7 +14,7 @@ block site-content
                     .input-group
                         input#search-field.form-control
                         span.input-group-btn
-                            button#search-link.btn.btn-default 搜索
+                            button#search-button.btn.btn-default 搜索
 
     .container
         .tiles
@@ -132,7 +132,8 @@ block site-content
 
     script.
         $(document).ready(function () {
-            $("#search-field").keyup(function () {
-                $("#search-link").attr("href", "/search/" + $(this).val());
+            $("#search-button").click(function () {
+                var href = "/search/" + $("#search-field").val();
+                window.location.href = href;
             });
         });
