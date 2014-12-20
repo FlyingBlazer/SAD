@@ -341,3 +341,14 @@ exports.InvalidAdminId = function InvalidAdminId(message) {
     this.name = 'InvalidAdminId';
 };
 util.inherits(exports.InvalidAdminId, restify.RestError);
+
+exports.InvalidRating = function InvalidRating(message) {
+    restify.RestError.call(this, {
+        restCode: '5005',
+        statusCode: 404,
+        message: message,
+        constructorOpt: InvalidRating
+    });
+    this.name = 'InvalidRating';
+};
+util.inherits(exports.InvalidRating, restify.RestError);

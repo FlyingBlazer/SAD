@@ -42,10 +42,10 @@ exports.add = function(req, res, next) {
             });
         }
     }
-    req.models.hospital.get(req.body.hospital_id, function(err, hospital) {
-        if(err && err.message != 'Not found') return next(err);
-        if(!hospital) return next(new Errors.HospitalNotExist('Hospital not exist'));
-        hospital = hospital;
+    req.models.hospital.get(req.body.hospital_id, function(err, h) {
+        if(err && err.message != 'Not found') throw err;
+        if(!h) return next(new Errors.HospitalNotExist('Hospital not exist'));
+        hospital = h;
         finish();
     });
     req.models.department.create({
@@ -53,7 +53,7 @@ exports.add = function(req, res, next) {
         tel: req.body.phone,
         info: req.body.description
     }, function(err, dep) {
-        if(err && err.message != 'Not found') return next(err);
+        if(err) throw err;
         department = dep;
         finish();
     });
@@ -96,17 +96,15 @@ exports.update = function(req, res, next) {
             return;
         }
         for(var index in req.body) {
-            if(typeof department[index] != 'undefined') {
-                switch(index) {
-                    case 'telephone':
-                        hospital.tel = req.body[index];
-                        break;
-                    case 'description':
-                        hospital.info = req.body[index];
-                        break;
-                    default:
-                        break;
-                }
+            switch(index) {
+                case 'phone':
+                    department.tel = req.body[index];
+                    break;
+                case 'description':
+                    department.info = req.body[index];
+                    break;
+                default:
+                    break;
             }
         }
         department.save(function(err) {

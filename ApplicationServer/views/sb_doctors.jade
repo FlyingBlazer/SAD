@@ -16,43 +16,139 @@ block content
             thead
                tr
                   th #
-                  th 姓名
-                  th 所属科室
-                  th 职称
+                  th(style='width: 50px') 姓名
+                  th(style='width: 60px') 所属科室
+                  th(style='width: 80px') 职称
                   th 描述
-                  th 操作
+                  th(style='width: 130px') 操作
             tbody
                each doctor in list
                   tr
                      td= doctor.id
-                     td= doctor.name
-                     td= doctor.department
-                     td= doctor.title
-                     td= doctor.description
+                     td: a.x-editable.x-editable-name(href='#', data-id='#{doctor.id}')= doctor.name
+                     td: a.x-editable.x-editable-dept(href='#', data-id='#{doctor.id}')= doctor.department
+                     td: a.x-editable.x-editable-title(href='#', data-id='#{doctor.id}')= doctor.title
+                     td: a.x-editable.x-editable-desc(href='#', data-id='#{doctor.id}')= doctor.description
                      td
                         a.button.blue-button.xs-button.opnl-button(href='/backstage/doctor/#{doctor.id}/edit_schedule') 编辑排班
                         button.button.red-button.xs-button.delete-doctor(data-id='#{doctor.id}', data-name='#{doctor.name}') 删除医生
 
          script.
-            $('#doctor-table').DataTable();
-            $('.delete-doctor').click(function() {
-               if (confirm('是否确定删除医生' + $(this).data('name') + '？')) {
-                  var doctorId = $(this).data('id');
-                  $.ajax({
-                     url: 'http://#{businessServer}/hospital/doctor/' + doctorId + '/delete',
-                     type: 'GET'
-                  }).done(function(data) {
-                     if (data.code == 0) {
-                        toastr.success('医生已经删除', '成功');
-                     } else {
-                        toastr.error('系统错误。错误代码：' + data.code, '删除失败');
-                     }
-                  }).error(function(jqXHR, textStatus, errorThrown) {
-                     toastr.error('系统发生致命错误 ' + textStatus + '。错误信息：' + errorThrown, '删除失败');
-                  });
-               }
-            });
+            $(function() {
+               $('#doctor-table').DataTable();
 
+               $('#doctor-table .x-editable-desc').each(function() {
+                  $(this).text($(this).text().replace('<br>', ''));
+               });
+               $('#doctor-table .x-editable-desc').each(function() {
+                  $(this).text($(this).text().replace('<br>', ''));
+               });
+               $('#doctor-table .x-editable-desc').each(function() {
+                  $(this).text($(this).text().replace('<br>', ''));
+               });
+
+               var deps = !{decodeURI(JSON.stringify(departments))};
+               var source = [];
+               var i = 0;
+               for (var id in deps) {
+                  source.push({
+                     value: deps[id].id,
+                     text: deps[id].name
+                  });
+                  ++i;
+               }
+
+               $('.x-editable-name').each(function (index, element) {
+                  $(element).editable({
+                     url: 'http://#{businessServer}/hospital/doctor/' + $(element).data('id') + '/update',
+                     type: 'text',
+                     title: '修改姓名',
+                     send: 'always',
+                     params: function (params) {
+                        return {
+                           'name': params.value
+                        }
+                     }
+                  });
+               });
+
+               $('.x-editable-dept').each(function(index, element) {
+                  $(element).editable({
+                     url: 'http://#{businessServer}/hospital/doctor/' + $(element).data('id') + '/update',
+                     type: 'select2',
+                     title: '修改科室',
+                     send: 'always',
+                     source: source,
+                     select2: {
+                        placeholder: "选择科室..."
+                     },
+                     params: function(params) {
+                        return {
+                           'department_id': params.value
+                        }
+                     }
+                  });
+               });
+
+               $('.x-editable-title').each(function(index, element) {
+                  $(element).editable({
+                     url: 'http://#{businessServer}/hospital/doctor/' + $(element).data('id') + '/update',
+                     type: 'select2',
+                     title: '修改职称',
+                     send: 'always',
+                     source: [
+                        {value: '医师', text: '医师'},
+                        {value: '专家', text: '专家'},
+                        {value: '特级专家', text: '特级专家'},
+                        {value: '海外专家', text: '海外专家'},
+                        {value: '实习医生', text: '实习医生'},
+                        {value: '主治医生', text: '主治医生'},
+                        {value: '主任', text: '主任'},
+                        {value: '副主任', text: '副主任'}
+                     ],
+                     select2: {
+                        placeholder: "选择职称..."
+                     },
+                     params: function(params) {
+                        return {
+                           'title': params.value
+                        }
+                     }
+                  });
+               });
+
+               $('.x-editable-desc').each(function(index, element) {
+                  $(element).editable({
+                     url: 'http://#{businessServer}/hospital/doctor/' + $(element).data('id') + '/update',
+                     type: 'textarea',
+                     title: '修改描述',
+                     send: 'always',
+                     params: function(params) {
+                        return {
+                           'description': params.value
+                        }
+                     }
+                  });
+               });
+
+               $('.delete-doctor').click(function() {
+                  if (confirm('是否确定删除医生' + $(this).data('name') + '？')) {
+                     var doctorId = $(this).data('id');
+                     $.ajax({
+                        url: 'http://#{businessServer}/hospital/doctor/' + doctorId + '/delete',
+                        type: 'GET'
+                     }).done(function(data) {
+                        if (data.code == 0) {
+                           toastr.success('医生已经删除', '成功');
+                        } else {
+                           toastr.error('系统错误。错误代码：' + data.code, '删除失败');
+                        }
+                     }).error(function(jqXHR, textStatus, errorThrown) {
+                        toastr.error('系统发生致命错误 ' + textStatus + '。错误信息：' + errorThrown, '删除失败');
+                     });
+                  }
+               });
+            });
 
       div#panel-add.tab-pane.fade
          h3 添加医生

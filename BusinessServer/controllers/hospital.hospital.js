@@ -73,9 +73,10 @@ exports.detail = function(req, res, next) {
 };
 
 exports.add = function(req, res, next) {
-    req.models.hospital_rating.find({meaning: req.body.level}, function(err, rating) {
-        if(err && err.message != 'Not found') return next(err);
-        req.models.create({
+    req.models.hospital_rating.one({meaning: req.body.level}, function(err, rating) {
+        if(err && err.message != 'Not found') throw err;
+        if(!rating) throw (new Errors.InvalidRating('Rating is invalid'));
+        req.models.hospital.create({
             name: req.body.name,
             province: req.body.province,
             city: req.body.city,
@@ -84,9 +85,11 @@ exports.add = function(req, res, next) {
             site: req.body.website,
             info: req.body.description
         }, function(err, hospital) {
-            if(err && err.message != 'Not found') return next(err);
+            if(err) throw err;
             hospital.setRating(rating, function(err) {
-                if(err && err.message != 'Not found') return next(err);
+                console.log(arguments);
+                if(err) throw err;
+                console.log(arguments);
                 var supplement = 8 - hospital.id.toString().length;
                 var admin_name ='admin';
                 for(var i = 0; i < supplement ; i++) {
@@ -100,7 +103,7 @@ exports.add = function(req, res, next) {
                     password: admin_password,
                     auth: authentication
                 }, function(err,admin) {
-                    if(err && err.message != 'Not found') return next(err);
+                    if(err && err.message != 'Not found') throw err;
                     res.json({
                         code: 0,
                         message: 'success'
@@ -179,8 +182,9 @@ exports.update = function(req, res, next) {
             delete req.body.level;
             req.models.hospital_rating.one({meaning: level}, function(err, rating) {
                 if(err && err.message != 'Not found') return next(err);
+                console.log(level, rating);
                 hospital.setRating(rating, function(err) {
-                    if(err && err.message != 'Not found') return next(err);
+                    if(err && err.message != 'Not found') throw err;
                 });
             });
         }
