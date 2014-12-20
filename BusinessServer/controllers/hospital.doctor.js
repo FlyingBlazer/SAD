@@ -76,7 +76,19 @@ exports.update = function(req, res, next) {
             throw err;
         }
         for(var index in req.body) {
-            doctor[index] = req.body[index];
+            switch(index) {
+                case 'description':
+                    hospital.info = req.body[index];
+                    break;
+                case 'price':
+                    hospital.price = req.body[index];
+                    break;
+                case 'title':
+                    hospital.title = req.body[index];
+                    break;
+                default:
+                    break;
+            }
         }
         doctor.save(function(err) {
             if(err) {
