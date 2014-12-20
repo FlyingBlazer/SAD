@@ -157,7 +157,7 @@ exports.cancel = function(req, res, next) {
     req.models.appointment.get(reservation_id,function(err,app){
         if(err && err.message != 'Not found') return next(err);
         if(!app) return next(new Errors.CancelFailure("Cannot Find Such Appointment!"));
-        app.status = app.status.replaceAt(5, 0);
+        app.status = app.status.replaceAt(5, 1);
         app.save(function(err) {
             if(err && err.message != 'Not found') return next(err);
             res.json({
