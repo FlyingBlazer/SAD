@@ -543,11 +543,32 @@ exports.editSchedule = function (request, response) {
     retrieveDoctorInfo(doctorId, doctorInfoCallback);
 };
 
+/**
+ * 渲染审核用户页面
+ * @param request
+ * @param response
+ */
 exports.users = function (request, response) {
-//TODO
+    var path = '/user/check/list';
 
+    forwardRequestGET(path, function (result) {
+        if (result.code == 0) {
+            var params = {
+                username: getCookie(request).username,
+                userId: getCookie(request).userId,
+                hospitalId: getCookie(request).hospitalId,
+                hospitalName: getCookie(request).hospitalName,
+                businessServer: getCookie(request).businessServer,
+                list: result.users
+            };
 
-    response.render('sb_users');
+            printLogMessage(JSON.stringify(result.users));
+
+            response.render('sb_users', params);
+        } else {
+            printLogMessage(result.message);
+        }
+    });
 };
 
 /**
