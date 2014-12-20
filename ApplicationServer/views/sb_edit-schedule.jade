@@ -1,6 +1,6 @@
 extends ./sb_layout
 block content
-   h2 编辑医生排班
+   h2 医生排班管理（#{doctorDepartment}&nbsp;#{doctorName}）
 
    ul.nav.nav-tabs(role='tablist')
       li.active(role='presentation')
@@ -94,8 +94,8 @@ block content
                return yyyy + '-' + (mm[1] ? mm : "0" + mm[0]) + '-' + (dd[1] ? dd : "0" + dd[0]);
             };
             var shiftDate = function(date, what, count) {
-               var proc1 = 'get' + what,
-                       proc2 = 'set' + what;
+               var proc1 = 'get' + what;
+               var proc2 = 'set' + what;
                var value = Date.prototype[proc1].call(date);
                Date.prototype[proc2].call(date, value + count);
                return date;
@@ -119,7 +119,7 @@ block content
             });
 
          style.
-            #panel-current .time-slots {
+            .time-slots {
                text-align: center;
             }
             .time-slots .title {
@@ -130,7 +130,7 @@ block content
       div#panel-weekly.tab-pane.fade
          h3 修改每周排班
          table.time-slots.table.table-bordered
-            tr
+            tr.title
                td
                td 星期一
                td 星期二
@@ -140,66 +140,81 @@ block content
                td 星期六
                td 星期日
             tr
-               td 上午
+               td.title 上午
                td.cell
-                  a.x-editable(href='#', data-day='1', data-period='1')
+                  a.x-editable(href='#', data-day='1', data-period='1', data-id='#{doctorId}')= schedule.week[0][0]
                td.cell
-                  a.x-editable(href='#', data-day='2', data-period='1')
+                  a.x-editable(href='#', data-day='2', data-period='1', data-id='#{doctorId}')= schedule.week[1][0]
                td.cell
-                  a.x-editable(href='#', data-day='3', data-period='1')
+                  a.x-editable(href='#', data-day='3', data-period='1', data-id='#{doctorId}')= schedule.week[2][0]
                td.cell
-                  a.x-editable(href='#', data-day='4', data-period='1')
+                  a.x-editable(href='#', data-day='4', data-period='1', data-id='#{doctorId}')= schedule.week[3][0]
                td.cell
-                  a.x-editable(href='#', data-day='5', data-period='1')
+                  a.x-editable(href='#', data-day='5', data-period='1', data-id='#{doctorId}')= schedule.week[4][0]
                td.cell
-                  a.x-editable(href='#', data-day='6', data-period='1')
+                  a.x-editable(href='#', data-day='6', data-period='1', data-id='#{doctorId}')= schedule.week[5][0]
                td.cell
-                  a.x-editable(href='#', data-day='7', data-period='1')
+                  a.x-editable(href='#', data-day='7', data-period='1', data-id='#{doctorId}')= schedule.week[6][0]
 
             tr
-               td 下午
+               td.title 下午
                td.cell
-                  a.x-editable(href='#', data-day='1', data-period='2')
+                  a.x-editable(href='#', data-day='1', data-period='2', data-id='#{doctorId}')= schedule.week[0][1]
                td.cell
-                  a.x-editable(href='#', data-day='2', data-period='2')
+                  a.x-editable(href='#', data-day='2', data-period='2', data-id='#{doctorId}')= schedule.week[1][1]
                td.cell
-                  a.x-editable(href='#', data-day='3', data-period='2')
+                  a.x-editable(href='#', data-day='3', data-period='2', data-id='#{doctorId}')= schedule.week[2][1]
                td.cell
-                  a.x-editable(href='#', data-day='4', data-period='2')
+                  a.x-editable(href='#', data-day='4', data-period='2', data-id='#{doctorId}')= schedule.week[3][1]
                td.cell
-                  a.x-editable(href='#', data-day='5', data-period='2')
+                  a.x-editable(href='#', data-day='5', data-period='2', data-id='#{doctorId}')= schedule.week[4][1]
                td.cell
-                  a.x-editable(href='#', data-day='6', data-period='2')
+                  a.x-editable(href='#', data-day='6', data-period='2', data-id='#{doctorId}')= schedule.week[5][1]
                td.cell
-                  a.x-editable(href='#', data-day='7', data-period='2')
+                  a.x-editable(href='#', data-day='7', data-period='2', data-id='#{doctorId}')= schedule.week[6][1]
 
             tr
-               td 晚上
+               td.title 晚上
                td.cell
-                  a.x-editable(href='#', data-day='1', data-period='3')
+                  a.x-editable(href='#', data-day='1', data-period='3', data-id='#{doctorId}')= schedule.week[0][2]
                td.cell
-                  a.x-editable(href='#', data-day='2', data-period='3')
+                  a.x-editable(href='#', data-day='2', data-period='3', data-id='#{doctorId}')= schedule.week[1][2]
                td.cell
-                  a.x-editable(href='#', data-day='3', data-period='3')
+                  a.x-editable(href='#', data-day='3', data-period='3', data-id='#{doctorId}')= schedule.week[2][2]
                td.cell
-                  a.x-editable(href='#', data-day='4', data-period='3')
+                  a.x-editable(href='#', data-day='4', data-period='3', data-id='#{doctorId}')= schedule.week[3][2]
                td.cell
-                  a.x-editable(href='#', data-day='5', data-period='3')
+                  a.x-editable(href='#', data-day='5', data-period='3', data-id='#{doctorId}')= schedule.week[4][2]
                td.cell
-                  a.x-editable(href='#', data-day='6', data-period='3')
+                  a.x-editable(href='#', data-day='6', data-period='3', data-id='#{doctorId}')= schedule.week[5][2]
                td.cell
-                  a.x-editable(href='#', data-day='7', data-period='3')
+                  a.x-editable(href='#', data-day='7', data-period='3', data-id='#{doctorId}')= schedule.week[6][2]
 
          script.
             $('#panel-weekly a').each(function(index, element) {
+               var doctorId = $(element).data('id');
                $(element).editable({
-
+                  url: 'http://#{businessServer}/hospital/doctor/' + doctorId + '/working/week/update',
+                  type: 'text',
+                  send: 'always',
+                  title: '最大预约人数',
+                  params: function(params) {
+                     return {
+                        "works": [
+                           {
+                              "day": $(element).data('day'),
+                              "period": $(element).data('period'),
+                              "action": params.value
+                           }
+                        ]
+                     };
+                  }
                });
             });
 
+
       div#panel-temp.tab-pane.fade
-         h3 临时排班管理
-         h4 添加记录
+         h3 添加记录
          form(id='add-temp')
             .form-group
                .prompt
@@ -222,11 +237,11 @@ block content
                .control
                   input#capacity.form-control(name='capacity', type='number', required)
                   .note 设为 0 即表示不开放预约。
-            button#submit-button.button.submit-button.green-button.button-with-icon(type='submit', data-doctor_id='1')
+            button#submit-button.button.submit-button.green-button.button-with-icon(type='submit', data-doctor_id='#{doctorId}')
                i.fa.fa-plus
                | &nbsp;添加临时排班记录
 
-         h4 当前记录
+         h3 当前记录
          table#temp-table.table.table-striped.table-bordered.table-hover
             thead
                tr
@@ -235,11 +250,18 @@ block content
                   th 可预约人数
                   th 操作
             tbody
-               tr
-                  td 2014-12-31
-                  td 上午
-                  td 0
-                  td: button.button.red-button.xs-button.delete-temp(data-date='2014-12-31', data-period='3', data-doctor_id='1') 删除记录
+               each record in schedule.temp
+                  tr
+                     td= record.date
+                     case record.period
+                        when 1
+                           td 上午
+                        when 2
+                           td 中午
+                        when 3
+                           td 下午
+                     td= record.capacity
+                     td: button.button.red-button.xs-button.delete-temp(data-date='#{record.date}', data-period='#{record.period}', data-doctor_id='#{doctorId}') 删除记录
 
          script.
             $('#add-temp').validate();
@@ -247,9 +269,9 @@ block content
                format: "yyyy-mm-dd",
                todayBtn: "linked",
                language: "zh-CN",
-               keyboardNavigation: false,
-               autoclose: true,
-               todayHighlight: true
+               keyboardNavigation: !1,
+               autoclose: !0,
+               todayHighlight: !0
             });
             $('#submit-button').on('click', function(e) {
                e.preventDefault();
@@ -259,10 +281,14 @@ block content
                var doctorId = $(this).data('doctor_id');
                if (date != '' && period != '' && capacity != '') {
                   $.ajax({
-                     url: '/hospital/doctor/' + doctorId + '/working/temp/add',
+                     url: 'http://#{businessServer}/hospital/doctor/' + doctorId + '/working/temp/add',
                      type: 'POST',
-                     dataType: '',
-                     data: '' // TODO-API 2-2-6-4
+                     data: {
+                        date: date,
+                        period: period,
+                        adminId: #{userId},
+                        action: capacity
+                     }
                   }).done(function(data) {
                      if (data.code == 0) {
                         toastr.success('临时排班已添加', '成功');
@@ -282,11 +308,16 @@ block content
             $('.delete-temp').click(function() {
                if (confirm('是否确定删除该排班项？')) {
                   var doctorId = $(this).data('doctor_id');
+                  var date = $(this).data('date');
+                  var period = $(this).data('period');
                   $.ajax({
-                     url: '/hospital/doctor/' + doctorId + '/working/temp/delete',
+                     url: 'http://#{businessServer}/hospital/doctor/' + doctorId + '/working/temp/delete',
                      type: 'POST',
-                     dataType: '',
-                     data: '' // TODO-API 2-2-6-5
+                     data: {
+                        date: date,
+                        period: period,
+                        adminId: #{userId}
+                     }
                   }).done(function(data) {
                      if (data.code == 0) {
                         toastr.success('排班已经删除', '成功');
