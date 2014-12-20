@@ -1,3 +1,142 @@
-//
-   Created by renfei on 14/12/19.
+extends ./sb_layout
+block content
+   h2 编辑医生排班
 
+   ul.nav.nav-tabs(role='tablist')
+      li.active(role='presentation')
+         a(href='#panel-current', role='tab', data-toggle='tab') 当前排班情况
+      li(role='presentation')
+         a(href='#panel-weekly', role='tab', data-toggle='tab') 修改每周排班
+      li(role='presentation')
+         a(href='#panel-temp', role='tab', data-toggle='tab') 添加临时排班
+
+   div.tab-content
+
+      div#panel-current.tab-pane.fade.in.active
+         h3 当前排班情况
+         table.time-slots.table.table-bordered
+            tr
+               td
+               td 星期一
+               td 星期二
+               td 星期三
+               td 星期四
+               td 星期五
+               td 星期六
+               td 星期日
+            tr
+               td 上午
+               td.checkable(data-row='1', data-col='1')
+                  a.x-editable
+               td.checkable(data-row='2', data-col='1')
+                  a.x-editable
+               td.checkable(data-row='3', data-col='1')
+                  a.x-editable
+               td.checkable(data-row='4', data-col='1')
+                  a.x-editable
+               td.checkable(data-row='5', data-col='1')
+                  a.x-editable
+               td.checkable(data-row='6', data-col='1')
+                  a.x-editable
+               td.checkable(data-row='7', data-col='1')
+                  a.x-editable
+
+            tr
+               td 下午
+               td.checkable(data-row='1', data-col='2')
+                  a.x-editable
+               td.checkable(data-row='2', data-col='2')
+                  a.x-editable
+               td.checkable(data-row='3', data-col='2')
+                  a.x-editable
+               td.checkable(data-row='4', data-col='2')
+                  a.x-editable
+               td.checkable(data-row='5', data-col='2')
+                  a.x-editable
+               td.checkable(data-row='6', data-col='2')
+                  a.x-editable
+               td.checkable(data-row='7', data-col='2')
+                  a.x-editable
+
+            tr
+               td 晚上
+               td.checkable(data-row='1', data-col='3')
+                  a.x-editable
+               td.checkable(data-row='2', data-col='3')
+                  a.x-editable
+               td.checkable(data-row='3', data-col='3')
+                  a.x-editable
+               td.checkable(data-row='4', data-col='3')
+                  a.x-editable
+               td.checkable(data-row='5', data-col='3')
+                  a.x-editable
+               td.checkable(data-row='6', data-col='3')
+                  a.x-editable
+               td.checkable(data-row='7', data-col='3')
+                  a.x-editable
+
+      div#panel-weekly.tab-pane.fade
+         h3 修改每周排班
+         table.time-slots.table.table-bordered
+            tr
+               td
+               td 星期一
+               td 星期二
+               td 星期三
+               td 星期四
+               td 星期五
+               td 星期六
+               td 星期日
+            tr
+               td 上午
+               td.checkable(data-row='1', data-col='1')
+                  a.x-editable
+               td.checkable(data-row='2', data-col='1')
+                  a.x-editable
+               td.checkable(data-row='3', data-col='1')
+                  a.x-editable
+               td.checkable(data-row='4', data-col='1')
+                  a.x-editable
+               td.checkable(data-row='5', data-col='1')
+                  a.x-editable
+               td.checkable(data-row='6', data-col='1')
+                  a.x-editable
+               td.checkable(data-row='7', data-col='1')
+                  a.x-editable
+
+            tr
+               td 下午
+               td.checkable(data-row='1', data-col='2')
+                  a.x-editable
+               td.checkable(data-row='2', data-col='2')
+                  a.x-editable
+               td.checkable(data-row='3', data-col='2')
+                  a.x-editable
+               td.checkable(data-row='4', data-col='2')
+                  a.x-editable
+               td.checkable(data-row='5', data-col='2')
+                  a.x-editable
+               td.checkable(data-row='6', data-col='2')
+                  a.x-editable
+               td.checkable(data-row='7', data-col='2')
+                  a.x-editable
+
+            tr
+               td 晚上
+               td.checkable(data-row='1', data-col='3')
+                  a.x-editable
+               td.checkable(data-row='2', data-col='3')
+                  a.x-editable
+               td.checkable(data-row='3', data-col='3')
+                  a.x-editable
+               td.checkable(data-row='4', data-col='3')
+                  a.x-editable
+               td.checkable(data-row='5', data-col='3')
+                  a.x-editable
+               td.checkable(data-row='6', data-col='3')
+                  a.x-editable
+               td.checkable(data-row='7', data-col='3')
+                  a.x-editable
+
+      div#panel-temp.tab-pane.fade
+         h3 添加临时排班

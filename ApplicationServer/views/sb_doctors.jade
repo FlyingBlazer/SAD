@@ -15,13 +15,22 @@ block content
          table#doctor-table.table.table-striped.table-bordered.table-hover
             thead
                tr
-                  th id
+                  th #
                   th 姓名
                   th 所属科室
                   th 职称
                   th 描述
                   th 操作
             tbody
+               tr
+                  td 1
+                  td 王拖地
+                  td 口腔科
+                  td 特级专家
+                  td 始于1994
+                  td
+                     a.button.blue-button.xs-button.opnl-button(href='/backstage/doctor/1/edit_schedule') 编辑排班
+                     button.button.red-button.xs-button.delete-doctor(data-id='1') 删除医生
 
 
       div#panel-add.tab-pane.fade
@@ -144,13 +153,31 @@ block content
                      i.fa.fa-close
                      | &nbsp;清除选择
 
-            input(type='hidden' name='hospitalId' value='')
-            input(type='hidden' name='timeSlots' value='')
+            .form-group
+               .prompt
+                  label 可预约人数
+               .control
+                  label(for='morning') 上午
+                  input#morning.form-control.inline(name='morning', type='number')
+                  label(for='afternoon') 下午
+                  input#afternoon.form-control.inline(name='afternoon', type='number')
+                  label(for='evening') 晚上
+                  input#evening.form-control.inline(name='evening', type='number')
+                  .note 详细的预约人数控制可以在添加医生之后设定。
+
+            input(type='hidden', name='hospitalId', id='hospital-id' value='')
+            input(type='hidden', name='timeSlots', id='time-slots', value='')
             button.button.submit-button.green-button.button-with-icon(type='submit')
                i.fa.fa-plus
                | &nbsp;添加医生
 
    style.
+      a.button {
+         text-decoration: none !important;
+      }
+      .opnl-button {
+         margin-right: 10px;
+      }
       .time-slots td {
          text-align: center;
       }
@@ -165,25 +192,50 @@ block content
          cursor: pointer;
       }
       .time-slots td.checkable:hover {
-         background: #f4f4f4;
+         background: #f7f7f7;
       }
       .time-slots td.checkable.checked {
-         background: #f4f4f4;
+         background: #f7f7f7;
       }
       .select-all,
       .select-none {
          margin-right: 15px;
       }
+      input.form-control.inline {
+         width: 100px;
+         margin: 0 20px 0 10px;
+      }
 
    script.
-      $('.time-slots .checkable').click(function() {
+      $('#doctor-table').DataTable();
+      $('.delete-doctor').click(function() {
+         var id = $(this).data('id');
+         if (confirm('是否确定删除医生？')) {
+            $.ajax({
+               url: '/hospital/doctor/' + id + '/delete',
+               type: 'GET'
+            }).done(function(data) {
+               if (data.code == 0) {
+                  toastr.success('医生已经删除', '成功');
+               } else {
+                  toastr.error('系统错误。错误代码：' + data.code, '删除失败');
+               }
+            }).error(function() {
+               toastr.error('系统发生致命错误。错误信息：ECONNECTREFUSED', '删除失败');
+            });
+         }
+      });
+
+   script.
+      var $cell = $('.time-slots .checkable');
+      $cell.click(function() {
          $(this).toggleClass('checked');
       });
       $('.select-all').click(function() {
-         $('.time-slots .checkable').addClass('checked');
+         $cell.addClass('checked');
       });
       $('.select-none').click(function() {
-         $('.time-slots .checkable').removeClass('checked');
+         $cell.removeClass('checked');
       });
       $('#add-doctor').on('submit', function() {
          var timeSlots = [
@@ -195,7 +247,12 @@ block content
             [0, 0, 0],
             [0, 0, 0]
          ];
-         $('td.clickable').each(function(idx, elm) {
-
+         var caps = [parseInt($('#morning').val()), parseInt($('#afternoon').val()), parseInt($('#evening').val())];
+         $('td.checkable.checked').each(function(index, element) {
+            var row = $(element).data('row');
+            var col = $(element).data('col');
+            timeSlots[row - 1][col - 1] = caps[col - 1];
          });
+         $('#time-slots').val(JSON.stringify(timeSlots));
+         return true;
       });

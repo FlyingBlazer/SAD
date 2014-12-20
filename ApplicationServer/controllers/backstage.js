@@ -138,6 +138,9 @@ exports.onChangePassword = function (request, response) {
  * @param response
  */
 exports.hospitals = function (request, response) {
+    response.render('sb_hospitals');
+    return;
+
     if (!getCookie(request).username)
         response.redirect('/backstage/login');
     else {
@@ -162,6 +165,9 @@ exports.hospitals = function (request, response) {
  * @param response
  */
 exports.departments = function (request, response) {
+    response.render('sb_departments');
+    return;
+
     if (!getCookie(request).username)
         response.redirect('/backstage/login');
     else {
@@ -187,6 +193,10 @@ exports.departments = function (request, response) {
  * @param response
  */
 exports.doctors = function (request, response) {
+    response.render('sb_doctors');
+    return;
+
+
     if (!getCookie(request).username)
         response.redirect('/backstage/login');
     else {
