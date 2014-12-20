@@ -105,7 +105,7 @@ block content
                var period = $(element).data('period');
                var capacity = $(element).data('capacity');
                $('#panel-current .cell').each(function(index, element) {
-                  if ($(element).data('date') == date && $(element).date('period') == period) {
+                  if ($(element).data('date') == date && $(element).data('period') == period) {
                      $(element).text(capacity);
                      return false;
                   }
