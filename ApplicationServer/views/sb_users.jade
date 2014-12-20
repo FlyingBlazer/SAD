@@ -40,17 +40,17 @@ block content
                th ip
                th 操作
          tbody
-            if (users.length)
-               each item in users
+            if (list.length)
+               each item in list
 
                   tr
                      td #{item.name}
-                     td #{item.user_id}
+                     td #{item.id}
                      td #{item.phone}
                      td #{item.email}
                      td #{item.ip}
                      td
-                        button.button.green-button(id=accept_button,name=item.user_id)  接受
-                        button.button.red-button(id=refuse_button,name=item.user_id)  拒绝
+                        button.button.green-button(id=accept_button,name=item.id)  接受
+                        button.button.red-button(id=refuse_button,name=item.id)  拒绝
 
 
