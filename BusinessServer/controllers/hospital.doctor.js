@@ -75,16 +75,28 @@ exports.update = function(req, res, next) {
             res.send(500, "Doctor not exist.");
             throw err;
         }
+        if(typeof req.body.department_id != 'undefined') {
+            var department_id = req.body.department_id;
+            req.models.department.get(department_id, function(err, department) {
+                if(err && err.message != 'Not found') return next(err);
+                doctor.setDepartment(department, function(err) {
+                    if(err && err.message != 'Not found') throw err;
+                });
+            });
+        }
         for(var index in req.body) {
             switch(index) {
+                case 'name':
+                    doctor.name = req.body[index];
+                    break;
                 case 'description':
-                    hospital.info = req.body[index];
+                    doctor.info = req.body[index];
                     break;
                 case 'price':
-                    hospital.price = req.body[index];
+                    doctor.price = req.body[index];
                     break;
                 case 'title':
-                    hospital.title = req.body[index];
+                    doctor.title = req.body[index];
                     break;
                 default:
                     break;

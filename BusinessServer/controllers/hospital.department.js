@@ -96,17 +96,15 @@ exports.update = function(req, res, next) {
             return;
         }
         for(var index in req.body) {
-            if(typeof department[index] != 'undefined') {
-                switch(index) {
-                    case 'telephone':
-                        hospital.tel = req.body[index];
-                        break;
-                    case 'description':
-                        hospital.info = req.body[index];
-                        break;
-                    default:
-                        break;
-                }
+            switch(index) {
+                case 'phone':
+                    department.tel = req.body[index];
+                    break;
+                case 'description':
+                    department.info = req.body[index];
+                    break;
+                default:
+                    break;
             }
         }
         department.save(function(err) {
