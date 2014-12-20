@@ -92,6 +92,27 @@ exports.update = function(req, res, next) {
 };
 
 exports.detail = function(req, res, next) {
+    function finish(){
+        doctor.getDepartment(function(err, department) {
+            if(err) throw err;
+            department.getHospital(function(err, hospital) {
+                if(err) throw err;
+                res.json({
+                    code: 0,
+                    message: 'success',
+                    id: doctor.id,
+                    name: doctor.name,
+                    hospital: hospital.name,
+                    department: department.name,
+                    title: doctor.title,
+                    description: doctor.info,
+                    photo_url: doctor.photo,
+                    time_slots: slot,
+                    price: doctor.price
+                });
+            });
+        });
+    }
     req.models.doctor.get(req.params.doctorId, function(err, doctor) {
         if(err && err.message != 'Not found') return next(err);
         if(!doctor) return next(new Errors.DoctorNotExist('Doctor Not Exist'));
@@ -197,26 +218,10 @@ exports.detail = function(req, res, next) {
                     if(err) throw err;
                     slot[i].slot['evening'][2] = app_count;
                 });
+                if(i==7){
+                    finish();
+                }
             }
-            doctor.getDepartment(function(err, department) {
-                if(err) throw err;
-                department.getHospital(function(err, hospital) {
-                    if(err) throw err;
-                    res.json({
-                        code: 0,
-                        message: 'success',
-                        id: doctor.id,
-                        name: doctor.name,
-                        hospital: hospital.name,
-                        department: department.name,
-                        title: doctor.title,
-                        description: doctor.info,
-                        photo_url: doctor.photo,
-                        time_slots: slot,
-                        price: doctor.price
-                    });
-                });
-            });
         });
     });
 };

@@ -67,6 +67,26 @@ exports.updateInfo = function(req, res, next){
 };
 
 exports.signUp = function(req, res, next) {
+    function finish(){
+        req.models.user.create({
+            name: username,
+            realName: name,
+            password: password,
+            socialId: id,
+            tel: phone,
+            email: email,
+            credit: 5,
+            isActivated: 0,
+            ip: uip
+        }, function(err, user) {
+            if(err && err.message != 'Not found') return next(err);
+            res.json({
+                code: 0,
+                message: 'success',
+                userid: user.id
+            });
+        });
+    }
     var username = req.body.username,
         password = req.body.password,
         id = req.body.id,
@@ -79,27 +99,14 @@ exports.signUp = function(req, res, next) {
         if(users.length>0) {
             users.remove(function (err) {
                 if (err) throw err;
+                finish();
             });
         }
+        else{
+            finish();
+        }
     });
-    req.models.user.create({
-        name: username,
-        realName: name,
-        password: password,
-        socialId: id,
-        tel: phone,
-        email: email,
-        credit: 5,
-        isActivated: 0,
-        ip: uip
-    }, function(err, user) {
-        if(err && err.message != 'Not found') return next(err);
-        res.json({
-            code: 0,
-            message: 'success',
-            userid: user.id
-        });
-    });
+
 };
 
 exports.checkName = function(req, res, next) {

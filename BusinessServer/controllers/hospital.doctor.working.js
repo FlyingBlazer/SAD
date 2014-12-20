@@ -35,6 +35,15 @@ exports.getRaw = function(req, res, next) {
 };
 
 exports.addWeek = function(req, res, next) {
+    var count = 3;
+    function finish(){
+        if(--count==0) {
+            res.json({
+                code: 0,
+                message: 'success'
+            });
+        }
+    }
     check(req, function(data, doctorId, adminId) {
         var new_working=req.body.day;
         var morning = '20000000';
@@ -46,7 +55,7 @@ exports.addWeek = function(req, res, next) {
             evening.replaceAt(i + 1, new_working[i][2]);
         }
         var date=new Date();
-        req.models.working.find({doctor_id: doctorId}, function(err, workings) {
+        req.models.working.get(doctorId, function(err, workings) {
             if(err && err.message != 'Not found') return next(err);
             if(workings) {
                 return next(new Errors.AddingFailed("Working Arrangement Already Exists!"));
@@ -59,6 +68,7 @@ exports.addWeek = function(req, res, next) {
                 price : data[0]['price']
             }, function(err, working) {
                 if(err && err.message != 'Not found') return next(err);
+                finish();
             });
             req.models.working.create({
                 doctor_id: doctorId,
@@ -68,6 +78,7 @@ exports.addWeek = function(req, res, next) {
                 price : data[0]['price']
             }, function(err, working) {
                 if(err && err.message != 'Not found') return next(err);
+                finish();
             });
             req.models.working.create({
                 doctor_id: doctorId,
@@ -77,10 +88,7 @@ exports.addWeek = function(req, res, next) {
                 price : data[0]['price']
             }, function(err, working) {
                 if(err && err.message != 'Not found') return next(err);
-            });
-            res.json({
-                code: 0,
-                message: 'success'
+                finish();
             });
         });
     });

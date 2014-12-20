@@ -1,6 +1,16 @@
 var Errors = require('../lib/Errors');
 
 exports.list = function(req, res, next) {
+    var count = 2;
+    function finish(){
+        if(--count==0){
+            res.json({
+                code: 0,
+                message: 'success',
+                users: userList
+            });
+        }
+    }
     var userList = {};
     req.models.user.find({
         isActivated: 0
@@ -20,6 +30,7 @@ exports.list = function(req, res, next) {
                 candidate[i]["ip"]=user[i].ip;
         	}
             userList['validating']=candidate;
+            finish();
         }
     });
     req.models.user.find({
@@ -41,11 +52,7 @@ exports.list = function(req, res, next) {
             }
             userList['unqualified']=candidate;
         }
-    });
-    res.json({
-        code: 0,
-        message: 'success',
-        users: userList
+        finish();
     });
 };
 
