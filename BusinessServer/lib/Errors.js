@@ -64,7 +64,7 @@ exports.InvalidUserStatus=function InvalidUserStatus(message) {
         constructorOpt: InvalidUserStatus
     });
     this.name = 'InvalidUserStatus';
-}
+};
 util.inherits(exports.InvalidUserStatus, restify.RestError);
 
 exports.HospitalNotExist = function HospitalNotExist(message) {
@@ -163,7 +163,7 @@ exports.ReservationPeriodFailure = function ReservationPeriodFailure(message) {
         constructorOpt: ReservationPeriodFailure
     });
     this.name = 'ReservationPeriodFailure';
-}
+};
 util.inherits(exports.ReservationPeriodFailure, restify.RestError);
 
 exports.ReservationFullFailure = function ReservationFullFailure(message) {
