@@ -74,7 +74,7 @@ exports.onLogin = function (request, response) {
 
 
     //TODO dummy implementation
-    setCookie(response, username, '1', '1', 'hospital name', businessServerInfo);
+    setCookie(response, username, '5', '1', 'hospital name', businessServerInfo);
     printLogMessage('cookie : ' + JSON.stringify(getCookie(request)));
     var redirectPath = '/backstage';
     response.redirect(redirectPath);
@@ -559,7 +559,7 @@ exports.users = function (request, response) {
                 hospitalId: getCookie(request).hospitalId,
                 hospitalName: getCookie(request).hospitalName,
                 businessServer: getCookie(request).businessServer,
-                list: result.users.validating//TODO 依API而定
+                list: result.users.validating
             };
 
             printLogMessage(JSON.stringify(result.users));
