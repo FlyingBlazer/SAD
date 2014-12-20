@@ -14,7 +14,7 @@ var businessServerInfo = 'localhost:' + settings.port.business;
  * @param response
  */
 exports.home = function (request, response) {
-    //TODO 判定是否注册
+    //TODO 判定是否注册  传参
     response.render('sb_home');
 };
 
@@ -29,9 +29,14 @@ exports.login = function (request, response) {
     var message = request.params.message;
 
     var params = {
-        initTimestamp: typeof initTimestamp == 'undefined' ? '' : initTimestamp,
-        msgType: typeof msgType == 'undefined' ? '' : msgType,
-        message: typeof  message == 'undefined' ? '' : message
+        username: getCookie(request).username,
+        userId: getCookie(request).userId,
+        hospitalId: getCookie(request).hospitalId,
+        hospitalName: getCookie(request).hospitalName,
+        businessServer: getCookie(request).businessServer,
+        initTimestamp: isNullOrUndefined(initTimestamp) ? '' : initTimestamp,
+        msgType: isNullOrUndefined(msgType) ? '' : msgType,
+        message: isNullOrUndefined(message) ? '' : message
     };
 
     response.render('sb_login', params);
@@ -126,9 +131,14 @@ exports.changePassword = function (request, response) {
         var message = request.params.message;
 
         var params = {
-            initTimestamp: typeof initTimestamp == 'undefined' ? '' : initTimestamp,
-            msgType: typeof msgType == 'undefined' ? '' : msgType,
-            message: typeof  message == 'undefined' ? '' : message
+            username: getCookie(request).username,
+            userId: getCookie(request).userId,
+            hospitalId: getCookie(request).hospitalId,
+            hospitalName: getCookie(request).hospitalName,
+            businessServer: getCookie(request).businessServer,
+            initTimestamp: isNullOrUndefined(initTimestamp) ? '' : initTimestamp,
+            msgType: isNullOrUndefined(msgType) ? '' : msgType,
+            message: isNullOrUndefined(message) ? '' : message
         };
 
         response.render('sb_changePassword', params);
@@ -187,9 +197,14 @@ exports.hospitals = function (request, response) {
                 var message = request.params.message;
 
                 var params = {
-                    initTimestamp: typeof initTimestamp == 'undefined' ? '' : initTimestamp,
-                    msgType: typeof msgType == 'undefined' ? '' : msgType,
-                    message: typeof  message == 'undefined' ? '' : message,
+                    username: getCookie(request).username,
+                    userId: getCookie(request).userId,
+                    hospitalId: getCookie(request).hospitalId,
+                    hospitalName: getCookie(request).hospitalName,
+                    businessServer: getCookie(request).businessServer,
+                    initTimestamp: isNullOrUndefined(initTimestamp) ? '' : initTimestamp,
+                    msgType: isNullOrUndefined(msgType) ? '' : msgType,
+                    message: isNullOrUndefined(message) ? '' : message,
                     list: result.hospitals
                 };
 
@@ -225,9 +240,14 @@ exports.departments = function (request, response) {
                 var message = request.params.message;
 
                 var params = {
-                    initTimestamp: typeof initTimestamp == 'undefined' ? '' : initTimestamp,
-                    msgType: typeof msgType == 'undefined' ? '' : msgType,
-                    message: typeof  message == 'undefined' ? '' : message,
+                    username: getCookie(request).username,
+                    userId: getCookie(request).userId,
+                    hospitalId: getCookie(request).hospitalId,
+                    hospitalName: getCookie(request).hospitalName,
+                    businessServer: getCookie(request).businessServer,
+                    initTimestamp: isNullOrUndefined(initTimestamp) ? '' : initTimestamp,
+                    msgType: isNullOrUndefined(msgType) ? '' : msgType,
+                    message: isNullOrUndefined(message) ? '' : message,
                     list: departments_list
                 };
 
@@ -262,9 +282,14 @@ exports.doctors = function (request, response) {
                     var message = request.params.message;
 
                     var params = {
-                        initTimestamp: typeof initTimestamp == 'undefined' ? '' : initTimestamp,
-                        msgType: typeof msgType == 'undefined' ? '' : msgType,
-                        message: typeof  message == 'undefined' ? '' : message,
+                        username: getCookie(request).username,
+                        userId: getCookie(request).userId,
+                        hospitalId: getCookie(request).hospitalId,
+                        hospitalName: getCookie(request).hospitalName,
+                        businessServer: getCookie(request).businessServer,
+                        initTimestamp: isNullOrUndefined(initTimestamp) ? '' : initTimestamp,
+                        msgType: isNullOrUndefined(msgType) ? '' : msgType,
+                        message: isNullOrUndefined(message) ? '' : message,
                         departments: departments_list,
                         list: doctors
                     };
@@ -276,36 +301,225 @@ exports.doctors = function (request, response) {
     }
 };
 
+/**
+ * 渲染管理预约页面
+ * @param request
+ * @param response
+ */
 exports.reservations = function (request, response) {
 
-    response.render('sb_reservations');
+    printLogMessage('1');
+    //TODO dummy implementation
+    var param = {
+        username: getCookie(request).username,
+        userId: getCookie(request).userId,
+        hospitalId: getCookie(request).hospitalId,
+        hospitalName: getCookie(request).hospitalName,
+        businessServer: getCookie(request).businessServer,
+        list: [
+            {
+                "reservation_id": 12345,
+                "time": "2014-12-16 08:50:00",
+                "price": "23.33",
+                "status": "000000",
+                "status_msg": "在线支付，已付款",
+                "hospital_name": "XX hospital",
+                "department_name": "psychology",
+                "doctor_name": "杨伟",
+                "user_name": "渣诚",
+                "user_phone": "18622222222",
+                "user_sid": "12010319921000100X"
+            },
+            {
+                "reservation_id": 12345,
+                "time": "2014-12-16 08:50:00",
+                "price": "23.33",
+                "status": "000000",
+                "status_msg": "在线支付，已付款",
+                "hospital_name": "XX hospital",
+                "department_name": "psychology",
+                "doctor_name": "杨伟",
+                "user_name": "渣诚",
+                "user_phone": "18622222222",
+                "user_sid": "12010319921000100X"
+            }]
+    };
+    printLogMessage(2);
+    response.render('sb_reservations', param);
+    printLogMessage(3);
+    return;
+
+
+    var hospitalId = getCookie(request).hospitalId;
+    if (!isNullOrUndefined(hospitalId) || !isNullOrUndefined(getCookie(request).userId)) {//未登录
+        response.redirect('/backstage/login');
+    } else {
+        var path = '/reservation/' + hospitalId + '/list';
+        forwardRequestGET(path, function (result) {
+            if (result.code == 0) {
+                response.render('sb_reservations', {
+                    username: getCookie(request).username,
+                    userId: getCookie(request).userId,
+                    hospitalId: getCookie(request).hospitalId,
+                    hospitalName: getCookie(request).hospitalName,
+                    businessServer: getCookie(request).businessServer,
+                    list: result.reservations
+                });
+            } else {
+                printLogMessage(result.message);
+            }
+        });
+    }
 };
 
-// post
+/**
+ * 添加医院
+ * POST
+ * @param request
+ * @param response
+ */
 exports.addHospital = function (request, response) {
 
-    response.redirect('/backstage/hospitals');
+    var requestBody = request.body;
 
+    var data = {
+        name: requestBody.name,
+        level: requestBody.level,
+        province: requestBody.province,
+        city: '',//上传的数据中不包含city
+        address: requestBody.address,
+        telephone: requestBody.telephone,
+        website: requestBody.website,
+        description: requestBody.description
+    };
+
+    var path = '/hospital/hospital/add';
+    forwardRequestPOST(data, path, function (result) {
+        if (result.code == 0) {
+            response.redirect('/backstage/manage-hospitals/' + getCurrentTimeInSeconds() + '/success/complete');
+        } else {
+            response.redirect('/backstage/manage-hospitals/' + getCurrentTimeInSeconds() + '/fail/unknown');
+        }
+    });
 };
 
-// post
+/**
+ * 添加科室
+ * POST
+ * @param request
+ * @param response
+ */
 exports.addDepartment = function (request, response) {
+    var requestBody = request.body;
 
-    response.redirect('/backstage/departments');
+    var data = {
+        name: requestBody.name,
+        hospital_id: requestBody.hospital_id,
+        phone: requestBody.phone,
+        description: requestBody.description
+    };
+
+    var path = '/hospital/department/add';
+    forwardRequestPOST(data, path, function (result) {
+        if (result.code == 0) {
+            response.redirect('/backstage/departments/' + getCurrentTimeInSeconds() + '/success/complete');
+        } else {
+            response.redirect('/backstage/departments/' + getCurrentTimeInSeconds() + '/fail/unknown');
+        }
+    });
+
+
 };
 
-// post
+/**
+ * 添加医生
+ * POST
+ * @param request
+ * @param response
+ */
 exports.addDoctor = function (request, response) {
+    var requestBody = request.body;
+
+    var data = {
+        name: requestBody.name,
+        hospital_id: requestBody.hospital_id,
+        department_id: requestBody.department_id,
+        //photo: requestBody.photo,
+        photo: '',//TODO pending
+        description: requestBody.description,
+        title: requestBody.title,
+        price: requestBody.price
+    };
+
+    var timeSlots = requestBody.timeSlots;
+
+    var path = '/hospital/doctor/add';
+    forwardRequestPOST(data, path, function (result) {
+        if (result == 0) {
+            //添加排班信息
+            var doctor_id = result.doctor_id;
+            var adminId = getCookie(request).userId;
+            var addTimeSlotsPath = '/hospital/doctor/' + doctor_id + '/working/week/add';
+
+            forwardRequestPOST({
+                    week: timeSlots,
+                    adminId: adminId
+                },
+                addTimeSlotsPath, function (feedback) {
+                    if (feedback.code == 0) {
+                        response.redirect('/backstage/departments/' + getCurrentTimeInSeconds() + '/success/complete');
+                    } else {
+                        response.redirect('/backstage/departments/' + getCurrentTimeInSeconds() + '/fail/unknown');
+                    }
+                });
+        } else {
+            response.redirect('/backstage/departments/' + getCurrentTimeInSeconds() + '/fail/unknown');
+        }
+    });
 
     response.redirect('/backstage/account');
 };
 
+/**
+ * 渲染编辑排班页面
+ * GET
+ * URL中参数为id(医生id)
+ * @param request
+ * @param response
+ */
 exports.editSchedule = function (request, response) {
 
-    response.render('sb_edit-schedule');
+    var doctorId = request.params.id;
+    var adminId = getCookie(request).adminId;
+
+    var doctorInfoCallback = function (doctorInfo) {
+        retrieveDoctorSchedule(doctorId, adminId, function (schedule) {
+            if (schedule.code == 0) {
+                var params = {
+                    username: getCookie(request).username,
+                    userId: getCookie(request).userId,
+                    hospitalId: getCookie(request).hospitalId,
+                    hospitalName: getCookie(request).hospitalName,
+                    businessServer: getCookie(request).businessServer,
+                    doctorId: doctorInfo.id,
+                    doctorName: doctorInfo.name,
+                    doctorHospital: doctorInfo.hospital,
+                    doctorDepartment: doctorInfo.department,
+                    schedule: schedule
+                };
+                response.render('sb_edit-schedule', params);
+            } else {
+                printLogMessage(schedule.message);
+            }
+        });
+    };
+
+    retrieveDoctorInfo(doctorId, doctorInfoCallback);
 };
 
 exports.users = function (request, response) {
+//TODO
+
 
     response.render('sb_users');
 };
@@ -336,7 +550,6 @@ function getCookie(request) {
  * @param businessServer
  */
 function setCookie(response, username, userId, hospitalId, hospitalName, businessServer) {
-
     var options = {
         expires: new Date(Date.now() + 900000000),
         path: '/'
@@ -370,8 +583,6 @@ function clearCookie(response) {
  * @param callback 业务服务器返回的结果(JSON Object)
  */
 function forwardRequestPOST(data, path, callback) {
-    printLogMessage('forwardRequestPOST : path =' + path + '  data=' + queryString.stringify(data));
-
     forwardRequest('POST', path, queryString.stringify(data), callback);
 }
 
@@ -485,5 +696,44 @@ function retrieveDoctorList(hospitalId, callback) {
     };
 
     forwardRequestGET('/hospital/department/' + hospitalId, handler);
+}
+
+/**
+ * 获取医生信息
+ * id、name、hospital、department
+ * @param doctorId
+ * @param callback 参数为doctorInfo(包含id、name、hospital、department)
+ */
+function retrieveDoctorInfo(doctorId, callback) {
+    var path = '/hospital/doctor/' + doctorId + '/detail';
+    forwardRequestGET(path, function (result) {
+        var doctorInfo = {
+            id: result.id,
+            name: result.name,
+            hospital: result.hospital,
+            department: result.department
+        };
+        callback(doctorInfo);
+    });
+}
+
+/**
+ *获取医生排班信息
+ * @param doctorId
+ * @param adminId
+ * @param callback 参数为schedule
+ */
+function retrieveDoctorSchedule(doctorId, adminId, callback) {
+    var path = '/hospital/doctor/' + doctorId + '/working/getraw?adminId=' + adminId;
+    forwardRequestGET(path, callback);
+}
+
+/**
+ * 判断是否为空或未定义
+ * @param data
+ * @returns {boolean}
+ */
+function isNullOrUndefined(data) {
+    return !data;
 }
 
