@@ -16,11 +16,12 @@ exports.list = function(req, res, next) {
         isActivated: 0
     }).only("id","name","socialId","realName","tel","email","ip").run(function(err, user) {
         if(err && err.message != 'Not found') return next(err);
-        if(!user) {
+        if(!user||user.length==0) {
             return next(new Errors.ListEmpty("No user needs to be validated"));
         } else {
             var candidate=[];
         	for(var i=0;i<user.length;i++){
+                candidate[i]=new Array();
         		candidate[i]["user_id"]=user[i].id;
                 candidate[i]["username"]=user[i].name;
                 candidate[i]["id"]=user[i].socialId;
@@ -37,11 +38,12 @@ exports.list = function(req, res, next) {
         isActivated: -2
     }).only("id","name","socialId","realName","tel","email","ip").run(function(err, user) {
         if(err && err.message != 'Not found') return next(err);
-        if(!user) {
+        if(!user|| user.length==0) {
             return next(new Errors.ListEmpty("All Users Have Been Activated"));
         } else {
             var candidate=[];
             for(var i=0;i<user.length;i++){
+                candidate[i]=new Array();
                 candidate[i]["user_id"]=user[i].id;
                 candidate[i]["username"]=user[i].name;
                 candidate[i]["id"]=user[i].socialId;
