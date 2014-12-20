@@ -1,3 +1,6 @@
+//TODO 添加成功提示
+   删除成功未刷新
+
 extends ./sb_layout
 block content
    h2 科室管理
@@ -11,7 +14,7 @@ block content
    div.tab-content
       div#panel-manage.tab-pane.fade.in.active
          h3 现有医院管理
-         table#doctor-table.table.table-striped.table-bordered.table-hover
+         table#department-table.table.table-striped.table-bordered.table-hover
             thead
                tr
                   th id
@@ -24,13 +27,50 @@ block content
                   tr
                      td #{department.id}
                      td #{department.name}
-                     td #{department.phone}
-                     td #{department.description}
                      td
-                        button.button.xs-button.blue-button.edit-hospital
-                           i.fa.fa-edit.fa-fw 编辑
-                        button.button.xs-button.red-button.delete-hospital
+                        a.x-editable(href='#', data-id='#{department.id}', data-prop='phone')= department.phone
+                     td
+                        -var description = department.description;
+                        - description = description.substr(0, 20) + '...';
+                        a.x-editable(href='#', data-id='#{department.id}', data-prop='description') #{description}.
+                     td
+                        button.button.xs-button.red-button.delete-department(data-id='#{department.id}', data-name='#{department.name}')
                            i.fa.fa-trash.fa-fw 删除
+
+         script.
+            $('#department-table').DataTable();
+            $('.delete-department').click(function() {
+               if (confirm('是否确定删除' + $(this).data('name') + '？')) {
+                  var departmentId = $(this).data('id');
+                  $.ajax({
+                     url: 'http://#{businessServer}/hospital/department/' + departmentId + '/delete',
+                     type: 'GET'
+                  }).done(function(data) {
+                     if (data.code == 0) {
+                        toastr.success('科室已经删除', '成功');
+                     } else {
+                        toastr.error('系统错误。错误代码：' + data.code, '删除失败');
+                     }
+                  }).error(function(jqXHR, textStatus, errorThrown) {
+                     toastr.error('系统发生致命错误 ' + textStatus + '。错误信息：' + errorThrown, '删除失败');
+                  });
+               }
+            });
+
+            $('#panel-manage a.x-editable').each(function(index, element) {
+               var departmentId = $(element).data('id');
+               var prop = $(element).data('prop');
+               $(element).editable({
+                  url: 'http://#{businessServer}/hospital/department/' + departmentId + '/update',
+                  type: 'text',
+                  send: 'always',
+                  params: function(params) {
+                     var r = {};
+                     r[prop] = params.value;
+                     return r;
+                  }
+               });
+            });
 
       div#panel-add.tab-pane.fade
          h3 添加科室

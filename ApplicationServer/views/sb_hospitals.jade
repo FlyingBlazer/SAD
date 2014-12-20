@@ -11,7 +11,7 @@ block content
    div.tab-content
       div#panel-manage.tab-pane.fade.in.active
          h3 现有医院管理
-         table#doctor-table.table.table-striped.table-bordered.table-hover
+         table#hospitals-table.table.table-striped.table-bordered.table-hover
             thead
                tr
                   th id
@@ -24,35 +24,77 @@ block content
                   th 简介
                   th 操作
             tbody
-               //tr
-               //   td 1
-               //   td 中国人民解放军总医院301医院
-               //   td 三级甲等
-               //   td 北京
-               //   td 北京市海淀区复兴路28号
-               //   td 010-58266699
-               //   td http://jiaowu.buaa.edu.cn
-               //   td 中国人民解放军总医院301医院是一所致力于救死扶伤的知名医疗机构，位于北京市海淀区复兴路28号。医院拥有全国一流的医疗团队，自建院时起至今......
-               //   td
-               //      button.button.xs-button.blue-button.edit-hospital
-               //         i.fa.fa-edit.fa-fw 编辑
-               //      button.button.xs-button.red-button.delete-hospital
-               //         i.fa.fa-trash.fa-fw 删除
                each hospital in list
                   tr
                      td #{hospital.id}
                      td #{hospital.name}
-                     td #{hospital.level}
+                     td.level
+                        a.x-editable(href='#', data-id='#{hospital.id}')= hospital.level
                      td #{hospital.province}
-                     td #{hospital.address}
-                     td #{hospital.telephone}
-                     td #{hospital.website}
-                     td #{hospital.description}
                      td
-                        button.button.xs-button.blue-button.edit-hospital
-                           i.fa.fa-edit.fa-fw 编辑
-                        button.button.xs-button.red-button.delete-hospital
+                        a.x-editable(href='#', data-id='#{hospital.id}', data-prop='address')= hospital.address
+                     td
+                        a.x-editable(href='#', data-id='#{hospital.id}', data-prop='telephone')= hospital.telephone
+                     td
+                        a.x-editable(href='#', data-id='#{hospital.id}', data-prop='website')= hospital.website
+                     td
+                        a.x-editable(href='#', data-id='#{hospital.id}', data-prop='description')= hospital.description
+                     td
+                        button.button.xs-button.red-button.delete-hospital(data-id='#{hospital.id}', data-name='#{hospital.name}')
                            i.fa.fa-trash.fa-fw 删除
+
+         script.
+            $('#hospitals-table').DataTable();
+            $('.delete-hospital').click(function() {
+               if (confirm('是否确定删除' + $(this).data('name') + '？')) {
+                  var hospitalId = $(this).data('id');
+                  $.ajax({
+                     url: 'http://#{businessServer}/hospital/hospital/' + hospitalId + '/delete',
+                     type: 'GET'
+                  }).done(function(data) {
+                     if (data.code == 0) {
+                        toastr.success('医院已经删除', '成功');
+                     } else {
+                        toastr.error('系统错误。错误代码：' + data.code, '删除失败');
+                     }
+                  }).error(function(jqXHR, textStatus, errorThrown) {
+                     toastr.error('系统发生致命错误 ' + textStatus + '。错误信息：' + errorThrown, '删除失败');
+                  });
+               }
+            });
+
+            $('#panel-manage .level a.x-editable').each(function (index, element) {
+               var hospitalId = $(element).data('id');
+               $(element).editable({
+                  url: 'http://#{businessServer}/hospital/hospital/' + hospitalId + '/update',
+                  type: 'select2',
+                  send: 'always',
+                  source: [{id: "一级丙等", text: "一级丙等"}, {id: "一级乙等", text: "一级乙等"}, {id: "一级甲等", text: "一级甲等"},
+                     {id: "二级丙等", text: "二级丙等"}, {id: "二级乙等", text: "二级乙等"}, {id: "二级甲等", text: "二级甲等"},
+                     {id: "三级丙等", text: "三级丙等"}, {id: "三级乙等", text: "三级乙等"}, {id: "三级甲等", text: "三级甲等"}, {id: "三级特等", text: "三级特等"}],
+                  params: function (params) {
+                     return {
+                        "level": params.value
+                     };
+                  }
+               });
+            });
+
+            $('#panel-manage a.x-editable').each(function(index, element) {
+               var hospitalId = $(element).data('id');
+               var prop = $(element).data('prop');
+               $(element).editable({
+                  url: 'http://#{businessServer}/hospital/hospital/' + hospitalId + '/update',
+                  type: 'text',
+                  send: 'always',
+                  params: function(params) {
+                     var r = {};
+                     r[prop] = params.value;
+                     return r;
+                  }
+               });
+            });
+
 
       div#panel-add.tab-pane.fade
          h3 添加医院
@@ -68,16 +110,16 @@ block content
                   label(for='level') 等级
                .control
                   select.form-control(name='level', data-placeholder='选择等级...' required)
-                     option(value='3') 一级丙等
-                     option(value='2') 一级乙等
-                     option(value='1') 一级甲等
-                     option(value='6') 二级丙等
-                     option(value='5') 二级乙等
-                     option(value='4') 二级甲等
-                     option(value='10') 三级丙等
-                     option(value='9') 三级乙等
-                     option(value='8') 三级甲等
-                     option(value='7') 三级特等
+                     option(value='一级丙等') 一级丙等
+                     option(value='一级乙等') 一级乙等
+                     option(value='一级甲等') 一级甲等
+                     option(value='二级丙等') 二级丙等
+                     option(value='二级乙等') 二级乙等
+                     option(value='二级甲等') 二级甲等
+                     option(value='三级丙等') 三级丙等
+                     option(value='三级乙等') 三级乙等
+                     option(value='三级甲等') 三级甲等
+                     option(value='三级特等') 三级特等
 
             .form-group
                .prompt
