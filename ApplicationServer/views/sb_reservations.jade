@@ -4,7 +4,7 @@ block content
       $(document).ready(function () {
          $('#example').DataTable();
          $('#confirm').bind("click", $('#confirm').attr('name'), function (params) {
-            $.post("/hospital/reservation/"+params.data[0]+"/cofirm",
+            $.post("/hospital/reservation/"+params.data[0]+"/confirm",
 
                     function (data, status) {
                          location.reload(true);
@@ -36,8 +36,8 @@ block content
                th 价格
                th 操作
          tbody
-            if (reservations.length)
-               each item in reservations
+            if (list.length)
+               each item in list
 
                tr
                   td #{item.hospital_name}

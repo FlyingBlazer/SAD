@@ -22,15 +22,36 @@ block content
                   th 描述
                   th 操作
             tbody
-               tr
-                  td 1
-                  td 王拖地
-                  td 口腔科
-                  td 特级专家
-                  td 始于1994
-                  td
-                     a.button.blue-button.xs-button.opnl-button(href='/backstage/doctor/1/edit_schedule') 编辑排班
-                     button.button.red-button.xs-button.delete-doctor(data-id='1') 删除医生
+               each doctor in list
+                  tr
+                     td= doctor.id
+                     td= doctor.name
+                     td= doctor.department
+                     td= doctor.title
+                     td= doctor.description
+                     td
+                        a.button.blue-button.xs-button.opnl-button(href='/backstage/doctor/#{doctor.id}/edit_schedule') 编辑排班
+                        button.button.red-button.xs-button.delete-doctor(data-id='#{doctor.id}', data-name='#{doctor.name}') 删除医生
+
+         script.
+            $('#doctor-table').DataTable();
+            $('.delete-doctor').click(function() {
+               if (confirm('是否确定删除医生' + $(this).data('name') + '？')) {
+                  var doctorId = $(this).data('id');
+                  $.ajax({
+                     url: 'http://#{businessServer}/hospital/doctor/' + doctorId + '/delete',
+                     type: 'GET'
+                  }).done(function(data) {
+                     if (data.code == 0) {
+                        toastr.success('医生已经删除', '成功');
+                     } else {
+                        toastr.error('系统错误。错误代码：' + data.code, '删除失败');
+                     }
+                  }).error(function(jqXHR, textStatus, errorThrown) {
+                     toastr.error('系统发生致命错误 ' + textStatus + '。错误信息：' + errorThrown, '删除失败');
+                  });
+               }
+            });
 
 
       div#panel-add.tab-pane.fade
@@ -44,16 +65,11 @@ block content
 
             .form-group
                .prompt
-                  label(for='department') 所属科室
+                  label(for='departmentId') 所属科室
                .control
-                  select#department.form-control(name='department', data-placeholder='选择科室...', required)
-                     option(value='')
-                     option(value='')
-                     option(value='')
-                     option(value='')
-                     option(value='')
-                     option(value='')
-                     option(value='')
+                  select#departmentId.form-control(name='departmentId', data-placeholder='选择科室...', required)
+                     each department in departments
+                        option(value='#{department.id}') #{department.name}
 
             .form-group
                .prompt
@@ -166,11 +182,12 @@ block content
                   input#evening.form-control.inline(name='evening', type='number', value='0', required)
                   .note 详细的预约人数控制可以在添加医生之后设定。
 
-            input(type='hidden', name='hospitalId', id='hospital-id' value='')
+            input(type='hidden', name='hospitalId', id='hospital-id' value='#{hospitalId}')
             input(type='hidden', name='timeSlots', id='time-slots', value='')
             button.button.submit-button.green-button.button-with-icon(type='submit')
                i.fa.fa-plus
                | &nbsp;添加医生
+
 
    style.
       a.button {
@@ -206,26 +223,6 @@ block content
          width: 100px;
          margin: 0 20px 0 10px;
       }
-
-   script.
-      $('#doctor-table').DataTable();
-      $('.delete-doctor').click(function() {
-         var id = $(this).data('id');
-         if (confirm('是否确定删除医生？')) {
-            $.ajax({
-               url: '/hospital/doctor/' + id + '/delete',
-               type: 'GET'
-            }).done(function(data) {
-               if (data.code == 0) {
-                  toastr.success('医生已经删除', '成功');
-               } else {
-                  toastr.error('系统错误。错误代码：' + data.code, '删除失败');
-               }
-            }).error(function() {
-               toastr.error('系统发生致命错误。错误信息：ECONNECTREFUSED', '删除失败');
-            });
-         }
-      });
 
    script.
       $('#add-doctor').validate();
