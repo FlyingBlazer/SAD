@@ -228,7 +228,8 @@ function check(req, cb) {
     var adminId=req.body.adminId;
     var doctorId=req.body.doctorId;
     req.models.administrator.get(adminId, function(err, admin) {
-        if(err && err.message != 'Not found') return cb(err);
+        if(err && err.message != 'Not found') throw err;
+        if(!admin) return cb(new Errors.InvalidAdminId('Admin id not exist'));
         var hospital_id=parseInt(admin.name.substr(5, 8), 10);
         req.db.driver.execQuery(
             "SELECT hospital.id as id, doctor.price as price "+
