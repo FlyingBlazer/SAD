@@ -5,6 +5,8 @@
 var queryString = require('querystring');
 var url = require('url');
 var http = require('http');
+var settings = require('../../settings');
+var businessServerInfo = 'localhost:' + settings.port.business;
 
 /**
  * 渲染主页
@@ -44,18 +46,23 @@ exports.onLogin = function (request, response) {
         'password': password
     };
 
+    printLogMessage('on login: username=' + username + '  password=' + password);
 
     var loginCallback = function (result) {
+
+        printLogMessage('result : ' + JSON.stringify(result));
+
         //直接返回result
         if (result.code == 0 && result.message == 'success') {//登录成功:跳转并设置cookie
 
-            var hospitalId = result.hospital;
+            var hospitalId = result.hospitalId;
+            var adminId = result.adminId;
 
             //跳转到 /backstage 页面
             var jump = function (hospitalInfo) {
 
                 //存入cookie
-                setCookie(response, username, hospitalId, hospitalInfo.name);
+                setCookie(response, username, adminId, hospitalId, hospitalInfo.name, businessServerInfo);
 
                 //跳转
                 var redirectPath = '/backstage';
@@ -140,8 +147,7 @@ exports.onChangePassword = function (request, response) {
  * @param response
  */
 exports.hospitals = function (request, response) {
-    response.render('sb_hospitals');
-    return;
+
 
     if (!getCookie(request).username)
         response.redirect('/backstage/login');
@@ -281,7 +287,7 @@ function getCookie(request) {
  * @param hospitalId
  * @param hospitalName
  */
-function setCookie(response, username, hospitalId, hospitalName) {
+function setCookie(response, username, userId, hospitalId, hospitalName, businessServer) {
 
     var options = {
         expires: new Date(Date.now() + 900000000),
@@ -289,8 +295,10 @@ function setCookie(response, username, hospitalId, hospitalName) {
     };
 
     response.cookie('sb_username', username, options);
+    response.cookie('sb_userId', userId, options);
     response.cookie('sb_hospitalId', hospitalId, options);
     response.cookie('sb_hospitalName', hospitalName, options);
+    response.cookie('sb_businessServer', businessServer, options);
 }
 
 /**
@@ -298,9 +306,12 @@ function setCookie(response, username, hospitalId, hospitalName) {
  * @param response
  */
 function clearCookie(response) {
-    response.clearCookie('sb_username', {path: '/'});
-    response.clearCookie('sb_hospitalId', {path: '/'});
-    response.clearCookie('sb_hospitalName', {path: '/'});
+    var options = {path: '/'};
+    response.clearCookie('sb_username', options);
+    response.clearCookie('sb_userId', options);
+    response.clearCookie('sb_hospitalId', options);
+    response.clearCookie('sb_hospitalName', options);
+    response.clearCookie('sb_businessServer', options);
 }
 
 /**
@@ -311,6 +322,8 @@ function clearCookie(response) {
  * @param callback 业务服务器返回的结果(JSON Object)
  */
 function forwardRequestPOST(data, path, callback) {
+    printLogMessage('forwardRequestPOST : path =' + path + '  data=' + queryString.stringify(data));
+
     forwardRequest('POST', path, queryString.stringify(data), callback);
 }
 
