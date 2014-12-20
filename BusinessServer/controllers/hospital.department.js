@@ -97,7 +97,16 @@ exports.update = function(req, res, next) {
         }
         for(var index in req.body) {
             if(typeof department[index] != 'undefined') {
-                department[index] = req.body[index];
+                switch(index) {
+                    case 'telephone':
+                        hospital.tel = req.body[index];
+                        break;
+                    case 'description':
+                        hospital.info = req.body[index];
+                        break;
+                    default:
+                        break;
+                }
             }
         }
         department.save(function(err) {
