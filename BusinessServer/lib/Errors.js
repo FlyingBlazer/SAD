@@ -320,13 +320,13 @@ exports.WorkingAlreadyExist = function WorkingAlreadyExist(message) {
 };
 util.inherits(exports.WorkingAlreadyExist, restify.RestError);
 
-exports.ReservationCannotBeCanceled = function AppointmentCannotBeCanceled(message) {
+exports.ReservationCannotBeCanceled = function ReservationCannotBeCanceled(message) {
     restify.RestError.call(this, {
         restCode: '3012',
         statusCode: 403,
         message: message,
-        constructorOpt: AppointmentCannotBeCanceled
+        constructorOpt: ReservationCannotBeCanceled
     });
-    this.name = 'AppointmentCannotBeCanceled';
+    this.name = 'ReservationCannotBeCanceled';
 };
-util.inherits(exports.AppointmentCannotBeCanceled, restify.RestError);
+util.inherits(exports.ReservationCannotBeCanceled, restify.RestError);
