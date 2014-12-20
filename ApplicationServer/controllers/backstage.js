@@ -2,12 +2,15 @@
  * Created by renfei on 14/12/6.
  */
 
+var queryString = required('queryString');
+
 /**
  * 渲染主页
  * @param request
  * @param response
  */
 exports.home = function (request, response) {
+    //TODO 判定是否注册
     response.render('sb_home');
 };
 
@@ -62,7 +65,7 @@ exports.onLogin = function (request, response) {
             forwardRequestGET(queryUrl, jump);
 
         } else {
-            var redirectPath = '/backstage/login/fail/' + result.message;
+            var redirectPath = '/backstage/login/fail/wrong_credentials';
             response.redirect(redirectPath);
 
         }
@@ -74,38 +77,134 @@ exports.onLogin = function (request, response) {
 
 /**
  * 登出
- * 清空cookie，跳转到/login
+ * 清空cookie，跳转到/backstage/login
  * @param request
  * @param response
  */
 exports.logout = function (request, response) {
     clearCookie(response);
-    response.redirect('/login');
+    response.redirect('/backstage/login');
 };
 
+/**
+ * 渲染修改密码页
+ * @param request
+ * @param response
+ */
 exports.changePassword = function (request, response) {
-
-    response.render('sb_changePassword');
+    if (!getCookie(request).username)
+        response.redirect('/backstage/login');
+    else
+        response.render('sb_changePassword');
 };
 
-// post
+/**
+ * 修改密码
+ * POST
+ * 完成后跳转到/backstage/account，添加成功提示complete或失败提示wrong_credential
+ * @param request
+ * @param response
+ */
 exports.onChangePassword = function (request, response) {
 
+    var requestBody = request.body;
+    var username = requestBody.username;
+    var original_password = requestBody.originalPassword;
+    var new_password = requestBody.newPassword;
+
+    var path = '/admin/change_password';
+    var data = {
+        username: username,
+        original_password: original_password,
+        new_password: new_password
+    };
+
+    var callback = function (result) {
+        var redirectPath = '/backstage/account';
+        if (result.code == 0) {//修改成功
+            redirectPath = '/backstage/account/success/complete';
+        } else {//修改失败
+            redirectPath = '/backstage/account/fail/wrong_credential';
+        }
+        response.redirect(redirectPath);
+    };
+
+    forwardRequestPOST(data, path, callback);
 };
 
+/**
+ * 渲染管理医院页面
+ * @param request
+ * @param response
+ */
 exports.hospitals = function (request, response) {
+    if (!getCookie(request).username)
+        response.redirect('/backstage/login');
+    else {
+        var callback = function (result) {
+            if (result.code == 0)
+            //传参并渲染页面
+                response.render('sb_hospitals', {
+                    list: result.hospitals
+                });
+            else {
+                printLogMessage(result.message);
+            }
+        };
 
-    response.render('sb_hospitals');
+        forwardRequestGET('/hospital/hospital/list', callback);
+    }
 };
 
+/**
+ * 渲染科室页面
+ * @param request
+ * @param response
+ */
 exports.departments = function (request, response) {
-
-    response.render('sb_departments');
+    if (!getCookie(request).username)
+        response.redirect('/backstage/login');
+    else {
+        //传参并渲染
+        var hospitalId = getCookie(request).hospitalId;
+        if (typeof hospitalId == 'undefined' || !hospitalId)
+            printLogMessage('hospital id 不能为空');
+        else {
+            var callback = function (departments_list) {
+                response.render('sb_departments', {
+                    list: departments_list
+                });
+            };
+            //forwardRequestGET('/hospital/department/' + hospitalId, callback);
+            retrieveDepartmentList(hospitalId, callback);
+        }
+    }
 };
 
+/**
+ * 渲染管理医生页面
+ * @param request
+ * @param response
+ */
 exports.doctors = function (request, response) {
-
-    response.render('sb_doctors');
+    if (!getCookie(request).username)
+        response.redirect('/backstage/login');
+    else {
+        var hospitalId = getCookie(request).hospitalId;
+        if (typeof hospitalId == 'undefined' || !hospitalId)
+            printLogMessage('hospital id 不能为空');
+        else {
+            //获取科室信息和医生信息
+            retrieveDepartmentList(hospitalId, function (departments_list) {
+                retrieveDoctorList(hospitalId, function (doctors) {
+                    response.render('sb_doctors', {
+                        departments: departments_list,
+                        list: doctors
+                    });
+                });
+            });
+        }
+    }
 };
 
 exports.reservations = function (request, response) {
@@ -220,7 +319,7 @@ function forwardRequestGET(path, callback) {
  * @param data
  * @param callback 参数为返回的结果(JSON Object)
  */
-var forwardRequest = function (method, path, data, callback) {
+function forwardRequest(method, path, data, callback) {
     var options;
     if (method == 'GET')
         options = {
@@ -263,5 +362,46 @@ var forwardRequest = function (method, path, data, callback) {
     if (data !== null)
         req.write(data);
     req.end();
-};
+}
+/**
+ * 打印调试信息
+ * @param message
+ */
+function printLogMessage(message) {
+    console.log(message);
+}
 
+/**
+ * 根据hospital id获取所有科室信息
+ *
+ * @param hospitalId
+ * @param callback 参数为包含科室信息的departments_list
+ */
+function retrieveDepartmentList(hospitalId, callback) {
+
+    var handler = function (result) {
+        if (result.code == 0) {
+            callback(result.departments_list);
+        } else {
+            printLogMessage(result.message);
+        }
+    };
+
+    forwardRequestGET('/hospital/department/' + hospitalId, handler);
+}
+
+/**
+ * 根据hospital id获取所有医生信息
+ * @param hospitalId
+ * @param callback 参数为doctors
+ */
+function retrieveDoctorList(hospitalId, callback) {
+    var handler = function (result) {
+        if (result.code == 0) {
+            callback(result.doctors);
+        } else
+            printLogMessage(result.message);
+    };
+
+    forwardRequestGET('/hospital/department/' + hospitalId, handler);
+}
