@@ -48,6 +48,15 @@ exports.onLogin = function (request, response) {
 
     printLogMessage('on login: username=' + username + '  password=' + password);
 
+
+    //TODO dummy implementation
+    setCookie(response, username, '1', '1', 'hospital name', businessServerInfo);
+    printLogMessage('cookie : ' + JSON.stringify(getCookie(request)));
+    var redirectPath = '/backstage';
+    response.redirect(redirectPath);
+    return;
+
+
     var loginCallback = function (result) {
 
         printLogMessage('result : ' + JSON.stringify(result));
@@ -74,7 +83,7 @@ exports.onLogin = function (request, response) {
             forwardRequestGET(queryUrl, jump);
 
         } else {
-            var redirectPath = '/backstage/login/' + getCurrentTimeInSeconds() + 'fail/wrong_credentials';//TODO 参数不对
+            var redirectPath = '/backstage/login/' + getCurrentTimeInSeconds() + '/fail/wrong_credentials';
             response.redirect(redirectPath);
         }
     };
@@ -265,8 +274,10 @@ exports.users = function (request, response) {
 function getCookie(request) {
     return {
         'username': request.cookies.sb_username,
+        'userId': request.cookies.sb_userId,
         'hospitalId': request.cookies.sb_hospitalId,
-        'hospitalName': request.cookies.sb_hospitalName
+        'hospitalName': request.cookies.sb_hospitalName,
+        'businessServer': request.cookies.sb_businessServer
     };
 }
 
@@ -275,8 +286,10 @@ function getCookie(request) {
  * cookie内包含完整的用户信息
  * @param response
  * @param username
+ * @param userId
  * @param hospitalId
  * @param hospitalName
+ * @param businessServer
  */
 function setCookie(response, username, userId, hospitalId, hospitalName, businessServer) {
 
