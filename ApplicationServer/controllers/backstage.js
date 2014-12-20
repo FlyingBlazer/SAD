@@ -516,7 +516,7 @@ exports.addDoctor = function (request, response) {
 exports.editSchedule = function (request, response) {
 
     var doctorId = request.params.id;
-    var adminId = getCookie(request).adminId;
+    var adminId = getCookie(request).userId;
 
     var doctorInfoCallback = function (doctorInfo) {
         retrieveDoctorSchedule(doctorId, adminId, function (schedule) {
@@ -773,6 +773,7 @@ function retrieveDoctorInfo(doctorId, callback) {
  */
 function retrieveDoctorSchedule(doctorId, adminId, callback) {
     var path = '/hospital/doctor/' + doctorId + '/working/getraw?adminId=' + adminId;
+    printLogMessage('path=' + path);
     forwardRequestGET(path, callback);
 }
 
