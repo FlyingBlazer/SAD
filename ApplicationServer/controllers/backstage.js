@@ -74,11 +74,9 @@ exports.onLogin = function (request, response) {
             forwardRequestGET(queryUrl, jump);
 
         } else {
-            var redirectPath = '/backstage/login/fail/wrong_credentials';
+            var redirectPath = '/backstage/login/' + getCurrentTimeInSeconds() + 'fail/wrong_credentials';//TODO 参数不对
             response.redirect(redirectPath);
-
         }
-
     };
 
     forwardRequestPOST(data, path, loginCallback);
@@ -254,16 +252,9 @@ exports.editSchedule = function (request, response) {
     response.render('sb_edit-schedule');
 };
 
-// post
-exports.modifyTempWorking = function (request, response) {
-
-    var doctorId = '1';//todo temp
-    response.redirect('/backstage/doctor/' + doctorId + '/edit_schedule');
-};
-
-
 exports.users = function (request, response) {
 
+    response.render('sb_users');
 };
 
 /**
@@ -397,6 +388,14 @@ function printLogMessage(message) {
 }
 
 /**
+ * 返回当前时间戳
+ * 单位为秒
+ */
+function getCurrentTimeInSeconds() {
+    return Date.parse(new Date()) / 1000;
+}
+
+/**
  * 根据hospital id获取所有科室信息
  *
  * @param hospitalId
@@ -430,3 +429,4 @@ function retrieveDoctorList(hospitalId, callback) {
 
     forwardRequestGET('/hospital/department/' + hospitalId, handler);
 }
+
