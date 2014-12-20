@@ -365,7 +365,7 @@ INSERT INTO `appointment` (`id`, `user_id`, `doctor_id`, `pay_method`, `time`, `
 
 CREATE TABLE IF NOT EXISTS `department` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `hospital_id` int(11) NOT NULL,
+  `hospital_id` int(11),
   `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `info` text COLLATE utf8_bin NOT NULL,
   `tel` varchar(50) COLLATE utf8_bin NOT NULL,
@@ -888,7 +888,7 @@ INSERT INTO `department` (`id`, `hospital_id`, `name`, `info`, `tel`) VALUES
 
 CREATE TABLE IF NOT EXISTS `doctor` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `department_id` int(11) NOT NULL,
+  `department_id` int(11),
   `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `photo` varchar(50) COLLATE utf8_bin DEFAULT NULL,
   `info` text COLLATE utf8_bin NOT NULL,

@@ -42,10 +42,10 @@ exports.add = function(req, res, next) {
             });
         }
     }
-    req.models.hospital.get(req.body.hospital_id, function(err, hospital) {
-        if(err && err.message != 'Not found') return next(err);
-        if(!hospital) return next(new Errors.HospitalNotExist('Hospital not exist'));
-        hospital = hospital;
+    req.models.hospital.get(req.body.hospital_id, function(err, h) {
+        if(err && err.message != 'Not found') throw err;
+        if(!h) return next(new Errors.HospitalNotExist('Hospital not exist'));
+        hospital = h;
         finish();
     });
     req.models.department.create({
@@ -53,7 +53,7 @@ exports.add = function(req, res, next) {
         tel: req.body.phone,
         info: req.body.description
     }, function(err, dep) {
-        if(err && err.message != 'Not found') return next(err);
+        if(err) throw err;
         department = dep;
         finish();
     });
