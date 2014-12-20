@@ -226,7 +226,7 @@ exports.deleteTemp = function(req, res, next) {
 
 function check(req, cb) {
     var adminId=req.body.adminId;
-    var doctorId=req.body.doctorId;
+    var doctorId=req.params.doctorId;
     req.models.administrator.get(adminId, function(err, admin) {
         if(err && err.message != 'Not found') throw err;
         if(!admin) return cb(new Errors.InvalidAdminId('Admin id not exist'));

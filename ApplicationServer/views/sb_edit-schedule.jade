@@ -27,55 +27,34 @@ block content
                td.tcell(data-plus-day='6')
             tr
                td.title 上午
-               td.cell(data-row='1', data-col='1')
-                  a.x-editable
-               td.cell(data-row='2', data-col='1')
-                  a.x-editable
-               td.cell(data-row='3', data-col='1')
-                  a.x-editable
-               td.cell(data-row='4', data-col='1')
-                  a.x-editable
-               td.cell(data-row='5', data-col='1')
-                  a.x-editable
-               td.cell(data-row='6', data-col='1')
-                  a.x-editable
-               td.cell(data-row='7', data-col='1')
-                  a.x-editable
+               td.cell(data-row='1', data-col='1')= schedule.week[0][0]
+               td.cell(data-row='2', data-col='1')= schedule.week[1][0]
+               td.cell(data-row='3', data-col='1')= schedule.week[2][0]
+               td.cell(data-row='4', data-col='1')= schedule.week[3][0]
+               td.cell(data-row='5', data-col='1')= schedule.week[4][0]
+               td.cell(data-row='6', data-col='1')= schedule.week[5][0]
+               td.cell(data-row='7', data-col='1')= schedule.week[6][0]
 
             tr
                td.title 下午
-               td.cell(data-row='1', data-col='2')
-                  a.x-editable
-               td.cell(data-row='2', data-col='2')
-                  a.x-editable
-               td.cell(data-row='3', data-col='2')
-                  a.x-editable
-               td.cell(data-row='4', data-col='2')
-                  a.x-editable
-               td.cell(data-row='5', data-col='2')
-                  a.x-editable
-               td.cell(data-row='6', data-col='2')
-                  a.x-editable
-               td.cell(data-row='7', data-col='2')
-                  a.x-editable
+               td.cell(data-row='1', data-col='2')= schedule.week[0][1]
+               td.cell(data-row='2', data-col='2')= schedule.week[1][1]
+               td.cell(data-row='3', data-col='2')= schedule.week[2][1]
+               td.cell(data-row='4', data-col='2')= schedule.week[3][1]
+               td.cell(data-row='5', data-col='2')= schedule.week[4][1]
+               td.cell(data-row='6', data-col='2')= schedule.week[5][1]
+               td.cell(data-row='7', data-col='2')= schedule.week[6][1]
 
             tr
                td.title 晚上
-               td.cell(data-row='1', data-col='3')
-                  a.x-editable
-               td.cell(data-row='2', data-col='3')
-                  a.x-editable
-               td.cell(data-row='3', data-col='3')
-                  a.x-editable
-               td.cell(data-row='4', data-col='3')
-                  a.x-editable
-               td.cell(data-row='5', data-col='3')
-                  a.x-editable
-               td.cell(data-row='6', data-col='3')
-                  a.x-editable
-               td.cell(data-row='7', data-col='3')
-                  a.x-editable
-                  
+               td.cell(data-row='1', data-col='3')= schedule.week[0][2]
+               td.cell(data-row='2', data-col='3')= schedule.week[1][2]
+               td.cell(data-row='3', data-col='3')= schedule.week[2][2]
+               td.cell(data-row='4', data-col='3')= schedule.week[3][2]
+               td.cell(data-row='5', data-col='3')= schedule.week[4][2]
+               td.cell(data-row='6', data-col='3')= schedule.week[5][2]
+               td.cell(data-row='7', data-col='3')= schedule.week[6][2]
+
          script.
             var date = new Date();
             var dayToChinese = [
@@ -191,7 +170,7 @@ block content
                   a.x-editable(href='#', data-day='7', data-period='3', data-id='#{doctorId}')= schedule.week[6][2]
 
          script.
-            $('#panel-weekly a').each(function(index, element) {
+            $('#panel-weekly a.x-editable').each(function(index, element) {
                var doctorId = $(element).data('id');
                $(element).editable({
                   url: 'http://#{businessServer}/hospital/doctor/' + doctorId + '/working/week/update',
@@ -206,7 +185,8 @@ block content
                               "period": $(element).data('period'),
                               "action": params.value
                            }
-                        ]
+                        ],
+                        "adminId": #{userId}
                      };
                   }
                });
