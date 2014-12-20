@@ -295,9 +295,12 @@ exports.doctors = function (request, response) {
                 retrieveDoctorList(hospitalId, function (doctors) {
 
                     printLogMessage('doctors: ' + JSON.stringify(doctors));
-//TODO 合并doctors中的数据
-                    var doctorListData = doctors;
-
+                    var doctorListData = [];
+                    for (doctor in doctors) {
+                        for (item in doctors[doctor]) {
+                            doctorListData.push(doctors[doctor][item]);
+                        }
+                    }
 
                     var initTimestamp = request.params.initTimestamp;
                     var msgType = request.params.msgType;
