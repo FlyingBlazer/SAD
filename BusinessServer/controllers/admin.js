@@ -13,7 +13,7 @@ exports.login = function(req, res, next) {
                 adminId: admin.id,
                 hospitalId: parseInt(admin.name.toString().slice(5)).toString()
             });
-        }
+        } else return next(new Errors.LoginFail('Invalid Username or Password'));
     });
 };
 
