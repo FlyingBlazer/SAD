@@ -71,12 +71,14 @@ body {
 .nav-tabs>li>a {
     border-radius: 0;
     border-top-width: 2px;
+    border-bottom: none;
 }
 
 .nav-tabs>li.active>a,
 .nav-tabs>li.active>a:hover,
 .nav-tabs>li.active>a:focus {
     border-top: 2px solid #377bee;
+    border-bottom: none;
 }
 
 #footer #copyright {
@@ -95,6 +97,10 @@ body {
 
 .hidden {
     display: none !important;
+}
+
+.table {
+    text-align: center;
 }
 
 .table>thead>tr>th,

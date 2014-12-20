@@ -1,1 +1,74 @@
-<!--Created by renfei on 14/12/19.-->
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=EDGE"><link rel="stylesheet" href="/backstage/css/reset.css" media="all"><link rel="stylesheet" href="/backstage/css/font-awesome.css" media="all"><link rel="stylesheet" href="/backstage/plugins/toastr-notifications/toastr.css" media="all"><link rel="stylesheet" href="/backstage/plugins/icheck/grey.css" media="all"><link rel="stylesheet" href="/backstage/plugins/select2/select2.css" media="all"><link rel="stylesheet" href="/backstage/css/select2-custom.css" media="all"><link rel="stylesheet" href="/backstage/css/table.css" media="all"><link rel="stylesheet" href="/backstage/css/editable.css" media="all"><link rel="stylesheet" href="/backstage/css/tab.css" media="all"><link rel="stylesheet" href="/backstage/css/components.css" media="all"><link rel="stylesheet" href="/backstage/css/admin.css" media="all"><script src="/backstage/plugins/jquery/jquery-2.1.1.min.js"></script><script src="/backstage/plugins/jquery-validation/jquery.validate.min.js"></script><script src="/backstage/plugins/jquery-validation/additional-methods.min.js"></script><script src="/backstage/plugins/jquery-validation/messages_zh.js"></script><script src="/backstage/plugins/toastr-notifications/toastr.min.js"></script><script src="/backstage/plugins/icheck/icheck.min.js"></script><script src="/backstage/plugins/select2/select2.min.js"></script><script src="/backstage/plugins/select2/select2_locale_zh-CN.js"></script><script src="/backstage/plugins/datatables/js/jquery.dataTables.min.js"></script><script src="/backstage/plugins/datatables/js/dataTables.bootstrap.js"></script><script src="/backstage/plugins/bootstrap/bootstrap.min.js"></script><script src="/backstage/plugins/bootstrap3-editable/js/bootstrap-editable.js"></script><script src="/backstage/plugins/bootstrap3-editable/js/bootstrap-datepicker.js"></script><script src="/backstage/plugins/bootstrap3-editable/js/bootstrap-datepicker.zh-CN.js"></script></head><body><header id="masthead" class="site-header"><div class="inner"><h1 class="site-title"><a href="/backstage" class="site-title-link">SRF 后台管理系统</a></h1><a href="/backstage/logout" title="登出" class="log-out"><i class="fa fa-sign-out"></i>&nbsp;登出</a></div></header><div id="main" class="site-main"><div class="content-area"><div id="primary" class="site-content"><h2>医生管理</h2><ul role="tablist" class="nav nav-tabs"><li role="presentation" class="active"><a href="#panel-manage" role="tab" data-toggle="tab">现有医生管理</a></li><li role="presentation"><a href="#panel-add" role="tab" data-toggle="tab">添加医生</a></li></ul><div class="tab-content"><div id="panel-manage" class="tab-pane fade in active"><h3>现有医生管理</h3><table id="doctor-table" class="table table-striped table-bordered table-hover"><thead><tr><th>id</th><th>姓名</th><th>所属科室</th><th>职称</th><th>描述</th><th>操作</th></tr></thead><tbody></tbody></table></div><div id="panel-add" class="tab-pane fade"><h3>添加医生</h3><form method="post" action="/backstage/api/add/doctor" id="add-doctor"><div class="form-group"><div class="prompt"><label for="name">姓名</label></div><div class="control"><input id="name" name="name" required="" type="text" class="form-control"></div></div><div class="form-group"><div class="prompt"><label for="title">所属科室</label></div><div class="control"><select name="title" data-placeholder="选择科室..." required="" class="form-control"><option value=""></option><option value=""></option><option value=""></option><option value=""></option><option value=""></option><option value=""></option><option value=""></option></select></div></div><div class="form-group"><div class="prompt"><label for="title">称号</label></div><div class="control"><select name="title" data-placeholder="选择称号..." required="" class="form-control"><option value="医师">医师</option><option value="专家">专家</option><option value="特级专家">特级专家</option><option value="海外专家">海外专家</option><option value="实习医生">实习医生</option><option value="主治医生">主治医生</option><option value="主任">主任</option><option value="副主任">副主任</option></select></div></div><div class="form-group"><div class="prompt"><label for="price">挂号价格（元）</label></div><div class="control"><input id="price" name="price" required="" type="text" class="form-control"></div></div><div class="form-group"><div class="prompt"><label for="description">描述</label></div><div class="control"><textarea id="description" name="description" required="" rows="5" class="form-control"></textarea></div></div><div class="form-group"><div class="prompt"><label>出诊时间</label></div><div class="control"><table class="time-slots table table-bordered"><tr><td></td><td>星期一</td><td>星期二</td><td>星期三</td><td>星期四</td><td>星期五</td><td>星期六</td><td>星期日</td></tr><tr><td>上午</td><td data-row="1" data-col="1" class="checkable"><i class="fa-check fa fa-fw"></i></td><td data-row="2" data-col="1" class="checkable"><i class="fa-check fa fa-fw"></i></td><td data-row="3" data-col="1" class="checkable"><i class="fa-check fa fa-fw"></i></td><td data-row="4" data-col="1" class="checkable"><i class="fa-check fa fa-fw"></i></td><td data-row="5" data-col="1" class="checkable"><i class="fa-check fa fa-fw"></i></td><td data-row="6" data-col="1" class="checkable"><i class="fa-check fa fa-fw"></i></td><td data-row="7" data-col="1" class="checkable"><i class="fa-check fa fa-fw"></i></td></tr><tr><td>下午</td><td data-row="1" data-col="2" class="checkable"><i class="fa-check fa fa-fw"></i></td><td data-row="2" data-col="2" class="checkable"><i class="fa-check fa fa-fw"></i></td><td data-row="3" data-col="2" class="checkable"><i class="fa-check fa fa-fw"></i></td><td data-row="4" data-col="2" class="checkable"><i class="fa-check fa fa-fw"></i></td><td data-row="5" data-col="2" class="checkable"><i class="fa-check fa fa-fw"></i></td><td data-row="6" data-col="2" class="checkable"><i class="fa-check fa fa-fw"></i></td><td data-row="7" data-col="2" class="checkable"><i class="fa-check fa fa-fw"></i></td></tr><tr><td>晚上</td><td data-row="1" data-col="3" class="checkable"><i class="fa-check fa fa-fw"></i></td><td data-row="2" data-col="3" class="checkable"><i class="fa-check fa fa-fw"></i></td><td data-row="3" data-col="3" class="checkable"><i class="fa-check fa fa-fw"></i></td><td data-row="4" data-col="3" class="checkable"><i class="fa-check fa fa-fw"></i></td><td data-row="5" data-col="3" class="checkable"><i class="fa-check fa fa-fw"></i></td><td data-row="6" data-col="3" class="checkable"><i class="fa-check fa fa-fw"></i></td><td data-row="7" data-col="3" class="checkable"><i class="fa-check fa fa-fw"></i></td></tr></table><span class="button gray-button xs-button select-all"><i class="fa fa-check-square-o"></i>&nbsp;全选</span><span class="button gray-button xs-button select-none"><i class="fa fa-close"></i>&nbsp;清除选择</span></div></div><input type="hidden" name="hospitalId" value=""><input type="hidden" name="timeSlots" value=""><button type="submit" class="button submit-button green-button button-with-icon"><i class="fa fa-plus"></i>&nbsp;添加医生</button></form></div></div><style>.time-slots td {
+   text-align: center;
+}
+.time-slots i {
+   display: none;
+}
+.time-slots td.checked i {
+   display: inline-block;
+}
+.time-slots td.checkable {
+   background: #fff;
+   cursor: pointer;
+}
+.time-slots td.checkable:hover {
+   background: #f4f4f4;
+}
+.time-slots td.checkable.checked {
+   background: #f4f4f4;
+}
+.select-all,
+.select-none {
+   margin-right: 15px;
+}
+</style><script>$('.time-slots .checkable').click(function() {
+   $(this).toggleClass('checked');
+});
+$('.select-all').click(function() {
+   $('.time-slots .checkable').addClass('checked');
+});
+$('.select-none').click(function() {
+   $('.time-slots .checkable').removeClass('checked');
+});
+$('#add-doctor').on('submit', function() {
+   var timeSlots = [
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0]
+   ];
+   $('td.clickable').each(function(idx, elm) {
+
+   });
+});</script></div></div><div id="secondary" class="site-sidebar"><ul class="site-navigation"><li class="module-navigation-item"><a href="/backstage/manage-hospitals"><i class="fa fa-lg fa-fw fa-plus-square"></i>&nbsp;医院管理</a></li><li class="module-navigation-item"><a href="/backstage/users"><i class="fa fa-lg fa-fw fa-users"></i>&nbsp;用户审核</a></li><li class="module-navigation-item"><a href="/backstage/departments"><i class="fa fa-lg fa-fw fa-hospital-o"></i>&nbsp;科室管理</a></li><li class="module-navigation-item"><a href="/backstage/doctors"><i class="fa fa-lg fa-fw fa-user-md"></i>&nbsp;医生管理</a></li><li class="module-navigation-item"><a href="/backstage/reservations"><i class="fa fa-lg fa-fw fa-table"></i>&nbsp;预约管理</a></li><li class="module-navigation-item"><a href="/backstage/account"><i class="fa fa-lg fa-fw fa-lock"></i>&nbsp;修改密码</a></li></ul></div></div><footer id="colophon" class="site-footer"></footer><script>toastr.options = {
+   "closeButton": !0,
+   "debug": !1,
+   "positionClass": "toast-top-right",
+   "onclick": null,
+   "showDuration": "1000",
+   "hideDuration": "1000",
+   "timeOut": "5000",
+   "extendedTimeOut": "1000",
+   "showEasing": "swing",
+   "hideEasing": "linear",
+   "showMethod": "fadeIn",
+   "hideMethod": "fadeOut"
+};
+$(document).ready(function () {
+   $('input').iCheck({
+      checkboxClass: 'icheckbox_minimal-grey',
+      radioClass: 'iradio_minimal-grey'
+   });
+   $('select').select2();
+   var maxVal = function (a, b) {
+      return a > b ? a : b;
+   };
+   var resizeSiteContent = function () {
+      $('.site-content')[0].style.minHeight = maxVal($('.site-sidebar').height(), $(window).height() - 84) + 'px';
+   };
+   resizeSiteContent();
+   $(window).on('resize', resizeSiteContent);
+});</script></body></html>
