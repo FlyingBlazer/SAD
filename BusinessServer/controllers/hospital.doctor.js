@@ -78,13 +78,13 @@ exports.update = function(req, res, next) {
         for(var index in req.body) {
             switch(index) {
                 case 'description':
-                    hospital.info = req.body[index];
+                    doctor.info = req.body[index];
                     break;
                 case 'price':
-                    hospital.price = req.body[index];
+                    doctor.price = req.body[index];
                     break;
                 case 'title':
-                    hospital.title = req.body[index];
+                    doctor.title = req.body[index];
                     break;
                 default:
                     break;
