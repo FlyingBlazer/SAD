@@ -209,7 +209,7 @@ block content
 
             .form-group
                .prompt
-                  label(for='capacity') 接诊人数
+                  label(for='capacity') 可预约人数
                .control
                   input#capacity.form-control(name='capacity', required, type='number')
                   .note 设为 0 即表示不开放预约。
@@ -218,8 +218,19 @@ block content
                | &nbsp;添加临时排班记录
 
          h4 当前记录
-         table
-
+         table#temp-table.table.table-striped.table-bordered.table-hover
+            thead
+               tr
+                  th 日期
+                  th 时间段
+                  th 可预约人数
+                  th 操作
+            tbody
+               tr
+                  td 2014-12-31
+                  td 上午
+                  td 0
+                  td: button.button.red-button.xs-button.delete-temp(data-date='2014-12-31', data-period='3', data-doctor_id='1') 删除记录
 
          script.
             $('.date-picker').datepicker({
@@ -229,4 +240,24 @@ block content
                keyboardNavigation: false,
                autoclose: true,
                todayHighlight: true
+            });
+            $('#temp-table').DataTable();
+            $('.delete-temp').click(function() {
+               if (confirm('是否确定删除该排班项？')) {
+                  var id = $(this).data('doctor_id');
+                  $.ajax({
+                     url: '/hospital/doctor/' + id + '/working/temp/delete',
+                     type: 'POST',
+                     dataType: 'json',
+                     data: ''
+                  }).done(function(data) {
+                     if (data.code == 0) {
+                        toastr.success('排班已经删除', '成功');
+                     } else {
+                        toastr.error('系统错误。错误代码：' + data.code, '删除失败');
+                     }
+                  }).error(function() {
+                     toastr.error('系统发生致命错误。错误信息：ECONNECTREFUSED', '删除失败');
+                  });
+               }
             });

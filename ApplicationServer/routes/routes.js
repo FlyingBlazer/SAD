@@ -80,23 +80,23 @@ router.route('/backstage').get(controllers.backstage.home);
 
 // account
 router.route('/backstage/login').get(controllers.backstage.login).post(controllers.backstage.onLogin);
-router.route('/backstage/login/:msgType/:message').get(controllers.backstage.login);
+router.route('/backstage/login/:initTimestamp/:msgType/:message').get(controllers.backstage.login);
 router.route('/backstage/logout').get(controllers.backstage.logout);
 router.route('/backstage/account').get(controllers.backstage.changePassword).post(controllers.backstage.onChangePassword);
-router.route('/backstage/account/:msgType/:message').get(controllers.backstage.changePassword);
+router.route('/backstage/account/:initTimestamp/:msgType/:message').get(controllers.backstage.changePassword);
 
 // query
 router.route('/backstage/users').get(controllers.backstage.users);
-router.route('/backstage/users/:msgType/:message').get(controllers.backstage.users);
+router.route('/backstage/users/:initTimestamp/:msgType/:message').get(controllers.backstage.users);
 
 router.route('/backstage/manage-hospitals').get(controllers.backstage.hospitals);
-router.route('/backstage/manage-hospitals/:msgType/:message').get(controllers.backstage.hospitals);
+router.route('/backstage/manage-hospitals/:initTimestamp/:msgType/:message').get(controllers.backstage.hospitals);
 router.route('/backstage/departments').get(controllers.backstage.departments);
-router.route('/backstage/departments/:msgType/:message').get(controllers.backstage.departments);
+router.route('/backstage/departments/:initTimestamp/:msgType/:message').get(controllers.backstage.departments);
 router.route('/backstage/doctors').get(controllers.backstage.doctors);
-router.route('/backstage/doctors/:msgType/:message').get(controllers.backstage.doctors);
+router.route('/backstage/doctors/:initTimestamp/:msgType/:message').get(controllers.backstage.doctors);
 router.route('/backstage/reservations').get(controllers.backstage.reservations);
-router.route('/backstage/reservations/:msgType/:message').get(controllers.backstage.reservations);
+router.route('/backstage/reservations/:initTimestamp/:msgType/:message').get(controllers.backstage.reservations);
 router.route('/backstage/doctor/:id/edit_schedule').get(controllers.backstage.editSchedule).post(controllers.backstage.modifyTempWorking);
 
 // add
