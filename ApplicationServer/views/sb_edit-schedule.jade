@@ -55,6 +55,10 @@ block content
                td.cell(data-row='6', data-col='3')= schedule.week[5][2]
                td.cell(data-row='7', data-col='3')= schedule.week[6][2]
 
+         div#temps(style='display:hidden')
+            each record in schedule.temp
+               span(data-date='#{record.date}', data-period='#{record.period}', data-capacity='#{record.capacity}')
+
          script.
             var date = new Date();
             var dayToChinese = [
@@ -95,6 +99,17 @@ block content
             $('.tcell').each(function(index, element) {
                var date = shiftDate(new Date(), 'Date', parseInt($(element).data('plus-day')));
                $(element).html(dayToChinese[date.getDay()] + '<br>' + date.yyyy_mm_dd());
+            });
+            $('#temps').each(function(index, element) {
+               var date = $(element).data('date');
+               var period = $(element).data('period');
+               var capacity = $(element).data('capacity');
+               $('#panel-current .cell').each(function(index, element) {
+                  if ($(element).data('date') == date && $(element).data('period') == period) {
+                     $(element).text(capacity);
+                     return false;
+                  }
+               });
             });
 
          style.

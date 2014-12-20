@@ -185,7 +185,22 @@ exports.update = function(req, res, next) {
             });
         }
         for(var index in req.body) {
-            hospital[index] = req.body[index];
+            switch(index) {
+                case 'telephone':
+                    hospital.tel = req.body[index];
+                    break;
+                case 'website':
+                    hospital.site = req.body[index];
+                    break;
+                case 'address':
+                    hospital.addr = req.body[index];
+                    break;
+                case 'description':
+                    hospital.info = req.body[index];
+                    break;
+                default:
+                    break;
+            }
         }
         hospital.save(function(err) {
             if(err) {

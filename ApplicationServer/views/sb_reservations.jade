@@ -1,10 +1,10 @@
 extends ./sb_layout
 block content
 
-   script(type='javascript').
+   script.
       $(document).ready(function () {
          $('#example').DataTable();
-         $('#confirm').bind("click", $('#confirm').attr('name'), function (params) {
+         $('.confirm').bind("click", $('#confirm').attr('name'), function (params) {
             $.post("/hospital/reservation/"+params.data[0]+"/confirm",
 
                     function (data, status) {
@@ -15,18 +15,8 @@ block content
       });
    h2 预约单管理
    div
-      table#example.display(cellspacing='0', width='80%')
+      table#example.table.table-bordered.table-striped.table-hover.display(cellspacing='0', width='80%')
          thead
-            tr
-
-               th 医院
-               th 医生姓名
-               th 时间
-               th 状态
-               th 科室
-               th 价格
-               th 操作
-         tfoot
             tr
 
                th 医院
@@ -49,7 +39,7 @@ block content
                      td #{item.price}
                      td
                         if (item.status.charAt(2)!='2')
-                          button(id='confirm',name=item.reservation_id) 到场
+                          button(class='confirm',name=item.reservation_id) 到场
 
                         else
                           label 已到场

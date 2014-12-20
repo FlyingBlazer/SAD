@@ -14,8 +14,17 @@ var businessServerInfo = 'localhost:' + settings.port.business;
  * @param response
  */
 exports.home = function (request, response) {
-    //TODO 判定是否注册  传参
-    response.render('sb_home');
+    if (!getCookie(request).username) {
+        response.redirect('/backstage/login');
+    } else {
+        response.render('sb_home', {
+            username: getCookie(request).username,
+            userId: getCookie(request).userId,
+            hospitalId: getCookie(request).hospitalId,
+            hospitalName: getCookie(request).hospitalName,
+            businessServer: getCookie(request).businessServer
+        });
+    }
 };
 
 /**
@@ -65,7 +74,7 @@ exports.onLogin = function (request, response) {
 
 
     //TODO dummy implementation
-    setCookie(response, username, '1', '1', 'hospital name', businessServerInfo);
+    setCookie(response, username, '5', '1', 'hospital name', businessServerInfo);
     printLogMessage('cookie : ' + JSON.stringify(getCookie(request)));
     var redirectPath = '/backstage';
     response.redirect(redirectPath);
@@ -196,6 +205,8 @@ exports.hospitals = function (request, response) {
                 var msgType = request.params.msgType;
                 var message = request.params.message;
 
+                printLogMessage('hospitals:' + JSON.stringify(result.hospitals));
+
                 var params = {
                     username: getCookie(request).username,
                     userId: getCookie(request).userId,
@@ -266,16 +277,30 @@ exports.departments = function (request, response) {
  */
 exports.doctors = function (request, response) {
 
+    printLogMessage('cookie:' + JSON.stringify(getCookie(request)));
+
     if (!getCookie(request).username)
         response.redirect('/backstage/login');
     else {
         var hospitalId = getCookie(request).hospitalId;
-        if (typeof hospitalId == 'undefined' || !hospitalId)
+
+        if (!hospitalId)
             printLogMessage('hospital id 不能为空');
         else {
             //获取科室信息和医生信息
             retrieveDepartmentList(hospitalId, function (departments_list) {
+
+                printLogMessage('department_list: ' + JSON.stringify(departments_list));
+
                 retrieveDoctorList(hospitalId, function (doctors) {
+
+                    printLogMessage('doctors: ' + JSON.stringify(doctors));
+                    var doctorListData = [];
+                    for (doctor in doctors) {
+                        for (item in doctors[doctor]) {
+                            doctorListData.push(doctors[doctor][item]);
+                        }
+                    }
 
                     var initTimestamp = request.params.initTimestamp;
                     var msgType = request.params.msgType;
@@ -291,7 +316,7 @@ exports.doctors = function (request, response) {
                         msgType: isNullOrUndefined(msgType) ? '' : msgType,
                         message: isNullOrUndefined(message) ? '' : message,
                         departments: departments_list,
-                        list: doctors
+                        list: doctorListData
                     };
 
                     response.render('sb_doctors', params);
@@ -308,8 +333,9 @@ exports.doctors = function (request, response) {
  */
 exports.reservations = function (request, response) {
 
-    printLogMessage('1');
     //TODO dummy implementation
+    printLogMessage('1');
+    printLogMessage(JSON.stringify(getCookie(request)));
     var param = {
         username: getCookie(request).username,
         userId: getCookie(request).userId,
@@ -490,7 +516,7 @@ exports.addDoctor = function (request, response) {
 exports.editSchedule = function (request, response) {
 
     var doctorId = request.params.id;
-    var adminId = getCookie(request).adminId;
+    var adminId = getCookie(request).userId;
 
     var doctorInfoCallback = function (doctorInfo) {
         retrieveDoctorSchedule(doctorId, adminId, function (schedule) {
@@ -517,11 +543,32 @@ exports.editSchedule = function (request, response) {
     retrieveDoctorInfo(doctorId, doctorInfoCallback);
 };
 
+/**
+ * 渲染审核用户页面
+ * @param request
+ * @param response
+ */
 exports.users = function (request, response) {
-//TODO
+    var path = '/user/check/list';
 
+    forwardRequestGET(path, function (result) {
+        if (result.code == 0) {
+            var params = {
+                username: getCookie(request).username,
+                userId: getCookie(request).userId,
+                hospitalId: getCookie(request).hospitalId,
+                hospitalName: getCookie(request).hospitalName,
+                businessServer: getCookie(request).businessServer,
+                list: result.users.validating
+            };
 
-    response.render('sb_users');
+            printLogMessage(JSON.stringify(result.users));
+
+            response.render('sb_users', params);
+        } else {
+            printLogMessage(result.message);
+        }
+    });
 };
 
 /**
@@ -690,12 +737,13 @@ function retrieveDepartmentList(hospitalId, callback) {
 function retrieveDoctorList(hospitalId, callback) {
     var handler = function (result) {
         if (result.code == 0) {
+            printLogMessage('result:' + JSON.stringify(result));
             callback(result.doctors);
         } else
             printLogMessage(result.message);
     };
 
-    forwardRequestGET('/hospital/department/' + hospitalId, handler);
+    forwardRequestGET('/hospital/doctor/list?hospitalId=' + hospitalId, handler);
 }
 
 /**
@@ -725,6 +773,7 @@ function retrieveDoctorInfo(doctorId, callback) {
  */
 function retrieveDoctorSchedule(doctorId, adminId, callback) {
     var path = '/hospital/doctor/' + doctorId + '/working/getraw?adminId=' + adminId;
+    printLogMessage('path=' + path);
     forwardRequestGET(path, callback);
 }
 

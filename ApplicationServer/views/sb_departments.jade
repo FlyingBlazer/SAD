@@ -1,3 +1,62 @@
-//
-   Created by renfei on 14/12/19.
+extends ./sb_layout
+block content
+   h2 科室管理
 
+   ul.nav.nav-tabs(role='tablist')
+      li.active(role='presentation')
+         a(href='#panel-manage', role='tab', data-toggle='tab') 现有科室管理
+      li(role='presentation')
+         a(href='#panel-add', role='tab', data-toggle='tab') 添加科室
+
+   div.tab-content
+      div#panel-manage.tab-pane.fade.in.active
+         h3 现有医院管理
+         table#doctor-table.table.table-striped.table-bordered.table-hover
+            thead
+               tr
+                  th id
+                  th 名称
+                  th 电话
+                  th 简介
+                  th 操作
+            tbody
+               each department in list
+                  tr
+                     td #{department.id}
+                     td #{department.name}
+                     td #{department.phone}
+                     td #{department.description}
+                     td
+                        button.button.xs-button.blue-button.edit-hospital
+                           i.fa.fa-edit.fa-fw 编辑
+                        button.button.xs-button.red-button.delete-hospital
+                           i.fa.fa-trash.fa-fw 删除
+
+      div#panel-add.tab-pane.fade
+         h3 添加科室
+         form(method='post', action='/backstage/api/add/department', id='add-department')
+            .form-group
+               .prompt
+                  label(for='name') 科室名称
+               .control
+                  input#name.form-control(name='name', required, type='text')
+
+            .form-group
+               .prompt
+                  label(for='tel') 联系电话
+               .control
+                  input#telephone.form-control(name='telephone', required, type='text')
+
+            .form-group
+               .prompt
+                  label(for='description') 简介
+               .control
+                  textarea#description.form-control(name='description', required, rows='5')
+
+            input(type='hidden' name='hospitalId' value='')
+            button.button.submit-button.green-button.button-with-icon(type='submit')
+               i.fa.fa-plus
+               | &nbsp;添加科室
+
+   script.
+      $('#add-department').validate();
