@@ -158,6 +158,9 @@ exports.cancel = function(req, res, next) {
     req.models.appointment.get(reservation_id,function(err,app){
         if(err && err.message != 'Not found') return next(err);
         if(!app) return next(new Errors.CancelFailure("Cannot Find Such Appointment!"));
+        var date = new Date(app.time);
+        var curDate = new Date(new Date().Format('yyyy-MM-dd'));
+        if(date.getTime() - curDate.getTime() <= 0) return next(new Errors.AppointmentCannotBeCanceled('Appointment Cannot Be Canceled'));
         app.status = app.status.replaceAt(5, 1);
         app.save(function(err) {
             if(err && err.message != 'Not found') return next(err);

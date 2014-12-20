@@ -210,7 +210,7 @@ exports.DetailFailure = function DetailFailure(message) {
 };
 util.inherits(exports.DetailFailure, restify.RestError);
 
-exports.PrintFalure = function PrintFalure(message) {
+exports.PrintFailure = function PrintFalure(message) {
     restify.RestError.call(this, {
         restCode: '3009',
         statusCode: 404,
@@ -219,7 +219,7 @@ exports.PrintFalure = function PrintFalure(message) {
     });
     this.name = 'PrintFalure';
 };
-util.inherits(exports.PrintFalure, restify.RestError);
+util.inherits(exports.PrintFailure, restify.RestError);
 
 exports.ConfirmFailure = function ConfirmFailure(message) {
     restify.RestError.call(this, {
@@ -319,3 +319,14 @@ exports.WorkingAlreadyExist = function WorkingAlreadyExist(message) {
     this.name = 'WorkingAlreadyExist';
 };
 util.inherits(exports.WorkingAlreadyExist, restify.RestError);
+
+exports.ReservationCannotBeCanceled = function AppointmentCannotBeCanceled(message) {
+    restify.RestError.call(this, {
+        restCode: '3012',
+        statusCode: 403,
+        message: message,
+        constructorOpt: AppointmentCannotBeCanceled
+    });
+    this.name = 'AppointmentCannotBeCanceled';
+};
+util.inherits(exports.AppointmentCannotBeCanceled, restify.RestError);
