@@ -1,29 +1,51 @@
 var Errors = require('../lib/Errors');
 
 exports.list = function(req, res, next) {
+    var userList = {};
     req.models.user.find({
         isActivated: 0
     }).only("id","name","socialId","realName","tel","email","ip").run(function(err, user) {
         if(err && err.message != 'Not found') return next(err);
         if(!user) {
+            return next(new Errors.ListEmpty("No user needs to be validated"));
+        } else {
+            var candidate=[];
+        	for(var i=0;i<user.length;i++){
+        		candidate[i]["user_id"]=user[i].id;
+                candidate[i]["username"]=user[i].name;
+                candidate[i]["id"]=user[i].socialId;
+                candidate[i]["name"]=user[i].realName;
+                candidate[i]["phone"]=user[i].tel;
+                candidate[i]["email"]=user[i].email;
+                candidate[i]["ip"]=user[i].ip;
+        	}
+            userList['validating']=candidate;
+        }
+    });
+    req.models.user.find({
+        isActivated: -2
+    }).only("id","name","socialId","realName","tel","email","ip").run(function(err, user) {
+        if(err && err.message != 'Not found') return next(err);
+        if(!user) {
             return next(new Errors.ListEmpty("All Users Have Been Activated"));
         } else {
-        	var userList = [];
-        	for(var i=0;i<user.length;i++){
-        		userList[i]["user_id"]=user[i].id;
-				userList[i]["username"]=user[i].name;
-				userList[i]["id"]=user[i].socialId;
-				userList[i]["name"]=user[i].realName;
-                userList[i]["phone"]=user[i].tel;
-                userList[i]["email"]=user[i].email;
-                userList[i]["ip"]=user[i].ip;
-        	}
-            res.json({
-                code: 0,
-                message: 'success',
-                users: userList
-            });
+            var candidate=[];
+            for(var i=0;i<user.length;i++){
+                candidate[i]["user_id"]=user[i].id;
+                candidate[i]["username"]=user[i].name;
+                candidate[i]["id"]=user[i].socialId;
+                candidate[i]["name"]=user[i].realName;
+                candidate[i]["phone"]=user[i].tel;
+                candidate[i]["email"]=user[i].email;
+                candidate[i]["ip"]=user[i].ip;
+            }
+            userList['unqualified']=candidate;
         }
+    });
+    res.json({
+        code: 0,
+        message: 'success',
+        users: userList
     });
 };
 

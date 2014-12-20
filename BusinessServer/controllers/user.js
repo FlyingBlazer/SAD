@@ -74,6 +74,14 @@ exports.signUp = function(req, res, next) {
         name = req.body.name,
         email = req.body.email,
         uip = req.body.ip;
+    req.models.user.find({name: username, isActivated: -1}, function(err, users) {
+        if(err && err.message != 'Not found') return next(err);
+        if(users.length>0) {
+            users.remove(function (err) {
+                if (err) throw err;
+            });
+        }
+    });
     req.models.user.create({
         name: username,
         realName: name,
@@ -99,7 +107,11 @@ exports.checkName = function(req, res, next) {
     req.models.user.find({name: username}, function(err, users) {
         if(err && err.message != 'Not found') return next(err);
         if(users.length > 0) {
-            return next(new Errors.UserAlreadyExisted('User Already Existed'));
+            users.forEach(function(user) {
+               if(user.isActivated != -1){
+                   return next(new Errors.UserAlreadyExisted('User Already Existed'));
+               }
+            });
         } else {
             res.json({
                 code: 0,
