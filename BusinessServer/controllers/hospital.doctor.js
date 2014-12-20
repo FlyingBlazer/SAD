@@ -216,19 +216,33 @@ exports.detail = function(req, res, next) {
                         break;
                 }
             });
-            for(var i = 0; i < 7; i++){
+            var i = 0 ;
+            while( i < 7 ){
+                var cnt=3;
+                function nextturn(){
+                    if(--cnt==0){
+                        i++;
+                        cnt+3;
+                    }
+                }
                 var t_date=slot[i].date.year+'-'+slot[i].date.month+'-'+slot[i].date.date;
                 req.models.appointment.aggregate({time: t_date,doctor_id: req.params.doctorId, period: 1}).count('id').get(function(err, app_count) {
                    if(err) throw err;
-                    slot[i].slot['morning'][2] = app_count;
+                    console.log(i);
+                    nextturn();
+                    //slot[i].slot['morning'][2] = app_count;
                 });
                 req.models.appointment.aggregate({time: t_date,doctor_id: req.params.doctorId, period: 2}).count('id').get(function(err, app_count) {
                     if(err) throw err;
-                    slot[i].slot['afternoon'][2] = app_count;
+                    console.log(i);
+                    nextturn();
+                    //slot[i].slot['afternoon'][2] = app_count;
                 });
                 req.models.appointment.aggregate({time: t_date,doctor_id: req.params.doctorId, period: 3}).count('id').get(function(err, app_count) {
                     if(err) throw err;
-                    slot[i].slot['evening'][2] = app_count;
+                    console.log(i);
+                    nextturn();
+                    //slot[i].slot['evening'][2] = app_count;
                 });
                 if(i==7){
                     finish();
