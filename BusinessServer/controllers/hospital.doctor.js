@@ -36,6 +36,7 @@ exports.add = function(req, res, next) {
             name: req.body.name,
             photo: req.body.photo,
             info: req.body.description,
+            department_id: req.body.departmentId,
             title: req.body.title,
             price: req.body.price
         }, function(err, doctor) {

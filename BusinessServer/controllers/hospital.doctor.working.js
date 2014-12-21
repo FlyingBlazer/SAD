@@ -53,7 +53,7 @@ exports.addWeek = function(req, res, next) {
     }
     check(req, function(err, data, doctorId, adminId) {
         if(err) return next(err);
-        var new_working=req.body.day;
+        var new_working= req.body.week;
         var morning = '20000000';
         var afternoon = '20000000';
         var evening = '20000000';
@@ -64,14 +64,15 @@ exports.addWeek = function(req, res, next) {
             morning = morning.replaceAt(i + 1, new_working[i][0]!=0 ? 1 : 0);
             afternoon = afternoon.replaceAt(i + 1, new_working[i][1]!=0 ? 1 : 0);
             evening = evening.replaceAt(i + 1, new_working[i][2]!=0 ? 1 : 0);
-            morning_app=new_working[i][0]!=0 ? new_working[i][0] : morning_app;
-            afternoon_app=new_working[i][1]!=0 ? new_working[i][1] : afternoon_app;
-            evening_app=new_working[i][2]!=0 ? new_working[i][2] : evening_app;
+            morning_app=new_working[i][0]!=0 ? parseInt(new_working[i][0], 10) : morning_app;
+            afternoon_app=new_working[i][1]!=0 ? parseInt(new_working[i][1],10) : afternoon_app;
+            evening_app=new_working[i][2]!=0 ? parseInt(new_working[i][2], 10) : evening_app;
         }
+
         var date=new Date();
         req.models.working.get(doctorId, function(err, workings) {
             if(err && err.message != 'Not found') return next(err);
-            if(workings) {
+            if(workings && workings.length > 0) {
                 return next(new Errors.AddingFailed("Working Arrangement Already Exists!"));
             }
             req.models.working.create({
