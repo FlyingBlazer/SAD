@@ -67,6 +67,13 @@ exports.updateInfo = function(req, res, next){
 };
 
 exports.signUp = function(req, res, next) {
+    var username = req.body.username,
+        password = req.body.password,
+        id = req.body.id,
+        phone = req.body.phone,
+        name = req.body.name,
+        email = req.body.email,
+        uip = req.body.ip || '';
     function finish(){
         req.models.user.create({
             name: username,
@@ -87,13 +94,6 @@ exports.signUp = function(req, res, next) {
             });
         });
     }
-    var username = req.body.username,
-        password = req.body.password,
-        id = req.body.id,
-        phone = req.body.phone,
-        name = req.body.name,
-        email = req.body.email,
-        uip = req.body.ip;
     req.models.user.find({name: username, isActivated: -1}, function(err, users) {
         if(err && err.message != 'Not found') return next(err);
         if(users.length>0) {

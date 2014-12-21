@@ -184,7 +184,7 @@ exports.detail = function(req, res, next) {
                         var i = curDate.getDateOffset(tarDate);
                         if(i <= 7 && i > 0) {
                             slot[i].slot[key][0] = (working.frequency.charAt(1) == '1');
-                            slot[i].slot[key][1] =working.totalApp;
+                            slot[i].slot[key][1] =working.monday;
                             hasTemp[i][key] = 1;
                         }
                         break;
@@ -194,10 +194,36 @@ exports.detail = function(req, res, next) {
                         });
                         break;
                     case '2':
+                        function getApp(working,day){
+                            switch(day){
+                                case 1:
+                                    return working.monday;
+                                    break;
+                                case 2:
+                                    return working.tuesday;
+                                    break;
+                                case 3:
+                                    return working.wednesday;
+                                    break;
+                                case 4:
+                                    return working.thursday;
+                                    break;
+                                case 5:
+                                    return working.friday;
+                                    break;
+                                case 6:
+                                    return working.saturday;
+                                    break;
+                                case 7:
+                                    return working.sunday;
+                                    break;
+                            }
+                        }
                         for(var j=1; j <= 7; j++) {
                             if(working.frequency.charAt(j) == '1'&&hasTemp[(6-day+j)%7][key] == 0) {
                                 slot[(6-day+j)%7].slot[key][0] = true;
-                                slot[(6-day+j)%7].slot[key][1] =working.totalApp;
+                                var app;
+                                slot[(6-day+j)%7].slot[key][1] = getApp(working, (6-day+j)%7+1);
                             }
                         }
                         break;
@@ -231,6 +257,9 @@ exports.detail = function(req, res, next) {
                         if(err) throw err;
                         department.getHospital(function(err, hospital) {
                             if(err) throw err;
+                            for(var i=0;i<7;i++){
+                                console.log(slot[i].slot);
+                            }
                             res.json({
                                 code: 0,
                                 message: 'success',

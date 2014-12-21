@@ -1,6 +1,31 @@
 var Errors = require('../lib/errors');
 
 exports.getRaw = function(req, res, next) {
+    function getApp(working,day){
+        switch(day){
+            case 1:
+                return working.monday;
+                break;
+            case 2:
+                return working.tuesday;
+                break;
+            case 3:
+                return working.wednesday;
+                break;
+            case 4:
+                return working.thursday;
+                break;
+            case 5:
+                return working.friday;
+                break;
+            case 6:
+                return working.saturday;
+                break;
+            case 7:
+                return working.sunday;
+                break;
+        }
+    }
     check(req, function(err, data, doctorId, adminId) {
         if(err) return next(err);
         var week_stat=[[0,0,0],[0,0,0],[0,0,0],
@@ -10,27 +35,29 @@ exports.getRaw = function(req, res, next) {
             if(err && err.message != 'Not found') return next(err);
             workings.forEach(function(working){
                 console.log(working.frequency);
+                var curDate = new Date();
+                var day=(curDate.getDay()+6)%7+1;
                 switch(working.frequency.charAt(0)){
                     case '0':
                         var date = new Date(working.date);
-                        var curDate = new Date();
                         if(date.Format('yyyyMMdd') < curDate.Format('yyyyMMdd')) break;
                         var temp_working={
-                            date: working.date,
+                            date: date.Format('yyyy-MM-dd'),
                             period: working.period,
-                            capacity: working.frequency.charAt(1)=='1'? working.totalApp : 0
+                            capacity: working.frequency.charAt(1)=='1'?  working.monday : 0
                         };
                         temp_stat.push(temp_working);
                         break;
                     case '2':
                         for(var i = 1 ; i <= 7 ; i++){
                             if(working.frequency.charAt(i)=='1'){
-                                week_stat[i-1][working.period-1]=working.totalApp;
+                                week_stat[i%7][working.period-1]=getApp(working, i);
                             }
                         }
                         break;
                 }
             });
+            console.log(temp_stat);
             res.json({
                 code: 0,
                 message: 'success',
@@ -195,7 +222,13 @@ exports.addTemp = function(req, res, next) {
                 date: req.body.date,
                 frequency: t_frequency,
                 period: t_period,
-                totalApp: t_action
+                monday: t_action,
+                tuesday: 0,
+                wednesday: 0,
+                thursday: 0,
+                friday: 0,
+                saturday: 0,
+                sunday: 0
             }, function (working) {
                 if (err && err.message != 'Not found') return next(err);
                 res.json({
