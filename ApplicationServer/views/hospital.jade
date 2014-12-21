@@ -43,6 +43,13 @@ block site-content
                 hr
                 div.intro-content #{detail.description}
                 div.intro-title
+                    h4 科室列表
+                hr
+                div.departments
+                    each department in departments
+                        a.department-tag(href="#") #{department.name}
+
+                div.intro-title
                     h4 医院地图
                 hr
                 div#hospital-map
@@ -122,6 +129,16 @@ block site-content
                             map.centerAndZoom(point, 16);
                             map.addOverlay(new BMap.Marker(point));
                         }
+                    });
+
+                    $(".department-tag").click(function () {
+                        var selection = $(this).html();
+                        $("#select-department a").each(function () {
+                            if ($(this).html() == selection) {
+                                $(this).click();
+                            }
+                        });
+                        $("a[href=\"#reserve\"]").tab("show");
                     });
 
                     var departmentSelection = "";

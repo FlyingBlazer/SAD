@@ -48,6 +48,22 @@
     margin-bottom: 40px;
 }
 
+.hospital-intro>.departments>.department-tag {
+    display: inline-block;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    padding: 5px 8px;
+    background-color: #dff2ff;
+    color: #377bee;
+    transition: all .3s ease-out 0s;
+}
+
+.hospital-intro>.departments>.department-tag:hover {
+    text-decoration: none;
+    background-color: #377bee;
+    color: #ffffff;
+}
+
 .hospital-intro>#hospital-map {
     height: 400px;
 }
