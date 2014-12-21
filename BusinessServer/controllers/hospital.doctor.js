@@ -116,27 +116,6 @@ exports.update = function(req, res, next) {
 };
 
 exports.detail = function(req, res, next) {
-    function finish(){
-        doctor.getDepartment(function(err, department) {
-            if(err) throw err;
-            department.getHospital(function(err, hospital) {
-                if(err) throw err;
-                res.json({
-                    code: 0,
-                    message: 'success',
-                    id: doctor.id,
-                    name: doctor.name,
-                    hospital: hospital.name,
-                    department: department.name,
-                    title: doctor.title,
-                    description: doctor.info,
-                    photo_url: doctor.photo,
-                    time_slots: slot,
-                    price: doctor.price
-                });
-            });
-        });
-    }
     req.models.doctor.get(req.params.doctorId, function(err, doctor) {
         if(err && err.message != 'Not found') return next(err);
         if(!doctor) return next(new Errors.DoctorNotExist('Doctor Not Exist'));
@@ -246,8 +225,25 @@ exports.detail = function(req, res, next) {
                             slot[(6-adata.day+j)%7].slot[adata.period==1? 'morning': (adata.period==2 ? 'afternoon' : 'evening')][1] =adata.appnum;
                         });
                     }
-                    Console.log(slot);
-                    finish();
+                    doctor.getDepartment(function(err, department) {
+                        if(err) throw err;
+                        department.getHospital(function(err, hospital) {
+                            if(err) throw err;
+                            res.json({
+                                code: 0,
+                                message: 'success',
+                                id: doctor.id,
+                                name: doctor.name,
+                                hospital: hospital.name,
+                                department: department.name,
+                                title: doctor.title,
+                                description: doctor.info,
+                                photo_url: doctor.photo,
+                                time_slots: slot,
+                                price: doctor.price
+                            });
+                        });
+                    });
             });
         });
     });
