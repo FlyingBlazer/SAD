@@ -35,6 +35,7 @@ html
          div.inner
             h1.site-title
                a.site-title-link(href='/backstage') SRF 后台管理系统
+            span(style="color: #aaa") 当前用户：#{username} 所属医院：#{hospitalName}
             a.log-out(href='/backstage/logout', title='登出')
                i.fa.fa-sign-out
                | &nbsp;登出
