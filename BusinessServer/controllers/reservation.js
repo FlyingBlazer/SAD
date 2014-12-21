@@ -101,8 +101,9 @@ exports.add = function(req, res, next) {
                 function(err,data){
                     if(err) return next(err);
                     if(!data) return next(new Errors.ReservationErrorFailure('Database Error!'));
-                    req.db.driver.execQuery("SELECT total_app,price "+
-                        "FROM working,doctor "+
+                    var weeklist=["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
+                    req.db.driver.execQuery("SELECT "+weeklist[aweeknum-1]+",price "+
+                        "FROM working,doctor,frequency "+
                         "WHERE doctor_id=doctor.id "+
                         "AND doctor_id=? "+
                         "AND period=? "+
@@ -114,7 +115,18 @@ exports.add = function(req, res, next) {
                         function(err,data1){
                             if(err && err.message != 'Not found') return next(err);
                             if(!data1) return next(new Errors.ReservationPeriodFailure('No Such Working Period!'));
-                            if(data1[0]['total_app']<=data['number']){
+                            var total_app=0;
+                            if(data1.length>1){
+                                data1.forEach(function(w_data){
+                                   if(w_data['frequency'].charAt(0)=='0'){
+                                       total_app=w_data[weeklist[aweeknum-1]];
+                                   }
+                                });
+                            }
+                            else{
+                                total_app=data1[0][weeklist[aweeknum-1]];
+                            }
+                            if(total_app<=data['number']){
                                 return next(new Errors.ReservationFullFailure("Appointment Full!"));
                             }
                             else{
