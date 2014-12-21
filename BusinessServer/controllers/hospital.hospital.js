@@ -83,31 +83,27 @@ exports.add = function(req, res, next) {
             addr: req.body.address,
             tel: req.body.telephone,
             site: req.body.website,
-            info: req.body.description
+            info: req.body.description,
+            rating_id: rating.id
         }, function(err, hospital) {
             if(err) throw err;
-            hospital.setRating(rating, function(err) {
-                console.log(arguments);
-                if(err) throw err;
-                console.log(arguments);
-                var supplement = 8 - hospital.id.toString().length;
-                var admin_name ='admin';
-                for(var i = 0; i < supplement ; i++) {
-                    admin_name += '0';
-                }
-                admin_name += hospital.id;
-                var admin_password = md5.update('hosp' + admin_name).digest('hex');
-                var authentication = 1;
-                req.models.administrator.create({
-                    name: admin_name,
-                    password: admin_password,
-                    auth: authentication
-                }, function(err,admin) {
-                    if(err && err.message != 'Not found') throw err;
-                    res.json({
-                        code: 0,
-                        message: 'success'
-                    });
+            var supplement = 8 - hospital.id.toString().length;
+            var admin_name ='admin';
+            for(var i = 0; i < supplement ; i++) {
+                admin_name += '0';
+            }
+            admin_name += hospital.id;
+            var admin_password = md5.update('hosp' + admin_name).digest('hex');
+            var authentication = 1;
+            req.models.administrator.create({
+                name: admin_name,
+                password: admin_password,
+                auth: authentication
+            }, function(err,admin) {
+                if(err && err.message != 'Not found') throw err;
+                res.json({
+                    code: 0,
+                    message: 'success'
                 });
             });
         });

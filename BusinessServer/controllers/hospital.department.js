@@ -26,36 +26,22 @@ exports.list = function(req, res, next) {
 };
 
 exports.add = function(req, res, next) {
-    var count = 2;
-    var hospital;
-    var department;
-    function finish() {
-        count -= 1;
-        if(count === 0) {
-            department.setHospital(hospital, function(err) {
-                if(err) return next(err);
-                res.json({
-                    code: 0,
-                    message: 'success',
-                    department_id: department.id
-                });
-            });
-        }
-    }
-    req.models.hospital.get(req.body.hospital_id, function(err, h) {
+    req.models.hospital.get(req.body.hospital_id, function(err, hospital) {
         if(err && err.message != 'Not found') throw err;
-        if(!h) return next(new Errors.HospitalNotExist('Hospital not exist'));
-        hospital = h;
-        finish();
-    });
-    req.models.department.create({
-        name: req.body.name,
-        tel: req.body.phone,
-        info: req.body.description
-    }, function(err, dep) {
-        if(err) throw err;
-        department = dep;
-        finish();
+        if(!hospital) return next(new Errors.HospitalNotExist('Hospital not exist'));
+        req.models.department.create({
+            name: req.body.name,
+            tel: req.body.phone,
+            info: req.body.description,
+            hospital_id: hospital.id
+        }, function(err) {
+            if(err) throw err;
+            res.json({
+                code: 0,
+                message: 'success',
+                department_id: department.id
+            });
+        });
     });
 };
 

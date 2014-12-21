@@ -36,18 +36,15 @@ exports.add = function(req, res, next) {
             name: req.body.name,
             photo: req.body.photo,
             info: req.body.description,
-            department_id: req.body.departmentId,
             title: req.body.title,
-            price: req.body.price
+            price: req.body.price,
+            department_id: department.id
         }, function(err, doctor) {
             if(err && err.message != 'Not found') return next(err);
-            doctor.setDepartment(department, function(err) {
-                if(err) return next(err);
-                res.json({
-                    code: 0,
-                    message: 'success',
-                    doctor_id: doctor.id
-                });
+            res.json({
+                code: 0,
+                message: 'success',
+                doctor_id: doctor.id
             });
         });
     });
