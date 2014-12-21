@@ -73,10 +73,12 @@ exports.onRegister = function (request, response) {
                         id: request.body.id,
                         name: request.body.name,
                         phone: request.body.phone,
-                        email: request.body.email
+                        email: request.body.email,
+                        ip: request.connection.remoteAddress
                     };
+                    printLogMessage('data:' + JSON.stringify(data));
 
-                    forwardRequestPOST(request.body, '/user/signup', registerCallback);//注册
+                    forwardRequestPOST(data, '/user/signup', registerCallback);//注册
                 } else
                     response.render('signup', {
                         errorMessage: '账号已存在'
@@ -220,6 +222,9 @@ exports.onLogin = function (request, response) {
             username: request.body.username,
             password: request.body.password
         };
+
+        printLogMessage('requestBody:' + JSON.stringify(request.body));
+        printLogMessage('data:' + JSON.stringify(data));
 
         //将数据转发至业务服务器
         forwardRequestPOST(request.body, loginPath, loginCallback);
