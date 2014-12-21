@@ -32,7 +32,7 @@ exports.list_h = function(req, res, next) {
     var hospital_id = req.params.hospitalId;
     req.db.driver.execQuery(
         "SELECT appointment.id as reservation_id, appointment.price as price,appointment.status as status,user.realname as user_name, " +
-        "appointment.time as time,doctor.name as doctor_name,hospital.name as hospital_name,department.name as department_name "+
+        "appointment.time as time,doctor.name as doctor_name,hospital.name as hospital_name,department.name as department_name, "+
         "user.tel as user_phone, user.socialId as user_sid " +
         "FROM appointment,doctor,department,hospital,user "+
         "WHERE appointment.doctor_id=doctor.id "+
