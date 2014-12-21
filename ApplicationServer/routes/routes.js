@@ -58,6 +58,7 @@ router.route('/concierge/reserve/:hospital_id').get(controllers.reservation.show
 // Doctor page - Show doctor's detail and available time slots
 // Choose a time
 router.route('/concierge/reserve/:hospital_id/:department_id/:expert_id').get(controllers.reservation.showDoctor);
+router.route('/concierge/reserve/:hospital_id/:department_id/:expert_id/:err_code').get(controllers.reservation.showDoctor);
 
 // Show reservation detail
 // User may take actions like pay, print or close

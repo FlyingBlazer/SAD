@@ -141,7 +141,7 @@ var fireRequest = function(method, path, data, callback, noErrCodeCheck) {
                         ' > Request URL: ' + path,
                         ' > Server response: ' + responseData);
                     callbackSent = true;
-                    callback(null);
+                    callback(srcObject);
                 }
             }
         });
@@ -316,9 +316,11 @@ exports.showDoctor = function(request, response) {
         userInfo = parseUserInfo(request);
 
     var username = userInfo.username ? userInfo.username : '';
+    var status = userInfo.status;
     var expertId = request.params.expert_id;
     var hospitalId = request.params.hospital_id;
     var departmentId = request.params.department_id;
+    var errCode = request.params.err_code ? request.params.err_code : '';
     var url = '/hospital/doctor/' + expertId + '/detail';
 
     fireRequest('GET', url, null, function(res) {
@@ -332,6 +334,8 @@ exports.showDoctor = function(request, response) {
         }
         response.render('doctor', {
             username: username,
+            status: status,
+            errCode: errCode,
             hospitalId: hospitalId,
             departmentId: departmentId,
             detail: res
@@ -436,6 +440,10 @@ exports.onSubmit = function(request, response) {
     fireRequest('POST', url, serialize(data), function(res) {
         if (res == null) {
             __fatalError(response, 'Line=' + __line + ', Func=' + __function);
+            return;
+        }
+        if (res.code == 3011) {
+            response.redirect(302, '/concierge/reserve/'+hospitalId+'/'+departmentId+'/'+doctorId+'/3011')
             return;
         }
         var resvId = res.id;
