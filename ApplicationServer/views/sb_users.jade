@@ -8,7 +8,10 @@ block content
             var userId = $(this).data('id');
             $.ajax({
                url: 'http://#{businessServer}/user/check/' + userId + '/approve',
-               type: 'POST'
+               type: 'POST',
+               success:function (data){
+                  location.reload(true);
+               }
             }).done(function(data) {
                if (data.code == 0) {
                   toastr.success('确认审核', '成功');
@@ -40,12 +43,12 @@ block content
       } );
    h2 用户管理
    div
-      table#example(cellspacing='0', width='80%')
+      table#example.table.table-striped.table-bordered.table-hover(cellspacing='0', width='60%')
          thead
             tr
 
                th 真实姓名
-               th id
+               th 身份证
                th 电话
                th 邮箱
                th ip
@@ -62,7 +65,7 @@ block content
                      td #{item.email}
                      td #{item.ip}
                      td
-                        button.blue-button.xs-button.opnl-button(class='accept_button',data-id='#{item.id}')  接受
-                        button..button.red-button.xs-button(class='refuse_button',data-id='#{item.id}')  拒绝
+                        button.button.xs-button.blue-button.delete-hospital(class='accept_button',data-id='#{item.user_id}')  接受
+                        button.button.xs-button.red-button.delete-hospital(class='refuse_button',data-id='#{item.user_id}')  拒绝
 
 

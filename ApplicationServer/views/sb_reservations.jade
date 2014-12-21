@@ -9,7 +9,10 @@ block content
                var reservationId = $(this).data('id');
                $.ajax({
                   url: 'http://#{businessServer}/hospital/reservation/' + reservationId + '/confirm',
-                  type: 'POST'
+                  type: 'POST',
+                  success:function (data){
+                     location.reload(true);
+                  }
                }).done(function(data) {
                   if (data.code == 0) {
                      toastr.success('确认到场', '成功');

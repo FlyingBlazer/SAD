@@ -259,68 +259,89 @@ block content
                      td: button.button.red-button.xs-button.delete-temp(data-date='#{record.date}', data-period='#{record.period}', data-doctor_id='#{doctorId}') 删除记录
 
          script.
-            $('#add-temp').validate();
-            $('.date-picker').datepicker({
-               format: "yyyy-mm-dd",
-               todayBtn: "linked",
-               language: "zh-CN",
-               keyboardNavigation: !1,
-               autoclose: !0,
-               todayHighlight: !0
-            });
-            $('#submit-button').on('click', function(e) {
-               e.preventDefault();
-               var date = $('#date').val();
-               var period = $('#period').val();
-               var capacity = $('#capacity').val();
-               var doctorId = $(this).data('doctor_id');
-               if (date != '' && period != '' && capacity != '') {
-                  $.ajax({
-                     url: 'http://#{businessServer}/hospital/doctor/' + doctorId + '/working/temp/add',
-                     type: 'POST',
-                     data: {
-                        date: date,
-                        period: period,
-                        adminId: #{userId},
-                        action: capacity
-                     }
-                  }).done(function(data) {
-                     if (data.code == 0) {
-                        toastr.success('临时排班已添加', '成功');
-                        $('#date').val(null);
-                        $('#period').val(null);
-                        $('#capacity').val(null);
-                     } else {
-                        toastr.error('系统错误。错误代码：' + data.code, '添加失败');
-                     }
-                  }).error(function() {
-                     toastr.error('系统发生致命错误。错误信息：ECONNECTREFUSED', '添加失败');
-                  });
-               }
-            });
+            $(function() {
+               var tempTable = $('#temp-table').DataTable();
 
-            $('#temp-table').DataTable();
-            $('.delete-temp').click(function() {
-               if (confirm('是否确定删除该排班项？')) {
+               $('#add-temp').validate();
+               $('.date-picker').datepicker({
+                  format: "yyyy-mm-dd",
+                  todayBtn: "linked",
+                  language: "zh-CN",
+                  keyboardNavigation: !1,
+                  autoclose: !0,
+                  todayHighlight: !0
+               });
+
+               $('#submit-button').on('click', function(e) {
+                  e.preventDefault();
+                  var date = $('#date').val();
+                  var period = $('#period').val();
+                  var capacity = $('#capacity').val();
                   var doctorId = $(this).data('doctor_id');
-                  var date = $(this).data('date');
-                  var period = $(this).data('period');
-                  $.ajax({
-                     url: 'http://#{businessServer}/hospital/doctor/' + doctorId + '/working/temp/delete',
-                     type: 'POST',
-                     data: {
-                        date: date,
-                        period: period,
-                        adminId: #{userId}
-                     }
-                  }).done(function(data) {
-                     if (data.code == 0) {
-                        toastr.success('排班已经删除', '成功');
-                     } else {
-                        toastr.error('系统错误。错误代码：' + data.code, '删除失败');
-                     }
-                  }).error(function() {
-                     toastr.error('系统发生致命错误。错误信息：ECONNECTREFUSED', '删除失败');
-                  });
-               }
+                  var periodCN = '未知';
+                  if (period == 1)
+                     periodCN = '上午';
+                  if (period == 2)
+                     periodCN = '下午';
+                  if (period == 3)
+                     periodCN = '晚上';
+
+                  if (date != '' && period != '' && capacity != '') {
+                     $.ajax({
+                        url: 'http://#{businessServer}/hospital/doctor/' + doctorId + '/working/temp/add',
+                        type: 'POST',
+                        data: {
+                           date: date,
+                           period: period,
+                           adminId: #{userId},
+                           action: capacity
+                        }
+                     }).success(function(data) {
+                        if (data.code == 0) {
+                           toastr.success('临时排班已添加', '成功');
+                           $('#date').val(null);
+                           tempTable.row.add([
+                              date,
+                              periodCN,
+                              capacity,
+                              ''
+                           ]).draw();
+                           $($(rowNode).children('td')[3]).html('<button class="button red-button xs-button delete-temp" data-date="' + date + '" data-period="' + period + '" data-doctor_id="' + doctorId + '">删除记录</button>');
+                        } else {
+                           toastr.error('系统错误。错误代码：' + data.code, '添加失败');
+                        }
+                     }).error(function() {
+                        toastr.error('系统发生致命错误。错误信息：ECONNECTREFUSED', '添加失败');
+                     });
+                  }
+               });
+
+               $('.delete-temp').click(function() {
+                  var tr = $(this).parents('tr');
+                  if (confirm('是否确定删除该排班项？')) {
+                     var doctorId = $(this).data('doctor_id');
+                     var date = $(this).data('date');
+                     var period = $(this).data('period');
+                     $.ajax({
+                        url: 'http://#{businessServer}/hospital/doctor/' + doctorId + '/working/temp/delete',
+                        type: 'POST',
+                        data: {
+                           date: date,
+                           period: period,
+                           adminId: #{userId}
+                        }
+                     }).done(function(data) {
+                        if (data.code == 0) {
+                           setTimeout(function() {
+                              tempTable.row(tr).remove().draw();
+                           }, 500);
+                           toastr.success('排班已经删除', '成功');
+                        } else {
+                           toastr.error('系统错误。错误代码：' + data.code, '删除失败');
+                        }
+                     }).error(function() {
+                        toastr.error('系统发生致命错误。错误信息：ECONNECTREFUSED', '删除失败');
+                     });
+                  }
+               });
             });

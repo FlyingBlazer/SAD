@@ -233,7 +233,7 @@ exports.detail = function(req, res, next) {
             req.db.driver.execQuery("SELECT period as period, (DAYOFWEEK(time)+6)%7 as day, count(user_id) as appnum "+
             "FROM appointment "+
             "WHERE doctor_id=? "+
-            "AND time>='?' AND time<='?' "+
+            "AND time>=? AND time<=? "+
             "GROUP BY period,time "+
             "ORDER BY time",
             [req.params.doctorId, startdate, enddate], function(err, datas) {
