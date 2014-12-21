@@ -152,9 +152,11 @@ exports.changePassword = function (request, response) {
 exports.onChangePassword = function (request, response) {
 
     var requestBody = request.body;
-    var username = requestBody.username;
+    var username = getCookie(request).username;
     var original_password = requestBody.originalPassword;
     var new_password = requestBody.newPassword;
+
+    printLogMessage(JSON.stringify(requestBody));
 
     var path = '/admin/change_password';
     var data = {
@@ -163,12 +165,14 @@ exports.onChangePassword = function (request, response) {
         new_password: new_password
     };
 
+    printLogMessage(JSON.stringify(data));
+
     var callback = function (result) {
         var redirectPath = '/backstage/account';
         if (result.code == 0) {//修改成功
-            redirectPath = '/backstage/account/success/cpcomplete';
+            redirectPath = '/backstage/account/' + getCurrentTimeInSeconds() + '/success/cpcomplete';
         } else {//修改失败
-            redirectPath = '/backstage/account/fail/cp_wrong_credential';
+            redirectPath = '/backstage/account/' + getCurrentTimeInSeconds() + '/fail/cp_wrong_credential';
         }
         response.redirect(redirectPath);
     };
@@ -321,51 +325,11 @@ exports.doctors = function (request, response) {
  */
 exports.reservations = function (request, response) {
 
-    //TODO dummy implementation
-    //printLogMessage('1');
-   // printLogMessage(JSON.stringify(getCookie(request)));
-    var param = {
-        username: getCookie(request).username,
-        userId: getCookie(request).userId,
-        hospitalId: getCookie(request).hospitalId,
-        hospitalName: getCookie(request).hospitalName,
-        businessServer: getCookie(request).businessServer,
-        list: [
-            {
-                "reservation_id": 12345,
-                "time": "2014-12-16 08:50:00",
-                "price": "23.33",
-                "status": "000000",
-                "status_msg": "在线支付，已付款",
-                "hospital_name": "XX hospital",
-                "department_name": "psychology",
-                "doctor_name": "杨伟",
-                "user_name": "渣诚",
-                "user_phone": "18622222222",
-                "user_sid": "12010319921000100X"
-            },
-            {
-                "reservation_id": 12345,
-                "time": "2014-12-16 08:50:00",
-                "price": "23.33",
-                "status": "000000",
-                "status_msg": "在线支付，已付款",
-                "hospital_name": "XX hospital",
-                "department_name": "psychology",
-                "doctor_name": "杨伟",
-                "user_name": "渣诚",
-                "user_phone": "18622222222",
-                "user_sid": "12010319921000100X"
-            }]
-    };
-    //printLogMessage(2);
-    response.render('sb_reservations', param);
-    //printLogMessage(3);
-    return;
-
-
     var hospitalId = getCookie(request).hospitalId;
-    if (!isNullOrUndefined(hospitalId) || !isNullOrUndefined(getCookie(request).userId)) {//未登录
+
+    printLogMessage('cookie: ' + JSON.stringify(getCookie(request)));
+
+    if (isNullOrUndefined(hospitalId) || isNullOrUndefined(getCookie(request).userId)) {//未登录
         response.redirect('/backstage/login');
     } else {
         var path = '/reservation/' + hospitalId + '/list';
@@ -518,32 +482,37 @@ exports.editSchedule = function (request, response) {
     var doctorId = request.params.id;
     var adminId = getCookie(request).userId;
 
-    var doctorInfoCallback = function (doctorInfo) {
+    if (!isNullOrUndefined(adminId)) {
+        response.redirect('/backstage/login');
+    } else {
 
-        //printLogMessage('doctorInfo:' + JSON.stringify(doctorInfo));
+        var doctorInfoCallback = function (doctorInfo) {
 
-        retrieveDoctorSchedule(doctorId, adminId, function (schedule) {
-            if (schedule.code == 0) {
-                var params = {
-                    username: getCookie(request).username,
-                    userId: getCookie(request).userId,
-                    hospitalId: getCookie(request).hospitalId,
-                    hospitalName: getCookie(request).hospitalName,
-                    businessServer: getCookie(request).businessServer,
-                    doctorId: doctorInfo.id,
-                    doctorName: doctorInfo.name,
-                    doctorHospital: doctorInfo.hospital,
-                    doctorDepartment: doctorInfo.department,
-                    schedule: schedule
-                };
-                response.render('sb_edit-schedule', params);
-            } else {
-                printLogMessage(schedule);
-            }
-        });
-    };
+            printLogMessage('doctorInfo:' + JSON.stringify(doctorInfo));
 
-    retrieveDoctorInfo(doctorId, doctorInfoCallback);
+            retrieveDoctorSchedule(doctorId, adminId, function (schedule) {
+                if (schedule.code == 0) {
+                    var params = {
+                        username: getCookie(request).username,
+                        userId: getCookie(request).userId,
+                        hospitalId: getCookie(request).hospitalId,
+                        hospitalName: getCookie(request).hospitalName,
+                        businessServer: getCookie(request).businessServer,
+                        doctorId: doctorInfo.id,
+                        doctorName: doctorInfo.name,
+                        doctorHospital: doctorInfo.hospital,
+                        doctorDepartment: doctorInfo.department,
+                        schedule: schedule
+                    };
+                    response.render('sb_edit-schedule', params);
+                } else {
+                    printLogMessage(schedule);
+                }
+            });
+        };
+
+        retrieveDoctorInfo(doctorId, doctorInfoCallback);
+    }
 };
 
 /**
@@ -780,7 +749,7 @@ function retrieveDoctorInfo(doctorId, callback) {
  */
 function retrieveDoctorSchedule(doctorId, adminId, callback) {
     var path = '/hospital/doctor/' + doctorId + '/working/getraw?adminId=' + adminId;
-    //printLogMessage('path=' + path);
+    printLogMessage('path=' + path);
     forwardRequestGET(path, callback);
 }
 
