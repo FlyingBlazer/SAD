@@ -246,17 +246,18 @@ exports.detail = function(req, res, next) {
                         throw err;
                     }
                     if(datas){
+                        var today=(new Date().getDay()+6)%7+1;
                         datas.forEach(function(adata){
-                            slot[(6-adata.day+j)%7].slot[adata.period==1? 'morning': (adata.period==2 ? 'afternoon' : 'evening')][1] =adata.appnum;
+                            slot[(6-today+adata.day)%7].slot[adata.period==1? 'morning': (adata.period==2 ? 'afternoon' : 'evening')][2] =adata.appnum;
                         });
                     }
                     doctor.getDepartment(function(err, department) {
                         if(err) throw err;
                         department.getHospital(function(err, hospital) {
                             if(err) throw err;
-                            for(var i=0;i<7;i++){
-                                console.log(slot[i].slot);
-                            }
+                            //for(var i=0;i<7;i++){
+                            //    console.log(slot[i].slot);
+                            //}
                             res.json({
                                 code: 0,
                                 message: 'success',
