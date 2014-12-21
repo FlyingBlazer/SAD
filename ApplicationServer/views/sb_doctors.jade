@@ -35,7 +35,7 @@ block content
 
          script.
             $(function() {
-               $('#doctor-table').DataTable();
+               var doctorTable = $('#doctor-table').DataTable();
 
                $('#doctor-table .x-editable-desc').each(function() {
                   $(this).text($(this).text().replace('<br>', ''));
@@ -132,6 +132,7 @@ block content
                });
 
                $('.delete-doctor').click(function() {
+                  var tr = $(this).parents('tr');
                   if (confirm('是否确定删除医生' + $(this).data('name') + '？')) {
                      var doctorId = $(this).data('id');
                      $.ajax({
@@ -139,6 +140,9 @@ block content
                         type: 'GET'
                      }).done(function(data) {
                         if (data.code == 0) {
+                           setTimeout(function() {
+                              doctorTable.row(tr).remove().draw();
+                           }, 500);
                            toastr.success('医生已经删除', '成功');
                         } else {
                            toastr.error('系统错误。错误代码：' + data.code, '删除失败');
