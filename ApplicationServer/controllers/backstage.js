@@ -180,9 +180,9 @@ exports.onChangePassword = function (request, response) {
     var callback = function (result) {
         var redirectPath = '/backstage/account';
         if (result.code == 0) {//修改成功
-            redirectPath = '/backstage/account/success/complete';
+            redirectPath = '/backstage/account/success/cpcomplete';
         } else {//修改失败
-            redirectPath = '/backstage/account/fail/wrong_credential';
+            redirectPath = '/backstage/account/fail/cp_wrong_credential';
         }
         response.redirect(redirectPath);
     };
@@ -430,7 +430,7 @@ exports.addHospital = function (request, response) {
         //printLogMessage('add hospital: ' + result.message);
 
         if (result.code == 0) {
-            response.redirect('/backstage/manage-hospitals/' + getCurrentTimeInSeconds() + '/success/complete');
+            response.redirect('/backstage/manage-hospitals/' + getCurrentTimeInSeconds() + '/success/ahcomplete');
         } else {
             response.redirect('/backstage/manage-hospitals/' + getCurrentTimeInSeconds() + '/fail/unknown');
         }
@@ -458,7 +458,7 @@ exports.addDepartment = function (request, response) {
     var path = '/hospital/department/add';
     forwardRequestPOST(data, path, function (result) {
         if (result.code == 0) {
-            response.redirect('/backstage/departments/' + getCurrentTimeInSeconds() + '/success/complete');
+            response.redirect('/backstage/departments/' + getCurrentTimeInSeconds() + '/success/adcomplete');
         } else {
             response.redirect('/backstage/departments/' + getCurrentTimeInSeconds() + '/fail/unknown');
         }
@@ -507,7 +507,7 @@ exports.addDoctor = function (request, response) {
                 function (feedback) {
                     printLogMessage(feedback);
                     if (feedback.code == 0) {
-                        response.redirect('/backstage/doctors/' + getCurrentTimeInSeconds() + '/success/complete');
+                        response.redirect('/backstage/doctors/' + getCurrentTimeInSeconds() + '/success/aecomplete');
                     } else {
                         response.redirect('/backstage/doctors/' + getCurrentTimeInSeconds() + '/fail/unknown');
                     }
