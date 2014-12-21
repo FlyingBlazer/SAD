@@ -15,16 +15,16 @@ block content
             thead
                tr
                   th id
-                  th 名称
-                  th 电话
+                  th.title 名称
+                  th.tel 电话
                   th 简介
                   th.operation 操作
             tbody
                each department in list
                   tr
                      td #{department.id}
-                     td #{department.name}
-                     td
+                     td.title #{department.name}
+                     td.tel
                         a.x-editable(href='#', data-id='#{department.id}')= department.phone
                      td.description
                         a.x-editable(href='#', data-id='#{department.id}')= department.description
@@ -115,4 +115,10 @@ block content
    style.
       .operation {
          width: 60px;
+      }
+      .title {
+         width: 60px;
+      }
+      .tel {
+         width: 100px;
       }
