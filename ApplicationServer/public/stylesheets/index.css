@@ -1,3 +1,7 @@
+.navbar .navbar-form {
+    display: none;
+}
+
 #header {
     display: none;
 }

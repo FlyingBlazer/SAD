@@ -22,6 +22,12 @@ html(lang="zh-cn")
                             span.icon-bar
                             span.icon-bar
                         a.navbar-brand(href="/") SRF
+                    .navbar-form.navbar-left
+                        .input-group
+                            input#nav-search-field.form-control(placeholder="搜索医院")
+                            span.input-group-btn
+                                button#nav-search-button.btn.btn-default 搜索
+
                     div#navbar-collapse.collapse.navbar-collapse
                         if username
                             ul.nav.navbar-nav.navbar-right
@@ -51,3 +57,11 @@ html(lang="zh-cn")
 
     div#footer
         p#copyright.text-center © 2014 SRF 版权所有
+
+    script.
+        $(document).ready(function () {
+            $("#nav-search-button").click(function () {
+                var href = "/search/" + $("#nav-search-field").val();
+                window.location.href = href;
+            });
+        });

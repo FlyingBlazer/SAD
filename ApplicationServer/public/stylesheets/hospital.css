@@ -24,7 +24,7 @@
 
 .hospital-info {
     display: inline-block;
-    vertical-align: top !important;
+    vertical-align: top;
     margin-left: 20px;
 }
 
