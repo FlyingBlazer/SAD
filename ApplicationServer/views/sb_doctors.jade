@@ -174,7 +174,6 @@ block content
                .prompt
                   label(for='picture') 照片
                .control
-                  input#picture(type='text', name='photo', hidden, required)
                   #fileuploader 上传照片
 
          form(method='post', action='/backstage/api/add/doctor', id='add-doctor')
@@ -300,6 +299,7 @@ block content
             input(type='hidden', name='hospitalId', id='hospital-id' value='#{hospitalId}')
             input(type='hidden', name='timeSlots', id='time-slots', value='')
             input(type='hidden', name='name', id='name', value='')
+            input#picture(type='text', name='photo', hidden, required)
             button.button.submit-button.green-button.button-with-icon(type='submit')
                i.fa.fa-plus
                | &nbsp;添加医生
