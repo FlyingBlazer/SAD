@@ -895,7 +895,6 @@ CREATE TABLE IF NOT EXISTS `doctor` (
   `title` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `price` decimal(8,2) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `doctor_photo` (`photo`),
   FULLTEXT KEY `name` (`name`),
   FULLTEXT KEY `info` (`info`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=2501 ;
