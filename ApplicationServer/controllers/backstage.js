@@ -150,6 +150,8 @@ exports.changePassword = function (request, response) {
             message: isNullOrUndefined(message) ? '' : message
         };
 
+        printLogMessage(JSON.stringify(params));
+
         response.render('sb_changePassword', params);
     }
 };
@@ -440,13 +442,15 @@ exports.addHospital = function (request, response) {
  */
 exports.addDepartment = function (request, response) {
     var requestBody = request.body;
+    printLogMessage('add department: ' + JSON.stringify(requestBody));
 
     var data = {
         name: requestBody.name,
-        hospital_id: requestBody.hospital_id,
-        phone: requestBody.phone,
+        hospital_id: getCookie(request).hospitalId,
+        phone: requestBody.telephone,
         description: requestBody.description
     };
+    printLogMessage('data:' + JSON.stringify(data));
 
     var path = '/hospital/department/add';
     forwardRequestPOST(data, path, function (result) {
@@ -456,8 +460,6 @@ exports.addDepartment = function (request, response) {
             response.redirect('/backstage/departments/' + getCurrentTimeInSeconds() + '/fail/unknown');
         }
     });
-
-
 };
 
 /**
@@ -469,10 +471,12 @@ exports.addDepartment = function (request, response) {
 exports.addDoctor = function (request, response) {
     var requestBody = request.body;
 
+    printLogMessage('add doctor:' + JSON.stringify(requestBody));
+
     var data = {
         name: requestBody.name,
-        hospital_id: requestBody.hospital_id,
-        department_id: requestBody.department_id,
+        hospitalId: requestBody.hospitalId,
+        departmentId: requestBody.departmentId,
         //photo: requestBody.photo,
         photo: '',//TODO pending
         description: requestBody.description,
@@ -496,13 +500,13 @@ exports.addDoctor = function (request, response) {
                 },
                 addTimeSlotsPath, function (feedback) {
                     if (feedback.code == 0) {
-                        response.redirect('/backstage/departments/' + getCurrentTimeInSeconds() + '/success/complete');
+                        response.redirect('/backstage/doctors/' + getCurrentTimeInSeconds() + '/success/complete');
                     } else {
-                        response.redirect('/backstage/departments/' + getCurrentTimeInSeconds() + '/fail/unknown');
+                        response.redirect('/backstage/doctors/' + getCurrentTimeInSeconds() + '/fail/unknown');
                     }
                 });
         } else {
-            response.redirect('/backstage/departments/' + getCurrentTimeInSeconds() + '/fail/unknown');
+            response.redirect('/backstage/doctors/' + getCurrentTimeInSeconds() + '/fail/unknown');
         }
     });
 
