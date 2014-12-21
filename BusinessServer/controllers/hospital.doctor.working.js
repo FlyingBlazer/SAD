@@ -51,7 +51,7 @@ exports.getRaw = function(req, res, next) {
                     case '2':
                         for(var i = 1 ; i <= 7 ; i++){
                             if(working.frequency.charAt(i)=='1'){
-                                week_stat[i%7][working.period-1]=getApp(working, i);
+                                week_stat[i-1][working.period-1]=getApp(working, i);
                             }
                         }
                         break;
@@ -142,9 +142,6 @@ exports.updateWeek = function(req, res, next) {
     check(req, function(err, data, doctorId, adminId) {
         if(err) return next(err);
         var works=req.body.works;
-        var morning='20000000';
-        var afternoon='20000000';
-        var evening='20000000';
         req.models.working.find({doctor_id: doctorId}, function(err, workings){
             if(err && err.message != 'Not found') return next(err);
             var m_index=0;
@@ -163,19 +160,45 @@ exports.updateWeek = function(req, res, next) {
                         break;
                 }
             }
-            for(var i = 0 ; i < works.length ; i++) {
+            function updateSpecific(working, day, number){
+                switch(day){
+                    case 1:
+                        working.monday=number;
+                        break;
+                    case 2:
+                        working.tuesday=number;
+                        break;
+                    case 3:
+                        working.wednesday=number;
+                        break;
+                    case 4:
+                        working.thusday=number;
+                        break;
+                    case 5:
+                        working.friday=number;
+                        break;
+                    case 6:
+                        working.saturday=number;
+                        break;
+                    case 7:
+                        working.sunday=number;
+                        break;
+                }
+            }
+            console.log(works);
+            for(var i = 0 ; i < works.length ; i++){
                 switch(parseInt(works[i]['period'],10)) {
                     case 1:
                         workings[m_index].frequency = workings[m_index].frequency.replaceAt(parseInt(works[i]['day']), works[i]['action']!=0 ? 1 : 0);
-                        workings[m_index].totalApp=works[i]['action'];
+                        updateSpecific(workings[m_index],parseInt(works[i]['day']), works[i]['action']);
                         break;
                     case 2:
                         workings[a_index].frequency = workings[a_index].frequency.replaceAt(parseInt(works[i]['day']), works[i]['action']!=0 ? 1 : 0);
-                        workings[a_index].totalApp=works[i]['action'];
+                        updateSpecific(workings[a_index], parseInt(works[i]['day']), works[i]['action']);
                         break;
                     case 3:
                         workings[e_index].frequency = workings[e_index].frequency.replaceAt(parseInt(works[i]['day']), works[i]['action']!=0 ? 1 : 0);
-                        workings[e_index].totalApp=works[i]['action'];
+                        updateSpecific(workings[e_index], parseInt(works[i]['day']), works[i]['action']);
                         break;
                     default:
                         break;
