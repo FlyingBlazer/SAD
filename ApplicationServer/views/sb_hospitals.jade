@@ -44,25 +44,6 @@ block content
                            i.fa.fa-trash 删除
 
          script.
-            $('#hospitals-table').DataTable();
-            $('.delete-hospital').click(function() {
-               if (confirm('是否确定删除' + $(this).data('name') + '？')) {
-                  var hospitalId = $(this).data('id');
-                  $.ajax({
-                     url: 'http://#{businessServer}/hospital/hospital/' + hospitalId + '/delete',
-                     type: 'GET'
-                  }).done(function(data) {
-                     if (data.code == 0) {
-                        toastr.success('医院已经删除', '成功');
-                     } else {
-                        toastr.error('系统错误。错误代码：' + data.code, '删除失败');
-                     }
-                  }).error(function(jqXHR, textStatus, errorThrown) {
-                     toastr.error('系统发生致命错误 ' + textStatus + '。错误信息：' + errorThrown, '删除失败');
-                  });
-               }
-            });
-
             $('#panel-manage .level a.x-editable').each(function (index, element) {
                var hospitalId = $(element).data('id');
                $(element).editable({
@@ -107,6 +88,27 @@ block content
                      return r;
                   }
                });
+            });
+
+            var dt = $('#hospitals-table').DataTable();
+            $('.delete-hospital').click(function() {
+               var tr = $(this).parents('tr');
+               if (confirm('是否确定删除' + $(this).data('name') + '？')) {
+                  var hospitalId = $(this).data('id');
+                  $.ajax({
+                     url: 'http://#{businessServer}/hospital/hospital/' + hospitalId + '/delete',
+                     type: 'GET'
+                  }).done(function(data) {
+                     if (data.code == 0) {
+                        dt.row(tr).remove().draw();
+                        toastr.success('医院已经删除', '成功');
+                     } else {
+                        toastr.error('系统错误。错误代码：' + data.code, '删除失败');
+                     }
+                  }).error(function(jqXHR, textStatus, errorThrown) {
+                     toastr.error('系统发生致命错误 ' + textStatus + '。错误信息：' + errorThrown, '删除失败');
+                  });
+               }
             });
 
 
@@ -202,6 +204,18 @@ block content
 
    script.
       $('#add-hospitals').validate();
+      window.onload = function(){
+         var params = $(location).attr('pathname');
+         params = params.split('/');
+         if (params.length == 6) {
+            if (params[4] == 'success') {
+               toastr.success('医院已经添加', '成功');
+            } else if (params[4] == 'fail') {
+               toastr.error('医院添加失败，错误信息：' + params[5], '失败');
+            }
+         }
+      };
+
    style.
       .operation {
          width: 60px;
