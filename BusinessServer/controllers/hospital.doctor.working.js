@@ -178,7 +178,6 @@ exports.addTemp = function(req, res, next) {
         if(err) return next(err);
         var t_period = req.body.period;
         var t_action = req.body.action;
-        var t_capacity = req.body.capacity;
         var t_frequency = '0_000000';
         req.models.working.one({
             doctor_id: doctorId,
@@ -192,9 +191,10 @@ exports.addTemp = function(req, res, next) {
             t_frequency = t_frequency.replaceAt(1, t_action==0 ? 0 : 1);
             req.models.working.create({
                 doctor_id: doctorId,
+                date: req.body.date,
                 frequency: t_frequency,
                 period: t_period,
-                totalApp: t_capacity
+                totalApp: t_action
             }, function (working) {
                 if (err && err.message != 'Not found') return next(err);
                 res.json({
