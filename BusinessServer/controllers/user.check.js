@@ -59,7 +59,8 @@ exports.list = function(req, res, next) {
 };
 
 exports.approve = function(req, res, next) {
-    var userId = req.body.userId;
+    var userId = req.params.userId;
+    console.log(userId);
     req.models.user.one({
         id: userId
     }, function(err, user) {
@@ -81,7 +82,7 @@ exports.approve = function(req, res, next) {
 };
 
 exports.reject = function(req, res, next) {
-    var userId = req.body.userId;
+    var userId = req.params.userId;
     req.models.user.one({
         id: userId
     }, function(err, user) {
@@ -103,7 +104,7 @@ exports.reject = function(req, res, next) {
 };
 
 exports.status = function(req, res, next) {
-    var userId = req.body.userId;
+    var userId = req.params.userId;
     req.models.user.one({
         name: userId
     }, function(err, user) {
@@ -122,6 +123,9 @@ exports.status = function(req, res, next) {
         		case -1:
         			status_msg="Rejected";
         			break;
+                case -2:
+                    status_msg="Out of credit";
+                    break;
         	}
             res.json({
                 code: 0,
