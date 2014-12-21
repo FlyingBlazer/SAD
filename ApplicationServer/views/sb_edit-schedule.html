@@ -1,4 +1,111 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=EDGE"><link rel="stylesheet" href="/backstage/css/reset.css" media="all"><link rel="stylesheet" href="/backstage/css/font-awesome.css" media="all"><link rel="stylesheet" href="/backstage/plugins/toastr-notifications/toastr.css" media="all"><link rel="stylesheet" href="/backstage/plugins/icheck/grey.css" media="all"><link rel="stylesheet" href="/backstage/plugins/select2/select2.css" media="all"><link rel="stylesheet" href="/backstage/css/select2-custom.css" media="all"><link rel="stylesheet" href="/backstage/css/table.css" media="all"><link rel="stylesheet" href="/backstage/css/editable.css" media="all"><link rel="stylesheet" href="/backstage/css/tab.css" media="all"><link rel="stylesheet" href="/backstage/css/components.css" media="all"><link rel="stylesheet" href="/backstage/css/admin.css" media="all"><script src="/backstage/plugins/jquery/jquery-2.1.1.min.js"></script><script src="/backstage/plugins/jquery-validation/jquery.validate.min.js"></script><script src="/backstage/plugins/jquery-validation/additional-methods.min.js"></script><script src="/backstage/plugins/jquery-validation/messages_zh.js"></script><script src="/backstage/plugins/toastr-notifications/toastr.min.js"></script><script src="/backstage/plugins/icheck/icheck.min.js"></script><script src="/backstage/plugins/select2/select2.min.js"></script><script src="/backstage/plugins/select2/select2_locale_zh-CN.js"></script><script src="/backstage/plugins/datatables/js/jquery.dataTables.min.js"></script><script src="/backstage/plugins/datatables/js/dataTables.bootstrap.js"></script><script src="/backstage/plugins/bootstrap/bootstrap.min.js"></script><script src="/backstage/plugins/bootstrap3-editable/js/bootstrap-editable.js"></script><script src="/backstage/plugins/bootstrap3-editable/js/bootstrap-datepicker.js"></script><script src="/backstage/plugins/bootstrap3-editable/js/bootstrap-datepicker.zh-CN.js"></script></head><body><header id="masthead" class="site-header"><div class="inner"><h1 class="site-title"><a href="/backstage" class="site-title-link">SRF 后台管理系统</a></h1><a href="/backstage/logout" title="登出" class="log-out"><i class="fa fa-sign-out"></i>&nbsp;登出</a></div></header><div id="main" class="site-main"><div class="content-area"><div id="primary" class="site-content"><h2>编辑医生排班</h2><ul role="tablist" class="nav nav-tabs"><li role="presentation" class="active"><a href="#panel-current" role="tab" data-toggle="tab">当前排班情况</a></li><li role="presentation"><a href="#panel-weekly" role="tab" data-toggle="tab">修改每周排班</a></li><li role="presentation"><a href="#panel-temp" role="tab" data-toggle="tab">添加临时排班</a></li></ul><div class="tab-content"><div id="panel-current" class="tab-pane fade in active"><h3>当前排班情况</h3><table class="time-slots table table-bordered"><tr><td></td><td>星期一</td><td>星期二</td><td>星期三</td><td>星期四</td><td>星期五</td><td>星期六</td><td>星期日</td></tr><tr><td>上午</td><td data-row="1" data-col="1" class="checkable"><a class="x-editable"></a></td><td data-row="2" data-col="1" class="checkable"><a class="x-editable"></a></td><td data-row="3" data-col="1" class="checkable"><a class="x-editable"></a></td><td data-row="4" data-col="1" class="checkable"><a class="x-editable"></a></td><td data-row="5" data-col="1" class="checkable"><a class="x-editable"></a></td><td data-row="6" data-col="1" class="checkable"><a class="x-editable"></a></td><td data-row="7" data-col="1" class="checkable"><a class="x-editable"></a></td></tr><tr><td>下午</td><td data-row="1" data-col="2" class="checkable"><a class="x-editable"></a></td><td data-row="2" data-col="2" class="checkable"><a class="x-editable"></a></td><td data-row="3" data-col="2" class="checkable"><a class="x-editable"></a></td><td data-row="4" data-col="2" class="checkable"><a class="x-editable"></a></td><td data-row="5" data-col="2" class="checkable"><a class="x-editable"></a></td><td data-row="6" data-col="2" class="checkable"><a class="x-editable"></a></td><td data-row="7" data-col="2" class="checkable"><a class="x-editable"></a></td></tr><tr><td>晚上</td><td data-row="1" data-col="3" class="checkable"><a class="x-editable"></a></td><td data-row="2" data-col="3" class="checkable"><a class="x-editable"></a></td><td data-row="3" data-col="3" class="checkable"><a class="x-editable"></a></td><td data-row="4" data-col="3" class="checkable"><a class="x-editable"></a></td><td data-row="5" data-col="3" class="checkable"><a class="x-editable"></a></td><td data-row="6" data-col="3" class="checkable"><a class="x-editable"></a></td><td data-row="7" data-col="3" class="checkable"><a class="x-editable"></a></td></tr></table></div><div id="panel-weekly" class="tab-pane fade"><h3>修改每周排班</h3><table class="time-slots table table-bordered"><tr><td></td><td>星期一</td><td>星期二</td><td>星期三</td><td>星期四</td><td>星期五</td><td>星期六</td><td>星期日</td></tr><tr><td>上午</td><td data-row="1" data-col="1" class="checkable"><a class="x-editable"></a></td><td data-row="2" data-col="1" class="checkable"><a class="x-editable"></a></td><td data-row="3" data-col="1" class="checkable"><a class="x-editable"></a></td><td data-row="4" data-col="1" class="checkable"><a class="x-editable"></a></td><td data-row="5" data-col="1" class="checkable"><a class="x-editable"></a></td><td data-row="6" data-col="1" class="checkable"><a class="x-editable"></a></td><td data-row="7" data-col="1" class="checkable"><a class="x-editable"></a></td></tr><tr><td>下午</td><td data-row="1" data-col="2" class="checkable"><a class="x-editable"></a></td><td data-row="2" data-col="2" class="checkable"><a class="x-editable"></a></td><td data-row="3" data-col="2" class="checkable"><a class="x-editable"></a></td><td data-row="4" data-col="2" class="checkable"><a class="x-editable"></a></td><td data-row="5" data-col="2" class="checkable"><a class="x-editable"></a></td><td data-row="6" data-col="2" class="checkable"><a class="x-editable"></a></td><td data-row="7" data-col="2" class="checkable"><a class="x-editable"></a></td></tr><tr><td>晚上</td><td data-row="1" data-col="3" class="checkable"><a class="x-editable"></a></td><td data-row="2" data-col="3" class="checkable"><a class="x-editable"></a></td><td data-row="3" data-col="3" class="checkable"><a class="x-editable"></a></td><td data-row="4" data-col="3" class="checkable"><a class="x-editable"></a></td><td data-row="5" data-col="3" class="checkable"><a class="x-editable"></a></td><td data-row="6" data-col="3" class="checkable"><a class="x-editable"></a></td><td data-row="7" data-col="3" class="checkable"><a class="x-editable"></a></td></tr></table></div><div id="panel-temp" class="tab-pane fade"><h3>添加临时排班</h3></div></div></div></div><div id="secondary" class="site-sidebar"><ul class="site-navigation"><li class="module-navigation-item"><a href="/backstage/manage-hospitals"><i class="fa fa-lg fa-fw fa-plus-square"></i>&nbsp;医院管理</a></li><li class="module-navigation-item"><a href="/backstage/users"><i class="fa fa-lg fa-fw fa-users"></i>&nbsp;用户审核</a></li><li class="module-navigation-item"><a href="/backstage/departments"><i class="fa fa-lg fa-fw fa-hospital-o"></i>&nbsp;科室管理</a></li><li class="module-navigation-item"><a href="/backstage/doctors"><i class="fa fa-lg fa-fw fa-user-md"></i>&nbsp;医生管理</a></li><li class="module-navigation-item"><a href="/backstage/reservations"><i class="fa fa-lg fa-fw fa-table"></i>&nbsp;预约管理</a></li><li class="module-navigation-item"><a href="/backstage/account"><i class="fa fa-lg fa-fw fa-lock"></i>&nbsp;修改密码</a></li></ul></div></div><footer id="colophon" class="site-footer"></footer><script>toastr.options = {
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=EDGE"><link rel="stylesheet" href="/backstage/css/reset.css" media="all"><link rel="stylesheet" href="/backstage/css/font-awesome.css" media="all"><link rel="stylesheet" href="/backstage/plugins/toastr-notifications/toastr.css" media="all"><link rel="stylesheet" href="/backstage/plugins/icheck/grey.css" media="all"><link rel="stylesheet" href="/backstage/plugins/select2/select2.css" media="all"><link rel="stylesheet" href="/backstage/css/select2-custom.css" media="all"><link rel="stylesheet" href="/backstage/css/table.css" media="all"><link rel="stylesheet" href="/backstage/css/editable.css" media="all"><link rel="stylesheet" href="/backstage/css/tab.css" media="all"><link rel="stylesheet" href="/backstage/css/components.css" media="all"><link rel="stylesheet" href="/backstage/css/admin.css" media="all"><script src="/backstage/plugins/jquery/jquery-2.1.1.min.js"></script><script src="/backstage/plugins/jquery-validation/jquery.validate.min.js"></script><script src="/backstage/plugins/jquery-validation/additional-methods.min.js"></script><script src="/backstage/plugins/jquery-validation/messages_zh.js"></script><script src="/backstage/plugins/toastr-notifications/toastr.min.js"></script><script src="/backstage/plugins/icheck/icheck.min.js"></script><script src="/backstage/plugins/select2/select2.min.js"></script><script src="/backstage/plugins/select2/select2_locale_zh-CN.js"></script><script src="/backstage/plugins/datatables/js/jquery.dataTables.min.js"></script><script src="/backstage/plugins/datatables/js/dataTables.bootstrap.js"></script><script src="/backstage/plugins/bootstrap/bootstrap.min.js"></script><script src="/backstage/plugins/bootstrap3-editable/js/bootstrap-editable.js"></script><script src="/backstage/plugins/bootstrap3-editable/js/bootstrap-datepicker.js"></script><script src="/backstage/plugins/bootstrap3-editable/js/bootstrap-datepicker.zh-CN.js"></script></head><body><header id="masthead" class="site-header"><div class="inner"><h1 class="site-title"><a href="/backstage" class="site-title-link">SRF 后台管理系统</a></h1><a href="/backstage/logout" title="登出" class="log-out"><i class="fa fa-sign-out"></i>&nbsp;登出</a></div></header><div id="main" class="site-main"><div class="content-area"><div id="primary" class="site-content"><h2>编辑医生排班</h2><ul role="tablist" class="nav nav-tabs"><li role="presentation" class="active"><a href="#panel-current" role="tab" data-toggle="tab">当前排班情况</a></li><li role="presentation"><a href="#panel-weekly" role="tab" data-toggle="tab">修改每周排班</a></li><li role="presentation"><a href="#panel-temp" role="tab" data-toggle="tab">临时排班管理</a></li></ul><div class="tab-content"><div id="panel-current" class="tab-pane fade in active"><h3>当前排班情况</h3><h4>未来一周</h4><table class="time-slots table table-bordered"><tr class="title"><td></td><td data-plus-day="0" class="tcell"></td><td data-plus-day="1" class="tcell"></td><td data-plus-day="2" class="tcell"></td><td data-plus-day="3" class="tcell"></td><td data-plus-day="4" class="tcell"></td><td data-plus-day="5" class="tcell"></td><td data-plus-day="6" class="tcell"></td></tr><tr><td class="title">上午</td><td data-row="1" data-col="1" class="cell"><a class="x-editable"></a></td><td data-row="2" data-col="1" class="cell"><a class="x-editable"></a></td><td data-row="3" data-col="1" class="cell"><a class="x-editable"></a></td><td data-row="4" data-col="1" class="cell"><a class="x-editable"></a></td><td data-row="5" data-col="1" class="cell"><a class="x-editable"></a></td><td data-row="6" data-col="1" class="cell"><a class="x-editable"></a></td><td data-row="7" data-col="1" class="cell"><a class="x-editable"></a></td></tr><tr><td class="title">下午</td><td data-row="1" data-col="2" class="cell"><a class="x-editable"></a></td><td data-row="2" data-col="2" class="cell"><a class="x-editable"></a></td><td data-row="3" data-col="2" class="cell"><a class="x-editable"></a></td><td data-row="4" data-col="2" class="cell"><a class="x-editable"></a></td><td data-row="5" data-col="2" class="cell"><a class="x-editable"></a></td><td data-row="6" data-col="2" class="cell"><a class="x-editable"></a></td><td data-row="7" data-col="2" class="cell"><a class="x-editable"></a></td></tr><tr><td class="title">晚上</td><td data-row="1" data-col="3" class="cell"><a class="x-editable"></a></td><td data-row="2" data-col="3" class="cell"><a class="x-editable"></a></td><td data-row="3" data-col="3" class="cell"><a class="x-editable"></a></td><td data-row="4" data-col="3" class="cell"><a class="x-editable"></a></td><td data-row="5" data-col="3" class="cell"><a class="x-editable"></a></td><td data-row="6" data-col="3" class="cell"><a class="x-editable"></a></td><td data-row="7" data-col="3" class="cell"><a class="x-editable"></a></td></tr></table><script>var date = new Date();
+var dayToChinese = [
+   '星期日',
+   '星期一',
+   '星期二',
+   '星期三',
+   '星期四',
+   '星期五',
+   '星期六'
+];
+Date.prototype.yyyy_mm_dd = function () {
+   var yyyy = this.getFullYear().toString();
+   var mm = (this.getMonth() + 1).toString();
+   var dd = this.getDate().toString();
+   return yyyy + '-' + (mm[1] ? mm : "0" + mm[0]) + '-' + (dd[1] ? dd : "0" + dd[0]);
+};
+var shiftDate = function(date, what, count) {
+   var proc1 = 'get' + what,
+           proc2 = 'set' + what;
+   var value = Date.prototype[proc1].call(date);
+   Date.prototype[proc2].call(date, value + count);
+   return date;
+}
+var dates = [];
+for (var i = 0; i < 7; ++i) {
+   dates[i] = shiftDate(new Date(), 'Date', i);
+}
+$('.cell').each(function(index, element) {
+   var row = $(element).data('row');
+   var col = $(element).data('col');
+
+   $(element).data('period', col);
+   $(element).attr('data-period', col);
+   $(element).data('date', dates[row - 1].yyyy_mm_dd());
+   $(element).attr('data-date', dates[row - 1].yyyy_mm_dd());
+});
+$('.tcell').each(function(index, element) {
+   var date = shiftDate(new Date(), 'Date', parseInt($(element).data('plus-day')));
+   $(element).html(dayToChinese[date.getDay()] + '<br>' + date.yyyy_mm_dd());
+});
+</script><style>#panel-current .time-slots {
+   text-align: center;
+}
+.time-slots .title {
+   font-weight: bold;
+}
+
+</style></div><div id="panel-weekly" class="tab-pane fade"><h3>修改每周排班</h3><table class="time-slots table table-bordered"><tr><td></td><td>星期一</td><td>星期二</td><td>星期三</td><td>星期四</td><td>星期五</td><td>星期六</td><td>星期日</td></tr><tr><td>上午</td><td class="cell"><a href="#" data-day="1" data-period="1" class="x-editable"></a></td><td class="cell"><a href="#" data-day="2" data-period="1" class="x-editable"></a></td><td class="cell"><a href="#" data-day="3" data-period="1" class="x-editable"></a></td><td class="cell"><a href="#" data-day="4" data-period="1" class="x-editable"></a></td><td class="cell"><a href="#" data-day="5" data-period="1" class="x-editable"></a></td><td class="cell"><a href="#" data-day="6" data-period="1" class="x-editable"></a></td><td class="cell"><a href="#" data-day="7" data-period="1" class="x-editable"></a></td></tr><tr><td>下午</td><td class="cell"><a href="#" data-day="1" data-period="2" class="x-editable"></a></td><td class="cell"><a href="#" data-day="2" data-period="2" class="x-editable"></a></td><td class="cell"><a href="#" data-day="3" data-period="2" class="x-editable"></a></td><td class="cell"><a href="#" data-day="4" data-period="2" class="x-editable"></a></td><td class="cell"><a href="#" data-day="5" data-period="2" class="x-editable"></a></td><td class="cell"><a href="#" data-day="6" data-period="2" class="x-editable"></a></td><td class="cell"><a href="#" data-day="7" data-period="2" class="x-editable"></a></td></tr><tr><td>晚上</td><td class="cell"><a href="#" data-day="1" data-period="3" class="x-editable"></a></td><td class="cell"><a href="#" data-day="2" data-period="3" class="x-editable"></a></td><td class="cell"><a href="#" data-day="3" data-period="3" class="x-editable"></a></td><td class="cell"><a href="#" data-day="4" data-period="3" class="x-editable"></a></td><td class="cell"><a href="#" data-day="5" data-period="3" class="x-editable"></a></td><td class="cell"><a href="#" data-day="6" data-period="3" class="x-editable"></a></td><td class="cell"><a href="#" data-day="7" data-period="3" class="x-editable"></a></td></tr></table><script>$('#panel-weekly a').each(function(index, element) {
+   $(element).editable({
+
+   });
+});
+</script></div><div id="panel-temp" class="tab-pane fade"><h3>临时排班管理</h3><h4>添加记录</h4><form id="add-temp"><div class="form-group"><div class="prompt"><label for="date">日期</label></div><div class="control"><input id="date" name="date" type="text" required class="form-control date-picker"></div></div><div class="form-group"><div class="prompt"><label for="period">时间段</label></div><div class="control"><select id="period" name="period" data-placeholder="选择时间段..." required class="form-control"><option value="1">上午</option><option value="2">下午</option><option value="3">晚上</option></select></div></div><div class="form-group"><div class="prompt"><label for="capacity">可预约人数</label></div><div class="control"><input id="capacity" name="capacity" type="number" required class="form-control"><div class="note">设为 0 即表示不开放预约。</div></div></div><button id="submit-button" type="submit" data-doctor_id="1" class="button submit-button green-button button-with-icon"><i class="fa fa-plus"></i>&nbsp;添加临时排班记录</button></form><h4>当前记录</h4><table id="temp-table" class="table table-striped table-bordered table-hover"><thead><tr><th>日期</th><th>时间段</th><th>可预约人数</th><th>操作</th></tr></thead><tbody><tr><td>2014-12-31</td><td>上午</td><td>0</td><td><button data-date="2014-12-31" data-period="3" data-doctor_id="1" class="button red-button xs-button delete-temp">删除记录</button></td></tr></tbody></table><script>$('#add-temp').validate();
+$('.date-picker').datepicker({
+   format: "yyyy-mm-dd",
+   todayBtn: "linked",
+   language: "zh-CN",
+   keyboardNavigation: false,
+   autoclose: true,
+   todayHighlight: true
+});
+$('#submit-button').on('click', function(e) {
+   e.preventDefault();
+   var date = $('#date').val();
+   var period = $('#period').val();
+   var capacity = $('#capacity').val();
+   var doctorId = $(this).data('doctor_id');
+   if (date != '' && period != '' && capacity != '') {
+      $.ajax({
+         url: '/hospital/doctor/' + doctorId + '/working/temp/add',
+         type: 'POST',
+         dataType: '',
+         data: '' // TODO-API 2-2-6-4
+      }).done(function(data) {
+         if (data.code == 0) {
+            toastr.success('临时排班已添加', '成功');
+            $('#date').val(null);
+            $('#period').val(null);
+            $('#capacity').val(null);
+         } else {
+            toastr.error('系统错误。错误代码：' + data.code, '添加失败');
+         }
+      }).error(function() {
+         toastr.error('系统发生致命错误。错误信息：ECONNECTREFUSED', '添加失败');
+      });
+   }
+});
+
+$('#temp-table').DataTable();
+$('.delete-temp').click(function() {
+   if (confirm('是否确定删除该排班项？')) {
+      var doctorId = $(this).data('doctor_id');
+      $.ajax({
+         url: '/hospital/doctor/' + doctorId + '/working/temp/delete',
+         type: 'POST',
+         dataType: '',
+         data: '' // TODO-API 2-2-6-5
+      }).done(function(data) {
+         if (data.code == 0) {
+            toastr.success('排班已经删除', '成功');
+         } else {
+            toastr.error('系统错误。错误代码：' + data.code, '删除失败');
+         }
+      }).error(function() {
+         toastr.error('系统发生致命错误。错误信息：ECONNECTREFUSED', '删除失败');
+      });
+   }
+});</script></div></div></div></div><div id="secondary" class="site-sidebar"><ul class="site-navigation"><li class="module-navigation-item"><a href="/backstage/manage-hospitals"><i class="fa fa-lg fa-fw fa-plus-square"></i>&nbsp;医院管理</a></li><li class="module-navigation-item"><a href="/backstage/users"><i class="fa fa-lg fa-fw fa-users"></i>&nbsp;用户审核</a></li><li class="module-navigation-item"><a href="/backstage/departments"><i class="fa fa-lg fa-fw fa-hospital-o"></i>&nbsp;科室管理</a></li><li class="module-navigation-item"><a href="/backstage/doctors"><i class="fa fa-lg fa-fw fa-user-md"></i>&nbsp;医生管理</a></li><li class="module-navigation-item"><a href="/backstage/reservations"><i class="fa fa-lg fa-fw fa-table"></i>&nbsp;预约管理</a></li><li class="module-navigation-item"><a href="/backstage/account"><i class="fa fa-lg fa-fw fa-lock"></i>&nbsp;修改密码</a></li></ul></div></div><footer id="colophon" class="site-footer"></footer><script>toastr.options = {
    "closeButton": !0,
    "debug": !1,
    "positionClass": "toast-top-right",

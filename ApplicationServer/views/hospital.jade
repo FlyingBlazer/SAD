@@ -2,6 +2,8 @@ extends layout
 
 block title
     title 医院
+    link(href="/stylesheets/hospital.css", rel="stylesheet", media="all")
+    script(src="http://api.map.baidu.com/components?ak=pZFhoaCvZGuO14AmE2f0Xkon&v=1.0")
 
 block breadcrumb
     li
@@ -20,9 +22,6 @@ block header-content-extra
             a(href="#reserve", data-toggle="tab") 预约挂号
 
 block site-content
-    style
-    link(href="/stylesheets/hospital.css", rel="stylesheet", media="all")
-
     div#site-content.tab-content
         div#hospital-index.tab-pane.fade.in.active(role="tabpanel")
             img.hospital-image
@@ -35,13 +34,20 @@ block site-content
                     span.tel-content #{detail.telephone}
                 div.site
                     span.site-label 官网：
-                    span.site-content #{detail.website}
+                    span.site-content
+                        a(href="#{detail.website}") #{detail.website}
 
             div.hospital-intro
                 div.intro-title
                     h4 医院简介
                 hr
                 div.intro-content #{detail.description}
+                div.intro-title
+                    h4 医院地图
+                hr
+                div.hospital-map
+                    lbs-map
+                        lbs-poi(name="奎科科技大厦")
 
         div#reserve.tab-pane.fade(role="tabpanel")
             table.table#select-department
@@ -91,6 +97,19 @@ block site-content
             script.
 
                 $(document).ready(function() {
+
+
+                    $.ajax({
+                        type: "GET",
+                        url: "http://api.map.baidu.com/geocoder/v2/?output=json&ak=pZFhoaCvZGuO14AmE2f0Xkon&address=人民广场",
+                        data: {
+                            ak: "pZFhoaCvZGuO14AmE2f0Xkon",
+                            output: "json",
+                            address: "#{detail.address}"
+                        }
+                    }).done(function(data) {
+                        console.log(data);
+                    });
 
                     $("#select-department a").click(function() {
                         var selection = $(this).html();

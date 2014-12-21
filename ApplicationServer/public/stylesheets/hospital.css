@@ -44,6 +44,14 @@
     color: #5CA945;
 }
 
+.hospital-intro>.intro-content {
+    margin-bottom: 40px;
+}
+
+.hospital-intro>.hospital-map {
+    height: 400px;
+}
+
 .table {
     border: 1px solid #e4e4e4;
     text-align: center;
