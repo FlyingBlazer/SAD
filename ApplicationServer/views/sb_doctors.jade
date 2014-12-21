@@ -161,19 +161,23 @@ block content
 
       div#panel-add.tab-pane.fade
          h3 添加医生
-         form(method='post', action='/backstage/api/add/doctor', id='add-doctor')
+
+         form#alt-form
             .form-group
                .prompt
-                  label(for='name') 姓名
+                  label(for='dname') 姓名
                .control
-                  input#name.form-control(name='name', required, type='text')
+                  input#dname.form-control(name='dname', required, type='text')
 
+         form
             .form-group
-               .prompt: label(for='picture') 照片
+               .prompt
+                  label(for='picture') 照片
                .control
                   input#picture(type='text', name='photo', hidden, required)
                   #fileuploader 上传照片
 
+         form(method='post', action='/backstage/api/add/doctor', id='add-doctor')
             .form-group
                .prompt
                   label(for='departmentId') 所属科室
@@ -295,6 +299,7 @@ block content
 
             input(type='hidden', name='hospitalId', id='hospital-id' value='#{hospitalId}')
             input(type='hidden', name='timeSlots', id='time-slots', value='')
+            input(type='hidden', name='name', id='name', value='')
             button.button.submit-button.green-button.button-with-icon(type='submit')
                i.fa.fa-plus
                | &nbsp;添加医生
@@ -337,6 +342,7 @@ block content
 
    script.
       $('#add-doctor').validate();
+      $('#alt-form').validate();
       var $cell = $('.time-slots .checkable');
       $cell.click(function() {
          $(this).toggleClass('checked');
@@ -364,7 +370,8 @@ block content
             timeSlots[row - 1][col - 1] = caps[col - 1];
          });
          $('#time-slots').val(JSON.stringify(timeSlots));
-         return true;
+         $('#name').val($('#dname').val());
+         return $('#dname').valid();
       });
 
    script(src='/javascripts/jquery.uploadfile.min.js')
