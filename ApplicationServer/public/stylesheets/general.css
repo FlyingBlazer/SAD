@@ -109,5 +109,6 @@ body {
 .table>thead>tr>td,
 .table>tbody>tr>td,
 .table>tfoot>tr>td {
+    text-align: center;
     vertical-align: middle;
 }

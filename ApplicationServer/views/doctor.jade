@@ -13,40 +13,63 @@ block breadcrumb
     li #{detail.department}
     li.active #{detail.name}
 
+block header-content-extra
+    h1.doctor-name #{detail.name}
+    label.doctor-title #{detail.title}
+
 block site-content
     link(href="/stylesheets/doctor.css", rel="stylesheet", media="all")
 
     div#site-content
 
-        table#timetable.table
-            tr#date
-                each time in detail.time_slots
-                    th
-                        | #{time.date.month}/#{time.date.date}
-                        br
-                        | #{time.date.day}
-            tr#morning
-                each time in detail.time_slots
-                    td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}", data-day="#{time.date.day}")
-                        if time.slot.morning
-                            a(href="#") 预约
-                        else
-                            | -
-            tr#afternoon
-                each time in detail.time_slots
-                    td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}", data-day="#{time.date.day}")
-                        if time.slot.afternoon
-                            a(href="#") 预约
-                        else
-                            | -
-            tr#evening
-                each time in detail.time_slots
-                    td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}", data-day="#{time.date.day}")
-                        if time.slot.evening
-                            a(href="#") 预约
-                        else
-                            | -
+        img.doctor-image
+        div.doctor-info
+            div.hospital
+                span.hospital-label 医院：
+                span.hospital-content #{detail.hospital}
+            div.department
+                span.department-label 科室：
+                span.department-content #{detail.department}
+            div.price
+                span.price-label 挂号费：
+                span.price-content #{detail.price}元
 
+        div.doctor-intro
+            div.intro-title
+                h4 医生简介
+            hr
+            div.intro-content #{detail.description}
+            div.intro-title
+                h4 预约时间表
+            hr
+            table#timetable.table
+                tr#date
+                    each time in detail.time_slots
+                        th
+                            | #{time.date.month}/#{time.date.date}
+                            br
+                            | #{time.date.day}
+                tr#morning
+                    each time in detail.time_slots
+                        td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}", data-day="#{time.date.day}")
+                            if time.slot.morning[0]
+                                a(href="#") 预约
+                            else
+                                | -
+                tr#afternoon
+                    each time in detail.time_slots
+                        td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}", data-day="#{time.date.day}")
+                            if time.slot.afternoon[0]
+                                a(href="#") 预约
+                            else
+                                | -
+                tr#evening
+                    each time in detail.time_slots
+                        td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}", data-day="#{time.date.day}")
+                            if time.slot.evening[0]
+                                a(href="#") 预约
+                            else
+                                | -
 
         form#post-form.hidden(method="POST", action="/concierge/reserve-confirm")
             input(name="hospitalId", value="#{hospitalId}")

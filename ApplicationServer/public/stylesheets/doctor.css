@@ -1,3 +1,55 @@
-th, td {
-    text-align: center;
+.doctor-name {
+    display: inline-block;
+    margin-top: 10px;
+    float: left;
+}
+
+.doctor-title {
+    display: inline-block;
+    margin-left: 15px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-top: 15px;
+    margin-bottom: 35px;
+    line-height: 29px;
+    background-color: #ffeed1;
+    color: #f0920a;
+}
+
+.doctor-image {
+    display: inline-block;
+    width: 200px;
+    height: 150px;
+}
+
+.doctor-info {
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 20px;
+}
+
+.doctor-info>.hospital>.hospital-label,
+.doctor-info>.department>.department-label,
+.doctor-info>.price>.price-label {
+    color: #888888;
+}
+
+.doctor-intro {
+    margin-top: 20px;
+    border: 1px solid #eeeeee;
+    padding: 15px;
+}
+
+.doctor-intro>.intro-title {
+    color: #5CA945;
+}
+
+.doctor-intro>.intro-content {
+    margin-bottom: 40px;
+}
+
+.table>thead>tr>th,
+.table>tbody>tr>th,
+.table>tfoot>tr>th {
+    border-top: none;
 }
