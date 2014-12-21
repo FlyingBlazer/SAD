@@ -111,11 +111,6 @@ html
             when 'cp_wrong_credential'
                span#errMsg(style='display:hidden') 原密码错误
 
-         script.
-            $(function() {
-               toastr.error($('#errMsg').text(), '错误');
-            });
-
       if locals.msgType = 'success'
          case message
             when 'cpcomplete'
@@ -124,9 +119,13 @@ html
                span#sucMsg(style='display:hidden') 添加医院成功
             when 'adcomplete'
                span#sucMsg(style='display:hidden') 添加科室成功
-            when 'adcomplete'
+            when 'aecomplete'
                span#sucMsg(style='display:hidden') 添加医生成功
-         script.
-            $(function() {
+
+      script.
+         $(function() {
+            if ($('#errMsg').text())
+               toastr.error($('#errMsg').text(), '错误');
+            if ($('#sucMsg').text())
                toastr.success($('#sucMsg').text(), '成功');
-            });
+         });

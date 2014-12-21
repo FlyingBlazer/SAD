@@ -513,7 +513,7 @@ exports.addDoctor = function (request, response) {
                     }
                 });
         } else {
-            printLogMessage('fail:' + result);
+            printLogMessage('fail:' + result.message);
             response.redirect('/backstage/doctors/' + getCurrentTimeInSeconds() + '/fail/unknown');
         }
     });
