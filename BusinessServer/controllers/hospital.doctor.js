@@ -31,6 +31,7 @@ exports.list = function(req, res, next) {
 exports.add = function(req, res, next) {
     req.models.department.get(req.body.departmentId, function(err, department) {
         if(err && err.message != 'Not found') return next(err);
+        if(!department) return next(new Errors.DepartmentNotExist("Department with id %s not exist", req.body.departmentId));
         req.models.doctor.create({
             name: req.body.name,
             photo: req.body.photo,
