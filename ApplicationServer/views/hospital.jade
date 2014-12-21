@@ -74,7 +74,7 @@ block site-content
                         a(href="#") 实习医生
 
             div.department-list
-                each department in doctors
+                each department, department_id in doctors
                     div.department(data-name="#{department[0].department}")
                         each doctor in department
                             div.doctor
