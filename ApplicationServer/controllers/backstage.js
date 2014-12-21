@@ -410,6 +410,8 @@ exports.addHospital = function (request, response) {
 
     var requestBody = request.body;
 
+    printLogMessage('addHospital:' + JSON.stringify(requestBody));
+
     var data = {
         name: requestBody.name,
         level: requestBody.level,
@@ -420,6 +422,7 @@ exports.addHospital = function (request, response) {
         website: requestBody.website,
         description: requestBody.description
     };
+    printLogMessage('data:' + JSON.stringify(data));
 
     var path = '/hospital/hospital/add';
     forwardRequestPOST(data, path, function (result) {
@@ -483,8 +486,9 @@ exports.addDoctor = function (request, response) {
         title: requestBody.title,
         price: requestBody.price
     };
-
+    printLogMessage('data:' + JSON.stringify(data));
     var timeSlots = requestBody.timeSlots;
+    printLogMessage('timeSlots:' + JSON.stringify(timeSlots));
 
     var path = '/hospital/doctor/add';
     forwardRequestPOST(data, path, function (result) {
@@ -498,7 +502,8 @@ exports.addDoctor = function (request, response) {
                     week: timeSlots,
                     adminId: adminId
                 },
-                addTimeSlotsPath, function (feedback) {
+                addTimeSlotsPath,
+                function (feedback) {
                     if (feedback.code == 0) {
                         response.redirect('/backstage/doctors/' + getCurrentTimeInSeconds() + '/success/complete');
                     } else {
@@ -506,6 +511,7 @@ exports.addDoctor = function (request, response) {
                     }
                 });
         } else {
+            printLogMessage('fail:' + request.message);
             response.redirect('/backstage/doctors/' + getCurrentTimeInSeconds() + '/fail/unknown');
         }
     });
