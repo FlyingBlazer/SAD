@@ -2,7 +2,7 @@
  * Created by renfei on 14/12/6.
  */
 
-var queryString = require('querystring');
+var qs = require('qs');
 var url = require('url');
 var http = require('http');
 var settings = require('../../settings');
@@ -75,7 +75,7 @@ exports.onLogin = function (request, response) {
 
     //TODO dummy implementation
     setCookie(response, username, '5', '1', 'hospital name', businessServerInfo);
-    printLogMessage('cookie : ' + JSON.stringify(getCookie(request)));
+    //printLogMessage('cookie : ' + JSON.stringify(getCookie(request)));
     var redirectPath = '/backstage';
     response.redirect(redirectPath);
     return;
@@ -150,7 +150,7 @@ exports.changePassword = function (request, response) {
             message: isNullOrUndefined(message) ? '' : message
         };
 
-        printLogMessage(JSON.stringify(params));
+        //printLogMessage(JSON.stringify(params));
 
         response.render('sb_changePassword', params);
     }
@@ -207,7 +207,7 @@ exports.hospitals = function (request, response) {
                 var msgType = request.params.msgType;
                 var message = request.params.message;
 
-                printLogMessage('hospitals:' + JSON.stringify(result.hospitals));
+                //printLogMessage('hospitals:' + JSON.stringify(result.hospitals));
 
                 var params = {
                     username: getCookie(request).username,
@@ -223,7 +223,7 @@ exports.hospitals = function (request, response) {
 
                 response.render('sb_hospitals', params);
             } else {
-                printLogMessage(result.message);
+                printLogMessage(result);
             }
         };
 
@@ -279,7 +279,7 @@ exports.departments = function (request, response) {
  */
 exports.doctors = function (request, response) {
 
-    printLogMessage('cookie:' + JSON.stringify(getCookie(request)));
+    //printLogMessage('cookie:' + JSON.stringify(getCookie(request)));
 
     if (!getCookie(request).username)
         response.redirect('/backstage/login');
@@ -292,11 +292,11 @@ exports.doctors = function (request, response) {
             //获取科室信息和医生信息
             retrieveDepartmentList(hospitalId, function (departments_list) {
 
-                printLogMessage('department_list: ' + JSON.stringify(departments_list));
+                //printLogMessage('department_list: ' + JSON.stringify(departments_list));
 
                 retrieveDoctorList(hospitalId, function (doctors) {
 
-                    printLogMessage('doctors: ' + JSON.stringify(doctors));
+                    //printLogMessage('doctors: ' + JSON.stringify(doctors));
                     var doctorListData = [];
                     for (doctor in doctors) {
                         for (item in doctors[doctor]) {
@@ -336,8 +336,8 @@ exports.doctors = function (request, response) {
 exports.reservations = function (request, response) {
 
     //TODO dummy implementation
-    printLogMessage('1');
-    printLogMessage(JSON.stringify(getCookie(request)));
+    //printLogMessage('1');
+   // printLogMessage(JSON.stringify(getCookie(request)));
     var param = {
         username: getCookie(request).username,
         userId: getCookie(request).userId,
@@ -372,9 +372,9 @@ exports.reservations = function (request, response) {
                 "user_sid": "12010319921000100X"
             }]
     };
-    printLogMessage(2);
+    //printLogMessage(2);
     response.render('sb_reservations', param);
-    printLogMessage(3);
+    //printLogMessage(3);
     return;
 
 
@@ -394,7 +394,7 @@ exports.reservations = function (request, response) {
                     list: result.reservations
                 });
             } else {
-                printLogMessage(result.message);
+                printLogMessage(result);
             }
         });
     }
@@ -410,7 +410,7 @@ exports.addHospital = function (request, response) {
 
     var requestBody = request.body;
 
-    printLogMessage('addHospital:' + JSON.stringify(requestBody));
+    //printLogMessage('addHospital:' + JSON.stringify(requestBody));
 
     var data = {
         name: requestBody.name,
@@ -422,12 +422,12 @@ exports.addHospital = function (request, response) {
         website: requestBody.website,
         description: requestBody.description
     };
-    printLogMessage('data:' + JSON.stringify(data));
+    //printLogMessage('data:' + JSON.stringify(data));
 
     var path = '/hospital/hospital/add';
     forwardRequestPOST(data, path, function (result) {
 
-        printLogMessage('add hospital: ' + result.message);
+        //printLogMessage('add hospital: ' + result.message);
 
         if (result.code == 0) {
             response.redirect('/backstage/manage-hospitals/' + getCurrentTimeInSeconds() + '/success/complete');
@@ -445,7 +445,7 @@ exports.addHospital = function (request, response) {
  */
 exports.addDepartment = function (request, response) {
     var requestBody = request.body;
-    printLogMessage('add department: ' + JSON.stringify(requestBody));
+    //printLogMessage('add department: ' + JSON.stringify(requestBody));
 
     var data = {
         name: requestBody.name,
@@ -453,7 +453,7 @@ exports.addDepartment = function (request, response) {
         phone: requestBody.telephone,
         description: requestBody.description
     };
-    printLogMessage('data:' + JSON.stringify(data));
+    //printLogMessage('data:' + JSON.stringify(data));
 
     var path = '/hospital/department/add';
     forwardRequestPOST(data, path, function (result) {
@@ -474,26 +474,25 @@ exports.addDepartment = function (request, response) {
 exports.addDoctor = function (request, response) {
     var requestBody = request.body;
 
-    printLogMessage('add doctor:' + JSON.stringify(requestBody));
+    //printLogMessage('add doctor:' + JSON.stringify(requestBody));
 
     var data = {
         name: requestBody.name,
         hospitalId: requestBody.hospitalId,
         departmentId: requestBody.departmentId,
-        //photo: requestBody.photo,
-        photo: '',//TODO pending
+        photo: requestBody.photo,
         description: requestBody.description,
         title: requestBody.title,
         price: requestBody.price
     };
-    printLogMessage('data:' + JSON.stringify(data));
-    var timeSlots = requestBody.timeSlots;
-    printLogMessage('timeSlots:' + JSON.stringify(timeSlots));
+    //printLogMessage('data:' + JSON.stringify(data));
+    var timeSlots = JSON.parse(requestBody.timeSlots.toString());
+    //printLogMessage('timeSlots:' + JSON.stringify(timeSlots));
 
     var path = '/hospital/doctor/add';
     forwardRequestPOST(data, path, function (result) {
         if (result.code == 0) {
-            printLogMessage('add doctor: success');
+            //printLogMessage('add doctor: success');
             //添加排班信息
             var doctor_id = result.doctor_id;
             var adminId = getCookie(request).userId;
@@ -502,11 +501,11 @@ exports.addDoctor = function (request, response) {
                 adminId: adminId
             };
             var addTimeSlotsPath = '/hospital/doctor/' + doctor_id + '/working/week/add';
-            printLogMessage('addTimeSlotsData:' + JSON.stringify(addTimeSlotsData));
+            //printLogMessage('addTimeSlotsData:' + JSON.stringify(addTimeSlotsData));
 
             forwardRequestPOST(addTimeSlotsData, addTimeSlotsPath,
                 function (feedback) {
-                    printLogMessage(feedback.message);
+                    printLogMessage(feedback);
                     if (feedback.code == 0) {
                         response.redirect('/backstage/doctors/' + getCurrentTimeInSeconds() + '/success/complete');
                     } else {
@@ -514,7 +513,7 @@ exports.addDoctor = function (request, response) {
                     }
                 });
         } else {
-            printLogMessage('fail:' + result.message);
+            printLogMessage('fail:' + result);
             response.redirect('/backstage/doctors/' + getCurrentTimeInSeconds() + '/fail/unknown');
         }
     });
@@ -535,7 +534,7 @@ exports.editSchedule = function (request, response) {
 
     var doctorInfoCallback = function (doctorInfo) {
 
-        printLogMessage('doctorInfo:' + JSON.stringify(doctorInfo));
+        //printLogMessage('doctorInfo:' + JSON.stringify(doctorInfo));
 
         retrieveDoctorSchedule(doctorId, adminId, function (schedule) {
             if (schedule.code == 0) {
@@ -553,7 +552,7 @@ exports.editSchedule = function (request, response) {
                 };
                 response.render('sb_edit-schedule', params);
             } else {
-                printLogMessage(schedule.message);
+                printLogMessage(schedule);
             }
         });
     };
@@ -580,11 +579,11 @@ exports.users = function (request, response) {
                 list: result.users.validating
             };
 
-            printLogMessage(JSON.stringify(result.users));
+            //printLogMessage(JSON.stringify(result.users));
 
             response.render('sb_users', params);
         } else {
-            printLogMessage(result.message);
+            printLogMessage(result);
         }
     });
 };
@@ -648,7 +647,7 @@ function clearCookie(response) {
  * @param callback 业务服务器返回的结果(JSON Object)
  */
 function forwardRequestPOST(data, path, callback) {
-    forwardRequest('POST', path, queryString.stringify(data), callback);
+    forwardRequest('POST', path, qs.stringify(data), callback);
 }
 
 /**
@@ -669,6 +668,9 @@ function forwardRequestGET(path, callback) {
  * @param callback 参数为返回的结果(JSON Object)
  */
 function forwardRequest(method, path, data, callback) {
+    console.error('### PATH ### ' + path);
+    console.error('### DATA ### ' + data);
+    console.error('## METHOD ## ' + method);
     var options;
     if (method == 'GET')
         options = {
@@ -740,7 +742,7 @@ function retrieveDepartmentList(hospitalId, callback) {
         if (result.code == 0) {
             callback(result.departments_list);
         } else {
-            printLogMessage(result.message);
+            printLogMessage(result);
         }
     };
 
@@ -755,10 +757,10 @@ function retrieveDepartmentList(hospitalId, callback) {
 function retrieveDoctorList(hospitalId, callback) {
     var handler = function (result) {
         if (result.code == 0) {
-            printLogMessage('result:' + JSON.stringify(result));
+            //printLogMessage('result:' + JSON.stringify(result));
             callback(result.doctors);
         } else
-            printLogMessage(result.message);
+            printLogMessage(result);
     };
 
     forwardRequestGET('/hospital/doctor/list?hospitalId=' + hospitalId, handler);
@@ -773,7 +775,7 @@ function retrieveDoctorList(hospitalId, callback) {
 function retrieveDoctorInfo(doctorId, callback) {
     var path = '/hospital/doctor/' + doctorId + '/detail';
     forwardRequestGET(path, function (result) {
-        printLogMessage('retrieveDoctorInfo:' + JSON.stringify(result));
+        //printLogMessage('retrieveDoctorInfo:' + JSON.stringify(result));
         var doctorInfo = {
             id: result.id,
             name: result.name,
@@ -792,7 +794,7 @@ function retrieveDoctorInfo(doctorId, callback) {
  */
 function retrieveDoctorSchedule(doctorId, adminId, callback) {
     var path = '/hospital/doctor/' + doctorId + '/working/getraw?adminId=' + adminId;
-    printLogMessage('path=' + path);
+    //printLogMessage('path=' + path);
     forwardRequestGET(path, callback);
 }
 

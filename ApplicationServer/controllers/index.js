@@ -6,5 +6,6 @@ module.exports = {
     home: require('./home'),
     user: require('./user'),
     reservation: require('./reservation'),
-    backstage: require('./backstage')
+    backstage: require('./backstage'),
+    upload: require('./upload')
 };

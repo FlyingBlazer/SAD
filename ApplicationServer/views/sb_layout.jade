@@ -1,33 +1,34 @@
 doctype html
 html
    head
-      meta(charset='utf-8')
-      meta(http-equiv='X-UA-Compatible', content='IE=EDGE')
-      link(rel='stylesheet', href='/backstage/css/reset.css', media='all')
-      link(rel='stylesheet', href='/backstage/css/font-awesome.css', media='all')
-      link(rel='stylesheet', href='/backstage/plugins/toastr-notifications/toastr.css', media='all')
-      link(rel='stylesheet', href='/backstage/plugins/icheck/grey.css', media='all')
-      link(rel='stylesheet', href='/backstage/plugins/select2/select2.css', media='all')
-      link(rel='stylesheet', href='/backstage/css/select2-custom.css', media='all')
-      link(rel='stylesheet', href='/backstage/css/table.css', media='all')
-      link(rel='stylesheet', href='/backstage/css/editable.css', media='all')
-      link(rel='stylesheet', href='/backstage/css/tab.css', media='all')
-      link(rel='stylesheet', href='/backstage/css/components.css', media='all')
-      link(rel='stylesheet', href='/backstage/css/admin.css', media='all')
-      script(src='/backstage/plugins/jquery/jquery-2.1.1.min.js')
-      script(src='/backstage/plugins/jquery-validation/jquery.validate.min.js')
-      script(src='/backstage/plugins/jquery-validation/additional-methods.min.js')
-      script(src='/backstage/plugins/jquery-validation/messages_zh.js')
-      script(src='/backstage/plugins/toastr-notifications/toastr.min.js')
-      script(src='/backstage/plugins/icheck/icheck.min.js')
-      script(src='/backstage/plugins/select2/select2.min.js')
-      script(src='/backstage/plugins/select2/select2_locale_zh-CN.js')
-      script(src='/backstage/plugins/datatables/js/jquery.dataTables.min.js')
-      script(src='/backstage/plugins/datatables/js/dataTables.bootstrap.js')
-      script(src='/backstage/plugins/bootstrap/bootstrap.min.js')
-      script(src='/backstage/plugins/bootstrap3-editable/js/bootstrap-editable.js')
-      script(src='/backstage/plugins/bootstrap3-editable/js/bootstrap-datepicker.js')
-      script(src='/backstage/plugins/bootstrap3-editable/js/bootstrap-datepicker.zh-CN.js')
+      block head
+         meta(charset='utf-8')
+         meta(http-equiv='X-UA-Compatible', content='IE=EDGE')
+         link(rel='stylesheet', href='/backstage/css/reset.css', media='all')
+         link(rel='stylesheet', href='/backstage/css/font-awesome.css', media='all')
+         link(rel='stylesheet', href='/backstage/plugins/toastr-notifications/toastr.css', media='all')
+         link(rel='stylesheet', href='/backstage/plugins/icheck/grey.css', media='all')
+         link(rel='stylesheet', href='/backstage/plugins/select2/select2.css', media='all')
+         link(rel='stylesheet', href='/backstage/css/select2-custom.css', media='all')
+         link(rel='stylesheet', href='/backstage/css/table.css', media='all')
+         link(rel='stylesheet', href='/backstage/css/editable.css', media='all')
+         link(rel='stylesheet', href='/backstage/css/tab.css', media='all')
+         link(rel='stylesheet', href='/backstage/css/components.css', media='all')
+         link(rel='stylesheet', href='/backstage/css/admin.css', media='all')
+         script(src='/backstage/plugins/jquery/jquery-2.1.1.min.js')
+         script(src='/backstage/plugins/jquery-validation/jquery.validate.min.js')
+         script(src='/backstage/plugins/jquery-validation/additional-methods.min.js')
+         script(src='/backstage/plugins/jquery-validation/messages_zh.js')
+         script(src='/backstage/plugins/toastr-notifications/toastr.min.js')
+         script(src='/backstage/plugins/icheck/icheck.min.js')
+         script(src='/backstage/plugins/select2/select2.min.js')
+         script(src='/backstage/plugins/select2/select2_locale_zh-CN.js')
+         script(src='/backstage/plugins/datatables/js/jquery.dataTables.min.js')
+         script(src='/backstage/plugins/datatables/js/dataTables.bootstrap.js')
+         script(src='/backstage/plugins/bootstrap/bootstrap.min.js')
+         script(src='/backstage/plugins/bootstrap3-editable/js/bootstrap-editable.js')
+         script(src='/backstage/plugins/bootstrap3-editable/js/bootstrap-datepicker.js')
+         script(src='/backstage/plugins/bootstrap3-editable/js/bootstrap-datepicker.zh-CN.js')
 
    body
       header#masthead.site-header
@@ -85,7 +86,7 @@ html
             "showMethod": "fadeIn",
             "hideMethod": "fadeOut"
          };
-         $(document).ready(function () {
+         $(function() {
             $('input').iCheck({
                checkboxClass: 'icheckbox_minimal-grey',
                radioClass: 'iradio_minimal-grey'
