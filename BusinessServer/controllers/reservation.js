@@ -63,7 +63,6 @@ exports.add = function(req, res, next) {
     var adepartment_id=req.body.department_id;
     var adoctor_id=req.body.doctor_id;
     var adate=req.body.date;
-    var aggdate='%'+adate.substr(8,2);
     var aweeknum=(function() {
         switch(req.body.week) {
             case '星期一':
@@ -83,11 +82,10 @@ exports.add = function(req, res, next) {
         }
     })();
     var aperiod=req.body.period == 'morning' ? 1 : (req.body.period == 'afternoon' ? 2 : 3);
-    var afrequency1="00000000";
-    var afrequency2="10000000";
+    var afrequency1="01000000";
     var afrequency3="2_______";
-    var afrequency4="30000000";
     afrequency3 = afrequency3.replaceAt(aweeknum, '1');
+    var weeklist=["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
     req.models.user.get(auser_id,function(err,user){
         if(err && err.message != 'Not found') return next(err);
         if(!user) return next(new Errors.ReservationUserInvalidFailure('User Not Exist!'));
@@ -101,20 +99,17 @@ exports.add = function(req, res, next) {
                 function(err,data){
                     if(err) return next(err);
                     if(!data) return next(new Errors.ReservationErrorFailure('Database Error!'));
-                    var weeklist=["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
-                    req.db.driver.execQuery("SELECT "+weeklist[aweeknum-1]+",price "+
-                        "FROM working,doctor,frequency "+
+                    req.db.driver.execQuery("SELECT "+weeklist[aweeknum-1]+", price, frequency "+
+                        "FROM working,doctor "+
                         "WHERE doctor_id=doctor.id "+
                         "AND doctor_id=? "+
                         "AND period=? "+
-                        "AND (frequency=? "+
-                        "OR frequency=? "+
-                        "OR (frequency=? AND date like ?) "+
-                        "OR frequency like ?) LIMIT 1",
-                        [adoctor_id,aperiod,afrequency1,afrequency2,afrequency4,aggdate,afrequency3],
+                        "AND ((frequency=? AND date=?) "+
+                        "OR (frequency like ?)) LIMIT 1",
+                        [adoctor_id,aperiod,afrequency1,adate,afrequency3],
                         function(err,data1){
                             if(err && err.message != 'Not found') return next(err);
-                            if(!data1) return next(new Errors.ReservationPeriodFailure('No Such Working Period!'));
+                            if(!data1 || data1.length==0) return next(new Errors.ReservationPeriodFailure('No Such Working Period!'));
                             var total_app=0;
                             if(data1.length>1){
                                 data1.forEach(function(w_data){
