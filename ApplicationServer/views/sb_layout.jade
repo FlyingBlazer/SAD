@@ -102,7 +102,7 @@ html
          });
 
    if locals.message
-      if locals.msgType = 'fail'
+      if locals.msgType == 'fail'
          case message
             when 'wrong_credentials'
                span#errMsg(style='display:hidden') 用户名或密码错误
@@ -111,7 +111,7 @@ html
             when 'cp_wrong_credential'
                span#errMsg(style='display:hidden') 原密码错误
 
-      if locals.msgType = 'success'
+      if locals.msgType == 'success'
          case message
             when 'cpcomplete'
                span#sucMsg(style='display:hidden') 修改密码成功
