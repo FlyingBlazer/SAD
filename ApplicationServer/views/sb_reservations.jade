@@ -51,7 +51,7 @@ block content
                      td #{item.price}
                      td
                         if (item.status.charAt(2)!='2')
-                          button.blue-button.xs-button.opnl-button(class='confirm',data-id='#{item.reservation_id}') 确认到场
+                          button.button.blue-button.xs-button.delete-hospital(class='confirm',data-id='#{item.reservation_id}') 确认到场
 
                         else
                           label  已到场
