@@ -234,7 +234,7 @@ block site-content
             var checkEmail = true;
             var checkEULA = true;
 
-            $(".form-control").each(function() {
+            $(".form-group .form-control").each(function() {
                 if ($(this).val() == "") {
                     checkCompletion = false;
                     $(this).parents(".form-group").addClass("has-warning");
