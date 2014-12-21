@@ -14,7 +14,7 @@ html
         h1.site-title(style='color:white') SRF 管理后台
         .content
             h2 登陆账户
-            if false
+            if locals.message = 'wrong_credentials'
                div.error 用户名或密码错误。
 
             form(method='POST')
