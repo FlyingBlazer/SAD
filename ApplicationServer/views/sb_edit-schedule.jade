@@ -27,33 +27,33 @@ block content
                td.tcell(data-plus-day='6')
             tr
                td.title 上午
-               td.cell(data-row='1', data-col='1')= schedule.week[0][0]
-               td.cell(data-row='2', data-col='1')= schedule.week[1][0]
-               td.cell(data-row='3', data-col='1')= schedule.week[2][0]
-               td.cell(data-row='4', data-col='1')= schedule.week[3][0]
-               td.cell(data-row='5', data-col='1')= schedule.week[4][0]
-               td.cell(data-row='6', data-col='1')= schedule.week[5][0]
-               td.cell(data-row='7', data-col='1')= schedule.week[6][0]
+               td.cell(data-row='1', data-col='1')
+               td.cell(data-row='2', data-col='1')
+               td.cell(data-row='3', data-col='1')
+               td.cell(data-row='4', data-col='1')
+               td.cell(data-row='5', data-col='1')
+               td.cell(data-row='6', data-col='1')
+               td.cell(data-row='7', data-col='1')
 
             tr
                td.title 下午
-               td.cell(data-row='1', data-col='2')= schedule.week[0][1]
-               td.cell(data-row='2', data-col='2')= schedule.week[1][1]
-               td.cell(data-row='3', data-col='2')= schedule.week[2][1]
-               td.cell(data-row='4', data-col='2')= schedule.week[3][1]
-               td.cell(data-row='5', data-col='2')= schedule.week[4][1]
-               td.cell(data-row='6', data-col='2')= schedule.week[5][1]
-               td.cell(data-row='7', data-col='2')= schedule.week[6][1]
+               td.cell(data-row='1', data-col='2')
+               td.cell(data-row='2', data-col='2')
+               td.cell(data-row='3', data-col='2')
+               td.cell(data-row='4', data-col='2')
+               td.cell(data-row='5', data-col='2')
+               td.cell(data-row='6', data-col='2')
+               td.cell(data-row='7', data-col='2')
 
             tr
                td.title 晚上
-               td.cell(data-row='1', data-col='3')= schedule.week[0][2]
-               td.cell(data-row='2', data-col='3')= schedule.week[1][2]
-               td.cell(data-row='3', data-col='3')= schedule.week[2][2]
-               td.cell(data-row='4', data-col='3')= schedule.week[3][2]
-               td.cell(data-row='5', data-col='3')= schedule.week[4][2]
-               td.cell(data-row='6', data-col='3')= schedule.week[5][2]
-               td.cell(data-row='7', data-col='3')= schedule.week[6][2]
+               td.cell(data-row='1', data-col='3')
+               td.cell(data-row='2', data-col='3')
+               td.cell(data-row='3', data-col='3')
+               td.cell(data-row='4', data-col='3')
+               td.cell(data-row='5', data-col='3')
+               td.cell(data-row='6', data-col='3')
+               td.cell(data-row='7', data-col='3')
 
          div#temps(style='display:hidden')
             each record in schedule.temp
@@ -83,24 +83,31 @@ block content
                Date.prototype[proc2].call(date, value + count);
                return date;
             }
+            var schedule = !{decodeURI(JSON.stringify(schedule.week))};
             var dates = [];
             for (var i = 0; i < 7; ++i) {
                dates[i] = shiftDate(new Date(), 'Date', i);
             }
-            $('.cell').each(function(index, element) {
-               var row = $(element).data('row');
-               var col = $(element).data('col');
-
-               $(element).data('period', col);
-               $(element).attr('data-period', col);
-               $(element).data('date', dates[row - 1].yyyy_mm_dd());
-               $(element).attr('data-date', dates[row - 1].yyyy_mm_dd());
-            });
+            // set titles
             $('.tcell').each(function(index, element) {
                var date = shiftDate(new Date(), 'Date', parseInt($(element).data('plus-day')));
                $(element).html(dayToChinese[date.getDay()] + '<br>' + date.yyyy_mm_dd());
             });
-            $('#temps').each(function(index, element) {
+            // set capacities
+            $('.cell').each(function(index, element) {
+               var row = $(element).data('row');
+               var col = $(element).data('col');
+               // set data- attributes
+               $(element).data('period', col);
+               $(element).attr('data-period', col);
+               $(element).data('date', dates[row - 1].yyyy_mm_dd());
+               $(element).attr('data-date', dates[row - 1].yyyy_mm_dd());
+               // set capacity
+               var day = dates[row - 1].getDay();
+               $(element).text(schedule[day == 0 ? 6 : day - 1][col - 1]);
+            });
+            // make adjustments
+            $('#temps span').each(function(index, element) {
                var date = $(element).data('date');
                var period = $(element).data('period');
                var capacity = $(element).data('capacity');

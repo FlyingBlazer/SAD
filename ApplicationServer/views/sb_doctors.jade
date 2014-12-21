@@ -296,10 +296,10 @@ block content
                   input#evening.form-control.inline(name='evening', type='number', value='0', required)
                   .note 详细的预约人数控制可以在添加医生之后设定。
 
-            input(type='hidden', name='hospitalId', id='hospital-id' value='#{hospitalId}')
-            input(type='hidden', name='timeSlots', id='time-slots', value='')
-            input(type='hidden', name='name', id='name', value='')
-            input#picture(type='text', name='photo', hidden, required)
+            input#hospital-id(type='hidden', name='hospitalId', value='#{hospitalId}')
+            input#time-slots(type='hidden', name='timeSlots', value='')
+            input#name(type='hidden', name='name', value='')
+            input#picture(type='hidden', name='photo', value='')
             button.button.submit-button.green-button.button-with-icon(type='submit')
                i.fa.fa-plus
                | &nbsp;添加医生
