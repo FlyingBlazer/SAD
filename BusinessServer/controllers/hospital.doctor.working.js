@@ -139,15 +139,15 @@ exports.updateWeek = function(req, res, next) {
             for(var i = 0 ; i < works.length ; i++) {
                 switch(works[i]['period']) {
                     case 0:
-                        workings[m_index].frequency = workings[m_index].frequency.replaceAt(works[i]['day'], works[i]['action']!=0 ? 1 : 0);
+                        workings[m_index].frequency = workings[m_index].frequency = workings[m_index].frequency.replaceAt(works[i]['day'], works[i]['action']!=0 ? 1 : 0);
                         workings[m_index].totalApp=works[i]['action'];
                         break;
                     case 1:
-                        workings[a_index].frequency = workings[a_index].frequency.replaceAt(works[i]['day'], works[i]['action']!=0 ? 1 : 0);
+                        workings[a_index].frequency = workings[a_index].frequency = workings[a_index].frequency.replaceAt(works[i]['day'], works[i]['action']!=0 ? 1 : 0);
                         workings[a_index].totalApp=works[i]['action'];
                         break;
                     case 2:
-                        workings[e_index].frequency = workings[e_index].frequency.replaceAt(works[i]['day'], works[i]['action']!=0 ? 1 : 0);
+                        workings[e_index].frequency = workings[e_index].frequency = workings[e_index].frequency.replaceAt(works[i]['day'], works[i]['action']!=0 ? 1 : 0);
                         workings[e_index].totalApp=works[i]['action'];
                         break;
                 }
