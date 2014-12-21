@@ -50,6 +50,18 @@ block site-content
                         lbs-poi(name="奎科科技大厦")
 
         div#reserve.tab-pane.fade(role="tabpanel")
+
+            div#select.hidden
+                | 您已选择：
+                span#select-item-department.select-item.hidden
+                    span.select-item-info
+                    span.select-item-close
+                        i.fa.fa-close
+                span#select-item-title.select-item.hidden
+                    span.select-item-info
+                    span.select-item-close
+                        i.fa.fa-close
+
             table.table#select-department
                 td.table-header(rowspan=100) 科室
                 - var col = 5;
@@ -94,10 +106,12 @@ block site-content
                                 div.reservation
                                     a.gbn.gbt-blue(href="/concierge/reserve/#{detail.id}/#{department_id}/#{doctor.id}") 挂号
 
+            div.empty.hidden
+                div.alert.alert-info 没有找到符合条件的结果，请尝试减少搜索条件
+
             script.
 
                 $(document).ready(function() {
-
 
                     $.ajax({
                         type: "GET",
@@ -111,27 +125,75 @@ block site-content
                         console.log(data);
                     });
 
+                    var departmentSelection = "";
+                    var titleSelection = "";
+
+                    function checkEmpty() {
+                        var empty = true;
+                        $(".doctor").each(function () {
+                            if (!$(this).parent(".department").hasClass("hidden") && !$(this).hasClass("hidden")) {
+                                empty = false;
+                            }
+                        });
+                        if (empty) {
+                            $(".empty").removeClass("hidden");
+                        } else {
+                            $(".empty").addClass("hidden");
+                        }
+                    }
+
                     $("#select-department a").click(function() {
-                        var selection = $(this).html();
+                        departmentSelection = $(this).html();
                         $(".department-list>.department").each(function() {
-                            if ($(this).data("name") != selection) {
+                            if ($(this).data("name") != departmentSelection) {
                                 $(this).addClass("hidden");
                             } else {
                                 $(this).removeClass("hidden");
                             }
                         });
+                        checkEmpty();
+                        $("#select-item-department .select-item-info").html(departmentSelection);
+                        $("#select-item-department").removeClass("hidden");
+                        $("#select").removeClass("hidden");
+                    });
 
-                        $("#select-title a").click(function() {
-                            var selection = $(this).html();
-                            $(".doctor").each(function() {
-                                console.log($(this).find(".title").html());
-                                if ($(this).find(".title").html() != selection) {
-                                    $(this).addClass("hidden");
-                                } else {
-                                    $(this).removeClass("hidden");
-                                }
-                            });
+                    $("#select-title a").click(function () {
+                        titleSelection = $(this).html();
+                        $(".doctor").each(function () {
+                            if ($(this).find(".title").html() != titleSelection) {
+                                $(this).addClass("hidden");
+                            } else {
+                                $(this).removeClass("hidden");
+                            }
                         });
+                        checkEmpty();
+                        $("#select-item-title>.select-item-info").html(titleSelection);
+                        $("#select-item-title").removeClass("hidden");
+                        $("#select").removeClass("hidden");
+                    });
+
+                    $("#select-item-department>.select-item-close").click(function () {
+                        departmentSelection = "";
+                        $(".department-list>.department").each(function() {
+                            $(this).removeClass("hidden");
+                        });
+                        checkEmpty();
+                        $("#select-item-department").addClass("hidden");
+                        if (titleSelection == "") {
+                            $("#select").addClass("hidden");
+                        }
+                    });
+
+                    $("#select-item-title>.select-item-close").click(function () {
+                        titleSelection = "";
+                        $(".doctor").each(function () {
+                            $(this).removeClass("hidden");
+                        });
+                        checkEmpty();
+                        $("#select-item-title").addClass("hidden");
+                        if (departmentSelection == "") {
+                            $("#select").addClass("hidden");
+                        }
                     });
 
                 });
