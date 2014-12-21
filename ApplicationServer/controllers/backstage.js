@@ -492,18 +492,21 @@ exports.addDoctor = function (request, response) {
 
     var path = '/hospital/doctor/add';
     forwardRequestPOST(data, path, function (result) {
-        if (result == 0) {
+        if (result.code == 0) {
+            printLogMessage('add doctor: success');
             //添加排班信息
             var doctor_id = result.doctor_id;
             var adminId = getCookie(request).userId;
+            var addTimeSlotsData = {
+                week: timeSlots,
+                adminId: adminId
+            };
             var addTimeSlotsPath = '/hospital/doctor/' + doctor_id + '/working/week/add';
+            printLogMessage('addTimeSlotsData:' + JSON.stringify(addTimeSlotsData));
 
-            forwardRequestPOST({
-                    week: timeSlots,
-                    adminId: adminId
-                },
-                addTimeSlotsPath,
+            forwardRequestPOST(addTimeSlotsData, addTimeSlotsPath,
                 function (feedback) {
+                    printLogMessage(feedback.message);
                     if (feedback.code == 0) {
                         response.redirect('/backstage/doctors/' + getCurrentTimeInSeconds() + '/success/complete');
                     } else {
@@ -511,7 +514,7 @@ exports.addDoctor = function (request, response) {
                     }
                 });
         } else {
-            printLogMessage('fail:' + request.message);
+            printLogMessage('fail:' + result.message);
             response.redirect('/backstage/doctors/' + getCurrentTimeInSeconds() + '/fail/unknown');
         }
     });
