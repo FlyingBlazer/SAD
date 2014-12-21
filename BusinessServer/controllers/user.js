@@ -94,16 +94,15 @@ exports.signUp = function(req, res, next) {
             });
         });
     }
-    req.models.user.find({name: username, isActivated: -1}, function(err, users) {
-        if(err && err.message != 'Not found') return next(err);
-        if(users.length>0) {
-            users.remove(function (err) {
+    req.models.user.one({name: username, isActivated: -1}, function(err, user) {
+        if(err && err.message != 'Not found') throw err;
+        if (!user) {
+            finish();
+        } else {
+            user.remove(function (err) {
                 if (err) throw err;
                 finish();
             });
-        }
-        else{
-            finish();
         }
     });
 
