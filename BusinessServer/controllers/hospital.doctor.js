@@ -246,6 +246,7 @@ exports.detail = function(req, res, next) {
                             slot[(6-adata.day+j)%7].slot[adata.period==1? 'morning': (adata.period==2 ? 'afternoon' : 'evening')][1] =adata.appnum;
                         });
                     }
+                    Console.log(slot);
                     finish();
             });
         });
