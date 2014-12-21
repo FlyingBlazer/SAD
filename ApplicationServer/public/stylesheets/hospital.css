@@ -24,7 +24,7 @@
 
 .hospital-info {
     display: inline-block;
-    vertical-align: top;
+    vertical-align: top !important;
     margin-left: 20px;
 }
 
@@ -52,6 +52,22 @@
     height: 400px;
 }
 
+#select {
+    margin-bottom: 15px;
+}
+
+#select>.select-item {
+    margin-left: 10px;
+    padding: 5px;
+    border: 1px solid #377bee;
+}
+
+#select>.select-item>.select-item-close {
+    margin-left: 10px;
+    color: #377bee;
+    cursor: pointer;
+}
+
 .table {
     border: 1px solid #e4e4e4;
     text-align: center;
@@ -74,19 +90,13 @@
 
 .doctor {
     border: 2px solid #dddddd;
-    border-bottom-color: transparent;
     padding: 10px;
+    height: 124px;
 }
 
 .doctor:hover {
+    border-bottom: 2px solid dodgerblue;
     border-color: dodgerblue;
-}
-
-.doctor>.image {
-    display: inline-block;
-    width: 100px;
-    height: 100px;
-    vertical-align: top;
 }
 
 .doctor:last-child {
@@ -97,125 +107,122 @@
     border-bottom-color: dodgerblue;
 }
 
+.doctor>.image {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    vertical-align: top;
+}
+
+.doctor>.doctor-info {
+    display: inline-block;
+    width: 100px;
+    vertical-align: top;
+    margin-left: 20px;
+}
+
+.doctor>.doctor-intro {
+    display: inline-block;
+    vertical-align: top;
+    width: 550px;
+    margin-left: 20px;
+}
+
 .doctor>.reservation {
     display: inline-block;
-    vertical-align: middle;
+    margin-left: 40px;
+    margin-top: 34px;
 }
 
-@media all and (min-width: 980px){
-    .doctor>.doctor-info {
-        display: inline-block;
-        width: 200px;
-        margin-left: 20px;
-    }
+/*@media all and (max-width: 980px){*/
+    /*.doctor>.doctor-info {*/
+        /*display: inline-block;*/
+        /*width: 120px;*/
+        /*margin-left: 20px;*/
+    /*}*/
 
-    .doctor>.doctor-intro {
-        display: inline-block;
-        width: 500px;
-        margin-left: 20px;
-    }
-}
+    /*.doctor>.doctor-intro {*/
+        /*display: inline-block;*/
+        /*width: 400px;*/
+        /*margin-left: 20px;*/
+    /*}*/
+/*}*/
 
-@media all and (max-width: 980px){
-    .doctor>.doctor-info {
-        display: inline-block;
-        width: 200px;
-        margin-left: 20px;
-    }
+/*@media all and (max-width: 850px){*/
+    /*.doctor>.doctor-info {*/
+        /*display: inline-block;*/
+        /*width: 150px;*/
+        /*margin-left: 20px;*/
+    /*}*/
 
-    .doctor>.doctor-intro {
-        display: inline-block;
-        width: 400px;
-        margin-left: 20px;
-    }
-}
+    /*.doctor>.doctor-intro {*/
+        /*display: inline-block;*/
+        /*width: 300px;*/
+        /*margin-left: 20px;*/
+    /*}*/
+/*}*/
 
-@media all and (max-width: 850px){
-    .doctor>.doctor-info {
-        display: inline-block;
-        width: 200px;
-        margin-left: 20px;
-    }
+/*@media all and (max-width: 750px){*/
+    /*.doctor>.doctor-info {*/
+        /*display: inline-block;*/
+        /*width: 150px;*/
+        /*margin-left: 20px;*/
+    /*}*/
 
-    .doctor>.doctor-intro {
-        display: inline-block;
-        width: 300px;
-        margin-left: 20px;
-    }
-}
+    /*.doctor>.doctor-intro {*/
+        /*display: inline-block;*/
+        /*width: 150px;*/
+        /*margin-left: 20px;*/
+    /*}*/
+/*}*/
 
-@media all and (max-width: 750px){
-    .doctor>.doctor-info {
-        display: inline-block;
-        width: 200px;
-        margin-left: 20px;
-    }
+/*@media all and (max-width: 608px){*/
+    /*.doctor>.doctor-info {*/
+        /*display: inline-block;*/
+        /*width: 150px;*/
+        /*margin-left: 20px;*/
+    /*}*/
 
-    .doctor>.doctor-intro {
-        display: inline-block;
-        width: 200px;
-        margin-left: 20px;
-    }
-}
+    /*.doctor>.doctor-intro {*/
+        /*display: inline-block;*/
+        /*width: 200px;*/
+        /*margin-left: 20px;*/
+    /*}*/
 
-@media all and (max-width: 608px){
-    .doctor>.doctor-info {
-        display: inline-block;
-        width: 200px;
-        margin-left: 20px;
-    }
+    /*.doctor>.reservation {*/
+        /*width: 100%;*/
+        /*margin-top: 10px;*/
+        /*text-align: center;*/
+        /*vertical-align: middle;*/
+    /*}*/
+/*}*/
 
-    .doctor>.doctor-intro {
-        display: inline-block;
-        width: 200px;
-        margin-left: 20px;
-    }
+/*@media all and (max-width: 543px){*/
+    /*.doctor>.image {*/
+        /*display: none;*/
+    /*}*/
 
-    .doctor>.reservation {
-        width: 100%;
-        margin-top: 10px;
-        text-align: center;
-        vertical-align: middle;
-    }
-}
+    /*.doctor>.doctor-info {*/
+        /*display: inline-block;*/
+        /*width: 100%;*/
+        /*margin-left: 20px;*/
+        /*margin-top: 10px;*/
+    /*}*/
 
-@media all and (max-width: 543px){
-    .doctor>.image {
-        display: none;
-    }
+    /*.doctor>.doctor-intro {*/
+        /*display: inline-block;*/
+        /*width: 100%;*/
+        /*margin-left: 20px;*/
+        /*margin-top: 10px;*/
+    /*}*/
 
-    .doctor>.doctor-info {
-        display: inline-block;
-        width: 100%;
-        margin-left: 20px;
-        margin-top: 10px;
-    }
-
-    .doctor>.doctor-intro {
-        display: inline-block;
-        width: 100%;
-        margin-left: 20px;
-        margin-top: 10px;
-    }
-
-    .doctor>.reservation {
-        width: 100%;
-        margin-top: 10px;
-        text-align: center;
-        vertical-align: 50%;
-    }
-}
-
-.gbt-blue {
-    background: #dff2ff;
-    color: #377bee;
-    transition: none
-}
-
-.gbt-blue:hover {
-    background: #377bee;
-    color: #fff
-}
+    /*.doctor>.reservation {*/
+        /*width: 100%;*/
+        /*margin-top: 10px;*/
+        /*text-align: center;*/
+        /*vertical-align: 50%;*/
+    /*}*/
+/*}*/
 
 .gbn {
     padding: 0 16px;
@@ -225,12 +232,21 @@
     font-size: 16px;
     font-weight: 400;
     line-height: 32px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
     border-radius: 3px;
     transition: all .3s ease-out 0s
 }
 
+.gbt-blue {
+    background: #dff2ff;
+    color: #377bee;
+    transition: none
+}
+
 .gbn:hover {
     text-decoration: none
+}
+
+.gbt-blue:hover {
+    background: #377bee;
+    color: #fff
 }
