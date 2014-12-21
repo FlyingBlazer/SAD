@@ -38,11 +38,6 @@ exports.login = function (request, response) {
     var message = request.params.message;
 
     var params = {
-        username: getCookie(request).username,
-        userId: getCookie(request).userId,
-        hospitalId: getCookie(request).hospitalId,
-        hospitalName: getCookie(request).hospitalName,
-        businessServer: getCookie(request).businessServer,
         initTimestamp: isNullOrUndefined(initTimestamp) ? '' : initTimestamp,
         msgType: isNullOrUndefined(msgType) ? '' : msgType,
         message: isNullOrUndefined(message) ? '' : message
@@ -71,15 +66,6 @@ exports.onLogin = function (request, response) {
     };
 
     printLogMessage('on login: username=' + username + '  password=' + password);
-
-
-    //TODO dummy implementation
-    setCookie(response, username, '5', '1', 'hospital name', businessServerInfo);
-    //printLogMessage('cookie : ' + JSON.stringify(getCookie(request)));
-    var redirectPath = '/backstage';
-    response.redirect(redirectPath);
-    return;
-
 
     var loginCallback = function (result) {
 

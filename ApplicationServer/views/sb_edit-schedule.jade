@@ -90,8 +90,12 @@ block content
             }
             // set titles
             $('.tcell').each(function(index, element) {
-               var date = shiftDate(new Date(), 'Date', parseInt($(element).data('plus-day')));
-               $(element).html(dayToChinese[date.getDay()] + '<br>' + date.yyyy_mm_dd());
+               var plusDay = parseInt($(element).data('plus-day'));
+               var date = shiftDate(new Date(), 'Date', plusDay);
+               if (plusDay == 0)
+                  $(element).html('今天' + '<br>' + date.yyyy_mm_dd());
+               else
+                  $(element).html(dayToChinese[date.getDay()] + '<br>' + date.yyyy_mm_dd());
             });
             // set capacities
             $('.cell').each(function(index, element) {
