@@ -83,16 +83,10 @@ exports.addWeek = function(req, res, next) {
         var morning = '20000000';
         var afternoon = '20000000';
         var evening = '20000000';
-        var morning_app = 0;
-        var afternoon_app = 0;
-        var evening_app = 0;
         for(var i = 0 ; i < 7 ; i++) {
             morning = morning.replaceAt(i + 1, new_working[i][0]!=0 ? 1 : 0);
             afternoon = afternoon.replaceAt(i + 1, new_working[i][1]!=0 ? 1 : 0);
             evening = evening.replaceAt(i + 1, new_working[i][2]!=0 ? 1 : 0);
-            morning_app=new_working[i][0]!=0 ? parseInt(new_working[i][0], 10) : morning_app;
-            afternoon_app=new_working[i][1]!=0 ? parseInt(new_working[i][1],10) : afternoon_app;
-            evening_app=new_working[i][2]!=0 ? parseInt(new_working[i][2], 10) : evening_app;
         }
 
         var date=new Date();
@@ -107,7 +101,13 @@ exports.addWeek = function(req, res, next) {
                 period: 1,
                 frequency: morning,
                 price : data[0]['price'],
-                totalApp: morning_app
+                monday : parseInt(new_working[0][0]),
+                tuesday: parseInt(new_working[1][0]),
+                wednesday: parseInt(new_working[2][0]),
+                thursday: parseInt(new_working[3][0]),
+                friday: parseInt(new_working[4][0]),
+                saturday: parseInt(new_working[5][0]),
+                sunday:parseInt(new_working[6][0])
             }, function(err, working) {
                 if(err && err.message != 'Not found') return next(err);
                 finish();
@@ -118,7 +118,13 @@ exports.addWeek = function(req, res, next) {
                 period: 2,
                 frequency: afternoon,
                 price : data[0]['price'],
-                totalApp: afternoon_app
+                monday : parseInt(new_working[0][1]),
+                tuesday: parseInt(new_working[1][1]),
+                wednesday: parseInt(new_working[2][1]),
+                thursday: parseInt(new_working[3][1]),
+                friday: parseInt(new_working[4][1]),
+                saturday: parseInt(new_working[5][1]),
+                sunday:parseInt(new_working[6][1])
             }, function(err, working) {
                 if(err && err.message != 'Not found') return next(err);
                 finish();
@@ -129,7 +135,13 @@ exports.addWeek = function(req, res, next) {
                 period: 3,
                 frequency: evening,
                 price : data[0]['price'],
-                totalApp: evening_app
+                monday : parseInt(new_working[0][2]),
+                tuesday: parseInt(new_working[1][2]),
+                wednesday: parseInt(new_working[2][2]),
+                thursday: parseInt(new_working[3][2]),
+                friday: parseInt(new_working[4][2]),
+                saturday: parseInt(new_working[5][2]),
+                sunday:parseInt(new_working[6][2])
             }, function(err, working) {
                 if(err && err.message != 'Not found') return next(err);
                 finish();
