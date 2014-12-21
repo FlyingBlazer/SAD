@@ -57,7 +57,6 @@ exports.getRaw = function(req, res, next) {
                         break;
                 }
             });
-            console.log(temp_stat);
             res.json({
                 code: 0,
                 message: 'success',
@@ -247,17 +246,23 @@ exports.deleteTemp = function(req, res, next) {
         var w_date = req.body.date;
         var w_period = req.body.period;
         req.db.driver.execQuery(
-            "SELECT id FROM working WHERE date=? AND period=? AND frequency LIKE '?' LIMIT 1",
-            [w_date, w_period, '0_000000'],
+            "SELECT id FROM working WHERE doctor_id=? AND date=? AND period=? AND frequency LIKE ? LIMIT 1",
+            [doctorId, w_date, w_period, '0_000000'],
             function (err, w_data) {
                 if (err && err.message != 'Not found') return next(err);
-                if (!w_data) {
+                if (!w_data||w_data.length==0) {
                     return next(new Errors.ArrangementNotExist("Temporary arrangement not exists!"));
                 }
-                req.models.working.remove({id: w_data[0]['id']}, function (err) {
-                    if (err) {
-                        throw err;
-                    }
+                req.db.driver.execQuery("DELETE FROM working WHERE id=?",
+                    [w_data[0].id],
+                    function (err) {
+                        if (err) {
+                            throw err;
+                        }
+                        res.json({
+                            code: 0,
+                            message: 'success'
+                        });
                 });
             });
     });
