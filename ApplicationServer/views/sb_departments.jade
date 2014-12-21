@@ -1,6 +1,3 @@
-//TODO 添加成功提示
-   删除成功未刷新
-
 extends ./sb_layout
 block content
    h2 科室管理
@@ -36,25 +33,6 @@ block content
                            i.fa.fa-trash 删除
 
          script.
-            $('#department-table').DataTable();
-            $('.delete-department').click(function() {
-               if (confirm('是否确定删除' + $(this).data('name') + '？')) {
-                  var departmentId = $(this).data('id');
-                  $.ajax({
-                     url: 'http://#{businessServer}/hospital/department/' + departmentId + '/delete',
-                     type: 'GET'
-                  }).done(function(data) {
-                     if (data.code == 0) {
-                        toastr.success('科室已经删除', '成功');
-                     } else {
-                        toastr.error('系统错误。错误代码：' + data.code, '删除失败');
-                     }
-                  }).error(function(jqXHR, textStatus, errorThrown) {
-                     toastr.error('系统发生致命错误 ' + textStatus + '。错误信息：' + errorThrown, '删除失败');
-                  });
-               }
-            });
-
             $('#panel-manage .description a.x-editable').each(function(index, element) {
                var departmentId = $(element).data('id');
                $(element).editable({
@@ -82,6 +60,27 @@ block content
                      }
                   }
                });
+            });
+
+            var dt = $('#department-table').DataTable();
+            $('.delete-department').click(function() {
+               var tr = $(this).parents('tr');
+               if (confirm('是否确定删除' + $(this).data('name') + '？')) {
+                  var departmentId = $(this).data('id');
+                  $.ajax({
+                     url: 'http://#{businessServer}/hospital/department/' + departmentId + '/delete',
+                     type: 'GET'
+                  }).done(function(data) {
+                     if (data.code == 0) {
+                        dt.row(tr).remove().draw();
+                        toastr.success('科室已经删除', '成功');
+                     } else {
+                        toastr.error('系统错误。错误代码：' + data.code, '删除失败');
+                     }
+                  }).error(function(jqXHR, textStatus, errorThrown) {
+                     toastr.error('系统发生致命错误 ' + textStatus + '。错误信息：' + errorThrown, '删除失败');
+                  });
+               }
             });
 
       div#panel-add.tab-pane.fade
@@ -112,6 +111,17 @@ block content
 
    script.
       $('#add-department').validate();
+      window.onload = function(){
+         var params = $(location).attr('pathname');
+         params = params.split('/');
+         if (params.length == 6) {
+            if (params[4] == 'success') {
+               toastr.success('科室已经添加', '成功');
+            } else if (params[4] == 'fail') {
+               toastr.error('科室添加失败，错误信息：' + params[5], '失败');
+            }
+         }
+      };
 
    style.
       .operation {
