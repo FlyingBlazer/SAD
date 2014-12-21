@@ -53,7 +53,7 @@ exports.addWeek = function(req, res, next) {
     }
     check(req, function(err, data, doctorId, adminId) {
         if(err) return next(err);
-        var new_working=req.body.day;
+        var new_working= req.body.week;
         var morning = '20000000';
         var afternoon = '20000000';
         var evening = '20000000';
@@ -64,14 +64,15 @@ exports.addWeek = function(req, res, next) {
             morning = morning.replaceAt(i + 1, new_working[i][0]!=0 ? 1 : 0);
             afternoon = afternoon.replaceAt(i + 1, new_working[i][1]!=0 ? 1 : 0);
             evening = evening.replaceAt(i + 1, new_working[i][2]!=0 ? 1 : 0);
-            morning_app=new_working[i][0]!=0 ? new_working[i][0] : morning_app;
-            afternoon_app=new_working[i][1]!=0 ? new_working[i][1] : afternoon_app;
-            evening_app=new_working[i][2]!=0 ? new_working[i][2] : evening_app;
+            morning_app=new_working[i][0]!=0 ? parseInt(new_working[i][0], 10) : morning_app;
+            afternoon_app=new_working[i][1]!=0 ? parseInt(new_working[i][1],10) : afternoon_app;
+            evening_app=new_working[i][2]!=0 ? parseInt(new_working[i][2], 10) : evening_app;
         }
+
         var date=new Date();
         req.models.working.get(doctorId, function(err, workings) {
             if(err && err.message != 'Not found') return next(err);
-            if(workings) {
+            if(workings && workings.length > 0) {
                 return next(new Errors.AddingFailed("Working Arrangement Already Exists!"));
             }
             req.models.working.create({
@@ -137,18 +138,20 @@ exports.updateWeek = function(req, res, next) {
                 }
             }
             for(var i = 0 ; i < works.length ; i++) {
-                switch(works[i]['period']) {
-                    case 0:
-                        workings[m_index].frequency = workings[m_index].frequency = workings[m_index].frequency.replaceAt(works[i]['day'], works[i]['action']!=0 ? 1 : 0);
+                switch(parseInt(works[i]['period'],10)) {
+                    case 1:
+                        workings[m_index].frequency = workings[m_index].frequency.replaceAt(parseInt(works[i]['day']), works[i]['action']!=0 ? 1 : 0);
                         workings[m_index].totalApp=works[i]['action'];
                         break;
-                    case 1:
-                        workings[a_index].frequency = workings[a_index].frequency = workings[a_index].frequency.replaceAt(works[i]['day'], works[i]['action']!=0 ? 1 : 0);
+                    case 2:
+                        workings[a_index].frequency = workings[a_index].frequency.replaceAt(parseInt(works[i]['day']), works[i]['action']!=0 ? 1 : 0);
                         workings[a_index].totalApp=works[i]['action'];
                         break;
-                    case 2:
-                        workings[e_index].frequency = workings[e_index].frequency = workings[e_index].frequency.replaceAt(works[i]['day'], works[i]['action']!=0 ? 1 : 0);
+                    case 3:
+                        workings[e_index].frequency = workings[e_index].frequency.replaceAt(parseInt(works[i]['day']), works[i]['action']!=0 ? 1 : 0);
                         workings[e_index].totalApp=works[i]['action'];
+                        break;
+                    default:
                         break;
                 }
             }
@@ -176,7 +179,6 @@ exports.addTemp = function(req, res, next) {
         if(err) return next(err);
         var t_period = req.body.period;
         var t_action = req.body.action;
-        var t_capacity = req.body.capacity;
         var t_frequency = '0_000000';
         req.models.working.one({
             doctor_id: doctorId,
@@ -190,9 +192,10 @@ exports.addTemp = function(req, res, next) {
             t_frequency = t_frequency.replaceAt(1, t_action==0 ? 0 : 1);
             req.models.working.create({
                 doctor_id: doctorId,
+                date: req.body.date,
                 frequency: t_frequency,
                 period: t_period,
-                totalApp: t_capacity
+                totalApp: t_action
             }, function (working) {
                 if (err && err.message != 'Not found') return next(err);
                 res.json({
