@@ -421,6 +421,9 @@ exports.addHospital = function (request, response) {
 
     var path = '/hospital/hospital/add';
     forwardRequestPOST(data, path, function (result) {
+
+        printLogMessage('add hospital: ' + result.message);
+
         if (result.code == 0) {
             response.redirect('/backstage/manage-hospitals/' + getCurrentTimeInSeconds() + '/success/complete');
         } else {
@@ -503,7 +506,6 @@ exports.addDoctor = function (request, response) {
         }
     });
 
-    response.redirect('/backstage/account');
 };
 
 /**
@@ -519,6 +521,9 @@ exports.editSchedule = function (request, response) {
     var adminId = getCookie(request).userId;
 
     var doctorInfoCallback = function (doctorInfo) {
+
+        printLogMessage('doctorInfo:' + JSON.stringify(doctorInfo));
+
         retrieveDoctorSchedule(doctorId, adminId, function (schedule) {
             if (schedule.code == 0) {
                 var params = {
@@ -755,6 +760,7 @@ function retrieveDoctorList(hospitalId, callback) {
 function retrieveDoctorInfo(doctorId, callback) {
     var path = '/hospital/doctor/' + doctorId + '/detail';
     forwardRequestGET(path, function (result) {
+        printLogMessage('retrieveDoctorInfo:' + JSON.stringify(result));
         var doctorInfo = {
             id: result.id,
             name: result.name,
