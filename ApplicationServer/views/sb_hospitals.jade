@@ -204,17 +204,6 @@ block content
 
    script.
       $('#add-hospitals').validate();
-      window.onload = function(){
-         var params = $(location).attr('pathname');
-         params = params.split('/');
-         if (params.length == 6) {
-            if (params[4] == 'success') {
-               toastr.success('医院已经添加', '成功');
-            } else if (params[4] == 'fail') {
-               toastr.error('医院添加失败，错误信息：' + params[5], '失败');
-            }
-         }
-      };
 
    style.
       .operation {

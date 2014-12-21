@@ -45,13 +45,13 @@ html
          #secondary.site-sidebar
             ul.site-navigation
                li.module-navigation-item
-                  a(href='/backstage/manage-hospitals')
-                     i.fa.fa-lg.fa-fw.fa-plus-square
-                     | &nbsp;医院管理
-               li.module-navigation-item
                   a(href='/backstage/users')
                      i.fa.fa-lg.fa-fw.fa-users
                      | &nbsp;用户审核
+               li.module-navigation-item
+                  a(href='/backstage/manage-hospitals')
+                     i.fa.fa-lg.fa-fw.fa-plus-square
+                     | &nbsp;医院管理
                li.module-navigation-item
                   a(href='/backstage/departments')
                      i.fa.fa-lg.fa-fw.fa-hospital-o
@@ -69,7 +69,6 @@ html
                      i.fa.fa-lg.fa-fw.fa-lock
                      | &nbsp;修改密码
 
-      footer#colophon.site-footer
       script.
          toastr.options = {
             "closeButton": !0,
@@ -100,3 +99,33 @@ html
             resizeSiteContent();
             $(window).on('resize', resizeSiteContent);
          });
+
+   if locals.message
+      if locals.msgType = 'fail'
+         case message
+            when 'wrong_credentials'
+               span#errMsg(style='display:hidden') 用户名或密码错误
+            when 'unknown'
+               span#errMsg(style='display:hidden') 未知错误
+            when 'cp_wrong_credential'
+               span#errMsg(style='display:hidden') 原密码错误
+
+         script.
+            $(function() {
+               toastr.error($('#errMsg').text(), '错误');
+            });
+
+      if locals.msgType = 'success'
+         case message
+            when 'cpcomplete'
+               span#sucMsg(style='display:hidden') 修改密码成功
+            when 'ahcomplete'
+               span#sucMsg(style='display:hidden') 添加医院成功
+            when 'adcomplete'
+               span#sucMsg(style='display:hidden') 添加科室成功
+            when 'adcomplete'
+               span#sucMsg(style='display:hidden') 添加医生成功
+         script.
+            $(function() {
+               toastr.success($('#sucMsg').text(), '成功');
+            });
