@@ -421,6 +421,9 @@ exports.addHospital = function (request, response) {
 
     var path = '/hospital/hospital/add';
     forwardRequestPOST(data, path, function (result) {
+
+        printLogMessage('add hospital: ' + result.message);
+
         if (result.code == 0) {
             response.redirect('/backstage/manage-hospitals/' + getCurrentTimeInSeconds() + '/success/complete');
         } else {
@@ -503,7 +506,6 @@ exports.addDoctor = function (request, response) {
         }
     });
 
-    response.redirect('/backstage/account');
 };
 
 /**
