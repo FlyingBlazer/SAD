@@ -1,13 +1,15 @@
 var Errors = require('../lib/Errors');
-
+var crypto = require('crypto');
 exports.check = require('./user.check');
 
 exports.login =function(req, res, next) {
+    var md5 = crypto.createHash('md5');
     var username = req.body.username;
     var password = req.body.password;
+    md5.update("sad"+password);
     req.models.user.one({
         name: username,
-        password: password
+        password: md5.digest("hex")
     }, function(err, user) {
         if(err && err.message != 'Not found') return next(err);
         if(!user) {
@@ -36,11 +38,14 @@ exports.updateInfo = function(req, res, next){
         }
 
         if(pass_prev){
-            if(user.password!=pass_prev){
+            var md5 = crypto.createHash('md5');
+            md5.update("sad"+pass_prev);
+            if(user.password!=md5.digest("hex")){
                 return next(new Errors.UpdatePasswordFail("Incorrect password"));
             }
             else if(pass_curr){
-                user.password=pass_curr;
+                md5.update("sad"+pass_prev);
+                user.password=md5.digest("hex");
             }
             else{
                 return next(new Errors.UpdatePasswordFail("No new password"));
@@ -67,6 +72,7 @@ exports.updateInfo = function(req, res, next){
 };
 
 exports.signUp = function(req, res, next) {
+    var md5 = crypto.createHash('md5');
     var username = req.body.username,
         password = req.body.password,
         id = req.body.id,
@@ -74,11 +80,12 @@ exports.signUp = function(req, res, next) {
         name = req.body.name,
         email = req.body.email,
         uip = req.body.ip || '';
+    md5.update("sad"+password);
     function finish(){
         req.models.user.create({
             name: username,
             realName: name,
-            password: password,
+            password: md5.digest('hex'),
             socialId: id,
             tel: phone,
             email: email,
