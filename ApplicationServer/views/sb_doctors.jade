@@ -1,5 +1,10 @@
 extends ./sb_layout
 
+block append head
+   link(href="/stylesheets/uploadfile.min.css",rel="stylesheet", media="all")
+   style.
+      .ajax-file-upload-filename {display: none;}
+
 block content
    h2 医生管理
 
@@ -162,6 +167,12 @@ block content
                   label(for='name') 姓名
                .control
                   input#name.form-control(name='name', required, type='text')
+
+            .form-group
+               .prompt: label(for='picture') 照片
+               .control
+                  input#picture(type='text', name='photo', hidden)
+                  #fileuploader 上传照片
 
             .form-group
                .prompt
@@ -354,4 +365,29 @@ block content
          });
          $('#time-slots').val(JSON.stringify(timeSlots));
          return true;
+      });
+
+   script(src='/javascripts/jquery.uploadfile.min.js')
+   script.
+      $("#fileuploader").uploadFile({
+         url:"/upload",
+         fileName:"picture",
+         dragDrop: false,
+         multiple: false,
+         acceptFiles: 'image/*',
+         showStatusAfterSuccess:true,
+         dragDropStr: "<span><b>拖拽文件到此处上传</b></span>",
+         abortStr:"终止",
+         cancelStr:"取消",
+         doneStr:"完成",
+         showPreview: true,
+         showDone: false,
+         showProgress: true,
+         multiDragErrorStr: "不允许拖拽多个文件",
+         uploadErrorStr:"上传失败",
+         onSuccess:function(files, data) {
+            $("div.ajax-file-upload").hide();
+            $(".ajax-file-upload-progress").hide();
+            $("input#picture").val(data.name);
+         }
       });

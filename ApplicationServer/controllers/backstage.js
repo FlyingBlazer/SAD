@@ -477,8 +477,7 @@ exports.addDoctor = function (request, response) {
         name: requestBody.name,
         hospitalId: requestBody.hospitalId,
         departmentId: requestBody.departmentId,
-        //photo: requestBody.photo,
-        photo: '',//TODO pending
+        photo: requestBody.photo,
         description: requestBody.description,
         title: requestBody.title,
         price: requestBody.price

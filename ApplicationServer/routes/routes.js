@@ -5,6 +5,7 @@
 var express = require('express');
 var controllers = require('../controllers');
 var router = express.Router();
+var multiparty = require('multiparty');
 
 /**
  * =========================================================
@@ -102,5 +103,18 @@ router.route('/backstage/doctor/:id/edit_schedule').get(controllers.backstage.ed
 router.route('/backstage/api/add/department').post(controllers.backstage.addDepartment);
 router.route('/backstage/api/add/doctor').post(controllers.backstage.addDoctor);
 router.route('/backstage/api/add/hospitals').post(controllers.backstage.addHospital);
+
+// file upload
+router.route('/upload').all(function(req, res, next) {
+    var form = new multiparty.Form();
+
+    form.parse(req, function(err, fields, files) {
+        for(var index in fields) {
+            req.body[index] = fields[index];
+        }
+            req.file = files;
+        next(err);
+    });
+}).post(controllers.upload.upload);
 
 module.exports = router;
