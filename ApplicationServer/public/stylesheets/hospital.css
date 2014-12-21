@@ -48,7 +48,7 @@
     margin-bottom: 40px;
 }
 
-.hospital-intro>.hospital-map {
+.hospital-intro>#hospital-map {
     height: 400px;
 }
 

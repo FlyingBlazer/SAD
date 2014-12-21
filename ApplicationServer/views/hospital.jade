@@ -3,7 +3,7 @@ extends layout
 block title
     title 医院
     link(href="/stylesheets/hospital.css", rel="stylesheet", media="all")
-    script(src="http://api.map.baidu.com/components?ak=pZFhoaCvZGuO14AmE2f0Xkon&v=1.0")
+    script(src="http://api.map.baidu.com/api?v=2.0&ak=pZFhoaCvZGuO14AmE2f0Xkon")
 
 block breadcrumb
     li
@@ -45,9 +45,7 @@ block site-content
                 div.intro-title
                     h4 医院地图
                 hr
-                div.hospital-map
-                    lbs-map
-                        lbs-poi(name="奎科科技大厦")
+                div#hospital-map
 
         div#reserve.tab-pane.fade(role="tabpanel")
 
@@ -113,16 +111,17 @@ block site-content
 
                 $(document).ready(function() {
 
-                    $.ajax({
-                        type: "GET",
-                        url: "http://api.map.baidu.com/geocoder/v2/?output=json&ak=pZFhoaCvZGuO14AmE2f0Xkon&address=人民广场",
-                        data: {
-                            ak: "pZFhoaCvZGuO14AmE2f0Xkon",
-                            output: "json",
-                            address: "#{detail.address}"
+                    var map = new BMap.Map("hospital-map");
+                    var bottom_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_BOTTOM_LEFT});
+                    var top_left_navigation = new BMap.NavigationControl();
+                    map.addControl(bottom_left_control);
+                    map.addControl(top_left_navigation);
+                    var myGeo = new BMap.Geocoder();
+                    myGeo.getPoint("#{detail.address}", function(point) {
+                        if (point) {
+                            map.centerAndZoom(point, 16);
+                            map.addOverlay(new BMap.Marker(point));
                         }
-                    }).done(function(data) {
-                        console.log(data);
                     });
 
                     var departmentSelection = "";
