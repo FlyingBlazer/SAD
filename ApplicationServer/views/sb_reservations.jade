@@ -3,23 +3,22 @@ block content
 
    script.
       $(document).ready(function () {
-         $('#example').DataTable();
+
          $('.time_span').each(function(){
             var time=$(this).data('time');
             var array=time.split('T');
             $(this).html(array[0]);
          });
-         $('.pay_situation').each(function (){
-
+         $('.pay_situation').each(function() {
             var pay_content;
-            var status=$('.pay_situation').data('id');
-            if (status.charAt(0)=='0'){
+            var status=$(this).data('id');
+            if (status[0]=='0'){
                pay_content='现场';
             }
             else {
                pay_content='在线';
             }
-            if (status.charAt(1)=='0'){
+            if (status[1]=='0'){
                pay_content+='_未付款';
             }
             else {
@@ -27,24 +26,23 @@ block content
             }
 
             $(this).html(pay_content);
-
          });
          $('.status').each(function(){
 
             var status_content;
             var button_disable=true;
-            var status=$('.pay_situation').data('id');
-            if (status.charAt(2)==0){
+            var status=$(this).data('id');
+            if (status[2]=='0'){
                status_content='未确认';
                button_disable=false;
             }
-            else if(status.charAt(2)==1){
+            else if(status[2]=='1'){
                status_content='未到场';
             }
             else {
                status_content='已到场';
             }
-            if(status.charAt(3)==0){
+            if(status[3]=='0'){
                status_content+='_未超时';
             }
             else {
@@ -55,8 +53,11 @@ block content
             $(this).html(status_content);
             var button='#'+$(this).data('flag');
             $(button).attr("disabled", button_disable);
+            $('#example').DataTable();
 
          });
+
+
 
          $('.confirm').click(function() {
 
@@ -78,6 +79,8 @@ block content
                });
 
          });
+
+
 
       });
    h2 预约单管理

@@ -1,94 +1,244 @@
-extends layout
+doctype html
+html
+    head
+        meta(charset="utf-8")
+        meta(name="robots", content="none")
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        script(src="/javascripts/jquery-2.1.1.min.js")
+        script(src="/stylesheets/bootstrap/js/bootstrap.min.js")
+        link(href="/stylesheets/bootstrap/css/bootstrap.min.css", rel="stylesheet", media="all")
+        link(href="/stylesheets/font-awesome-4.2.0/css/font-awesome.min.css", rel="stylesheet", media="all")
+        link(href="/stylesheets/index.css", rel="stylesheet", media="all")
+        title 主页
+    body
+        #nav
+            .navbar.navbar-default(role="navigation",style="margin:0;border-radius:0")
+                .container
+                    .navbar-header
+                        button.navbar-toggle.collapsed(type="button", data-toggle="collapse", data-target="#navbar-collapse")
+                            span.sr-only Toggle navigation
+                            span.icon-bar
+                            span.icon-bar
+                            span.icon-bar
+                        a.navbar-brand(href="/") SRF 挂号平台
+                    .navbar-form.navbar-left
+                        .input-group
+                            input#nav-search-field.form-control(placeholder="搜索医院")
+                            span.input-group-btn
+                                button#nav-search-button.btn.btn-default 搜索
+                    #navbar-collapse.collapse.navbar-collapse
+                        if username
+                            ul.nav.navbar-nav.navbar-right
+                                li: a(href="#") #{username}
+                                li: a(href="/account/manage/info") 个人中心
+                                li: a(href="/account/manage/reservation") 预约单
+                                li: a(href="/account/logout") 退出
+                        else
+                            ul.nav.navbar-nav.navbar-right
+                                li: a(href="/account/login") 登陆
+                                li: a(href="/account/register") 注册
+        .jumbotron
+            .container
+                h1 SRF挂号平台
+                p SRF挂号平台是一款面向全国用户的线上挂号平台
+                p 无论是在家中还是通过手机都可以体验到简单便捷的挂号服务
+                .row
+                    .col-lg-6
+                        .input-group
+                            input#search-field.form-control
+                            span.input-group-btn
+                                button#search-button.btn.btn-default 搜索
+        .container
+            .tiles(style={margin: '30px 0 20px'})
+                .col-sm-4
+                    img(src='/images/index_pic1.png', style={height: '128px', width: 'auto'})
+                    h2.tile-title 名医加盟
+                    p 足不出户，预定国内知名医师门诊服务
+                .col-sm-4
+                    img(src='/images/index_pic2.png', style={height: '128px', width: 'auto'})
+                    h2.tile-title 全国医院数据
+                    p 网站医院数据实时更新，挂号更方便
+                .col-sm-4
+                    img(src='/images/index_pic3.png', style={height: '128px', width: 'auto'})
+                    h2.tile-title 低廉的价格
+                    p 价格低于同类网站，同样的价钱不一样的体验
+                .clearfix
 
-block append stylesheets
-    link(href="/stylesheets/index.css", rel="stylesheet", media="all")
+        .container
+            div#locations.main-section.left.col-md-6
+                h2.choose-location-label 选择省份
+                ul.nav.nav-tabs
+                    li.active: a(href='#all', data-toggle='tab') 所有省份
+                    li: a(href='#north', data-toggle='tab') 华北
+                    li: a(href='#east-north', data-toggle='tab') 东北
+                    li: a(href='#east', data-toggle='tab') 华东
+                    li: a(href='#middle-south', data-toggle='tab') 中南
+                    li: a(href='#west-south', data-toggle='tab') 西南
+                    li: a(href='#west-north', data-toggle='tab') 西北
+                .tab-content
+                    #all.tab-pane.fade.in.active
+                        a.province-link(href='/choose-location/beijing') 北京市
+                        a.province-link(href='/choose-location/tianjin') 天津市
+                        a.province-link(href='/choose-location/hebei') 河北省
+                        a.province-link(href='/choose-location/shanxi') 山西省
+                        a.province-link(href='/choose-location/neimenggu') 内蒙古自治区
+                        a.province-link(href='/choose-location/liaoning') 辽宁省
+                        a.province-link(href='/choose-location/jilin') 吉林省
+                        a.province-link(href='/choose-location/heilongjiang') 黑龙江省
+                        a.province-link(href='/choose-location/shanghai') 上海市
+                        a.province-link(href='/choose-location/jiangsu') 江苏省
+                        a.province-link(href='/choose-location/zhejiang') 浙江省
+                        a.province-link(href='/choose-location/anhui') 安徽省
+                        a.province-link(href='/choose-location/fujian') 福建省
+                        a.province-link(href='/choose-location/jiangxi') 江西省
+                        a.province-link(href='/choose-location/jiangxi') 山东省
+                        a.province-link(href='/choose-location/henan') 河南省
+                        a.province-link(href='/choose-location/hubei') 湖北省
+                        a.province-link(href='/choose-location/hunan') 湖南省
+                        a.province-link(href='/choose-location/guangdong') 广东省
+                        a.province-link(href='/choose-location/guangxi') 广西省
+                        a.province-link(href='/choose-location/hainan') 海南省
+                        a.province-link(href='/choose-location/chongqing') 重庆市
+                        a.province-link(href='/choose-location/sichuan') 四川省
+                        a.province-link(href='/choose-location/guizhou') 贵州省
+                        a.province-link(href='/choose-location/yunnan') 云南省
+                        a.province-link(href='/choose-location/xizang') 西藏自治区
+                        a.province-link(href='/choose-location/shaanxi') 陕西省
+                        a.province-link(href='/choose-location/gansu') 甘肃省
+                        a.province-link(href='/choose-location/qinghai') 青海省
+                        a.province-link(href='/choose-location/ningxia') 宁夏回族自治区
+                        a.province-link(href='/choose-location/xinjiang') 新疆维吾尔族自治区
+                    #north.tab-pane.fade
+                        a.province-link(href='/choose-location/beijing') 北京市
+                        a.province-link(href='/choose-location/tianjin') 天津市
+                        a.province-link(href='/choose-location/hebei') 河北省
+                        a.province-link(href='/choose-location/shanxi') 山西省
+                        a.province-link(href='/choose-location/neimenggu') 内蒙古自治区
+                    #east-north.tab-pane.fade
+                        a.province-link(href='/choose-location/liaoning') 辽宁省
+                        a.province-link(href='/choose-location/jilin') 吉林省
+                        a.province-link(href='/choose-location/heilongjiang') 黑龙江省
+                    #east.tab-pane.fade
+                        a.province-link(href='/choose-location/shanghai') 上海市
+                        a.province-link(href='/choose-location/jiangsu') 江苏省
+                        a.province-link(href='/choose-location/zhejiang') 浙江省
+                        a.province-link(href='/choose-location/anhui') 安徽省
+                        a.province-link(href='/choose-location/fujian') 福建省
+                        a.province-link(href='/choose-location/jiangxi') 江西省
+                        a.province-link(href='/choose-location/jiangxi') 山东省
+                    #middle-south.tab-pane.fade
+                        a.province-link(href='/choose-location/henan') 河南省
+                        a.province-link(href='/choose-location/hubei') 湖北省
+                        a.province-link(href='/choose-location/hunan') 湖南省
+                        a.province-link(href='/choose-location/guangdong') 广东省
+                        a.province-link(href='/choose-location/guangxi') 广西省
+                        a.province-link(href='/choose-location/hainan') 海南省
+                    #west-south.tab-pane.fade
+                        a.province-link(href='/choose-location/chongqing') 重庆市
+                        a.province-link(href='/choose-location/sichuan') 四川省
+                        a.province-link(href='/choose-location/guizhou') 贵州省
+                        a.province-link(href='/choose-location/yunnan') 云南省
+                        a.province-link(href='/choose-location/xizang') 西藏自治区
+                    #west-north.tab-pane.fade
+                        a.province-link(href='/choose-location/shaanxi') 陕西省
+                        a.province-link(href='/choose-location/gansu') 甘肃省
+                        a.province-link(href='/choose-location/qinghai') 青海省
+                        a.province-link(href='/choose-location/ningxia') 宁夏回族自治区
+                        a.province-link(href='/choose-location/xinjiang') 新疆维吾尔族自治区
+            div#shortcuts.main-section.right.col-md-6
+                h2.choose-location-label 热门医院
+                ul.nav.nav-tabs
+                    li.active: a(href='#beijing', data-toggle='tab') 北京
+                    li: a(href='#tianjin', data-toggle='tab') 天津
+                    li: a(href='#shanghai', data-toggle='tab') 上海
+                    li: a(href='#chongqing', data-toggle='tab') 重庆
+                    li: a(href='#liaoning', data-toggle='tab') 辽宁
+                    li: a(href='#jilin', data-toggle='tab') 吉林
+                .tab-content
+                    #beijing.tab-pane.fade.in.active
+                        a.hospital-link(href='/concierge/reserve/1') 中国人民解放军总医院301医院
+                        a.hospital-link(href='/concierge/reserve/2') 北京同仁医院
+                        a.hospital-link(href='/concierge/reserve/3') 北京天坛医院特需门诊
+                        a.hospital-link(href='/concierge/reserve/4') 北京安贞医院小儿心脏中心
+                        a.hospital-link(href='/concierge/reserve/5') 北京中医药大学东直门医院国际部
+                        a.hospital-link(href='/concierge/reserve/6') 中国人民解放军总医院第一附属医院
+                        a.hospital-link(href='/concierge/reserve/7') 中国人民武装警察部队北京市总队医院
+                        a.hospital-link(href='/concierge/reserve/8') 解放军第307医院
+                    #tianjin.tab-pane.fade
+                        a.hospital-link(href='/concierge/reserve/19') 天津市肿瘤医院
+                        a.hospital-link(href='/concierge/reserve/20') 天津市环湖医院
+                        a.hospital-link(href='/concierge/reserve/22') 天津市宝坻区人民医院
+                        a.hospital-link(href='/concierge/reserve/23') 天津市整形外科医院
+                        a.hospital-link(href='/concierge/reserve/24') 天津市安定医院
+                        a.hospital-link(href='/concierge/reserve/25') 天津市静海县医院
+                        a.hospital-link(href='/concierge/reserve/26') 中国人民解放军第二七二医院
+                        a.hospital-link(href='/concierge/reserve/27') 天津市宁河县医院
+                    #shanghai.tab-pane.fade
+                        a.hospital-link(href='/concierge/reserve/9') 上海瑞金医院
+                        a.hospital-link(href='/concierge/reserve/10') 复旦大学附属华山医院
+                        a.hospital-link(href='/concierge/reserve/11') 上海中山医院
+                        a.hospital-link(href='/concierge/reserve/12') 上海国际医学中心
+                        a.hospital-link(href='/concierge/reserve/13') 复旦大学附属中山医院特需门诊部
+                        a.hospital-link(href='/concierge/reserve/14') 上海长海医院
+                        a.hospital-link(href='/concierge/reserve/15') 复旦大学附属肿瘤医院
+                        a.hospital-link(href='/concierge/reserve/16') 上海华山医院东院
+                        a.hospital-link(href='/concierge/reserve/17') 复旦大学附属华山医院北院
+                        a.hospital-link(href='/concierge/reserve/18') 上海第六人民医院
+                    #chongqing.tab-pane.fade
+                        a.hospital-link(href='/concierge/reserve/28') 重庆西南医院
+                        a.hospital-link(href='/concierge/reserve/29') 重庆医科大学附属儿童医院
+                        a.hospital-link(href='/concierge/reserve/30') 重庆医科大学附属第一医院
+                        a.hospital-link(href='/concierge/reserve/31') 重庆医科大学附属第二医院
+                    #liaoning.tab-pane.fade
+                        a.hospital-link(href='/concierge/reserve/32') 中国医科大学附属第一医院
+                        a.hospital-link(href='/concierge/reserve/33') 沈阳市第四人民医院
+                        a.hospital-link(href='/concierge/reserve/34') 沈阳二0一医院
+                        a.hospital-link(href='/concierge/reserve/35') 沈阳463医院
+                        a.hospital-link(href='/concierge/reserve/36') 沈阳市第五人民医院
+                        a.hospital-link(href='/concierge/reserve/37') 大连医科大学附属第二医院
+                        a.hospital-link(href='/concierge/reserve/38') 沈阳市红十字会医院
+                        a.hospital-link(href='/concierge/reserve/39') 中国医科大学附属盛京医院
+                        a.hospital-link(href='/concierge/reserve/40') 大连医科大学附属第一医院
+                    #jilin.tab-pane.fade
+                        a.hospital-link(href='/concierge/reserve/41') 中国人民解放军第461医院
+                        a.hospital-link(href='/concierge/reserve/42') 长春市妇产医院
+                        a.hospital-link(href='/concierge/reserve/43') 长春市中医院
+                        a.hospital-link(href='/concierge/reserve/44') 长春市儿童医院
+                        a.hospital-link(href='/concierge/reserve/45') 吉林大学第二医院
+                        a.hospital-link(href='/concierge/reserve/46') 吉林大学口腔医院
+                        a.hospital-link(href='/concierge/reserve/47') 长春中医药大学附属医院
+                        a.hospital-link(href='/concierge/reserve/48') 吉林大学中日联谊医院
+                        a.hospital-link(href='/concierge/reserve/49') 吉林省人民医院
+                        a.hospital-link(href='/concierge/reserve/50') 吉林大学第四医院
 
-block title
-    title 主页
+        footer.site-footer(style={
+            'background': '#fff',
+            'border-top': '1px solid #eee',
+            'margin-top': '20px',
+            'padding': '20px 0 10px'
+        })
+            .container
+                .col-sm-9
+                    .ft-links
+                        ul
+                            li: a.link(href='#') 关于
+                            li: a.link(href='#') 常见问题
+                            li: a.link(href='#') 医院合作
+                            li: a.link(href='#') 投诉建议
+                            li: a.link(href='#') 版权信息
+                            li: a.link(href='#') 隐私政策
+                            li: a.link(href='#') 加入我们
 
-block site-content
-    .jumbotron: .container
-        h1 SRF挂号平台
-        p SRF挂号平台是一款面向全国用户的线上挂号平台
-        p 无论是在家中还是通过手机都可以体验到简单便捷的挂号服务
-        .row: .col-lg-6: .input-group
-            input#search-field.form-control
-            span.input-group-btn: button#search-button.btn.btn-default 搜索
-
-    .container: .tiles
-        .col-xs-12.col-sm-4
-            img(src='/images/index_pic1.png')
-            h2 名医加盟
-            p 足不出户，预定国内知名医师门诊服务
-        .col-xs-12.col-sm-4
-            img(src='/images/index_pic2.png')
-            h2 全国医院数据
-            p 网站医院数据实时更新，挂号更方便
-        .col-xs-12.col-sm-4
-            img(src='/images/index_pic3.png')
-            h2 低廉的价格
-            p 价格低于同类网站，同样的价钱不一样的体验
-
-    .container
-        div: h2#choose-location-label 按地点查找
-
-        ul.nav.nav-tabs
-            li.active: a(href='#north', data-toggle='tab') 华北
-            li: a(href='#east-north', data-toggle='tab') 东北
-            li: a(href='#east', data-toggle='tab') 华东
-            li: a(href='#middle-south', data-toggle='tab') 中南
-            li: a(href='#west-south', data-toggle='tab') 西南
-            li: a(href='#west-north', data-toggle='tab') 西北
-        .tab-content
-            #north.tab-pane.fade.in.active
-                table.table: tr
-                    td: a(href='/choose-location/beijing') 北京市
-                    td: a(href='/choose-location/tianjin') 天津市
-                    td: a(href='/choose-location/hebei') 河北省
-                    td: a(href='/choose-location/shanxi') 山西省
-                    td: a(href='/choose-location/neimenggu') 内蒙古自治区
-            #east-north.tab-pane.fade
-                table.table: tr
-                    td: a(href='/choose-location/liaoning') 辽宁省
-                    td: a(href='/choose-location/jilin') 吉林省
-                    td: a(href='/choose-location/heilongjiang') 黑龙江省
-            #east.tab-pane.fade
-                table.table: tr
-                    td: a(href='/choose-location/shanghai') 上海市
-                    td: a(href='/choose-location/jiangsu') 江苏省
-                    td: a(href='/choose-location/zhejiang') 浙江省
-                    td: a(href='/choose-location/anhui') 安徽省
-                    td: a(href='/choose-location/fujian') 福建省
-                    td: a(href='/choose-location/jiangxi') 江西省
-                    td: a(href='/choose-location/jiangxi') 山东省
-            #middle-south.tab-pane.fade
-                table.table: tr
-                    td: a(href='/choose-location/henan') 河南省
-                    td: a(href='/choose-location/hubei') 湖北省
-                    td: a(href='/choose-location/hunan') 湖南省
-                    td: a(href='/choose-location/guangdong') 广东省
-                    td: a(href='/choose-location/guangxi') 广西省
-                    td: a(href='/choose-location/hainan') 海南省
-            #west-south.tab-pane.fade
-                table.table: tr
-                    td: a(href='/choose-location/chongqing') 重庆市
-                    td: a(href='/choose-location/sichuan') 四川省
-                    td: a(href='/choose-location/guizhou') 贵州省
-                    td: a(href='/choose-location/yunnan') 云南省
-                    td: a(href='/choose-location/xizang') 西藏自治区
-            #west-north.tab-pane.fade
-                table.table: tr
-                    td: a(href='/choose-location/shaanxi') 陕西省
-                    td: a(href='/choose-location/gansu') 甘肃省
-                    td: a(href='/choose-location/qinghai') 青海省
-                    td: a(href='/choose-location/ningxia') 宁夏回族自治区
-                    td: a(href='/choose-location/xinjiang') 新疆维吾尔族自治区
-
-block append scripts
-    script.
-        $(document).ready(function () {
-            $("#search-button").click(function () {
-                var href = "/search/" + $("#search-field").val();
-                window.location.href = href;
+                    .ft-notes
+                        p 全国领先的一站式挂号预约平台
+                        p &copy; 2014 SRF Working Group
+                    .ft-alt-notes
+                        p VERSION: 0.9.0 rev #634
+                .col-sm-3
+                    h2.pull-right.site-ft-title SRF 统一挂号预约平台
+        script.
+            $(function () {
+                $('#search-button').click(function () {
+                    window.location.href = '/search/' + $('#search-field').val();
+                });
             });
-        });
