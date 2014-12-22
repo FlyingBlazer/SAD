@@ -41,7 +41,7 @@ a {
 }
 
 .choose-location-label {
-    margin: 40px 0 20px;
+    margin: 20px 0 20px;
     border-left: 4px solid #fa9900;
     color: #555;
     font-size: 18px;
@@ -94,6 +94,26 @@ a {
     display: inline-block;
     padding: 6px 13px;
     color: #333;
+}
+
+.featured .feature {
+    background: #41aaf7;
+    color: #fff;
+    font-size: 55px;
+    display: inline-block;
+    border-radius: 50%;
+}
+
+.feature.fa-user-md {
+    padding: 35px 41px;
+}
+
+.feature.fa-hospital-o {
+    padding: 35px 41px;
+}
+
+.feature.fa-cny {
+    padding: 35px 48px;
 }
 
 .ft-links ul {
