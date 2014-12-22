@@ -21,15 +21,22 @@ block append stylesheets
 block append scripts
     script(src="/javascripts/md5.js")
     script(src='/javascripts/jquery-2.1.1.min.js')
+    script.
+        $(document).ready(function (){
+            if (#{errorMessage}) {
+                toastr.error(#{errorMessage});
+            }
+        });
 
 
-block breadcrumb
+
+}block breadcrumb
     li: a(href="/") 主页
     li.active 个人中心
 
 block site-content
     div: .g-container(data-module='userinfo', data-fo-help='1')
-        #g-breadcrumb: span(style='margin-left:240px;color:blue;font-size:12px') #{errorMessage}
+        #g-breadcrumb: span(style='margin-left:240px;color:blue;font-size:12px')
         .wrap
             .person-left
                 p.left-head
