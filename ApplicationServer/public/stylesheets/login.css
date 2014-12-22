@@ -1,54 +1,57 @@
+#site-content {
+    margin-top: 70px;
+    margin-bottom: 50px;
+}
+
 .alert {
     max-width: 330px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 20px;
 }
 
 .form-login {
     max-width: 330px;
-    padding: 15px;
-    margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.form-login .form-login-heading,
 .form-login .checkbox {
     margin-bottom: 10px;
-}
-
-.form-login .checkbox {
-    font-weight: normal;
 }
 
 .form-login .form-control {
     margin-bottom: 10px;
-    position: relative;
-    height: auto;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    padding: 10px;
-    font-size: 16px;
-}
-
-.form-login .form-control:focus {
-    z-index: 2;
-}
-
-.form-login input {
-    margin-bottom: 10px;
 }
 
 .left-content {
-    border-right: 1px solid #ccc;
-    width: 640px;
-    padding-right: 10px;
+    border-right: 1px solid #cccccc;
 }
 
-.right-content{
-    margin-top: 50px;
-    boarder-left: 1px solid #ccc;
-    width: 300px;
-    padding-left: 10px;
+.right-content {
+    boarder-left: 1px solid #cccccc;
+}
+
+@media (max-width: 768px) {
+    .right-content {
+        display: none;
+    }
+}
+
+h2 {
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
+    margin-bottom: 19px;
+}
+
+h4 {
+    margin-bottom: 19px;
+}
+
+a.btn {
+    max-width: 330px;
+    margin-left: auto;
+    margin-right: auto;
 }
 

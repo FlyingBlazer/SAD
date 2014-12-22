@@ -193,116 +193,120 @@ block site-content
 
     script(type="text/javascript").
 
-        if ($(".alert-message").html() != "") {
-            $(".alert").removeClass("hidden");
-        }
+        $(document).ready(function() {
 
-        var maxtime = 60;
-
-        function StartCountDown() {
-            $("#msg").attr("disabled", true);
-            maxtime = 60;
-            timer = setInterval("CountDown()", 1000);
-        }
-
-        function CountDown() {
-            if (maxtime >= 0) {
-                var minutes = Math.floor(maxtime / 60);
-                var seconds = Math.floor(maxtime % 60);
-                $("#msg").html(minutes + "分" + seconds + "秒后可以再次发送");
-                maxtime--;
-            } else {
-                $("#msg").attr("disabled", false);
-                clearInterval(timer);
-                $("#msg").html("重新发送");
+            if ($(".alert-message").html() != "") {
+                $(".alert").removeClass("hidden");
             }
-        }
 
-        $("#agree-eula-button").click(function() {
-            $("#eula-modal").modal("hide");
-            $("#eula").prop("checked", true);
-        });
+            var maxtime = 60;
 
-        $("#submit-button").click(function(e) {
-            e.preventDefault();
+            function StartCountDown() {
+                $("#msg").attr("disabled", true);
+                maxtime = 60;
+                timer = setInterval("CountDown()", 1000);
+            }
 
-            $(".alert").addClass("hidden");
-            $(".form-group").removeClass("has-warning");
-            $(".form-control-feedback").addClass("hidden");
+            function CountDown() {
+                if (maxtime >= 0) {
+                    var minutes = Math.floor(maxtime / 60);
+                    var seconds = Math.floor(maxtime % 60);
+                    $("#msg").html(minutes + "分" + seconds + "秒后可以再次发送");
+                    maxtime--;
+                } else {
+                    $("#msg").attr("disabled", false);
+                    clearInterval(timer);
+                    $("#msg").html("重新发送");
+                }
+            }
 
-            var checkCompletion = true;
-            var checkPassword = true;
-            var checkId = true;
-            var checkPhone = true;
-            var checkEmail = true;
-            var checkEULA = true;
+            $("#agree-eula-button").click(function() {
+                $("#eula-modal").modal("hide");
+                $("#eula").prop("checked", true);
+            });
 
-            $(".form-group .form-control").each(function() {
-                if ($(this).val() == "") {
-                    checkCompletion = false;
-                    $(this).parents(".form-group").addClass("has-warning");
-                    $(this).siblings(".form-control-feedback").removeClass("hidden");
+            $("#submit-button").click(function(e) {
+                e.preventDefault();
+
+                $(".alert").addClass("hidden");
+                $(".form-group").removeClass("has-warning");
+                $(".form-control-feedback").addClass("hidden");
+
+                var checkCompletion = true;
+                var checkPassword = true;
+                var checkId = true;
+                var checkPhone = true;
+                var checkEmail = true;
+                var checkEULA = true;
+
+                $(".form-group .form-control").each(function() {
+                    if ($(this).val() == "") {
+                        checkCompletion = false;
+                        $(this).parents(".form-group").addClass("has-warning");
+                        $(this).siblings(".form-control-feedback").removeClass("hidden");
+                    }
+                });
+                if (checkCompletion == false) {
+                    $(".alert-message").html("信息不完整");
+                    $(".alert").removeClass("hidden");
+                    return;
+                }
+
+                if ($("#password").val() != $("#password2").val()) {
+                    $("#password").parents(".form-group").addClass("has-warning");
+                    $("#password").siblings(".form-control-feedback").removeClass("hidden");
+                    $("#password2").parents(".form-group").addClass("has-warning");
+                    $("#password2").siblings(".form-control-feedback").removeClass("hidden");
+                    $(".alert-message").html("两次输入的密码不一致");
+                    $(".alert").removeClass("hidden");
+                    checkPassword = false;
+                    return;
+                }
+
+                if (!(/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/).test($("#id").val())) {
+                    $("#id").parents(".form-group").addClass("has-warning");
+                    $("#id").siblings(".form-control-feedback").removeClass("hidden");
+                    $(".alert-message").html("身份证号格式有误");
+                    $(".alert").removeClass("hidden");
+                    checkId = false;
+                    return;
+                }
+
+                if (!(/^1[3|4|5|7|8]\d{9}$/.test($("#phone").val()))) {
+                    $("#phone").parents(".form-group").addClass("has-warning");
+                    $("#phone").siblings(".form-control-feedback").removeClass("hidden");
+                    $(".alert-message").html("手机号格式有误");
+                    $(".alert").removeClass("hidden");
+                    checkPhone = false;
+                    return;
+                }
+
+                if (!(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test($("#email").val()))) {
+                    $("#email").parents(".form-group").addClass("has-warning");
+                    $("#email").siblings(".form-control-feedback").removeClass("hidden");
+                    $(".alert-message").html("邮箱格式有误");
+                    $(".alert").removeClass("hidden");
+                    checkEmail = false;
+                    return;
+                }
+
+                if (!$("#eula").is(":checked")) {
+                    $("#eula").parents(".form-group").addClass("has-warning");
+                    $(".alert-message").html("您必须同意服务许可协议");
+                    $(".alert").removeClass("hidden");
+                    checkEULA = false;
+                    return;
+                }
+
+                if (checkCompletion && checkPassword && checkId && checkPhone && checkEmail &&checkEULA) {
+                    $("#form-register").submit();
                 }
             });
-            if (checkCompletion == false) {
-                $(".alert-message").html("信息不完整");
-                $(".alert").removeClass("hidden");
-                return;
-            }
 
-            if ($("#password").val() != $("#password2").val()) {
-                $("#password").parents(".form-group").addClass("has-warning");
-                $("#password").siblings(".form-control-feedback").removeClass("hidden");
-                $("#password2").parents(".form-group").addClass("has-warning");
-                $("#password2").siblings(".form-control-feedback").removeClass("hidden");
-                $(".alert-message").html("两次输入的密码不一致");
-                $(".alert").removeClass("hidden");
-                checkPassword = false;
-                return;
-            }
+            $("#form-register").submit(function() {
+                $("#password").val(hex_md5($("#password").val()));
+                $("#password2").val(hex_md5($("#password2").val()));
+                return true;
+            });
 
-            if (!(/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/).test($("#id").val())) {
-                $("#id").parents(".form-group").addClass("has-warning");
-                $("#id").siblings(".form-control-feedback").removeClass("hidden");
-                $(".alert-message").html("身份证号格式有误");
-                $(".alert").removeClass("hidden");
-                checkId = false;
-                return;
-            }
-
-            if (!(/^1[3|4|5|7|8]\d{9}$/.test($("#phone").val()))) {
-                $("#phone").parents(".form-group").addClass("has-warning");
-                $("#phone").siblings(".form-control-feedback").removeClass("hidden");
-                $(".alert-message").html("手机号格式有误");
-                $(".alert").removeClass("hidden");
-                checkPhone = false;
-                return;
-            }
-
-            if (!(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test($("#email").val()))) {
-                $("#email").parents(".form-group").addClass("has-warning");
-                $("#email").siblings(".form-control-feedback").removeClass("hidden");
-                $(".alert-message").html("邮箱格式有误");
-                $(".alert").removeClass("hidden");
-                checkEmail = false;
-                return;
-            }
-
-            if (!$("#eula").is(":checked")) {
-                $("#eula").parents(".form-group").addClass("has-warning");
-                $(".alert-message").html("您必须同意服务许可协议");
-                $(".alert").removeClass("hidden");
-                checkEULA = false;
-                return;
-            }
-
-            if (checkCompletion && checkPassword && checkId && checkPhone && checkEmail &&checkEULA) {
-                $("#form-register").submit();
-            }
-        });
-
-        $("#form-register").submit(function() {
-            $("#password").val(hex_md5($("#password").val()));
-            $("#password2").val(hex_md5($("#password2").val()));
-            return true;
         });
