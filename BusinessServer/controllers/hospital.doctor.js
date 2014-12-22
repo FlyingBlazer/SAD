@@ -40,7 +40,7 @@ exports.add = function(req, res, next) {
             price: req.body.price,
             department_id: department.id
         }, function(err, doctor) {
-            if(err && err.message != 'Not found') return next(err);
+            if(err) throw err;
             res.json({
                 code: 0,
                 message: 'success',
@@ -52,10 +52,10 @@ exports.add = function(req, res, next) {
 
 exports.remove = function(req, res, next) {
     req.models.doctor.get(req.params.doctorId, function(err, doctor) {
-        if(err && err.message != 'Not found') return next(err);
+        if(err && err.message != 'Not found') throw err;
         if(!doctor) return next(new Errors.DoctorNotExist('Doctor Not Exist'));
         doctor.remove(function(err) {
-            if(err && err.message != 'Not found') return next(err);
+            if(err) throw err;
             res.json({
                 code: 0,
                 message: 'success'
@@ -77,7 +77,7 @@ exports.update = function(req, res, next) {
         if(typeof req.body.department_id != 'undefined') {
             var department_id = req.body.department_id;
             req.models.department.get(department_id, function(err, department) {
-                if(err && err.message != 'Not found') return next(err);
+                if(err && err.message != 'Not found') throw err;
                 doctor.setDepartment(department, function(err) {
                     if(err && err.message != 'Not found') throw err;
                 });
@@ -116,10 +116,10 @@ exports.update = function(req, res, next) {
 
 exports.detail = function(req, res, next) {
     req.models.doctor.get(req.params.doctorId, function(err, doctor) {
-        if(err && err.message != 'Not found') return next(err);
+        if(err && err.message != 'Not found') throw err;
         if(!doctor) return next(new Errors.DoctorNotExist('Doctor Not Exist'));
         doctor.getWorking(function(err, workings) {
-            if(err) return next(err);
+            if(err) throw err;
             var curDate = new Date();
             var year = curDate.getFullYear();
             var month = curDate.getMonth();
@@ -255,9 +255,6 @@ exports.detail = function(req, res, next) {
                         if(err) throw err;
                         department.getHospital(function(err, hospital) {
                             if(err) throw err;
-                            //for(var i=0;i<7;i++){
-                            //    console.log(slot[i].slot);
-                            //}
                             res.json({
                                 code: 0,
                                 message: 'success',

@@ -31,7 +31,7 @@ if(typeof settings.dbUrl == "undefined") {
                 + "://" + encodeURIComponent(settings.db.username)
                 + (typeof settings.db.password != "undefined" ? ":" + encodeURIComponent(settings.db.password) : '')
                 + "@" + encodeURIComponent(settings.db.host)
-                + (typeof settings.db.password != "undefined" ? ":" + encodeURIComponent(settings.db.port) : '')
+                + (typeof settings.db.port != "undefined" ? ":" + encodeURIComponent(settings.db.port) : '')
                 + "/" + encodeURIComponent(settings.db.database);
         }
     });
