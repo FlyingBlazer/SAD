@@ -6,9 +6,9 @@ exports.list = function(req, res, next) {
     var hospitalId = req.query.hospitalId;
     req.db.driver.execQuery(
         "SELECT doctor.id as id, doctor.name as name, hospital.name as hospital, department.name as department, " +
-        "doctor.title as title, doctor.info as description, doctor.photo as photo_url, department.id as department_id " +
-        "FROM doctor, department, hospital WHERE doctor.department_id = department.id AND department.hospital_id = hospital.id " +
-        "AND hospital.id = ?",
+        "doctor.title as title, doctor.info as description, doctor.photo as photo_url, department.id as department_id, " +
+        "doctor.price as price FROM doctor, department, hospital WHERE doctor.department_id = department.id " +
+        "AND department.hospital_id = hospital.id AND hospital.id = ?",
         [hospitalId],
         function(err, data) {
             if(err) throw err;
