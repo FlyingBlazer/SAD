@@ -7,7 +7,8 @@ block title
     title 医院列表
 
 block breadcrumb
-    li: a(href="/") 主页
+    li
+        a(href="/") 主页
     if search
         li.active 搜索结果
     else
@@ -15,9 +16,10 @@ block breadcrumb
 
 
 block site-content
-    div#site-content
-        div.container
+    div.container
+        div#site-content
             div.hospital-list
+                div.alert.alert-info.hidden 没有找到符合条件的结果
                 each hospital in list
                     div.hospital
                         img(src="/images/3.jpg").image
@@ -33,3 +35,18 @@ block site-content
                                 | #{hospital.address}
                         div.reservation
                             a.gbn.gbt-blue(href="/concierge/reserve/#{hospital.id}") 挂号
+
+    script.
+
+        $(document).ready(function () {
+
+            var hospitalCount = 0;
+            $(".hospital").each(function() {
+                hospitalCount++;
+            });
+            console.log(hospitalCount);
+            if (hospitalCount == 0) {
+                $(".alert").removeClass("hidden");
+            }
+
+        });
