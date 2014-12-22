@@ -1,9 +1,13 @@
 extends layout
 
+block append stylesheets
+    link(href="/stylesheets/hospital.css", rel="stylesheet", media="all")
+
+block append javascripts
+    script(src="http://api.map.baidu.com/api?v=2.0&ak=pZFhoaCvZGuO14AmE2f0Xkon")
+
 block title
     title 医院
-    link(href="/stylesheets/hospital.css", rel="stylesheet", media="all")
-    script(src="http://api.map.baidu.com/api?v=2.0&ak=pZFhoaCvZGuO14AmE2f0Xkon")
 
 block breadcrumb
     li

@@ -34,6 +34,11 @@
     color: #888888;
 }
 
+.nav-tabs {
+    margin-top: 20px;
+    border: none;
+}
+
 .hospital-intro {
     margin-top: 20px;
     border: 1px solid #eeeeee;
