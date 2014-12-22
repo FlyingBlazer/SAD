@@ -97,20 +97,20 @@ block site-content
                         td.table-content
                             a(href="#") 实习医生
 
-                div.department-list
+                div.doctor-list
                     each department, department_id in doctors
-                        div.department(data-name="#{department[0].department}")
-                            each doctor in department
-                                div.doctor
-                                    img(src="/pictures/#{doctor.photo_url}").image
-                                    div.doctor-info
-                                        div.name
-                                            a(href="/concierge/reserve/#{detail.id}/#{department_id}/#{doctor.id}") #{doctor.name}
-                                        div.title #{doctor.title}
-                                        div.department #{doctor.department}
-                                    div.doctor-intro #{doctor.description}
-                                    div.reservation
-                                        a.gbn.gbt-blue(href="/concierge/reserve/#{detail.id}/#{department_id}/#{doctor.id}") 挂号
+                        //div.department(data-name="#{department[0].department}")
+                        each doctor in department
+                            div.doctor(data-department="#{doctor.department}", data-title="#{doctor.title}")
+                                img(src="/pictures/#{doctor.photo_url}").image
+                                div.doctor-info
+                                    div.name
+                                        a(href="/concierge/reserve/#{detail.id}/#{department_id}/#{doctor.id}") #{doctor.name}
+                                    div.title #{doctor.title}
+                                    div.department #{doctor.department}
+                                div.doctor-intro #{doctor.description}
+                                div.reservation
+                                    a.gbn.gbt-blue(href="/concierge/reserve/#{detail.id}/#{department_id}/#{doctor.id}") 挂号
 
                 div.empty.hidden
                     div.alert.alert-info 没有找到符合条件的结果，请尝试减少筛选条件
@@ -126,9 +126,11 @@ block site-content
 
                 $(document).ready(function() {
 
+                    var selectedDepartment = "all";
+                    var selectedTitle = "all";
+                    var pageCount = 1;
                     var currentPage = 1;
-                    updatePageCount();
-                    updatePage();
+                    updateAll();
 
                     var map = new BMap.Map("hospital-map");
                     var bottom_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_BOTTOM_LEFT});
@@ -153,13 +155,40 @@ block site-content
                         $("a[href=\"#reserve\"]").tab("show");
                     });
 
-                    var departmentSelection = "";
-                    var selectedTitle = "";
+                    function updateSelection() {
+                        $(".doctor").each(function() {
+                            if (($(this).data("department") == selectedDepartment || selectedDepartment == "all") &&
+                                    ($(this).data("title") == selectedTitle || selectedTitle == "all")) {
+                                $(this).removeClass("hidden");
+                            } else {
+                                $(this).addClass("hidden");
+                            }
+                        });
+                    }
+
+                    function updateSelectionItem() {
+                        $("#select-item-department>.select-item-info").html(selectedDepartment);
+                        $("#select-item-title>.select-item-info").html(selectedTitle);
+                        if (selectedDepartment == "all" && selectedTitle == "all") {
+                            $("#select").addClass("hidden");
+                        } else if (selectedDepartment == "all") {
+                            $("#select-item-department").addClass("hidden");
+                            $("#select-item-title").removeClass("hidden");
+                            $("#select").removeClass("hidden");
+                        } else if (selectedTitle == "all") {
+                            $("#select-item-title").addClass("hidden");
+                            $("#select-item-department").removeClass("hidden");
+                            $("#select").removeClass("hidden");
+                        } else {
+                            $("#select-item-department").removeClass("hidden");
+                            $("#select-item-title").removeClass("hidden");
+                        }
+                    }
 
                     function checkEmpty() {
                         var empty = true;
                         $(".doctor").each(function () {
-                            if (!$(this).parent(".department").hasClass("hidden") && !$(this).hasClass("hidden")) {
+                            if (!$(this).hasClass("hidden")) {
                                 empty = false;
                             }
                         });
@@ -171,73 +200,29 @@ block site-content
                     }
 
                     $("#select-department a").click(function() {
-                        departmentSelection = $(this).html();
-                        $(".department-list>.department").each(function() {
-                            if ($(this).data("name") != departmentSelection) {
-                                $(this).addClass("hidden");
-                            } else {
-                                $(this).removeClass("hidden");
-                            }
-                        });
-                        checkEmpty();
-                        updatePageCount();
-                        updatePage();
-                        $("#select-item-department .select-item-info").html(departmentSelection);
-                        $("#select-item-department").removeClass("hidden");
-                        $("#select").removeClass("hidden");
+                        selectedDepartment = $(this).html();
+                        updateAll();
                     });
 
                     $("#select-title a").click(function () {
                         selectedTitle = $(this).html();
-                        $(".doctor").each(function () {
-                            if ($(this).find(".title").html() != selectedTitle) {
-                                $(this).addClass("hidden");
-                            } else {
-                                $(this).removeClass("hidden");
-                            }
-                        });
-                        checkEmpty();
-                        updatePageCount();
-                        updatePage();
-                        $("#select-item-title>.select-item-info").html(selectedTitle);
-                        $("#select-item-title").removeClass("hidden");
-                        $("#select").removeClass("hidden");
+                        updateAll();
                     });
 
                     $("#select-item-department>.select-item-close").click(function () {
-                        departmentSelection = "";
-                        $(".department-list>.department").each(function() {
-                            $(this).removeClass("hidden");
-                        });
-                        checkEmpty();
-                        updatePageCount();
-                        updatePage();
-                        $("#select-item-department").addClass("hidden");
-                        if (selectedTitle == "") {
-                            $("#select").addClass("hidden");
-                        }
+                        selectedDepartment = "all";
+                        updateAll();
                     });
 
                     $("#select-item-title>.select-item-close").click(function () {
-                        selectedTitle = "";
-                        $(".doctor").each(function () {
-                            $(this).removeClass("hidden");
-                        });
-                        checkEmpty();
-                        updatePageCount();
-                        updatePage();
-                        $("#select-item-title").addClass("hidden");
-                        if (departmentSelection == "") {
-                            $("#select").addClass("hidden");
-                        }
+                        selectedTitle = "all";
+                        updateAll();
                     });
-
-                    var pageCount = 1;
 
                     function updatePageCount() {
                         var doctorCount = 0;
                         $(".doctor").each(function () {
-                            if (!$(this).parent(".department").hasClass("hidden") && !$(this).hasClass("hidden")) {
+                            if (!$(this).hasClass("hidden")) {
                                 doctorCount++;
                                 $(this).attr("id", "item-" + doctorCount);
                             } else {
@@ -248,7 +233,7 @@ block site-content
                         $(".page-number").remove();
                         if (pageCount > 1) {
                             for (var i = 1; i <= pageCount; i++) {
-                                $("#next-page").before("<li id=\"page-" + i + "\" class=\"page-number\"><a href='#'>" + i + "</a></li>");
+                                $("li.next-page").before("<li id=\"page-" + i + "\" class=\"page-number\"><a href='#'>" + i + "</a></li>");
                             }
                             $("#page-1").addClass("active");
                             $("li.prev-page").addClass("disabled");
@@ -265,7 +250,6 @@ block site-content
                             $(this).addClass("hidden");
                         });
                         for (var i = (currentPage - 1) * 10 + 1; i <= currentPage * 10; i++) {
-                            console.log("#item-" + i);
                             $("#item-" + i).removeClass("hidden");
                         }
                         $(".pagination>li.active").removeClass("active");
@@ -282,7 +266,7 @@ block site-content
                         }
                     }
 
-                    $(".pagination>li.page-number>a").click(function() {
+                    $(".pagination").on("click", "li.page-number>a", function() {
                         currentPage = $(this).html();
                         updatePage();
                     });
@@ -304,4 +288,12 @@ block site-content
                         }
                         updatePage();
                     });
+
+                    function updateAll() {
+                        updateSelection();
+                        updateSelectionItem()
+                        checkEmpty();
+                        updatePageCount();
+                        updatePage();
+                    }
                 });
