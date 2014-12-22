@@ -41,7 +41,7 @@ block content
 
          });
       } );
-   h2 用户管理
+   h2 审核用户
    div
       table#example.table.table-striped.table-bordered.table-hover(cellspacing='0', width='60%')
          thead
@@ -51,7 +51,7 @@ block content
                th 身份证
                th 电话
                th 邮箱
-               th ip
+               th 注册IP
                th 操作
 
          tbody
@@ -65,7 +65,7 @@ block content
                      td #{item.email}
                      td #{item.ip}
                      td
-                        button.button.xs-button.blue-button.delete-hospital(class='accept_button',data-id='#{item.user_id}')  接受
+                        button.button.xs-button.blue-button.delete-hospital(class='accept_button',data-id='#{item.user_id}')  通过审核
                         button.button.xs-button.red-button.delete-hospital(class='refuse_button',data-id='#{item.user_id}',style='margin-left:10px')  拒绝
 
 

@@ -4,6 +4,60 @@ block content
    script.
       $(document).ready(function () {
          $('#example').DataTable();
+         $('.time_span').each(function(){
+            var time=$(this).data('time');
+            var array=time.split('T');
+            $(this).html(array[0]);
+         });
+         $('.pay_situation').each(function (){
+
+            var pay_content;
+            var status=$('.pay_situation').data('id');
+            if (status.charAt(0)=='0'){
+               pay_content='现场';
+            }
+            else {
+               pay_content='在线';
+            }
+            if (status.charAt(1)=='0'){
+               pay_content+='_未付款';
+            }
+            else {
+               pay_content+='_已付款';
+            }
+
+            $(this).html(pay_content);
+
+         });
+         $('.status').each(function(){
+
+            var status_content;
+            var button_disable=true;
+            var status=$('.pay_situation').data('id');
+            if (status.charAt(2)==0){
+               status_content='未确认';
+               button_disable=false;
+            }
+            else if(status.charAt(2)==1){
+               status_content='未到场';
+            }
+            else {
+               status_content='已到场';
+            }
+            if(status.charAt(3)==0){
+               status_content+='_未超时';
+            }
+            else {
+               status_content+='_已超时';
+               button_disable=true;
+
+            }
+            $(this).html(status_content);
+            var button='#'+$(this).data('flag');
+            $(button).attr("disabled", button_disable);
+
+         });
+
          $('.confirm').click(function() {
 
                var reservationId = $(this).data('id');
@@ -31,12 +85,12 @@ block content
       table#example.table.table-bordered.table-striped.table-hover(cellspacing='0', width='80%')
          thead
             tr
-               th 医生姓名
+               th 科室
                th 患者姓名
                th 身份证号
                th 时间
+               th 支付情况
                th 状态
-               th 科室
                th 价格
                th 操作
          tbody
@@ -44,16 +98,16 @@ block content
                each item in list
 
                   tr
-                     td #{item.doctor_name}
-                     td #{item.user_name}
-                     td #{item.user_sid}
-                     td #{item.time}
-                     td #{item.status_msg}
-                     td #{item.department_name}
-                     td #{item.price}
+                     td  #{item.department_name}
+                     td  #{item.user_name}
+                     td  #{item.user_sid}
                      td
-                        if (item.status.charAt(2)!='2')
-                          button.button.blue-button.xs-button.delete-hospital(class='confirm',data-id='#{item.reservation_id}') 确认到场
+                        span(class='time_span',data-time='#{item.time}')
+                     td
+                        span(data-id='#{item.status}',class='pay_situation')
+                     td
+                        span(data-id='#{item.status}',class='status',data-flag='#{item.reservation_id}')
+                     td ￥#{item.price}
+                     td
+                        button.button.blue-button.xs-button.delete-hospital(class='confirm',data-id='#{item.reservation_id}',id='#{item.reservation_id}') 确认到场
 
-                        else
-                          label  已到场
