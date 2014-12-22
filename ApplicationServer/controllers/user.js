@@ -65,7 +65,7 @@ exports.onRegister = function (request, response) {
 
         var checkCallback = function (checkResult) {
             if (checkResult != null) {
-                if (checkResult.taken == false) {//未注册
+                if (checkResult.code == 0 && checkResult.taken == false) {//未注册
 
                     var data = {
                         username: request.body.username,
@@ -264,6 +264,7 @@ exports.manage = function (request, response) {
  * 返回用户信息
  * @param userId
  * @param onSucceedCallback 参数为完整的个人信息(包括userId)
+ * @param onFailCallback 参数为message
  */
 function getUserInfo(userId, onSucceedCallback) {
     //从业务服务器检索用户信息
@@ -271,13 +272,10 @@ function getUserInfo(userId, onSucceedCallback) {
     var path = '/user/' + userId + '/info';
 
     var callback = function (result) {
-        if (result != null)
-            if (result.code == 0) {
-                //加入个人信息
-                result.userId = userId;
-                onSucceedCallback(result);
-            } else
-                printLogMessage(result.message);
+        //加入个人信息
+        result.userId = userId;
+        onSucceedCallback(result);
+
     };
 
     forwardRequestGET(path, callback);
@@ -309,6 +307,9 @@ exports.showUserInformation = function (request, response) {
                     credit: result.credit,
                     errorMessage: errorMessage
                 });
+            }, function (errorMessage) {
+                //TODO 404页面
+
             });
     }
 };
@@ -392,20 +393,21 @@ function showReservations(userId, message, response) {
 
     var callback = function (result) {
         if (result != null)
-            if (result.code == 0) {
-                getUserInfo(userId, function (userInfo) {
-                    //渲染预约单界面
-                    response.render('reservation_list', {
-                        username: userInfo.username,
-                        name: userInfo.name,
-                        status: userInfo.status,
-                        credit: userInfo.credit,
-                        reservations: result.reservations,
-                        message: message
-                    });
-                });
-            } else
-                printLogMessage(result.message);
+            printLogMessage('result:' + JSON.stringify(result));
+
+        getUserInfo(userId, function (userInfo) {
+            //渲染预约单界面
+            response.render('reservation_list', {
+                code: userInfo.code,
+                username: userInfo.username,
+                name: userInfo.name,
+                status: userInfo.status,
+                credit: userInfo.credit,
+                reservations: result.reservations,
+                message: userInfo.code == 0 ? message : ''
+            });
+        });
+
     };
 
     forwardRequestGET(path, callback);
