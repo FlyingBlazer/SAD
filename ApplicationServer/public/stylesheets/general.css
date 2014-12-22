@@ -6,9 +6,9 @@ body {
     background-color: #f8f8f8;
 }
 
-@media all and (min-width: 980px) {
+/*@media all and (min-width: 980px) {*/
     .navbar {
-        width: 960px;
+        /*width: 960px;*/
         margin-left: auto;
         margin-right: auto;
         margin-bottom: 0;
@@ -17,42 +17,42 @@ body {
     }
 
     #header-content {
-        width: 960px;
+        /*width: 960px;*/
         margin-left: auto;
         margin-right: auto;
     }
 
     #site-content {
-        width: 960px;
+        /*width: 960px;*/
         margin-left: auto;
         margin-right: auto;
         margin-top: 20px;
     }
-}
+/*}*/
 
-@media all and (max-width: 980px) {
-    .navbar {
-        width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-        margin-bottom: 0;
-        border-width: 0;
-        border-radius: 0;
-    }
+/*@media all and (max-width: 980px) {*/
+    /*.navbar {*/
+        /*width: 100%;*/
+        /*margin-left: auto;*/
+        /*margin-right: auto;*/
+        /*margin-bottom: 0;*/
+        /*border-width: 0;*/
+        /*border-radius: 0;*/
+    /*}*/
 
-    #header-content {
-        width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-    }
+    /*#header-content {*/
+        /*width: 100%;*/
+        /*margin-left: auto;*/
+        /*margin-right: auto;*/
+    /*}*/
 
-    #site-content {
-        width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 20px;
-    }
-}
+    /*#site-content {*/
+        /*width: 100%;*/
+        /*margin-left: auto;*/
+        /*margin-right: auto;*/
+        /*margin-top: 20px;*/
+    /*}*/
+/*}*/
 
 #header {
     background-color: #f8f8f8;
@@ -60,6 +60,8 @@ body {
 }
 
 .breadcrumb {
+    padding-left: 0;
+    margin-bottom: 10px;
     background-color: #f8f8f8;
 }
 
@@ -86,21 +88,8 @@ body {
     color: #888888;
 }
 
-.vertical-middle-helper {
-    display: inline-table;
-}
-
-.hospital .vertical-middle {
-    display: table-cell;
-    vertical-align: middle;
-}
-
 .hidden {
     display: none !important;
-}
-
-.table {
-    text-align: center;
 }
 
 .table>thead>tr>th,

@@ -16,19 +16,20 @@ block site-content
     link(href="/stylesheets/hospital_list.css", rel="stylesheet", media="all")
 
     div#site-content
-        div.hospital-list
-            each hospital in list
-                div.hospital
-                    img(src="/images/3.jpg").image
-                    div.hospital-info
-                        div.name
-                            a(href="/concierge/reserve/#{hospital.id}") #{hospital.name}
-                        div.rating #{hospital.level}
-                        div.tel
-                            i.fa.fa-phone.fa-fw
-                            | #{hospital.telephone}
-                        div.addr
-                            i.fa.fa-map-marker.fa-fw
-                            | #{hospital.address}
-                    div.reservation
-                        a.gbn.gbt-blue(href="/concierge/reserve/#{hospital.id}") 挂号
+        div.container
+            div.hospital-list
+                each hospital in list
+                    div.hospital
+                        img(src="/images/3.jpg").image
+                        div.hospital-info
+                            div.name
+                                a(href="/concierge/reserve/#{hospital.id}") #{hospital.name}
+                            div.rating #{hospital.level}
+                            div.tel
+                                i.fa.fa-phone.fa-fw
+                                | #{hospital.telephone}
+                            div.addr
+                                i.fa.fa-map-marker.fa-fw
+                                | #{hospital.address}
+                        div.reservation
+                            a.gbn.gbt-blue(href="/concierge/reserve/#{hospital.id}") 挂号

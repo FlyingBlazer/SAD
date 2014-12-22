@@ -22,101 +22,113 @@ block header-content-extra
             a(href="#reserve", data-toggle="tab") 预约挂号
 
 block site-content
-    div#site-content.tab-content
-        div#hospital-index.tab-pane.fade.in.active(role="tabpanel")
-            img.hospital-image
-            div.hospital-info
-                div.addr
-                    span.addr-label 地址：
-                    span.addr-content #{detail.address}
-                div.tel
-                    span.tel-label 电话：
-                    span.tel-content #{detail.telephone}
-                div.site
-                    span.site-label 官网：
-                    span.site-content
-                        a(href="#{detail.website}") #{detail.website}
+    div.container
+        div#site-content.tab-content
+            div#hospital-index.tab-pane.fade.in.active(role="tabpanel")
+                img.hospital-image
+                div.hospital-info
+                    div.addr
+                        span.addr-label 地址：
+                        span.addr-content #{detail.address}
+                    div.tel
+                        span.tel-label 电话：
+                        span.tel-content #{detail.telephone}
+                    div.site
+                        span.site-label 官网：
+                        span.site-content
+                            a(href="#{detail.website}") #{detail.website}
 
-            div.hospital-intro
-                div.intro-title
-                    h4 医院简介
-                hr
-                div.intro-content #{detail.description}
-                div.intro-title
-                    h4 科室列表
-                hr
-                div.departments
+                div.hospital-intro
+                    div.intro-title
+                        h4 医院简介
+                    hr
+                    div.intro-content #{detail.description}
+                    div.intro-title
+                        h4 科室列表
+                    hr
+                    div.departments
+                        each department in departments
+                            a.department-tag(href="#") #{department.name}
+
+                    div.intro-title
+                        h4 医院地图
+                    hr
+                    div#hospital-map
+
+            div#reserve.tab-pane.fade(role="tabpanel")
+
+                div#select.hidden
+                    | 您已选择：
+                    span#select-item-department.select-item.hidden
+                        span.select-item-info
+                        span.select-item-close
+                            i.fa.fa-close
+                    span#select-item-title.select-item.hidden
+                        span.select-item-info
+                        span.select-item-close
+                            i.fa.fa-close
+
+                table.table#select-department
+                    td.table-header(rowspan=100) 科室
+                    - var col = 5;
                     each department in departments
-                        a.department-tag(href="#") #{department.name}
+                        if col == 0
+                            tr
+                            - col = 5;
+                        td.table-content
+                            a(href="#") #{department.name}
+                            br
+                        - col--;
+                    while col > 0
+                        td.table-content
+                        - col--;
 
-                div.intro-title
-                    h4 医院地图
-                hr
-                div#hospital-map
+                table.table#select-title
+                    tr
+                        td.table-header 医生职称
+                        td.table-content
+                            a(href="#") 特级专家
+                        td.table-content
+                            a(href="#") 海外专家
+                        td.table-content
+                            a(href="#") 专家
+                        td.table-content
+                            a(href="#") 医师
+                        td.table-content
+                            a(href="#") 实习医生
 
-        div#reserve.tab-pane.fade(role="tabpanel")
+                div.department-list
+                    each department, department_id in doctors
+                        div.department(data-name="#{department[0].department}")
+                            each doctor in department
+                                div.doctor
+                                    img(src="/pictures/#{doctor.photo_url}").image
+                                    div.doctor-info
+                                        div.name
+                                            a(href="/concierge/reserve/#{detail.id}/#{department_id}/#{doctor.id}") #{doctor.name}
+                                        div.title #{doctor.title}
+                                        div.department #{doctor.department}
+                                    div.doctor-intro #{doctor.description}
+                                    div.reservation
+                                        a.gbn.gbt-blue(href="/concierge/reserve/#{detail.id}/#{department_id}/#{doctor.id}") 挂号
 
-            div#select.hidden
-                | 您已选择：
-                span#select-item-department.select-item.hidden
-                    span.select-item-info
-                    span.select-item-close
-                        i.fa.fa-close
-                span#select-item-title.select-item.hidden
-                    span.select-item-info
-                    span.select-item-close
-                        i.fa.fa-close
+                div.empty.hidden
+                    div.alert.alert-info 没有找到符合条件的结果，请尝试减少筛选条件
 
-            table.table#select-department
-                td.table-header(rowspan=100) 科室
-                - var col = 5;
-                each department in departments
-                    if col == 0
-                        tr
-                        - col = 5;
-                    td.table-content
-                        a(href="#") #{department.name}
-                        br
-                    - col--;
-                while col > 0
-                    td.table-content
-                    - col--;
-
-            table.table#select-title
-                tr
-                    td.table-header 医生职称
-                    td.table-content
-                        a(href="#") 特级专家
-                    td.table-content
-                        a(href="#") 海外专家
-                    td.table-content
-                        a(href="#") 专家
-                    td.table-content
-                        a(href="#") 医师
-                    td.table-content
-                        a(href="#") 实习医生
-
-            div.department-list
-                each department, department_id in doctors
-                    div.department(data-name="#{department[0].department}")
-                        each doctor in department
-                            div.doctor
-                                img(src="/pictures/#{doctor.photo_url}").image
-                                div.doctor-info
-                                    div.name
-                                        a(href="/concierge/reserve/#{detail.id}/#{department_id}/#{doctor.id}") #{doctor.name}
-                                    div.title #{doctor.title}
-                                    div.department #{doctor.department}
-                                div.doctor-intro #{doctor.description}
-                                div.reservation
-                                    a.gbn.gbt-blue(href="/concierge/reserve/#{detail.id}/#{department_id}/#{doctor.id}") 挂号
-
-            div.empty.hidden
-                div.alert.alert-info 没有找到符合条件的结果，请尝试减少搜索条件
+                nav.paging.hidden
+                    ul.pagination
+                        li.prev-page
+                            a(href='#') «
+                        li.next-page
+                            a(href='#') »
 
             script.
 
                 $(document).ready(function() {
+
+                    var currentPage = 1;
+                    updatePageCount();
+                    updatePage();
 
                     var map = new BMap.Map("hospital-map");
                     var bottom_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_BOTTOM_LEFT});
@@ -142,7 +154,7 @@ block site-content
                     });
 
                     var departmentSelection = "";
-                    var titleSelection = "";
+                    var selectedTitle = "";
 
                     function checkEmpty() {
                         var empty = true;
@@ -168,22 +180,26 @@ block site-content
                             }
                         });
                         checkEmpty();
+                        updatePageCount();
+                        updatePage();
                         $("#select-item-department .select-item-info").html(departmentSelection);
                         $("#select-item-department").removeClass("hidden");
                         $("#select").removeClass("hidden");
                     });
 
                     $("#select-title a").click(function () {
-                        titleSelection = $(this).html();
+                        selectedTitle = $(this).html();
                         $(".doctor").each(function () {
-                            if ($(this).find(".title").html() != titleSelection) {
+                            if ($(this).find(".title").html() != selectedTitle) {
                                 $(this).addClass("hidden");
                             } else {
                                 $(this).removeClass("hidden");
                             }
                         });
                         checkEmpty();
-                        $("#select-item-title>.select-item-info").html(titleSelection);
+                        updatePageCount();
+                        updatePage();
+                        $("#select-item-title>.select-item-info").html(selectedTitle);
                         $("#select-item-title").removeClass("hidden");
                         $("#select").removeClass("hidden");
                     });
@@ -194,22 +210,98 @@ block site-content
                             $(this).removeClass("hidden");
                         });
                         checkEmpty();
+                        updatePageCount();
+                        updatePage();
                         $("#select-item-department").addClass("hidden");
-                        if (titleSelection == "") {
+                        if (selectedTitle == "") {
                             $("#select").addClass("hidden");
                         }
                     });
 
                     $("#select-item-title>.select-item-close").click(function () {
-                        titleSelection = "";
+                        selectedTitle = "";
                         $(".doctor").each(function () {
                             $(this).removeClass("hidden");
                         });
                         checkEmpty();
+                        updatePageCount();
+                        updatePage();
                         $("#select-item-title").addClass("hidden");
                         if (departmentSelection == "") {
                             $("#select").addClass("hidden");
                         }
                     });
 
+                    var pageCount = 1;
+
+                    function updatePageCount() {
+                        var doctorCount = 0;
+                        $(".doctor").each(function () {
+                            if (!$(this).parent(".department").hasClass("hidden") && !$(this).hasClass("hidden")) {
+                                doctorCount++;
+                                $(this).attr("id", "item-" + doctorCount);
+                            } else {
+                                $(this).removeAttr("id");
+                            }
+                        });
+                        pageCount = Math.ceil(doctorCount / 10);
+                        $(".page-number").remove();
+                        if (pageCount > 1) {
+                            for (var i = 1; i <= pageCount; i++) {
+                                $("#next-page").before("<li id=\"page-" + i + "\" class=\"page-number\"><a href='#'>" + i + "</a></li>");
+                            }
+                            $("#page-1").addClass("active");
+                            $("li.prev-page").addClass("disabled");
+                            $("li.next-page").removeClass("disabled");
+                            $("nav.paging").removeClass("hidden");
+                        } else {
+                            $("nav.paging").addClass("hidden");
+                        }
+                        currentPage = 1;
+                    }
+
+                    function updatePage() {
+                        $(".doctor").each(function (i) {
+                            $(this).addClass("hidden");
+                        });
+                        for (var i = (currentPage - 1) * 10 + 1; i <= currentPage * 10; i++) {
+                            console.log("#item-" + i);
+                            $("#item-" + i).removeClass("hidden");
+                        }
+                        $(".pagination>li.active").removeClass("active");
+                        $("#page-" + currentPage).addClass("active");
+                        if (currentPage == 1) {
+                            $("li.prev-page").addClass("disabled");
+                        } else {
+                            $("li.prev-page").removeClass("disabled");
+                        }
+                        if (currentPage == pageCount) {
+                            $("li.next-page").addClass("disabled");
+                        } else {
+                            $("li.next-page").removeClass("disabled");
+                        }
+                    }
+
+                    $(".pagination>li.page-number>a").click(function() {
+                        currentPage = $(this).html();
+                        updatePage();
+                    });
+
+                    $(".pagination>li.prev-page>a").click(function() {
+                        if (currentPage > 1) {
+                            currentPage = currentPage - 1;
+                        } else {
+                            return;
+                        }
+                        updatePage();
+                    });
+
+                    $(".pagination>li.next-page>a").click(function() {
+                        if (currentPage < pageCount) {
+                            currentPage = currentPage + 1;
+                        } else {
+                            return;
+                        }
+                        updatePage();
+                    });
                 });
