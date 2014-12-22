@@ -14,9 +14,6 @@ exports.list = function(req, res, next) {
         [user_id],
         function (err, data) {
             if(err && err.message != 'Not found') throw err;
-            if(!data || data.length==0) {
-                return next(new Errors.EmptyReservation("You Don't Have Any Appointment!"));
-            }
             for(var i = 0; i < data.length; i++){
                 data[i]['status_msg']=parseStatus(data[i]['status']);
                 data[i].time = new Date(data[i].time).Format('yyyy-MM-dd');
@@ -42,9 +39,6 @@ exports.list_h = function(req, res, next) {
         [hospital_id],
         function (err, data) {
             if(err && err.message != 'Not found') throw err;
-            if(!data || data.length==0) {
-                return next(new Errors.EmptyReservation("You Don't Have Any Appointment!"));
-            }
             else{
                 for(var i = 0; i < data.length; i++){
                     data[i]['status_msg']=parseStatus(data[i]['status']);

@@ -17,15 +17,10 @@ module.exports = function(req, res, next) {
         [keyword_set],
         function (err, data) {
             if(err) throw err;
-            if(!data || data.length==0) {
-                return next(new Errors.EmptySearchResult("Nothing Is Found!"));
-            }
-            else{
-                res.json({
-                    code: 0,
-                    message: 'success',
-                    hospitals: data
-                });
-            }
+            res.json({
+                code: 0,
+                message: 'success',
+                hospitals: data
+            });
         });
 };
