@@ -64,13 +64,14 @@ block right_block
                     span.second_label 账号信息
                 hr#hr_style
                 .list_content
-                    span 登录名: #{username}
-                    span 真实姓名: #{name}
-                    span 电话: #{phone}
-                    span 邮箱: #{email}
-                    span 身份证号:#{sid}
-                    span 信用额度:#{credit}
-                    span 状态：#{status}
+                    span(class="list-group-item")  登录名:&nbsp;&nbsp; &nbsp;  #{username}
+                    span(class="list-group-item")  真实姓名:&nbsp; #{name}
+                    span(class="list-group-item")  电话:&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;   #{phone}
+                    span(class="list-group-item")  邮箱:&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; #{email}
+                    span(class="list-group-item")  身份证号: #{sid}
+                    span(class="list-group-item")  信用额度: #{credit}
+                    span(class="list-group-item")  状态：&nbsp; &nbsp;&nbsp;&nbsp; #{status}
+
             div#change_info.tab-pane.fade
                 .second_block: span.second_label  修改信息
                 hr(style='line-width:1;', width='90%', color='#1E90FF', size='1')

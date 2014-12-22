@@ -14,16 +14,17 @@
     margin-top: 20px;
 }
 .list_content span{
-    margin-top: 6px;
-    margin-left:60px;
-    font-size: 10pt;
-    display:block;
+
+    font-size: 13pt;
+    width:50%;
+    margin-left:50px;
 }
 #hr_style{
     width:90%;
     height:2px;
     color: #0186c7;
 }
+
 .clear {
     clear: both;
     display: block;
