@@ -288,9 +288,9 @@ var fireRequest = function(method, path, data, callback, noErrCodeCheck) {
                 if (noErrCodeCheck || srcObject.code == 0) {
                     callbackSent = true;
                     callback(srcObject);
-                } else if (srcObject.code == 2001
-                    || srcObject.code == 2101
-                    || srcObject.code == 2201) {
+                } else if (srcObject.code == 24
+                    || srcObject.code == 7
+                    || srcObject.code == 23) {
                     callbackSent = true;
                     callback(stdNotFound);
                 } else {
@@ -601,8 +601,8 @@ exports.onSubmit = function(request, response) {
             __fatalError(response, 'Line=' + __line + ', Func=' + __function);
             return;
         }
-        if (res.code == 3011) {
-            response.redirect(302, '/concierge/reserve/'+hospitalId+'/'+departmentId+'/'+doctorId+'/3011')
+        if (res.code == 22) {
+            response.redirect(302, '/concierge/reserve/'+hospitalId+'/'+departmentId+'/'+doctorId+'/22')
             return;
         }
         var resvId = res.id;
