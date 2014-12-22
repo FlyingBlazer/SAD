@@ -19,7 +19,7 @@ block site-content
                     strong.step 第一步：
                     | 预约下单
 
-                if resvDetail.status[1] == '0' && resvDetail.status[3] == '0'
+                if resvDetail.status[1] == '0' && resvDetail.status[2] != '2' && resvDetail.status[3] == '0'
                     li.current
                         i.fa.fa-credit-card
                         strong.step 第二步：
@@ -39,13 +39,19 @@ block site-content
 
                 if resvDetail.status[2] == '2'
                     li.complete
+                        i.fa.fa-check
+                        strong.step 第三步：
+                        | 就诊
+
+                if resvDetail.status[3] == '1'
+                    li
                         i.fa.fa-hospital-o
                         strong.step 第三步：
                         | 就诊
 
                 if resvDetail.status[2] == '2'
                     li.complete
-                        i.fa.fa-heart
+                        i.fa.fa-check
                         strong.step 第四步：
                         | 完成就诊
 
@@ -56,45 +62,51 @@ block site-content
                         | 完成就诊
 
                 if resvDetail.status[2] != '2' && resvDetail.status[3] == '1'
-                    li.complete
+                    li.danger
                         i.fa.fa-warning
-                        strong.step 第四步：
-                        | 订单超时
+                        strong.step.wrongtime 订单超时
 
     .order-detail
         ul
-            li.title 取号信息
+            li.title 预约详情
             li
-                p
-                    span 联系电话：#{userTelephone}
-                    span 取号地点：门诊3楼挂号处
-                p
-                    - switch (resvDetail.period) {case 'morning': period='上午';break; case 'afternoon': period='下午';break; case 'evening': period='晚上';break;}
-                    - var rdate = resvDetail.date.substr(0,10);
-                    span 就诊日期：#{rdate} #{period} （具体时间以预约成功短信为准）
-                    span 挂号费：#{doctorDetail.price}元
-            li.last
                 p
                     span 预约单号：#{resvDetail.reservation_id}
                     - var pdate = resvDetail.submission_date.replace('T',' ');
                     - pdate = pdate.substr(0, 19);
                     span 下单时间：#{pdate}
                 p
-                    span 就诊人：#{userRealName}
-                    span 证件号：#{userSocialId}
+                    span 预约医院：#{doctorDetail.hospital}
+                    span 预约科室：#{doctorDetail.department}
                 p
-                    span 预约医生：#{doctorDetail.name}#{doctorDetail.title}, #{doctorDetail.hospital}-#{doctorDetail.department}
-                    span 门诊类型：特色门诊
-                p
+                    span 预约医生：#{doctorDetail.name} #{doctorDetail.title}
                     span 就诊类型：初诊
                 p
+                    span 门诊类型：特色门诊
+                    span 取号地点：门诊3楼挂号处
+                p
+                    - switch (resvDetail.period) {case 'morning': period='上午';break; case 'afternoon': period='下午';break; case 'evening': period='晚上';break;}
+                    - var rdate = resvDetail.date.substr(0,10);
+                    span 就诊日期：#{rdate} #{period} （具体时间以预约成功短信为准）
                     span 就诊地点：门诊3楼
+                p
+                    span 挂号费：#{doctorDetail.price}元
                     span 付款状态：#{resvDetail.status_msg}
+            li.title 就诊人详情
+            li.last
+                p
+                    span 就诊人：#{userRealName}
+                    span 联系电话：#{userTelephone}
+                p
+                    span 证件号：#{userSocialId}
+
+
         div
             if resvDetail.status[1] == '1' && resvDetail.status[5] == '0'
                 button.btn.btn-xs.btn-success 打印挂号单
             if resvDetail.status[1] == '0' && resvDetail.status[5] == '0'
                 button.btn.btn-xs.btn-success 打印预约单
+            if resvDetail.status[1] == '0' && resvDetail.status[5] == '0' && resvDetail.status[2] != '2' && resvDetail.status[3] == '0'
                 button.btn.btn-xs.btn-primary(type='button', onclick='pay()') 付款
             - var myDate = new Date();
             - var str = myDate.getFullYear()+"-"+(myDate.getMonth()+1)+"-"+myDate.getDate();

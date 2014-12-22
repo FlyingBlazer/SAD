@@ -1,16 +1,16 @@
 extends layout
 
-block append stylesheets
-    link(href="/stylesheets/doctor.css", rel="stylesheet", media="all")
-
 block title
     title 医生
+    link(href="/stylesheets/doctor.css", rel="stylesheet", media="all")
 
 block breadcrumb
-    li: a(href="/") 主页
+    li
+        a(href="/") 主页
     //li
     //    a(href="/#{detail.province}/hospitals") #{detail.province}
-    li: a(href="/concierge/reserve/#{hospitalId}") #{detail.hospital}
+    li
+        a(href="/concierge/reserve/#{hospitalId}") #{detail.hospital}
     li #{detail.department}
     li.active #{detail.name}
 
@@ -19,74 +19,109 @@ block header-content-extra
     label.doctor-title #{detail.title}
 
 block site-content
-    div#site-content
-        img.doctor-image
-        div.doctor-info
-            div.hospital
-                span.hospital-label 医院：
-                span.hospital-content #{detail.hospital}
-            div.department
-                span.department-label 科室：
-                span.department-content #{detail.department}
-            div.price
-                span.price-label 挂号费：
-                span.price-content #{detail.price}元
+    div.container
+        div#site-content
+            img.doctor-image
+            div.doctor-info
+                div.hospital
+                    span.hospital-label 医院：
+                    span.hospital-content #{detail.hospital}
+                div.department
+                    span.department-label 科室：
+                    span.department-content #{detail.department}
+                div.price
+                    span.price-label 挂号费：
+                    span.price-content #{detail.price}元
 
-        div.doctor-intro
-            div.intro-title: h4 医生简介
-            hr
-            div.intro-content #{detail.description}
-            div.intro-title: h4 预约时间表
-            hr
-            table#timetable.table
-                tr#date
-                    each time in detail.time_slots
-                        th
-                            | #{time.date.month}/#{time.date.date}
-                            br
-                            | #{time.date.day}
-                tr#morning
-                    each time in detail.time_slots
-                        td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}", data-day="#{time.date.day}")
-                            if time.slot.morning[0]
-                                a(href="#") 预约
-                            else
-                                | -
-                tr#afternoon
-                    each time in detail.time_slots
-                        td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}", data-day="#{time.date.day}")
-                            if time.slot.afternoon[0]
-                                a(href="#") 预约
-                            else
-                                | -
-                tr#evening
-                    each time in detail.time_slots
-                        td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}", data-day="#{time.date.day}")
-                            if time.slot.evening[0]
-                                a(href="#") 预约
-                            else
-                                | -
+            div.doctor-intro
+                div.intro-title
+                    h4 医生简介
+                hr
+                div.intro-content #{detail.description}
+                div.intro-title
+                    h4 预约时间表
+                hr
+                table#timetable.table
+                    tr#date
+                        each time in detail.time_slots
+                            th
+                                | #{time.date.month}/#{time.date.date}
+                                br
+                                | #{time.date.day}
+                    tr#morning
+                        each time in detail.time_slots
+                            td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}", data-day="#{time.date.day}")
+                                if time.slot.morning[0]
+                                    if time.slot.morning[2] != time.slot.morning[1]
+                                        if status != "candidating"
+                                            a(href="#") 预约
+                                            br
+                                            | 余#{time.slot.morning[1] - time.slot.morning[2]}
+                                        else
+                                            | 预约
+                                            br
+                                            | 余#{time.slot.morning[1] - time.slot.morning[2]}
+                                    else
+                                        | 已满
+                                else
+                                    | -
+                    tr#afternoon
+                        each time in detail.time_slots
+                            td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}", data-day="#{time.date.day}")
+                                if time.slot.afternoon[0]
+                                    if time.slot.afternoon[2] != time.slot.afternoon[1]
+                                        if status != "candidating"
+                                            a(href="#") 预约
+                                            br
+                                            | 余#{time.slot.afternoon[1] - time.slot.afternoon[2]}
+                                        else
+                                            | 预约
+                                            br
+                                            | 余#{time.slot.afternoon[1] - time.slot.afternoon[2]}
+                                    else
+                                        | 已满
+                                else
+                                    | -
+                    tr#evening
+                        each time in detail.time_slots
+                            td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}", data-day="#{time.date.day}")
+                                if time.slot.evening[0]
+                                    if time.slot.evening[2] != time.slot.evening[1]
+                                        if status != "candidating"
+                                            a(href="#") 预约
+                                            br
+                                            | 余#{time.slot.evening[1] - time.slot.evening[2]}
+                                        else
+                                            | 预约
+                                            br
+                                            | 余#{time.slot.evening[1] - time.slot.evening[2]}
+                                    else
+                                        | 已满
+                                else
+                                    | -
 
-        form#post-form.hidden(method="POST", action="/concierge/reserve-confirm")
-            input(name="hospitalId", value="#{hospitalId}")
-            input(name="hospital", value="#{detail.hospital}")
-            input(name="departmentId", value="#{departmentId}")
-            input(name="department",value="#{detail.department}")
-            input(name="doctorId", value="#{detail.id}")
-            input(name="doctor", value="#{detail.name}")
-            input(name="title", value="#{detail.title}")
-            input(name="price", value="#{detail.price}")
-            input(name="resvDate")
-            input(name="resvTime")
-            input(name="day")
+            form#post-form.hidden(method="POST", action="/concierge/reserve-confirm")
+                input(name="hospitalId", value="#{hospitalId}")
+                input(name="hospital", value="#{detail.hospital}")
+                input(name="departmentId", value="#{departmentId}")
+                input(name="department",value="#{detail.department}")
+                input(name="doctorId", value="#{detail.id}")
+                input(name="doctor", value="#{detail.name}")
+                input(name="title", value="#{detail.title}")
+                input(name="price", value="#{detail.price}")
+                input(name="resvDate")
+                input(name="resvTime")
+                input(name="day")
 
-block append scripts
     script.
+
         $(document).ready(function() {
+
             $("#timetable a").click(function() {
                 $("#post-form input[name='resvDate']").val($(this).parent("td").data("date"));
                 $("#post-form input[name='resvTime']").val($(this).parents("tr").attr("id"));
                 $("#post-form input[name='day']").val($(this).parent("td").data("day"));
                 $("#post-form").submit();
             });
+
         });

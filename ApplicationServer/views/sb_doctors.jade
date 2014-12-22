@@ -55,7 +55,9 @@ block content
                      td: a.x-editable.x-editable-name(href='#', data-id='#{doctor.id}')= doctor.name
                      td: a.x-editable.x-editable-dept(href='#', data-id='#{doctor.id}')= doctor.department
                      td: a.x-editable.x-editable-title(href='#', data-id='#{doctor.id}')= doctor.title
-                     td: a.x-editable.x-editable-price(href='#', data-id='#{doctor.id}')= doctor.price
+                     td
+                        | ¥&nbsp;
+                        a.x-editable.x-editable-price(href='#', data-id='#{doctor.id}')= doctor.price
                      td: a.x-editable.x-editable-desc(href='#', data-id='#{doctor.id}')= doctor.description
                      td
                         a.button.blue-button.xs-button.opnl-button(href='/backstage/doctor/#{doctor.id}/edit_schedule') 编辑排班
@@ -63,14 +65,6 @@ block content
 
          script.
             $(function() {
-               var doctorTable = $('#doctor-table').DataTable({
-                  order: [[0, "asc"]],
-                  aoColumnDefs: [{
-                     bSortable: false,
-                     aTargets: ['nosort']
-                  }]
-               });
-
                $('#doctor-table .x-editable-desc').each(function() {
                   $(this).text($(this).text().replace('<br>', ''));
                });
@@ -177,6 +171,14 @@ block content
                         }
                      }
                   });
+               });
+
+               var doctorTable = $('#doctor-table').DataTable({
+                  order: [[0, "asc"]],
+                  aoColumnDefs: [{
+                     bSortable: false,
+                     aTargets: ['nosort']
+                  }]
                });
 
                $('.delete-doctor').click(function() {

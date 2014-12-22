@@ -33,6 +33,39 @@ Object.defineProperty(global, '__function', {
     }
 });
 
+var py2cn = {};
+py2cn['beijing']='北京市';
+py2cn['tianjin']='天津市';
+py2cn['hebei']='河北省';
+py2cn['shanxi']='山西省';
+py2cn['neimenggu']='内蒙古自治区';
+py2cn['liaoning']='辽宁省';
+py2cn['jilin']='吉林省';
+py2cn['heilongjiang']='黑龙江省';
+py2cn['shanghai']='上海市';
+py2cn['jiangsu']='江苏省';
+py2cn['zhejiang']='浙江省';
+py2cn['anhui']='安徽省';
+py2cn['fujian']='福建省';
+py2cn['jiangxi']='江西省';
+py2cn['jiangxi']='山东省';
+py2cn['henan']='河南省';
+py2cn['hubei']='湖北省';
+py2cn['hunan']='湖南省';
+py2cn['guangdong']='广东省';
+py2cn['guangxi']='广西省';
+py2cn['hainan']='海南省';
+py2cn['chongqing']='重庆市';
+py2cn['sichuan']='四川省';
+py2cn['guizhou']='贵州省';
+py2cn['yunnan']='云南省';
+py2cn['xizang']='西藏自治区';
+py2cn['shaanxi']='陕西省';
+py2cn['gansu']='甘肃省';
+py2cn['qinghai']='青海省';
+py2cn['ningxia']='宁夏回族自治区';
+py2cn['xinjiang']='新疆维吾尔族自治区';
+
 var logError = function(errMsg) {
     console.error('(!) # FATAL ERROR # ...');
     for (var i = 0; i < arguments.length; ++i) {
@@ -221,7 +254,7 @@ exports.listHospitals = function(request, response) {
             username: username,
             search: false,
             searchText: null,
-            province: province,
+            province: py2cn[province],
             list: res.hospitals
         });
     }, false);
@@ -298,6 +331,7 @@ exports.showHospital = function(request, response) {
             __entityNotFound(response, 'Line=' + __line + ', Func=' + __function);
             return;
         }
+        detail.province = py2cn[detail.province];
         response.render('hospital', {
             username: username,
             detail: detail,

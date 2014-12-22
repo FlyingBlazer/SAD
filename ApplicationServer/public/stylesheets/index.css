@@ -1,3 +1,12 @@
+body {
+    font-family: 'Open Sans', Arial, 'Hiragino Sans GB', 'Helvetica Neue', 'Helvetica', 'Microsoft YaHei', '微软雅黑', sans-serif;
+    text-rendering: optimizeLegibility;
+}
+
+a {
+    transition: all .4s ease;
+}
+
 .navbar .navbar-form {
     display: none;
 }
@@ -67,6 +76,7 @@
 
 .nav-tabs li a {
     margin: 0 !important;
+    padding: 10px 13px !important;
 }
 
 .nav-tabs li a:hover {
