@@ -28,9 +28,10 @@ block site-content
                             p: a(href="/concierge/reserve/#{detail.hospitalId}",target="_blank") #{detail.hospital}
                             p: a #{detail.department}
                     td 专家门诊
-                    td #{detail.date} #{detail.time}
+                    - switch (detail.time) {case 'morning': period='上午';break; case 'afternoon': period='下午';break; case 'evening': period='晚上';break;}
+                    td #{detail.date} #{period}
                     td.money ￥#{detail.price}
-            p.tips 温馨提醒：挂号网免费提供预约挂号服务，实际挂号费由医院收取，请放心使用。
+            p.tips 温馨提醒：SRF免费提供预约挂号服务，实际挂号费由医院收取，请放心使用。
         .bookinfo
             div
                 .title 就诊人信息

@@ -7,6 +7,60 @@ block title
     title 预约详情
 
 block site-content
+    .process
+        if resvDetail.status[5] == '1'
+            p.cancel
+                i.fa.fa-trash  订单已取消
+
+        if resvDetail.status[5] == '0'
+            ol.steps
+                li.complete
+                    i.fa.fa-check
+                    strong.step 第一步：
+                    | 预约下单
+
+                if resvDetail.status[1] == '0' && resvDetail.status[3] == '0'
+                    li.current
+                        i.fa.fa-credit-card
+                        strong.step 第二步：
+                        | 付款（可选）
+
+                if resvDetail.status[1] == '1' || resvDetail.status[2] == '2' || resvDetail.status[3] == '1'
+                    li.complete
+                        i.fa.fa-check
+                        strong.step 第二步：
+                        | 付款（可选）
+
+                if resvDetail.status[2] != '2' && resvDetail.status[3] == '0'
+                    li.current
+                        i.fa.fa-hospital-o
+                        strong.step 第三步：
+                        | 就诊
+
+                if resvDetail.status[2] == '2'
+                    li.complete
+                        i.fa.fa-hospital-o
+                        strong.step 第三步：
+                        | 就诊
+
+                if resvDetail.status[2] == '2'
+                    li.complete
+                        i.fa.fa-heart
+                        strong.step 第四步：
+                        | 完成就诊
+
+                if resvDetail.status[2] != '2' && resvDetail.status[3] == '0'
+                    li
+                        i.fa.fa-heart
+                        strong.step 第四步：
+                        | 完成就诊
+
+                if resvDetail.status[2] != '2' && resvDetail.status[3] == '1'
+                    li.complete
+                        i.fa.fa-warning
+                        strong.step 第四步：
+                        | 订单超时
+
     .order-detail
         ul
             li.title 取号信息
@@ -15,12 +69,16 @@ block site-content
                     span 联系电话：#{userTelephone}
                     span 取号地点：门诊3楼挂号处
                 p
-                    span 就诊日期：#{resvDetail.date} #{resvDetail.period} （具体时间以预约成功短信为准）
+                    - switch (resvDetail.period) {case 'morning': period='上午';break; case 'afternoon': period='下午';break; case 'evening': period='晚上';break;}
+                    - var rdate = resvDetail.date.substr(0,10);
+                    span 就诊日期：#{rdate} #{period} （具体时间以预约成功短信为准）
                     span 挂号费：#{doctorDetail.price}元
             li.last
                 p
                     span 预约单号：#{resvDetail.reservation_id}
-                    span 下单时间：#{resvDetail.submission_date}
+                    - var pdate = resvDetail.submission_date.replace('T',' ');
+                    - pdate = pdate.substr(0, 19);
+                    span 下单时间：#{pdate}
                 p
                     span 就诊人：#{userRealName}
                     span 证件号：#{userSocialId}
@@ -33,10 +91,17 @@ block site-content
                     span 就诊地点：门诊3楼
                     span 付款状态：#{resvDetail.status_msg}
         div
-            button.btn.btn-xs.btn-success 打印
-            if !resvDetail.status
+            if resvDetail.status[1] == '1' && resvDetail.status[5] == '0'
+                button.btn.btn-xs.btn-success 打印挂号单
+            if resvDetail.status[1] == '0' && resvDetail.status[5] == '0'
+                button.btn.btn-xs.btn-success 打印预约单
                 button.btn.btn-xs.btn-primary(type='button', onclick='pay()') 付款
-            button.btn.btn-xs.btn-danger(type='button', onclick='cancel()') 取消订单
+            - var myDate = new Date();
+            - var str = myDate.getFullYear()+"-"+(myDate.getMonth()+1)+"-"+myDate.getDate();
+            if resvDetail.status[5] == '0' && str < rdate
+                button.btn.btn-xs.btn-danger(type='button', onclick='cancel()') 取消订单
+            if resvDetail.status[5] == '0' && str >= rdate
+                button.btn.btn-xs.btn-danger(disabled) 取消订单
 
 block append scripts
     script(type='text/javascript').
