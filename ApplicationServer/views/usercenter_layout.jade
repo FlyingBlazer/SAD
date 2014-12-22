@@ -1,7 +1,6 @@
 extends layout
 
 block append stylesheets
-    link(href="/stylesheets/bootstrap/css/bootstrap.min.css", rel="stylesheet", media="all")
     link(href="/stylesheets/usercenter_reservation_list.css",rel="stylesheet", media="all")
     link(href="/stylesheets/usercenter_userinfo.css",rel="stylesheet", media="all")
     link(rel='stylesheet', href='/backstage/css/font-awesome.css', media='all')
@@ -10,7 +9,9 @@ block append stylesheets
     link(rel='stylesheet', href='/backstage/css/editable.css', media='all')
     link(rel='stylesheet', href='/backstage/css/tab.css', media='all')
     link(rel='stylesheet', href='/backstage/css/components.css', media='all')
-    script(src='/backstage/plugins/jquery/jquery-2.1.1.min.js')
+block append scripts
+    script(src="/javascripts/md5.js")
+    script(src='/javascripts/jquery-2.1.1.min.js')
     script(src='/backstage/plugins/jquery-validation/jquery.validate.min.js')
     script(src='/backstage/plugins/jquery-validation/messages_zh.js')
     script(src='/backstage/plugins/toastr-notifications/toastr.min.js')
@@ -18,10 +19,6 @@ block append stylesheets
     script(src='/backstage/plugins/bootstrap3-editable/js/bootstrap-editable.js')
     script(src='/backstage/plugins/bootstrap3-editable/js/bootstrap-datepicker.js')
     script(src='/backstage/plugins/bootstrap3-editable/js/bootstrap-datepicker.zh-CN.js')
-block append scripts
-    script(src="/javascripts/md5.js")
-    script(src='/javascripts/jquery-2.1.1.min.js')
-
 
 block breadcrumb
     li: a(href="/") 主页

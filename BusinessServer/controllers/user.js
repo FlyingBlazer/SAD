@@ -142,17 +142,17 @@ exports.info = function(req, res, next) {
         if(!user) return next(new Errors.UserNotExist('User Not Exist'));
         var status_s;
         switch(parseInt(user.isActivated)) {
-            case 0:
-                status_s = 'candidating';
-                break;
             case 1:
-                status_s = 'rejected';
+                status_s="Accepted";
                 break;
-            case 2:
-                status_s = 'approved';
+            case 0:
+                status_s="Validating";
                 break;
-            case 3:
-                status_s = 'deprived';
+            case -1:
+                status_s="Rejected";
+                break;
+            case -2:
+                status_s="Out of credit";
                 break;
             default:
                 console.log(user.isActivated);
