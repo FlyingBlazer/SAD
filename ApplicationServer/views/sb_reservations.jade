@@ -48,11 +48,12 @@ block content
             else {
                status_content+='_已超时';
                button_disable=true;
-
             }
             $(this).html(status_content);
             var button='#'+$(this).data('flag');
-            $(button).attr("disabled", button_disable);
+            if(button_disable){
+               $(button).addClass("disabled-button");
+            }
             $('#example').DataTable();
 
          });
