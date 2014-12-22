@@ -130,14 +130,22 @@ exports.add = function(req, res, next) {
                                     if(err && err.message != 'Not found') throw err;
                                     if(!data1 || data1.length==0){}
                                     var len = appointments.length;
+                                    console.info('len', len);
                                     appointments.forEach(function(appointment) {
+                                        console.info('in');
                                         appointment.getDoctor(function(err, doctor){
+                                            if(err) throw err;
                                             if(doctor.department_id == adepartment_id){
                                                 return next(new Errors.ReservationConflict('You have already had one appointment at that period for the same department'));
                                             }
+                                            console.info('out');
                                             finish();
                                         });
                                     });
+                                    if(len == 0) {
+                                        len++;
+                                        finish();
+                                    }
                                     function finish() {
                                         if(--len === 0) {
                                             req.models.appointment.create({
