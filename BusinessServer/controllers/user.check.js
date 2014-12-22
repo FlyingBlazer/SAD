@@ -153,7 +153,7 @@ exports.revive = function(req, res, next) {
                     if(!user || user.isActivated != -2) {
                         return next(new Errors.AdminAccessRejected("You are not authorized to modify user info"));
                     }
-                    req.db.driver.execQuery("CALL Revive(?, ?)"), [userId, credit], function(err) {
+                    req.db.driver.execQuery("CALL Revive(?, ?)"), [credit, userId], function(err) {
                         if(err) {
                             throw err;
                         }
