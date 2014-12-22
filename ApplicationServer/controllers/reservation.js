@@ -474,31 +474,32 @@ exports.showDoctor = function(request, response) {
         userInfo = parseUserInfo(request);
 
     var username = userInfo.username ? userInfo.username : '';
-    var status = userInfo.status;
     var expertId = request.params.expert_id;
     var hospitalId = request.params.hospital_id;
     var departmentId = request.params.department_id;
     var errCode = request.params.err_code ? request.params.err_code : '';
-    var url = '/hospital/doctor/' + expertId + '/detail';
 
-    fireRequest('GET', url, null, function(res) {
-        if (res == null) {
-            __fatalError(response, 'Line=' + __line + ', Func=' + __function);
-            return;
-        }
-        if (res == stdNotFound) {
-            __entityNotFound(response, 'Line=' + __line + ', Func=' + __function);
-            return;
-        }
-        response.render('doctor', {
-            username: username,
-            status: status,
-            errCode: errCode,
-            hospitalId: hospitalId,
-            departmentId: departmentId,
-            detail: res
+    fireRequest('GET', '/user/' + userInfo.userId + '/info', null, function(res) {
+        var status = res.status;
+        fireRequest('GET', '/hospital/doctor/' + expertId + '/detail', null, function(res) {
+            if (res == null) {
+                __fatalError(response, 'Line=' + __line + ', Func=' + __function);
+                return;
+            }
+            if (res == stdNotFound) {
+                __entityNotFound(response, 'Line=' + __line + ', Func=' + __function);
+                return;
+            }
+            response.render('doctor', {
+                username: username,
+                status: status,
+                errCode: errCode,
+                hospitalId: hospitalId,
+                departmentId: departmentId,
+                detail: res
+            });
         });
-    }, false);
+    });
 };
 
 // post (need x-www-form-urlencoded data)
