@@ -4,6 +4,10 @@ exports.working = require('./hospital.doctor.working');
 
 exports.list = function(req, res, next) {
     var hospitalId = req.query.hospitalId;
+    var date = req.query.date;
+    var period = req.query.period == 'morning' ? 1 : (req.query.period == 'afternoon' ? 2 : 3);
+    var count = 1;
+    var ret = {};
     req.db.driver.execQuery(
         "SELECT doctor.id as id, doctor.name as name, hospital.name as hospital, department.name as department, " +
         "doctor.title as title, doctor.info as description, doctor.photo as photo_url, department.id as department_id, " +
@@ -12,20 +16,70 @@ exports.list = function(req, res, next) {
         [hospitalId],
         function(err, data) {
             if(err) throw err;
-            var ret = {};
-            data.forEach(function(line) {
-                if(!Array.isArray(ret[line.department_id])) {
-                    ret[line.department_id] = [];
+            count = data.length;
+            if(typeof date != 'undefined') {
+                date = new Date(date);
+                var day = (date.getDay()+6)%7+1;
+                var freq = '2_______'.replaceAt(day, '1');
+                if(typeof period != 'undefined') {
+                    data.forEach(function(line) {
+                        req.db.driver.execQuery(
+                            "SELECT working.* FROM doctor, working WHERE doctor.id = working.doctor_id AND doctor.id = ? " +
+                            "AND working.period = ? AND (working.frequency LIKE ? "+
+                            "OR (working.date = ? AND working.frequency LIKE '0%'))",
+                            [line.id, period, freq, req.query.date],
+                            function(err, d) {
+                                if(err) throw err;
+                                if(d.length > 0) {
+                                    if(!Array.isArray(ret[line.department_id])) {
+                                        ret[line.department_id] = [];
+                                    }
+                                    ret[line.department_id].push(line);
+                                }
+                                finish();
+                            }
+                        );
+                    });
+                } else {
+                    data.forEach(function(line) {
+                        req.db.driver.execQuery(
+                            "SELECT working.* FROM doctor, working WHERE doctor.id = working.doctor_id AND doctor.id = ? " +
+                            "AND (working.frequency LIKE ? OR (working.date = ? AND working.frequency LIKE '0%'))",
+                            [line.id, period, req.query.date, freq],
+                            function(err, data) {
+                                if(err) throw err;
+                                if(date.length > 0) {
+                                    if(!Array.isArray(ret[line.department_id])) {
+                                        ret[line.department_id] = [];
+                                    }
+                                    ret[line.department_id].push(line);
+                                }
+                                finish();
+                            }
+                        );
+                    });
                 }
-                ret[line.department_id].push(line);
-            });
+            } else {
+                count = 1;
+                data.forEach(function(line) {
+                    if (!Array.isArray(ret[line.department_id])) {
+                        ret[line.department_id] = [];
+                    }
+                    ret[line.department_id].push(line);
+                });
+                finish();
+            }
+        }
+    );
+    function finish() {
+        if(--count === 0) {
             res.json({
                 code: 0,
                 message: 'success',
                 doctors: ret
             });
         }
-    );
+    }
 };
 
 exports.add = function(req, res, next) {
