@@ -28,6 +28,12 @@
     margin-left: 20px;
 }
 
+.hospital-info>.addr,
+.hospital-info>.tel,
+.hospital-info>.site {
+    margin-bottom: 10px;
+}
+
 .hospital-info>.addr>.addr-label,
 .hospital-info>.tel>.tel-label,
 .hospital-info>.site>.site-label {
