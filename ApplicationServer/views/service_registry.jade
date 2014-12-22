@@ -1,0 +1,79 @@
+html
+    head
+        title
+        script(src='/javascripts/jquery-2.1.1.min.js')
+        script(src='/javascripts/pdfmake.min.js')
+        script(src='/javascripts/vfs_fonts.js')
+        script.
+            pdfMake.fonts = {
+               pinghei: {
+                    normal: 'pinghei.ttf'
+                }
+            }
+            var doc = {
+                defaultStyle: {
+                    font: 'pinghei',
+                    fontSize: 16
+                },
+                styles: {},
+                content: [
+                    {
+                        text: 'SRF 在线预约挂号系统挂号单',
+                        fontSize: 24,
+                        alignment: 'center',
+                        margin: [0, 0, 0, 10]
+                    },
+                    {
+                        text: '#{hospitalName}',
+                        fontSize: 18,
+                        alignment: 'center',
+                        margin: [0, 0, 0, 10]
+                    },
+                    {
+                        text: '（检查日请携带身份证和预约单到医院指定地点报道）',
+                        alignment: 'center'
+                    },
+                    {
+                        text: '预约编号：#{reservationId}',
+                        margin: [0, 15, 0, 0]
+                    },
+                   {
+                      text: '挂号流水号：#{registryId}',
+                      margin: [0, 5, 0, 0]
+                   },
+                    {
+                        margin: [0, 5, 0, 10],
+                        table: {
+                            widths: [80, 160, 80, 160],
+                            body: [
+                                ['检查者姓名', '#{name}', '预约日期', '#{date}'],
+                                ['性别', '#{gender}', '年龄', '#{age}'],
+                                ['身份证号', '#{sid}', '患者联络电话', '#{phone}'],
+                                ['预约科室', '#{department}', '预约医生', '#{doctor}'],
+                                ['挂号费', '#{price} 元', '交费状态', '尚未交费']
+                            ]
+                        }
+                    },
+                    {
+                        text: '(!) 注意：敬请准时前来就诊，逾时就诊者请等候或恐须改期，敬请谨慎预约'
+                    },
+                    {
+                        text: '(!) 预约日期当天起不允许取消预约'
+                    },
+                    {
+                        text: '此预约单由系统自动生成，就诊时请务必携带并出示。',
+                        fontSize: 12,
+                        margin: [0, 50, 0, 0]
+                    },
+                    {
+                        text: '预约单生成于 #{generationTime}',
+                        fontSize: 12,
+                        margin: [0, 5, 0, 0]
+                    }
+                ]
+            };
+            var pdf = pdfMake.createPdf(doc);
+            //pdf.open();
+            pdf.print();
+
+    body

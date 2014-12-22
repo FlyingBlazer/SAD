@@ -3,41 +3,55 @@ extends layout
 block append stylesheets
     link(href="/stylesheets/login.css", rel="stylesheet", media="all")
 
+block append javascripts
+    script(src="/javascripts/md5.js")
+
 block title
-    title 登陆界面
+    title 登陆
+
+block breadcrumb
+    li
+        a(href="/") 主页
+    li 登陆
 
 block site-content
     .container
-        .left-content(style='float: left;')
-            form.form-login(role='form', action='/account/login', name='postLoginMessage', method='post')
-                h2.form-login-heading 请登录
-                input#username.form-control(type='username', name='username', placeholder='用户名', required='', autofocus='')
-                input#password.form-control(type='password', name='password', placeholder='请输入密码', required='')
-                .checkbox: label
-                    input(type='checkbox', value='remember-me')
-                    | 记住我
-                h2.label(name='errorMessage', style='color: red; font-size: lsarger') #{errorMessage}
-                button.btn.btn-lg.btn-primary.btn-block(type='submit') 登录
-        .right-content(style='float: left')
-            label.label(style='color: #000000;font-size: larger') 还没有账号？
-            br
-            label.label(style='color: #000000;font-size: larger') 快加入SAD！
-            br
-            br
-            br
-            label.text-center(style='margin-left: 30px') 全国各大医院聚集
-            br
-            label.text-center(style='margin-left: 30px') 顶尖专家在线挂号
-            br
-            label.text-center(style='margin-left: 30px') 便捷省心的挂号体验
-            br
-            br
-            a.btn.btn-lg.btn-warning.btn-block(href='register') 注册
+        .left-content(style="float: left;")
 
-block append scripts
-    script(src="/javascripts/md5.js")
-    script(type="text/javascript").
-        $('.form-login').on('submit', function() {
+            .alert.alert-warning.alert-dismissible.hidden
+                button.close(type="button", data-dismiss="alert")
+                    span ×
+                strong.alert-message #{errorMessage}
+
+            form.form-login(role="form", action="/account/login", name="postLoginMessage", method="post")
+                input#username.form-control(type="username", name="username", placeholder="用户名", required="", autofocus="")
+                input#password.form-control(type="password", name="password", placeholder="请输入密码", required="")
+                .checkbox: label
+                    input(type="checkbox", value="remember-me")
+                    | 记住我
+                button.btn.btn-lg.btn-primary.btn-block(type="submit") 登录
+        .right-content(style="float: left")
+            label.label(style="color: #000000;font-size: larger") 还没有账号？
+            br
+            label.label(style="color: #000000;font-size: larger") 快加入SAD！
+            br
+            br
+            br
+            label.text-center(style="margin-left: 30px") 全国各大医院聚集
+            br
+            label.text-center(style="margin-left: 30px") 顶尖专家在线挂号
+            br
+            label.text-center(style="margin-left: 30px") 便捷省心的挂号体验
+            br
+            br
+            a.btn.btn-lg.btn-warning.btn-block(href="register") 注册
+
+    script.
+        if ($(".alert-message").html() != "") {
+            $(".alert").removeClass("hidden");
+        }
+
+        $(".form-login").on("submit", function() {
             $("#password").val(hex_md5($("#password").val()));
             return true;
         });
