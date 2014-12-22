@@ -17,7 +17,7 @@ exports.list = function(req, res, next) {
     }, function(err, user) {
         if(err && err.message != 'Not found') throw err;
         if(!user) {
-            return next(new Errors.ListEmpty("No user needs to be validated"));
+            userList['validating']=[];
         } else {
             var candidate=[];
         	for(var i=0;i<user.length;i++){
@@ -31,15 +31,15 @@ exports.list = function(req, res, next) {
                 candidate[i]["ip"]=user[i].ip;
         	}
             userList['validating']=candidate;
-            finish();
         }
+        finish();
     });
     req.models.user.find({
         isActivated: -2
     }, function(err, user) {
         if(err && err.message != 'Not found') throw err;
         if(!user) {
-            return next(new Errors.ListEmpty("All Users Have Been Activated"));
+            userList['unqualified']=[];
         } else {
             var candidate=[];
             for(var i=0;i<user.length;i++){
