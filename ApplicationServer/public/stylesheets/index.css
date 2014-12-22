@@ -18,9 +18,10 @@ a {
 .jumbotron {
     height: 400px;
     margin-bottom: 20px;
-    background-image: url(/images/index_pic0.jpg);
+    background: url(/images/1.png) no-repeat;
     background-size: cover;
     color: #ffffff;
+    background-color: #3e3d49;
 }
 
 .jumbotron h1 {
@@ -42,11 +43,13 @@ a {
 
 .choose-location-label {
     margin: 20px 0 20px;
-    border-left: 4px solid #fa9900;
     color: #555;
     font-size: 18px;
-    font-weight: 400;
-    padding: 5px 0 5px 9px;
+    font-weight: bold;
+}
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+    border-top: 1px solid #ddd !important;
 }
 
 .table > thead > tr > th,
@@ -97,7 +100,7 @@ a {
 }
 
 .featured .feature {
-    background: #41aaf7;
+    background: #53b481;
     color: #fff;
     font-size: 55px;
     display: inline-block;
