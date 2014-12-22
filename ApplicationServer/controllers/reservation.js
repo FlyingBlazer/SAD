@@ -129,7 +129,6 @@ base64.decode = function (str) {
 // util
 
 var settings = require('../../settings.json');
-var stdNotFound = {};
 
 Object.defineProperty(global, '__stack', {
     get: function() {
@@ -198,7 +197,7 @@ var logError = function(errMsg) {
 };
 
 var parseUserInfo = function(request) {
-    return JSON.parse(new Buffer(request.cookies.userInfo, 'base64').toString('ascii'));
+    return JSON.parse(new Buffer(request.cookies.userInfo, 'hex').toString());
 };
 
 var checkVars = function(name, object, members) {
