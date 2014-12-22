@@ -33,6 +33,7 @@ server.get('/user/check/list', controllers.user.check.list);
 server.post('/user/check/:userId/approve', controllers.user.check.approve);
 server.post('/user/check/:userId/reject', controllers.user.check.reject);
 server.get('/user/check/:userId/status', controllers.user.check.status);
+server.post('/user/check/:userId/revive', controllers.user.check.revive);
 //---
 server.get('/user/reservation/list', controllers.reservation.list);
 server.post('/user/reservation/add', controllers.reservation.add);

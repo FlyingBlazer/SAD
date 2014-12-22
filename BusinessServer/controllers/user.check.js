@@ -138,3 +138,24 @@ exports.status = function(req, res, next) {
         }
     });
 };
+
+exports.revive = function(req, res, next) {
+    var userId = req.params.userId;
+    var adminId = req.body.adminId;
+    var creadit = req.body.credit;
+    req.models.administrator.get(adminId, function(err, admin) {
+            if(err && err.message != 'Not found!') throw err;
+            if(!admin || admin.auth != 0) {
+                return next(new Errors.AdminAccessRejected("You are not authorized to modify user info"));
+            }
+            req.db.driver.execQuery("CALL Revive(?, ?)"), [userId, credit], function(err) {
+                if(err) {
+                    throw err;
+                }
+                res.json({
+                    code: 0,
+                    message: success
+                })
+            };
+    });
+};
