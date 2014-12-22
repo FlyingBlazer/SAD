@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2014 年 12 月 21 日 06:35
+-- 生成日期: 2014 年 12 月 22 日 10:01
 -- 服务器版本: 5.5.20
 -- PHP 版本: 5.3.10
 
@@ -50,6 +50,14 @@ BEGIN
 	UPDATE appointment SET status=concat(substring(status,1,3),'11',substring(status,6,1)) WHERE period=1 AND UNIX_TIMESTAMP(time)<=UNIX_TIMESTAMP();
     UPDATE user SET credit=credit-(SELECT count(*) FROM appointment WHERE appointment.status LIKE '__1100' AND appointment.user_id=user.id);
     UPDATE user SET isactivated=-2 WHERE credit<=0;
+    COMMIT;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Revive`(IN s int, IN uid int)
+BEGIN
+	START TRANSACTION;
+    UPDATE user SET isactivated=1 WHERE id=uid;
+    UPDATE user SET credit=s WHERE id=uid;
     COMMIT;
 END$$
 
@@ -149,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `appointment` (
   `record_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `running_number` (`running_number`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=203 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=212 ;
 
 --
 -- 转存表中的数据 `appointment`
@@ -355,8 +363,7 @@ INSERT INTO `appointment` (`id`, `user_id`, `doctor_id`, `pay_method`, `time`, `
 (197, 3, 197, 0, '2014-12-16', 2, '000000', '1.85', '3-197-2014-12-15 11:45:31', '2014-12-15 03:45:31'),
 (198, 3, 198, 0, '2014-12-16', 2, '000000', '16.30', '3-198-2014-12-15 11:45:31', '2014-12-15 03:45:31'),
 (199, 3, 199, 1, '2014-12-16', 2, '100000', '11.67', '3-199-2014-12-15 11:45:31', '2014-12-15 03:45:31'),
-(200, 3, 200, 1, '2014-12-16', 2, '100000', '12.05', '3-200-2014-12-15 11:45:31', '2014-12-15 03:45:31'),
-(202, 2, 1, 1, '2014-12-16', 2, '100000', '4.43', '++++', '2014-12-15 03:45:30');
+(200, 3, 200, 1, '2014-12-16', 2, '100000', '12.05', '3-200-2014-12-15 11:45:31', '2014-12-15 03:45:31');
 
 -- --------------------------------------------------------
 
@@ -3558,7 +3565,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY `user_name` (`name`),
   UNIQUE KEY `user_socialid` (`socialid`),
   UNIQUE KEY `user_email` (`email`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=12 ;
 
 --
 -- 转存表中的数据 `user`
@@ -3569,7 +3576,7 @@ INSERT INTO `user` (`id`, `name`, `realname`, `password`, `tel`, `socialid`, `cr
 (2, 'trashlhc', '渣诚', 'b3afa8c6108945f609df3ca34d5688f8', '12222222222', '210103199408152119', 5, '2222222@qq.com', 1, ''),
 (3, 'sabbyszm', '大帝', '50375417e611cdc512d5362f5fafb425', '13333333333', '210103199408152120', 3, '3333333@qq.com', 1, ''),
 (4, 'zhugongpu', '朱公仆', '5abf0d8358b256ed5ecf24fba3db5e37', '14444444444', '210103199408152121', 5, '4444444@qq.com', -1, ''),
-(5, 'sabbyszm2', '宋子明', '764eb40905d51327d67f469602d0d811', '15555555555', '210103199408152122', 0, '5555555@qq.com', -1, '');
+(5, 'sabbyszm2', '宋子明', '764eb40905d51327d67f469602d0d811', '15555555555', '210103199408152122', 0, '5555555@qq.com', -2, '');
 
 -- --------------------------------------------------------
 
@@ -3591,14 +3598,14 @@ CREATE TABLE IF NOT EXISTS `working` (
   `saturday` int(11) NOT NULL,
   `sunday` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=10016 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=10017 ;
 
 --
 -- 转存表中的数据 `working`
 --
 
 INSERT INTO `working` (`id`, `doctor_id`, `date`, `period`, `frequency`, `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, `sunday`) VALUES
-(2501, 1, '2014-12-20', 1, '21111111', 21, 22, 23, 24, 25, 26, 27),
+(2501, 1, '2014-12-20', 1, '21111111', 6000, 22, 23, 24, 25, 26, 27),
 (2502, 1, '2014-12-20', 2, '21111111', 25, 26, 27, 28, 29, 30, 31),
 (2503, 1, '2014-12-20', 3, '21111111', 15, 16, 17, 18, 19, 20, 21),
 (2504, 2, '2014-12-20', 1, '20101010', 22, 23, 24, 25, 26, 27, 28),
