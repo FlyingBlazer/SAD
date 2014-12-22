@@ -103,6 +103,7 @@ html
          });
 
    if locals.message
+      span#initTimestamp(data-timestamp='#{initTimestamp}')
       if locals.msgType == 'fail'
          case message
             when 'wrong_credentials'
@@ -125,8 +126,14 @@ html
 
       script.
          $(function() {
-            if ($('#errMsg').text())
-               toastr.error($('#errMsg').text(), '错误');
-            if ($('#sucMsg').text())
-               toastr.success($('#sucMsg').text(), '成功');
+            var timestamp = $('#initTimestamp').data('timestamp');
+            var curTimestamp = Date.now() / 1000 | 0;
+            if (curTimestamp - timestamp < 2) {
+               if ($('#errMsg').text())
+                  toastr.error($('#errMsg').text(), '错误');
+               if ($('#sucMsg').text())
+                  toastr.success($('#sucMsg').text(), '成功');
+            } else {
+               $('.login .error').hide();
+            }
          });

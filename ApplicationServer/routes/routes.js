@@ -82,10 +82,10 @@ router.route('/backstage').get(controllers.backstage.home);
 
 // account
 router.route('/backstage/login').get(controllers.backstage.login).post(controllers.backstage.onLogin);
-router.route('/backstage/login/:initTimestamp/:msgType/:message').get(controllers.backstage.login);
+router.route('/backstage/login/:initTimestamp/:msgType/:message').get(controllers.backstage.login).post(controllers.backstage.onLogin);
 router.route('/backstage/logout').get(controllers.backstage.logout);
 router.route('/backstage/account').get(controllers.backstage.changePassword).post(controllers.backstage.onChangePassword);
-router.route('/backstage/account/:initTimestamp/:msgType/:message').get(controllers.backstage.changePassword);
+router.route('/backstage/account/:initTimestamp/:msgType/:message').get(controllers.backstage.changePassword).post(controllers.backstage.onChangePassword);
 
 // query
 router.route('/backstage/users').get(controllers.backstage.users);
