@@ -145,23 +145,23 @@ exports.revive = function(req, res, next) {
     var credit = req.body.credit;
     req.models.administrator.get(adminId, function(err, admin) {
             if(err && err.message != 'Not found!') throw err;
-            if(!admin || admin.auth != 0) {
+            if(!admin || admin.auth) {
                 return next(new Errors.AdminAccessRejected("You are not authorized to modify user info"));
             }
             req.models.user.get(userId, function(err, user) {
-                    if(err && err.message != "Not found!") throw err;
-                    if(!user || user.isActivated != -2) {
-                        return next(new Errors.AdminAccessRejected("You are not authorized to modify user info"));
+                if(err && err.message != "Not found!") throw err;
+                if(!user || user.isActivated!= -2) {
+                    return next(new Errors.AdminAccessRejected("You are not authorized to modify user info"));
+                }
+                req.db.driver.execQuery("CALL Revive(?,?)", [credit, userId], function(err) {
+                    if(err) {
+                        throw err;
                     }
-                    req.db.driver.execQuery("CALL Revive(?, ?)"), [credit, userId], function(err) {
-                        if(err) {
-                            throw err;
-                        }
-                        res.json({
-                            code: 0,
-                            message: success
-                        })
-                    };
+                    res.json({
+                        code: 0,
+                        message: 'success'
+                    });
+                });
             });
     });
 };
