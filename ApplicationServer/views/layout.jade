@@ -57,8 +57,31 @@ html(lang="zh-cn")
 
         block site-content
 
-        div#footer
-            p#copyright.text-center © 2014 SRF 版权所有
+        div#footer.site-footer(style={
+            'background': '#fff',
+            'border-top': '1px solid #eee',
+            'margin-top': '20px',
+            'padding': '20px 0 10px'
+        })
+            .container
+                .col-sm-9
+                    .ft-links
+                        ul
+                            li: a.link(href='#') 关于
+                            li: a.link(href='#') 常见问题
+                            li: a.link(href='#') 医院合作
+                            li: a.link(href='#') 投诉建议
+                            li: a.link(href='#') 版权信息
+                            li: a.link(href='#') 隐私政策
+                            li: a.link(href='#') 加入我们
+
+                    .ft-notes
+                        p 全国领先的一站式挂号预约平台
+                        p &copy; 2014 SRF Working Group
+                    .ft-alt-notes
+                        p VERSION: 0.9.0 rev #634
+                .col-sm-3
+                    h2.pull-right.site-ft-title SRF 统一挂号预约平台
 
         block scripts
             script(src="/javascripts/jquery-2.1.1.min.js")
