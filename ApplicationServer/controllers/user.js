@@ -430,7 +430,6 @@ function getUserIdFromCookie(request) {
 
     //从base64编码的cookie中解析userId
     var temp = new Buffer(userInfo, 'hex').toString();
-    console.log(temp);
     return JSON.parse(temp).userId;
 
     //return request.cookies.userId;
