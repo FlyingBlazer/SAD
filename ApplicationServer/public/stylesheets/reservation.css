@@ -3,7 +3,7 @@
 }
 
 dl, dt{
-	margin: 0;
+    margin: 0;
     padding: 0;
     border: 0;
     font-size: 100%;
@@ -15,24 +15,92 @@ ol, ul {
 }
 
 @media all and (min-width: 980px){
-    .main-block {
-        width: 980px;
+    .main-block, .process {
+        width: 890px;
         margin: 0 auto;
         position: relative;
     }
 }ol
 
 @media all and (max-width: 980px){
-    .main-block {
+    .main-block, .process {
         width: 100%;
         margin: 0 auto;
         position: relative;
     }
 }
 
+.cancel {
+    text-align: center;
+    vertical-align: middle;
+    line-height: 100px;
+    font-size: 25px;
+}
+
+
+.steps {
+    display: table;
+    margin: 30px auto 0;
+    padding: 0;
+    overflow: hidden;
+    list-style: none;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    width: 890px;
+    line-height: inherit;
+}
+
+.steps li {
+    display: table-cell;
+    padding: 10px 15px;
+    width: 25%;
+    color: #ccc;
+    cursor: default;
+    border-left: 1px solid #ddd;
+    background-color: #fafafa
+}
+
+.steps li.current {
+    background-color: #fff;
+    color: #333
+}
+
+.steps li.current .fa {
+    color: #4183c4
+}
+
+.steps li .fa {
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    float: left;
+    font-size: 25px;
+    text-align: center;
+    vertical-align: middle;
+    margin-right: 15px;
+    padding-bottom: 5px
+}
+
+.steps li .step {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.steps li:first-child {
+    border-left: 0
+}
+
+.steps .complete {
+    color: #777
+}
+
+.steps .complete .fa {
+    color: #6cc644
+}
 
 .info {
-	margin-bottom: 40px;
+    margin-bottom: 40px;
 }
 
 @media all and (min-width: 980px) {
@@ -57,61 +125,61 @@ ol, ul {
 }
 
 .main-block .info th {
-	font-weight: 400;
-	padding: 2px;
-	text-align: center;
-	line-height: 20px;
-	color: #6B6B6B;
+    font-weight: 400;
+    padding: 2px;
+    text-align: center;
+    line-height: 20px;
+    color: #6B6B6B;
 }
 
 .main-block .info th p {
-	border-bottom: 3px solid #c3d7fa;
-	padding-bottom: 5px;
+    border-bottom: 3px solid #c3d7fa;
+    padding-bottom: 5px;
 }
 
 .table {
-	margin-bottom: 0;
-	padding-bottom: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
 
 .table > thead > tr > th{
-	border-bottom: 0;
+    border-bottom: 0;
 }
 
 .table > tbody > tr > td {
-	border-top: 0;
-	text-align: center;
+    border-top: 0;
+    text-align: center;
 }
 
 .table > tbody {
-	color: #888;
+    color: #888;
 }
 
 .main-block .info .doc-info dl {
-	text-align: center;
+    text-align: center;
 }
 
 .main-block .info .doc-info dt span {
-	color: #888;
+    color: #888;
 }
 
 .doc-info p a {
-	color: #888;
+    color: #888;
 }
 
 .money {
-	color: #f9a821;
+    color: #f9a821;
 }
 
 .main-block .info .tips {
-	background: #dff2ff;
-	line-height: 20px;
-	padding: 8px 20px;
+    background: #dff2ff;
+    line-height: 20px;
+    padding: 8px 20px;
 }
 
 .main-block .tips {
-	font-size: 12px;
-	color: #888;
+    font-size: 12px;
+    color: #888;
 }
 
 .user-boxes {
@@ -122,7 +190,7 @@ ol, ul {
 @media all and (min-width: 980px) {
     .user-boxes dl {
         float:left;
-        width: 190px;
+        width: 240px;
         border: 1px solid #ccc;
         padding: 3px;
         position: relative;
@@ -134,7 +202,7 @@ ol, ul {
 
 @media all and (max-width: 980px) {
     .user-boxes dl {
-        width: 190px;
+        width: 240px;
         border: 1px solid #ccc;
         padding: 3px;
         position: relative;

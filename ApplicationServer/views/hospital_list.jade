@@ -1,11 +1,13 @@
 extends layout
 
+block append stylesheets
+    link(href="/stylesheets/hospital_list.css", rel="stylesheet", media="all")
+
 block title
     title 医院列表
 
 block breadcrumb
-    li
-        a(href="/") 主页
+    li: a(href="/") 主页
     if search
         li.active 搜索结果
     else
@@ -13,8 +15,6 @@ block breadcrumb
 
 
 block site-content
-    link(href="/stylesheets/hospital_list.css", rel="stylesheet", media="all")
-
     div#site-content
         div.container
             div.hospital-list

@@ -16,7 +16,7 @@ exports.list = function(req, res, next) {
         isActivated: 0
     }, function(err, user) {
         if(err && err.message != 'Not found') throw err;
-        if(!user) {
+        if(!user || user.length==0) {
             userList['validating']=[];
         } else {
             var candidate=[];
@@ -38,7 +38,7 @@ exports.list = function(req, res, next) {
         isActivated: -2
     }, function(err, user) {
         if(err && err.message != 'Not found') throw err;
-        if(!user) {
+        if(!user || user.length==0) {
             userList['unqualified']=[];
         } else {
             var candidate=[];

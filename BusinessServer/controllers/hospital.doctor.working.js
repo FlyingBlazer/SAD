@@ -196,7 +196,7 @@ exports.updateWeek = function(req, res, next) {
                         break;
                 }
             }
-            console.log(works);
+            //console.log(works);
             for(var i = 0 ; i < works.length ; i++){
                 switch(parseInt(works[i]['period'],10)) {
                     case 1:
@@ -284,7 +284,7 @@ exports.deleteTemp = function(req, res, next) {
             [doctorId, w_date, w_period, '0_000000'],
             function (err, w_data) {
                 if (err) throw err;
-                if (!w_data||w_data.length==0) {
+                if (!w_data || w_data.length==0) {
                     return next(new Errors.ArrangementNotExist("Temporary arrangement not exists!"));
                 }
                 req.db.driver.execQuery("DELETE FROM working WHERE id=?",
@@ -316,7 +316,7 @@ function check(req, cb) {
             [doctorId],
             function(err, data){
                 if(err && err.message != 'Not found') throw err;
-                if(!data) {
+                if(!data || data.length==0) {
                     return cb(new Errors.AdminDoctorError("No Such Doctor!"));
                 }
                 if(data[0]['id']!=hospital_id){

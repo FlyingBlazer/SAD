@@ -14,11 +14,12 @@ exports.list = function(req, res, next) {
         [user_id],
         function (err, data) {
             if(err && err.message != 'Not found') throw err;
-            if(!data) {
+            if(!data || data.length==0) {
                 return next(new Errors.EmptyReservation("You Don't Have Any Appointment!"));
             }
             for(var i = 0; i < data.length; i++){
                 data[i]['status_msg']=parseStatus(data[i]['status']);
+                data[i].time = new Date(data[i].time).Format('yyyy-MM-dd');
             }
             res.json({
                 code: 0,
@@ -41,7 +42,7 @@ exports.list_h = function(req, res, next) {
         [hospital_id],
         function (err, data) {
             if(err && err.message != 'Not found') throw err;
-            if(!data) {
+            if(!data || data.length==0) {
                 return next(new Errors.EmptyReservation("You Don't Have Any Appointment!"));
             }
             else{
@@ -98,7 +99,7 @@ exports.add = function(req, res, next) {
                 [adoctor_id,aperiod,adate],
                 function(err,data){
                     if(err) throw err;
-                    if(!data) return next(new Errors.ReservationErrorFailure('Database Error!'));
+                    if(!data || data.length==0) return next(new Errors.ReservationErrorFailure('Database Error!'));
                     req.db.driver.execQuery("SELECT "+weeklist[aweeknum-1]+", price, frequency "+
                         "FROM working,doctor "+
                         "WHERE doctor_id=doctor.id "+
@@ -127,7 +128,7 @@ exports.add = function(req, res, next) {
                             else{
                                 req.models.appointment.find({user_id: auser_id, time: adate, period: aperiod}, function(err, appointments) {
                                     if(err && err.message != 'Not found') throw err;
-                                    if(!data1){}
+                                    if(!data1 || data1.length==0){}
                                     appointments.forEach(function(appointment) {
                                         appointment.getDoctor(function(err, doctor){
                                            if(doctor.department_id == adepartment_id){
@@ -208,7 +209,7 @@ exports.detail = function(req, res, next) {
         [reservation_id],
         function(err,data){
             if(err) throw err;
-            if(!data) return next(new Errors.DetailFailure("No Such Appointment!"));
+            if(!data || data.length==0) return next(new Errors.DetailFailure("No Such Appointment!"));
             res.json({
                 code: 0,
                 message: "success",

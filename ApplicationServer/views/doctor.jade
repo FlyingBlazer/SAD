@@ -2,6 +2,7 @@ extends layout
 
 block title
     title 医生
+    link(href="/stylesheets/doctor.css", rel="stylesheet", media="all")
 
 block breadcrumb
     li
@@ -18,8 +19,6 @@ block header-content-extra
     label.doctor-title #{detail.title}
 
 block site-content
-    link(href="/stylesheets/doctor.css", rel="stylesheet", media="all")
-
     div.container
         div#site-content
             img.doctor-image

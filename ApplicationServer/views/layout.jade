@@ -1,16 +1,18 @@
 doctype html
 html(lang="zh-cn")
     head
-        meta(charset="utf-8")
-        meta(name="robots", content="none")
-        meta(name="viewport" content="width=device-width, initial-scale=1")
-        script(src="/javascripts/jquery-2.1.1.min.js")
-        link(href="/stylesheets/bootstrap/css/bootstrap.min.css", rel="stylesheet", media="all")
-        script(src="/stylesheets/bootstrap/js/bootstrap.min.js")
-        link(href="/stylesheets/font-awesome-4.2.0/css/font-awesome.min.css", rel="stylesheet", media="all")
-        link(href="/stylesheets/general.css", rel="stylesheet", media="all")
-        block title
-            
+        block head
+            meta(charset="utf-8")
+            meta(name="robots", content="none")
+            meta(name="viewport" content="width=device-width, initial-scale=1")
+
+            block stylesheets
+                link(href="/stylesheets/bootstrap/css/bootstrap.min.css", rel="stylesheet", media="all")
+                link(href="/stylesheets/font-awesome-4.2.0/css/font-awesome.min.css", rel="stylesheet", media="all")
+                link(href="/stylesheets/general.css", rel="stylesheet", media="all")
+
+            block title
+
     body
         div#nav
             nav.navbar.navbar-default(role="navigation")
@@ -54,15 +56,41 @@ html(lang="zh-cn")
                         block breadcrumb
                     block header-content-extra
 
-    block site-content
+        block site-content
 
-    div#footer
-        p#copyright.text-center © 2014 SRF 版权所有
+        div#footer.site-footer(style={
+            'background': '#fff',
+            'border-top': '1px solid #eee',
+            'margin-top': '20px',
+            'padding': '20px 0 10px'
+        })
+            .container
+                .col-sm-9
+                    .ft-links
+                        ul
+                            li: a.link(href='#') 关于
+                            li: a.link(href='#') 常见问题
+                            li: a.link(href='#') 医院合作
+                            li: a.link(href='#') 投诉建议
+                            li: a.link(href='#') 版权信息
+                            li: a.link(href='#') 隐私政策
+                            li: a.link(href='#') 加入我们
 
-    script.
-        $(document).ready(function () {
-            $("#nav-search-button").click(function () {
-                var href = "/search/" + $("#nav-search-field").val();
-                window.location.href = href;
-            });
-        });
+                    .ft-notes
+                        p 全国领先的一站式挂号预约平台
+                        p &copy; 2014 SRF Working Group
+                    .ft-alt-notes
+                        p VERSION: 0.9.0 rev #634
+                .col-sm-3
+                    h2.pull-right.site-ft-title SRF 统一挂号预约平台
+
+        block scripts
+            script(src="/javascripts/jquery-2.1.1.min.js")
+            script(src="/stylesheets/bootstrap/js/bootstrap.min.js")
+            script.
+                $(document).ready(function () {
+                    $("#nav-search-button").click(function () {
+                        var href = "/search/" + $("#nav-search-field").val();
+                        window.location.href = href;
+                    });
+                });
