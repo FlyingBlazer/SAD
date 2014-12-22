@@ -245,7 +245,7 @@ exports.detail = function(req, res, next) {
                         res.send(500, "Internal error");
                         throw err;
                     }
-                    if(datas){
+                    if(datas && datas.length > 0){
                         var today=(new Date().getDay()+6)%7+1;
                         datas.forEach(function(adata){
                             slot[(6-today+adata.day)%7].slot[adata.period==1? 'morning': (adata.period==2 ? 'afternoon' : 'evening')][2] =adata.appnum;

@@ -352,3 +352,14 @@ exports.InvalidRating = function InvalidRating(message) {
     this.name = 'InvalidRating';
 };
 util.inherits(exports.InvalidRating, restify.RestError);
+
+exports.ArrangementNotExist = function ArrangementNotExist(message) {
+    restify.RestError.call(this, {
+        restCode: '33',
+        statusCode: 404,
+        message: message,
+        constructorOpt: ArrangementNotExist
+    });
+    this.name = 'ArrangementNotExist';
+};
+util.inherits(exports.ArrangementNotExist, restify.RestError);

@@ -17,7 +17,7 @@ module.exports = function(req, res, next) {
         [keyword_set],
         function (err, data) {
             if(err) throw err;
-            if(!data) {
+            if(!data || data.length==0) {
                 return next(new Errors.EmptySearchResult("Nothing Is Found!"));
             }
             else{

@@ -112,14 +112,13 @@ exports.signUp = function(req, res, next) {
             });
         }
     });
-
 };
 
 exports.checkName = function(req, res, next) {
     var username = req.params.username;
     req.models.user.find({name: username}, function(err, users) {
         if(err && err.message != 'Not found') throw err;
-        if(users.length > 0) {
+        if(users && users.length > 0) {
             users.forEach(function(user) {
                if(user.isActivated != -1){
                    return next(new Errors.UserAlreadyExisted('User Already Existed'));
