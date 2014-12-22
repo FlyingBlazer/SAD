@@ -8,112 +8,113 @@ block title
     title 预约详情
 
 block site-content
-    .process
-        if resvDetail.status[5] == '1'
-            p.cancel
-                i.fa.fa-trash  订单已取消
+    .container
+        .process.row
+            if resvDetail.status[5] == '1'
+                p.cancel
+                    i.fa.fa-trash  订单已取消
 
-        if resvDetail.status[5] == '0'
-            ol.steps
-                li.complete
-                    i.fa.fa-check
-                    strong.step 第一步：
-                    | 预约下单
-
-                if resvDetail.status[1] == '0' && resvDetail.status[2] != '2' && resvDetail.status[3] == '0'
-                    li.current
-                        i.fa.fa-credit-card
-                        strong.step 第二步：
-                        | 付款（可选）
-
-                if resvDetail.status[1] == '1' || resvDetail.status[2] == '2' || resvDetail.status[3] == '1'
-                    li.complete
+            if resvDetail.status[5] == '0'
+                ol.steps
+                    li.complete.col-md-3
                         i.fa.fa-check
-                        strong.step 第二步：
-                        | 付款（可选）
+                        strong.step 第一步：
+                        | 预约下单
 
-                if resvDetail.status[2] != '2' && resvDetail.status[3] == '0'
-                    li.current
-                        i.fa.fa-hospital-o
-                        strong.step 第三步：
-                        | 就诊
+                    if resvDetail.status[1] == '0' && resvDetail.status[2] != '2' && resvDetail.status[3] == '0'
+                        li.current.col-md-3
+                            i.fa.fa-credit-card
+                            strong.step 第二步：
+                            | 付款（可选）
 
-                if resvDetail.status[2] == '2'
-                    li.complete
-                        i.fa.fa-check
-                        strong.step 第三步：
-                        | 就诊
+                    if resvDetail.status[1] == '1' || resvDetail.status[2] == '2' || resvDetail.status[3] == '1'
+                        li.complete.col-md-3
+                            i.fa.fa-check
+                            strong.step 第二步：
+                            | 付款（可选）
 
-                if resvDetail.status[3] == '1'
-                    li
-                        i.fa.fa-hospital-o
-                        strong.step 第三步：
-                        | 就诊
+                    if resvDetail.status[2] != '2' && resvDetail.status[3] == '0'
+                        li.current.col-md-3
+                            i.fa.fa-hospital-o
+                            strong.step 第三步：
+                            | 就诊
 
-                if resvDetail.status[2] == '2'
-                    li.complete
-                        i.fa.fa-check
-                        strong.step 第四步：
-                        | 完成就诊
+                    if resvDetail.status[2] == '2'
+                        li.complete.col-md-3
+                            i.fa.fa-check
+                            strong.step 第三步：
+                            | 就诊
 
-                if resvDetail.status[2] != '2' && resvDetail.status[3] == '0'
-                    li
-                        i.fa.fa-heart
-                        strong.step 第四步：
-                        | 完成就诊
+                    if resvDetail.status[3] == '1'
+                        li.col-md-3
+                            i.fa.fa-hospital-o
+                            strong.step 第三步：
+                            | 就诊
 
-                if resvDetail.status[2] != '2' && resvDetail.status[3] == '1'
-                    li.danger
-                        i.fa.fa-warning
-                        strong.step.wrongtime 订单超时
+                    if resvDetail.status[2] == '2'
+                        li.complete.col-md-3
+                            i.fa.fa-check
+                            strong.step 第四步：
+                            | 完成就诊
 
-    .order-detail
-        ul
-            li.title 预约详情
-            li
-                p
-                    span 预约单号：#{resvDetail.reservation_id}
-                    - var pdate = resvDetail.submission_date.replace('T',' ');
-                    - pdate = pdate.substr(0, 19);
-                    span 下单时间：#{pdate}
-                p
-                    span 预约医院：#{doctorDetail.hospital}
-                    span 预约科室：#{doctorDetail.department}
-                p
-                    span 预约医生：#{doctorDetail.name} #{doctorDetail.title}
-                    span 就诊类型：初诊
-                p
-                    span 门诊类型：特色门诊
-                    span 取号地点：门诊3楼挂号处
-                p
-                    - switch (resvDetail.period) {case 'morning': period='上午';break; case 'afternoon': period='下午';break; case 'evening': period='晚上';break;}
-                    - var rdate = resvDetail.date.substr(0,10);
-                    span 就诊日期：#{rdate} #{period} （具体时间以预约成功短信为准）
-                    span 就诊地点：门诊3楼
-                p
-                    span 挂号费：#{doctorDetail.price}元
-                    span 付款状态：#{resvDetail.status_msg}
-            li.title 就诊人详情
-            li.last
-                p
-                    span 就诊人：#{userRealName}
-                    span 联系电话：#{userTelephone}
-                p
-                    span 证件号：#{userSocialId}
+                    if resvDetail.status[2] != '2' && resvDetail.status[3] == '0'
+                        li.col-md-3
+                            i.fa.fa-heart
+                            strong.step 第四步：
+                            | 完成就诊
 
-        div
-            if resvDetail.status[1] == '1' && resvDetail.status[5] == '0'
-                a#print-rg.btn.btn-xs.btn-success(href='', target='_blank') 打印挂号单
-            if resvDetail.status[1] == '0' && resvDetail.status[5] == '0'
-                a#print-rv.btn.btn-xs.btn-success(href='', target='_blank') 打印预约单
-            if resvDetail.status[1] == '0' && resvDetail.status[5] == '0' && resvDetail.status[2] != '2' && resvDetail.status[3] == '0'
-                button.btn.btn-xs.btn-primary(type='button', onclick='pay()') 付款
-            - var myDate = new Date();
-            - var str = myDate.getFullYear()+"-"+(myDate.getMonth()+1)+"-"+myDate.getDate();
-            if resvDetail.status[5] == '0' && str < rdate
-                button.btn.btn-xs.btn-danger(type='button', onclick='cancel()') 取消订单
-            if resvDetail.status[5] == '0' && str >= rdate
-                button.btn.btn-xs.btn-danger(disabled) 取消订单
+                    if resvDetail.status[2] != '2' && resvDetail.status[3] == '1'
+                        li.danger.col-md-3
+                            i.fa.fa-warning
+                            strong.step.wrongtime 订单超时
+
+        .order-detail.row
+            ul
+                li.title 预约详情
+                li
+                    p
+                        span 预约单号：#{resvDetail.reservation_id}
+                        - var pdate = resvDetail.submission_date.replace('T',' ');
+                        - pdate = pdate.substr(0, 19);
+                        span 下单时间：#{pdate}
+                    p
+                        span 预约医院：#{doctorDetail.hospital}
+                        span 预约科室：#{doctorDetail.department}
+                    p
+                        span 预约医生：#{doctorDetail.name} #{doctorDetail.title}
+                        span 就诊类型：初诊
+                    p
+                        span 门诊类型：特色门诊
+                        span 取号地点：门诊3楼挂号处
+                    p
+                        - switch (resvDetail.period) {case 'morning': period='上午';break; case 'afternoon': period='下午';break; case 'evening': period='晚上';break;}
+                        - var rdate = resvDetail.date.substr(0,10);
+                        span 就诊日期：#{rdate} #{period} （具体时间以预约成功短信为准）
+                        span 就诊地点：门诊3楼
+                    p
+                        span 挂号费：#{doctorDetail.price}元
+                        span 付款状态：#{resvDetail.status_msg}
+                li.title 就诊人详情
+                li.last
+                    p
+                        span 就诊人：#{userRealName}
+                        span 联系电话：#{userTelephone}
+                    p
+                        span 证件号：#{userSocialId}
+
+            div
+                if resvDetail.status[1] == '1' && resvDetail.status[5] == '0'
+                    a#print-rg.btn.btn-success(href='', target='_blank') 打印挂号单
+                if resvDetail.status[1] == '0' && resvDetail.status[5] == '0'
+                    a#print-rv.btn.btn-success(href='', target='_blank') 打印预约单
+                if resvDetail.status[1] == '0' && resvDetail.status[5] == '0' && resvDetail.status[2] != '2' && resvDetail.status[3] == '0'
+                    button.btn.btn-primary(type='button', onclick='pay()') 付款
+                - var myDate = new Date();
+                - var str = myDate.getFullYear()+"-"+(myDate.getMonth()+1)+"-"+myDate.getDate();
+                if resvDetail.status[5] == '0' && str < rdate && resvDetail.status[2] == '0' && resvDetail.status[3] == '0'
+                    button.btn.btn-danger(type='button', onclick='cancel()') 取消订单
+                if resvDetail.status[5] == '0' && str >= rdate
+                    button.btn.btn-danger(disabled) 取消订单
     div.hidden
         span#data-hospital-name.hidden(data-hospital-name='#{doctorDetail.hospital}')
         span#data-reservation-id.hidden(data-reservation-id='#{resvDetail.reservation_id}')

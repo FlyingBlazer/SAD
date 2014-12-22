@@ -67,7 +67,6 @@ router.route('/reservation/:reservation_id').get(controllers.reservation.showRes
 router.route('/reservation/:reservation_id/m/:message').get(controllers.reservation.showReservation);
 router.route('/reservation/:reservation_id/manage/pay').get(controllers.reservation.pay);
 router.route('/reservation/:reservation_id/manage/cancel').get(controllers.reservation.cancel);
-router.route('/reservation/:reservation_id/manage/print').get(controllers.reservation.print);
 
 // Search
 router.route('/search/:q').get(controllers.reservation.search);

@@ -213,18 +213,13 @@ var checkVars = function(name, object, members) {
     return status;
 };
 
-var __fatalError = function(response, identifier) {
+var fatalError = function(response, identifier) {
     response.status(503).send('HTTP/1.1 Error 503 Service Unavailable');
     logError('Incorrect content received from Business server (if it exists). Identifier: ' + identifier,
         'Terminating...');
 };
 
-var __entityNotFound = function(response, identifier) {
-    response.status(200).send('Entity Not Found');
-    console.error('Entity Not Found: ' + identifier);
-};
-
-var __invalidArgsError = function(response) {
+var invalidArgsError = function(response) {
     response.status(418).send('HTTP/1.1 Error 418 I\'m a teapot');
     logError('Invalid arguments provided.');
 };
@@ -285,21 +280,12 @@ var fireRequest = function(method, path, data, callback, noErrCodeCheck) {
 
             // check response error code
             if (srcObject) {
-                if (noErrCodeCheck || srcObject.code == 0) {
-                    callbackSent = true;
-                    callback(srcObject);
-                } else if (srcObject.code == 24
-                    || srcObject.code == 7
-                    || srcObject.code == 23) {
-                    callbackSent = true;
-                    callback(stdNotFound);
-                } else {
-                    logError('Unsuccessful response returned from business server, error not processed.',
+                if (srcObject.code != 0) {
+                    logError('Warning: Unsuccessful response returned from business server.',
                         ' > Request URL: ' + path,
                         ' > Server response: ' + responseData);
-                    callbackSent = true;
-                    callback(srcObject);
                 }
+                callback(srcObject);
             }
         });
     });
@@ -324,7 +310,7 @@ var fireRequest = function(method, path, data, callback, noErrCodeCheck) {
             logError('Request timed out when requesting Business server.',
                 ' > Request URL: ' + path);
         }
-    }, 3000);
+    }, 5000);
 };
 
 // Choose a location
@@ -334,7 +320,7 @@ exports.chooseLocation = function(request, response) {
     if (typeof request.params.province !== 'undefined') {
         var province = request.params.province;
         response.cookie('province', province, {
-            maxAge: 999999,
+            maxAge: 999999999,
             httpOnly: true
         });
         response.redirect(302, '/hospitals');
@@ -366,15 +352,12 @@ exports.listHospitals = function(request, response) {
     var url = '/hospital/hospital/list?province=' + province;
     fireRequest('GET', url, null, function(res) {
         if (res == null) {
-            __fatalError(response, 'Line=' + __line + ', Func=' + __function);
+            fatalError(response, 'Line=' + __line + ', Func=' + __function);
             return;
         }
-        if (res == stdNotFound) {
-            __entityNotFound(response, 'Line=' + __line + ', Func=' + __function);
-            return;
-        }
-
         response.render('hospital_list', {
+            code: res.code || 0,
+            message: res.message,
             username: username,
             search: false,
             searchText: null,
@@ -396,10 +379,12 @@ exports.search = function(request, response) {
 
     fireRequest('GET', url, null, function(res) {
         if (res == null) {
-            __fatalError(response, 'Line=' + __line + ', Func=' + __function);
+            fatalError(response, 'Line=' + __line + ', Func=' + __function);
             return;
         }
         response.render('hospital_list', {
+            code: res.code || 0,
+            message: res.message,
             username: username,
             search: true,
             searchText: query,
@@ -448,15 +433,28 @@ exports.showHospital = function(request, response) {
         if (ctr !== 3)
             return;
         if (detail == null || departments == null || doctors == null) {
-            __fatalError(response, 'Line=' + __line + ', Func=' + __function);
+            fatalError(response, 'Line=' + __line + ', Func=' + __function);
             return;
         }
-        if (detail == stdNotFound || departments == stdNotFound || doctors == stdNotFound) {
-            __entityNotFound(response, 'Line=' + __line + ', Func=' + __function);
-            return;
+
+        var code = 0, message = '';
+
+        if (detail.code != 0) {
+            code = detail.code;
+            message = detail.message;
+        } else if (departments.code != 0) {
+            code = departments.code;
+            message = departments.message;
+        } else if (doctors.code != 0) {
+            code = doctors.code;
+            message = doctors.message;
         }
+
         detail.province = py2cn[detail.province];
+
         response.render('hospital', {
+            code: code,
+            message: message,
             username: username,
             detail: detail,
             departments: departments.departments_list,
@@ -473,27 +471,28 @@ exports.showDoctor = function(request, response) {
     if (typeof request.cookies.userInfo !== 'undefined')
         userInfo = parseUserInfo(request);
 
-    var username = userInfo.username ? userInfo.username : '';
+    var username = userInfo.username || '';
     var expertId = request.params.expert_id;
     var hospitalId = request.params.hospital_id;
     var departmentId = request.params.department_id;
-    var errCode = request.params.err_code ? request.params.err_code : '';
+    var code = request.params.err_code || 0;
 
     fireRequest('GET', '/user/' + userInfo.userId + '/info', null, function(res) {
         var status = res.status;
         fireRequest('GET', '/hospital/doctor/' + expertId + '/detail', null, function(res) {
             if (res == null) {
-                __fatalError(response, 'Line=' + __line + ', Func=' + __function);
+                fatalError(response, 'Line=' + __line + ', Func=' + __function);
                 return;
             }
-            if (res == stdNotFound) {
-                __entityNotFound(response, 'Line=' + __line + ', Func=' + __function);
-                return;
+            if (res.code != 0) {
+                code = res.code;
             }
             response.render('doctor', {
+                code: code,
+                message: res.message,
                 username: username,
                 status: status,
-                errCode: errCode,
+                errCode: code,
                 hospitalId: hospitalId,
                 departmentId: departmentId,
                 detail: res
@@ -507,7 +506,7 @@ exports.confirm = function(request, response) {
 
     // if request body is incorrect, reject the request
     if (!checkVars('body', request.body, 'hospital', 'hospitalId', 'department', 'departmentId', 'doctor', 'doctorId', 'resvDate', 'resvTime', 'title', 'price')) {
-        __invalidArgsError(response);
+        invalidArgsError(response);
         return;
     }
 
@@ -534,7 +533,7 @@ exports.confirm = function(request, response) {
 
     // if control reaches here, start the normal rendering process
     var userInfo = parseUserInfo(request);
-    var username = userInfo.username ? userInfo.username : '';
+    var username = userInfo.username || '';
     var userId = userInfo.userId;
     var userTelephone = userInfo.phone;
     var userSocialId = userInfo.sid;
@@ -542,23 +541,25 @@ exports.confirm = function(request, response) {
 
     response.render('new_reservation', {
         username: username,
+        code: 0,
+        message: 'success',
         detail: {
-            "username": username,
-            "userId": userId,
-            "userTelephone": userTelephone,
-            "userSocialId": userSocialId,
-            "userRealName": userRealName,
-            "hospital": bodyParams.hospital,
-            "hospitalId": bodyParams.hospitalId,
-            "department": bodyParams.department,
-            "departmentId": bodyParams.departmentId,
-            "doctor": bodyParams.doctor,
-            "doctorId": bodyParams.doctorId,
-            "doctorTitle": bodyParams.title,
-            "date": bodyParams.resvDate,
-            "time": bodyParams.resvTime,
-            "price": bodyParams.price,
-            "day": bodyParams.day
+            username: username,
+            userId: userId,
+            userTelephone: userTelephone,
+            userSocialId: userSocialId,
+            userRealName: userRealName,
+            hospital: bodyParams.hospital,
+            hospitalId: bodyParams.hospitalId,
+            department: bodyParams.department,
+            departmentId: bodyParams.departmentId,
+            doctor: bodyParams.doctor,
+            doctorId: bodyParams.doctorId,
+            doctorTitle: bodyParams.title,
+            date: bodyParams.resvDate,
+            time: bodyParams.resvTime,
+            price: bodyParams.price,
+            day: bodyParams.day
         }
     });
 };
@@ -570,7 +571,7 @@ exports.onSubmit = function(request, response) {
     var _sb = checkVars('body', request.body, 'hospitalId', 'departmentId', 'doctorId', 'resvTime', 'resvDate');
 
     if (_sa === false || _sb === false) {
-        __invalidArgsError(response);
+        invalidArgsError(response);
         return;
     }
 
@@ -598,11 +599,11 @@ exports.onSubmit = function(request, response) {
 
     fireRequest('POST', url, serialize(data), function(res) {
         if (res == null) {
-            __fatalError(response, 'Line=' + __line + ', Func=' + __function);
+            fatalError(response, 'Line=' + __line + ', Func=' + __function);
             return;
         }
-        if (res.code == 22) {
-            response.redirect(302, '/concierge/reserve/'+hospitalId+'/'+departmentId+'/'+doctorId+'/22')
+        if (res.code != 0) {
+            response.redirect(302, '/concierge/reserve/' + hospitalId + '/' + departmentId + '/' + doctorId + '/' + res.code);
             return;
         }
         var resvId = res.id;
@@ -616,7 +617,7 @@ exports.onSubmit = function(request, response) {
 // get
 exports.showReservation = function(request, response) {
     if (!checkVars('cookies', request.cookies, 'userInfo')) {
-        __invalidArgsError(response);
+        invalidArgsError(response);
         return;
     }
     var userInfo = parseUserInfo(request);
@@ -634,11 +635,7 @@ exports.showReservation = function(request, response) {
         fireRequest('GET', url2, null, function(res) {
             doctorDetail = res;
             if (doctorDetail == null) {
-                __fatalError(response, 'Line=' + __line + ', Func=' + __function);
-                return;
-            }
-            if (doctorDetail == stdNotFound) {
-                __entityNotFound(response, 'Line=' + __line + ', Func=' + __function);
+                fatalError(response, 'Line=' + __line + ', Func=' + __function);
                 return;
             }
             render();
@@ -649,18 +646,19 @@ exports.showReservation = function(request, response) {
     fireRequest('GET', url1, null, function(res) {
         resvDetail = res;
         if (resvDetail == null) {
-            __fatalError(response, 'Line=' + __line + ', Func=' + __function);
-            return;
-        }
-        if (resvDetail == stdNotFound) {
-            __entityNotFound(response, 'Line=' + __line + ', Func=' + __function);
+            fatalError(response, 'Line=' + __line + ', Func=' + __function);
             return;
         }
         getDoctorDetail();
     }, false);
 
     var render = function() {
-        var r = {
+        var code = 0;
+        if (resvDetail.code && resvDetail.code != 0)
+            code = resvDetail.code;
+        if (doctorDetail.code && doctorDetail.code != 0)
+            code = doctorDetail.code;
+        response.render('reservation', {
             username: username,
             state: 'normal',
             userRealName: userRealName,
@@ -668,9 +666,9 @@ exports.showReservation = function(request, response) {
             userSocialId: userSid,
             resvDetail: resvDetail,
             doctorDetail: doctorDetail,
+            code: code,
             message: message ? message : ''
-        };
-        response.render('reservation', r);
+        });
     }
 };
 
@@ -690,32 +688,6 @@ exports.cancel = function(request, response) {
     fireRequest('POST', url, null, function() {
         response.redirect(302, '/account/manage/reservation/m/cancel_success');
     });
-};
-
-// get
-exports.print = function(request, response) {
-
-};
-
-// test
-exports.test = function(request, response) {
-    var file;
-    if (request.params.template == 'new_reservation')
-        file = '/new_reservation.json';
-    else if (request.params.template == 'hospital')
-        file = '/hospital.json';
-    else if (request.params.template == 'doctor')
-        file = '/doctor.json';
-    else
-        file = '/testfile.json';
-
-    fireRequest('GET', file, null, function(res) {
-        if (res == null) {
-            __fatalError(response, 'Line=' + __line + ', Func=' + __function);
-            return;
-        }
-        response.render(request.params.template, res);
-    }, false);
 };
 
 exports.reservationCertificate = function(request, response) {
