@@ -1,6 +1,6 @@
 extends ./sb_layout
 block content
-   h2 医生排班管理（#{doctorDepartment}&nbsp;#{doctorName}）
+   h2 医生排班管理（#{doctorDepartment}, #{doctorName}）
 
    ul.nav.nav-tabs(role='tablist')
       li.active(role='presentation')
@@ -14,7 +14,7 @@ block content
 
       div#panel-current.tab-pane.fade.in.active
          h3 当前排班情况
-         h4 未来一周
+         p 这里显示了医生<strong>#{doctorName}</strong>未来一周的实际排班情况。
          table.time-slots.table.table-bordered
             tr.title
                td
@@ -134,6 +134,7 @@ block content
 
       div#panel-weekly.tab-pane.fade
          h3 修改每周排班
+         p 您可以在此处修改医生<strong>#{doctorName}</strong>的每周排班表，点击数字编辑。
          table.time-slots.table.table-bordered
             tr.title
                td
@@ -220,7 +221,8 @@ block content
 
 
       div#panel-temp.tab-pane.fade
-         h3 添加记录
+         h3 添加临时排班记录
+         p 您可以在此处为医生<strong>#{doctorName}</strong>添加临时排班记录。此处的记录会覆盖每周排班表中的设定。
          form(id='add-temp')
             .form-group
                .prompt
@@ -241,7 +243,7 @@ block content
                .prompt
                   label(for='capacity') 可预约人数
                .control
-                  input#capacity.form-control(name='capacity', type='number', required)
+                  input#capacity.form-control(name='capacity', type='number', required, min='0', max='65535')
                   .note 设为 0 即表示不开放预约。
             button#submit-button.button.submit-button.green-button.button-with-icon(type='submit', data-doctor_id='#{doctorId}')
                i.fa.fa-plus
@@ -254,7 +256,7 @@ block content
                   th 日期
                   th 时间段
                   th 可预约人数
-                  th 操作
+                  th.nosort 操作
             tbody
                each record in schedule.temp
                   tr
@@ -271,7 +273,13 @@ block content
 
          script.
             $(function() {
-               var tempTable = $('#temp-table').DataTable();
+               var tempTable = $('#temp-table').DataTable({
+                  order: [[ 0, "desc" ]],
+                  aoColumnDefs: [{
+                     bSortable: false,
+                     aTargets: ['nosort']
+                  }]
+               });
 
                $('#add-temp').validate();
                $('.date-picker').datepicker({
@@ -285,6 +293,8 @@ block content
 
                $('#submit-button').on('click', function(e) {
                   e.preventDefault();
+                  if (!$('#add-temp').valid())
+                     return false;
                   var date = $('#date').val();
                   var period = $('#period').val();
                   var capacity = $('#capacity').val();

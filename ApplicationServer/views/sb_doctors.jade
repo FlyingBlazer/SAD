@@ -45,8 +45,9 @@ block content
                   th(style='width: 50px') 姓名
                   th(style='width: 60px') 所属科室
                   th(style='width: 80px') 职称
-                  th 描述
-                  th(style='width: 130px') 操作
+                  th(style='width: 60px') 挂号费
+                  th.nosort 描述
+                  th.nosort(style='width: 140px') 操作
             tbody
                each doctor in list
                   tr
@@ -54,6 +55,7 @@ block content
                      td: a.x-editable.x-editable-name(href='#', data-id='#{doctor.id}')= doctor.name
                      td: a.x-editable.x-editable-dept(href='#', data-id='#{doctor.id}')= doctor.department
                      td: a.x-editable.x-editable-title(href='#', data-id='#{doctor.id}')= doctor.title
+                     td: a.x-editable.x-editable-price(href='#', data-id='#{doctor.id}')= doctor.price
                      td: a.x-editable.x-editable-desc(href='#', data-id='#{doctor.id}')= doctor.description
                      td
                         a.button.blue-button.xs-button.opnl-button(href='/backstage/doctor/#{doctor.id}/edit_schedule') 编辑排班
@@ -61,7 +63,13 @@ block content
 
          script.
             $(function() {
-               var doctorTable = $('#doctor-table').DataTable();
+               var doctorTable = $('#doctor-table').DataTable({
+                  order: [[0, "asc"]],
+                  aoColumnDefs: [{
+                     bSortable: false,
+                     aTargets: ['nosort']
+                  }]
+               });
 
                $('#doctor-table .x-editable-desc').each(function() {
                   $(this).text($(this).text().replace('<br>', ''));
@@ -84,7 +92,7 @@ block content
                   ++i;
                }
 
-               $('.x-editable-name').each(function (index, element) {
+               $('.x-editable-name').each(function(index, element) {
                   $(element).editable({
                      url: 'http://#{businessServer}/hospital/doctor/' + $(element).data('id') + '/update',
                      type: 'text',
@@ -138,6 +146,20 @@ block content
                      params: function(params) {
                         return {
                            'title': params.value
+                        }
+                     }
+                  });
+               });
+
+               $('.x-editable-price').each(function(index, element) {
+                  $(element).editable({
+                     url: 'http://#{businessServer}/hospital/doctor/' + $(element).data('id') + '/update',
+                     type: 'text',
+                     title: '修改挂号费',
+                     send: 'always',
+                     params: function (params) {
+                        return {
+                           'price': params.value
                         }
                      }
                   });
