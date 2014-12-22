@@ -41,6 +41,16 @@ block site-content
                 div.intro-title
                     h4 预约时间表
                 hr
+                if status == "candidating"
+                    .alert.alert-warning.alert-dismissible
+                        button.close(type="button", data-dismiss="alert")
+                            span ×
+                        strong.alert-message 您的帐号还没有通过审核，暂时无法预约。
+                if errCode == "3011"
+                    .alert.alert-warning.alert-dismissible
+                        button.close(type="button", data-dismiss="alert")
+                            span ×
+                        strong.alert-message 您已预约了这个时间段，请不要重复预约。
                 table#timetable.table
                     tr#date
                         each time in detail.time_slots
