@@ -26,9 +26,6 @@ router.route('/account/manage/reservation/m/:message').get(controllers.user.show
 
 /* Reservation Workflow */
 
-// Test
-router.route('/test/:template/').get(controllers.reservation.test);
-
 // Home page
 router.route('/').get(controllers.home);
 
