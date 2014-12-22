@@ -482,7 +482,7 @@ exports.editSchedule = function (request, response) {
     var doctorId = request.params.id;
     var adminId = getCookie(request).userId;
 
-    if (!isNullOrUndefined(adminId)) {
+    if (isNullOrUndefined(adminId)) {
         response.redirect('/backstage/login');
     } else {
 
