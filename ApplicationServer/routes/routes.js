@@ -72,6 +72,10 @@ router.route('/reservation/:reservation_id/manage/print').get(controllers.reserv
 // Search
 router.route('/search/:q').get(controllers.reservation.search);
 
+// pdf generation
+router.route('/service/certificate/reservation/:key').get(controllers.reservation.reservationCertificate);//预约单
+router.route('/service/certificate/registry/:key').get(controllers.reservation.registryCertificate);//挂号单
+
 /**
  * =========================================================
  * |  SAD SmartBackstage (TM)                              |

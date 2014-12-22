@@ -2,6 +2,7 @@ extends layout
 
 block append stylesheets
     link(href="/stylesheets/reservation.css", rel="stylesheet", media="all")
+    script(src='/javascripts/base64.js')
 
 block title
     title 预约详情
@@ -100,12 +101,11 @@ block site-content
                 p
                     span 证件号：#{userSocialId}
 
-
         div
             if resvDetail.status[1] == '1' && resvDetail.status[5] == '0'
-                button.btn.btn-xs.btn-success 打印挂号单
+                a#print-rg.btn.btn-xs.btn-success(href='', target='_blank') 打印挂号单
             if resvDetail.status[1] == '0' && resvDetail.status[5] == '0'
-                button.btn.btn-xs.btn-success 打印预约单
+                a#print-rv.btn.btn-xs.btn-success(href='', target='_blank') 打印预约单
             if resvDetail.status[1] == '0' && resvDetail.status[5] == '0' && resvDetail.status[2] != '2' && resvDetail.status[3] == '0'
                 button.btn.btn-xs.btn-primary(type='button', onclick='pay()') 付款
             - var myDate = new Date();
@@ -114,9 +114,20 @@ block site-content
                 button.btn.btn-xs.btn-danger(type='button', onclick='cancel()') 取消订单
             if resvDetail.status[5] == '0' && str >= rdate
                 button.btn.btn-xs.btn-danger(disabled) 取消订单
+    div.hidden
+        span#data-hospital-name.hidden(data-hospital-name='#{doctorDetail.hospital}')
+        span#data-reservation-id.hidden(data-reservation-id='#{resvDetail.reservation_id}')
+        span#data-name.hidden(data-name='#{userRealName}')
+        span#data-date.hidden(data-date='#{resvDetail.submission_date}')
+        span#data-period.hidden(data-period='#{resvDetail.period}')
+        span#data-sid.hidden(data-sid='#{userSocialId}')
+        span#data-phone.hidden(data-phone='#{userTelephone}')
+        span#data-department.hidden(data-department='#{doctorDetail.department}')
+        span#data-doctor.hidden(data-doctor='#{doctorDetail.name}')
+        span#data-price.hidden(data-price='#{doctorDetail.price}')
 
 block append scripts
-    script(type='text/javascript').
+    script.
         function pay() {
             if (confirm("订单共#{doctorDetail.price}元，确认支付？")) {
                 window.location.href = '/reservation/#{resvDetail.reservation_id}/manage/pay';
@@ -127,3 +138,21 @@ block append scripts
                 window.location.href = '/reservation/#{resvDetail.reservation_id}/manage/cancel';
             }
         }
+        $(function() {
+            var info = {
+                hospitalName: $('#data-hospital-name').data('hospital-name'),
+                reservationId: $('#data-reservation-id').data('reservation-id'),
+                name: $('#data-name').data('name'),
+                date: $('#data-date').data('date'),
+                gender: $('#data-gender').data('gender'),
+                age: $('#data-age').data('age'),
+                sid: $('#data-sid').data('sid'),
+                phone: $('#data-phone').data('phone'),
+                department: $('#data-department').data('department'),
+                doctor: $('#data-doctor').data('doctor'),
+                price: $('#data-price').data('price')
+            };
+            var code = base64.encode(JSON.stringify(info));
+            $('#print-rg').attr('href', '/service/certificate/registry/' + code);
+            $('#print-rv').attr('href', '/service/certificate/reservation/' + code);
+        });
