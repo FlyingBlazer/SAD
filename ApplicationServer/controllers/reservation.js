@@ -1,3 +1,127 @@
+/*
+ * Copyright (c) 2012 Miles Shang <mail@mshang.ca>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+ * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+/*
+ * Usage:
+ * Set your settings:
+ *   base64.settings.char62 = "-";
+ *   base64.settings.char63 = "_";
+ *   etc.
+ *
+ * Then:
+ * base64.encode(str) takes a string and returns the base64 encoding of it.
+ * base64.decode(str) does the reverse.
+ */
+
+/* TODO:
+ * Add a "padding_mandatory" flag to check for bad padding in the decoder.
+ * Add test cases that throw errors.
+ */
+
+var base64 = new Object();
+
+base64.settings = { // defaults
+    "char62"        : "+",
+    "char63"        : "/",
+    "pad"           : "=",
+    "ascii"         : false
+};
+
+/*
+ * Settings:
+ * If "pad" is not null or undefined, then it will be used for encoding.
+ *
+ * If "ascii" is set to true, then the encoder
+ * will assume that plaintext is in 8-bit chars (the standard).
+ * In this case, for every 3 chars in plaintext, you get 4 chars of base64.
+ * Any non-8-bit chars will cause an error.
+ * Otherwise, assume that all plaintext can be in the full range
+ * of Javascript chars, i.e. 16 bits. Get 8 chars of base64 for 3 chars
+ * of plaintext. Any possible JS string can be encoded.
+ */
+
+base64.encode = function (str) {
+    this.char_set =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+        + this.settings.char62 + this.settings.char63;
+
+    var output = ""; // final output
+    var buf = ""; // binary buffer
+    for (var i = 0; i < str.length; ++i) {
+        var c_num = str.charCodeAt(i);
+        if (this.settings.ascii)
+            if (c_num >= 256)
+                throw "Not an 8-bit char.";
+        var c_bin = c_num.toString(2);
+        while (c_bin.length < (this.settings.ascii ? 8 : 16))
+            c_bin = "0" + c_bin;
+        buf += c_bin;
+
+        while (buf.length >= 6) {
+            var sextet = buf.slice(0, 6);
+            buf = buf.slice(6);
+            output += this.char_set.charAt(parseInt(sextet, 2));
+        }
+    }
+
+    if (buf) { // not empty
+        while (buf.length < 6) buf += "0";
+        output += this.char_set.charAt(parseInt(buf, 2));
+    }
+
+    if (this.settings.pad)
+        while (output.length % (this.settings.ascii ? 4 : 8) != 0)
+            output += this.settings.pad;
+
+    return output;
+}
+
+base64.decode = function (str) {
+    this.char_set =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+        + this.settings.char62 + this.settings.char63;
+
+    var output = ""; // final output
+    var buf = ""; // binary buffer
+    var bits = (this.settings.ascii ? 8 : 16);
+    for (var i = 0; i < str.length; ++i) {
+        if (str[i] == this.settings.pad) break;
+        var c_num = this.char_set.indexOf(str.charAt(i));
+        if (c_num == -1) throw "Not base64.";
+        var c_bin = c_num.toString(2);
+        while (c_bin.length < 6) c_bin = "0" + c_bin;
+        buf += c_bin;
+
+        while (buf.length >= bits) {
+            var octet = buf.slice(0, bits);
+            buf = buf.slice(bits);
+            output += String.fromCharCode(parseInt(octet, 2));
+        }
+    }
+    return output;
+}
+
+
 /**
  * Created by renfei on 14/12/6.
  */
@@ -164,9 +288,9 @@ var fireRequest = function(method, path, data, callback, noErrCodeCheck) {
                 if (noErrCodeCheck || srcObject.code == 0) {
                     callbackSent = true;
                     callback(srcObject);
-                } else if (srcObject.code == 2001
-                    || srcObject.code == 2101
-                    || srcObject.code == 2201) {
+                } else if (srcObject.code == 24
+                    || srcObject.code == 7
+                    || srcObject.code == 23) {
                     callbackSent = true;
                     callback(stdNotFound);
                 } else {
@@ -350,31 +474,32 @@ exports.showDoctor = function(request, response) {
         userInfo = parseUserInfo(request);
 
     var username = userInfo.username ? userInfo.username : '';
-    var status = userInfo.status;
     var expertId = request.params.expert_id;
     var hospitalId = request.params.hospital_id;
     var departmentId = request.params.department_id;
     var errCode = request.params.err_code ? request.params.err_code : '';
-    var url = '/hospital/doctor/' + expertId + '/detail';
 
-    fireRequest('GET', url, null, function(res) {
-        if (res == null) {
-            __fatalError(response, 'Line=' + __line + ', Func=' + __function);
-            return;
-        }
-        if (res == stdNotFound) {
-            __entityNotFound(response, 'Line=' + __line + ', Func=' + __function);
-            return;
-        }
-        response.render('doctor', {
-            username: username,
-            status: status,
-            errCode: errCode,
-            hospitalId: hospitalId,
-            departmentId: departmentId,
-            detail: res
+    fireRequest('GET', '/user/' + userInfo.userId + '/info', null, function(res) {
+        var status = res.status;
+        fireRequest('GET', '/hospital/doctor/' + expertId + '/detail', null, function(res) {
+            if (res == null) {
+                __fatalError(response, 'Line=' + __line + ', Func=' + __function);
+                return;
+            }
+            if (res == stdNotFound) {
+                __entityNotFound(response, 'Line=' + __line + ', Func=' + __function);
+                return;
+            }
+            response.render('doctor', {
+                username: username,
+                status: status,
+                errCode: errCode,
+                hospitalId: hospitalId,
+                departmentId: departmentId,
+                detail: res
+            });
         });
-    }, false);
+    });
 };
 
 // post (need x-www-form-urlencoded data)
@@ -476,8 +601,8 @@ exports.onSubmit = function(request, response) {
             __fatalError(response, 'Line=' + __line + ', Func=' + __function);
             return;
         }
-        if (res.code == 3011) {
-            response.redirect(302, '/concierge/reserve/'+hospitalId+'/'+departmentId+'/'+doctorId+'/3011')
+        if (res.code == 22) {
+            response.redirect(302, '/concierge/reserve/'+hospitalId+'/'+departmentId+'/'+doctorId+'/22')
             return;
         }
         var resvId = res.id;
@@ -591,4 +716,54 @@ exports.test = function(request, response) {
         }
         response.render(request.params.template, res);
     }, false);
+};
+
+exports.reservationCertificate = function(request, response) {
+    var key = request.params.key;
+    var obj = JSON.parse(base64.decode(key));
+    var gender = obj.sid.length == 17 ? (obj.sid[16] % 2 == 0 ? '女' : '男') : '男';
+    var age = 2014 - parseInt(obj.sid.substr(6, 4));
+    var now = new Date();
+    var time = now.getFullYear() + '年' + (parseInt(now.getMonth()) + 1) + '月' + now.getDate();
+    time = time + '日 ' + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
+
+    response.render('service_reservation', {
+        hospitalName: obj.hospitalName,
+        reservationId: obj.reservationId,
+        name: obj.name,
+        date: obj.date,
+        gender: gender,
+        age: age,
+        sid: obj.sid,
+        phone: obj.phone,
+        department: obj.department,
+        doctor: obj.doctor,
+        price: obj.price,
+        generationTime: time
+    });
+};
+
+exports.registryCertificate = function(request, response) {
+    var key = request.params.key;
+    var obj = JSON.parse(base64.decode(key));
+    var gender = obj.sid.length == 17 ? (obj.sid[16] % 2 == 0 ? '女' : '男') : '男';
+    var age = 2014 - parseInt(obj.sid.substr(6, 4));
+    var now = new Date();
+    var time = now.getFullYear() + '年' + (parseInt(now.getMonth()) + 1) + '月' + now.getDate();
+    time = time + '日 ' + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
+
+    response.render('service_registry', {
+        hospitalName: obj.hospitalName,
+        reservationId: obj.reservationId,
+        name: obj.name,
+        date: obj.date,
+        gender: gender,
+        age: age,
+        sid: obj.sid,
+        phone: obj.phone,
+        department: obj.department,
+        doctor: obj.doctor,
+        price: obj.price,
+        generationTime: time
+    });
 };

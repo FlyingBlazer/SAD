@@ -40,32 +40,97 @@ block content
             });
 
          });
-      } );
-   h2 审核用户
-   div
-      table#example.table.table-striped.table-bordered.table-hover(cellspacing='0', width='60%')
-         thead
-            tr
-
-               th 真实姓名
-               th 身份证
-               th 电话
-               th 邮箱
-               th 注册IP
-               th 操作
-
-         tbody
-            if (list.length)
-               each item in list
-
-                  tr
-                     td #{item.name}
-                     td #{item.id}
-                     td #{item.phone}
-                     td #{item.email}
-                     td #{item.ip}
-                     td
-                        button.button.xs-button.blue-button.delete-hospital(class='accept_button',data-id='#{item.user_id}')  通过审核
-                        button.button.xs-button.red-button.delete-hospital(class='refuse_button',data-id='#{item.user_id}',style='margin-left:10px')  拒绝
 
 
+         $('#credit_table').DataTable();
+
+
+      });
+   h2 用户管理
+   ul.nav.nav-tabs(role='tablist')
+      li.active(role='presentation')
+         a(href='#panel-verify', role='tab', data-toggle='tab') 用户审核
+      li(role='presentation')
+         a(href='#panel-credit', role='tab', data-toggle='tab') 信用管理
+   div.tab-content
+      div#panel-verify.tab-pane.fade.in.active
+         h3 用户审核
+         table#example.table.table-striped.table-bordered.table-hover(cellspacing='0', width='60%')
+            thead
+               tr
+
+                  th 真实姓名
+                  th 身份证
+                  th 电话
+                  th 邮箱
+                  th 注册IP
+                  th 操作
+
+            tbody
+               if (validatingList.length)
+                  each item in validatingList
+
+                     tr
+                        td #{item.name}
+                        td #{item.id}
+                        td #{item.phone}
+                        td #{item.email}
+                        td #{item.ip}
+                        td
+                           button.button.xs-button.blue-button.delete-hospital(class='accept_button',data-id='#{item.user_id}')  通过审核
+                           button.button.xs-button.red-button.delete-hospital(class='refuse_button',data-id='#{item.user_id}',style='margin-left:10px')  拒绝
+
+
+      div#panel-credit.tab-pane.fade
+         h3 信用管理
+         table#credit_table.table.table-striped.table-bordered.table-hover(cellspacing='0', width='60%')
+            thead
+               tr
+
+                  th 真实姓名
+                  th 身份证
+                  th 电话
+                  th 邮箱
+                  th 注册IP
+                  th 信用额度
+
+            tbody
+                if (unqualifiedList.length)
+                    each item in unqualifiedList
+                       tr
+                          td #{item.name}
+                          td #{item.id}
+                          td #{item.phone}
+                          td #{item.email}
+                          td #{item.ip}
+                          td
+                             a.x-editable.x-editable-credit(href='#', data-id='#{item.user_id}')= -1
+
+         script.
+            $('.x-editable-credit').each(function(index, element) {
+               var userId = $(element).data('id');
+               var adminId= #{userId};
+               $(element).editable({
+                  url: 'http://#{businessServer}/user/check/'+userId+'/revive',
+                  type: 'select2',
+                  send: 'always',
+                  source: [
+                     {value: 1, text: '1'},
+                     {value: 2, text: '2'},
+                     {value: 3, text: '3'},
+                     {value: 4, text: '4'},
+                     {value: 5, text: '5'}
+
+                  ],
+                  select2: {
+                     placeholder: "选择信用额"
+                  },
+                  title: '修改信用额',
+                  params: function(params) {
+                     return {
+                        'credit': params.value,
+                        'adminId':adminId
+                     }
+                  }
+               });
+            });

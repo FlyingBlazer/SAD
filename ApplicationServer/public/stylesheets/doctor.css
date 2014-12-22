@@ -28,6 +28,12 @@
     margin-left: 20px;
 }
 
+.doctor-info>.hospital,
+.doctor-info>.department,
+.doctor-info>.price {
+    margin-bottom: 10px;
+}
+
 .doctor-info>.hospital>.hospital-label,
 .doctor-info>.department>.department-label,
 .doctor-info>.price>.price-label {
