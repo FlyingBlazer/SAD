@@ -48,7 +48,19 @@
     padding:3px;
 
 }
+.none-border li{
+    list-style-type: none;
+    margin-top:40px;
+    margin-left:10px;
+    text-align:center;
+    font-size:26px;
 
+}
+
+.none-border li:hover{
+   background-color: #0040D0;
+
+}
 
 .current {
 

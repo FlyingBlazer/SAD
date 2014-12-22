@@ -567,10 +567,11 @@ exports.users = function (request, response) {
                 hospitalId: getCookie(request).hospitalId,
                 hospitalName: getCookie(request).hospitalName,
                 businessServer: getCookie(request).businessServer,
-                list: result.users.validating
+                validatingList: result.users.validating,
+                unqualifiedList:result.users.unqualified
             };
 
-            //printLogMessage(JSON.stringify(result.users));
+            printLogMessage(JSON.stringify(params));
 
             response.render('sb_users', params);
         } else {
