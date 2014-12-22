@@ -1,21 +1,21 @@
 extends layout
+
+block append stylesheets
+    link(href="/stylesheets/login.css", rel="stylesheet", media="all")
+
 block title
     title 登陆界面
 
 block site-content
-    link(href="/stylesheets/login.css", rel="stylesheet", media="all")
-
     .container
         .left-content(style='float: left;')
             form.form-login(role='form', action='/account/login', name='postLoginMessage', method='post')
                 h2.form-login-heading 请登录
                 input#username.form-control(type='username', name='username', placeholder='用户名', required='', autofocus='')
                 input#password.form-control(type='password', name='password', placeholder='请输入密码', required='')
-                .checkbox
-                    label
-                        input(type='checkbox', value='remember-me')
-                        | 记住我
-
+                .checkbox: label
+                    input(type='checkbox', value='remember-me')
+                    | 记住我
                 h2.label(name='errorMessage', style='color: red; font-size: lsarger') #{errorMessage}
                 button.btn.btn-lg.btn-primary.btn-block(type='submit') 登录
         .right-content(style='float: left')
@@ -33,10 +33,11 @@ block site-content
             br
             br
             a.btn.btn-lg.btn-warning.btn-block(href='register') 注册
+
+block append scripts
     script(src="/javascripts/md5.js")
     script(type="text/javascript").
         $('.form-login').on('submit', function() {
             $("#password").val(hex_md5($("#password").val()));
             return true;
         });
-    // left-container end

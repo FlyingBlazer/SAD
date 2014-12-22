@@ -1,105 +1,94 @@
 extends layout
 
-block site-content
-
+block append stylesheets
    link(href="/stylesheets/bootstrap/css/bootstrap.min.css", rel="stylesheet", media="all")
    link(href="/stylesheets/usercenter_reservation_list.css",rel="stylesheet", media="all")
    link(href="/stylesheets/usercenter_userinfo.css",rel="stylesheet", media="all")
+
+block append scripts
    script(src="/javascripts/md5.js")
    script(src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js')
    script(type="text/javascript").
-      function pw()
-      {
-         var pw1=document.getElementById("pw1").value;
-         var pw2=document.getElementById("pw2").value;
-         var prompt=document.getElementById("prompt");
-         if (pw1!=pw2){
-
-            prompt.innerHTML="两次输入的密码不一样";
-            document.getElementById("submit").disable=true;
+      function pw() {
+         var pw1 = document.getElementById("pw1").value;
+         var pw2 = document.getElementById("pw2").value;
+         var prompt = document.getElementById("prompt");
+         if (pw1 != pw2) {
+            prompt.innerHTML = "两次输入的密码不一样";
+            document.getElementById("submit").disable = true;
          }
          else {
-            prompt.style.display="gone";
-            document.getElementById("submit").disable=false;
-
+            prompt.style.display = "gone";
+            document.getElementById("submit").disable = false;
          }
       }
-
       $(document).ready(function () {
-
          $("#submit").click(function () {
             $.post("/account/manage/info",
-                    {
-                      pre_pw:hex_md5($("#pre_pw").val()),
-                      new_pw:hex_md5($("#pw1").val()),
-                       phone:$("#phone").val(),
-                       email:$("#email").val()
-                    },
-                    function (data, status) {
-                       alert("Data: " + data + "\nStatus: " + status);
-                    });
+              {
+                 pre_pw: hex_md5($("#pre_pw").val()),
+                 new_pw: hex_md5($("#pw1").val()),
+                 phone: $("#phone").val(),
+                 email: $("#email").val()
+              },
+              function (data, status) {
+                 alert("Data: " + data + "\nStatus: " + status);
+              });
          });
       });
 
-   div
-      .g-container(data-module='userinfo', data-fo-help='1')
-         #g-breadcrumb
-            a(href='http://www.guahao.com') 首页
-            span > 我的预约单
-         .wrap
-            .person-left
-               p.left-head
-                  img(src='http://img.guahao.cn/img/character/young-m.png', alt='男')
-                  span(style='margin-left: 3px')
-                     strong #{username}
-               ul.none-border
-                  li(style='list-style-type: none;margin-top:40px;margin-left:10px;text-align:left')
-                     a.btn.btn-default.btn-lg.active(href='http://www.guahao.com/my/orderlist', role='button')
-                        | 预约列表
-                  li(style='list-style-type: none;margin-top:20px;margin-left:10px;text-align: left')
-                     a.btn.btn-primary.btn-lg.active(role='button', href='http://www.guahao.com/my/haoyuanlist')
-                        | 个人中心
-            .person-right
-               .order-remind.g-clear
-                  span.icon.gi2.gi-order-big
-                  .meta
-                     h1 个人中心
-               .second_block
-                  span.second_label 账号信息
-               hr#hr_style
-               .list_content
-                  span 登录名: #{uesrname}
-                  span 真实姓名: #{name}
-                  span 电话: #{phone}
-                  span 邮箱: #{email}
-                  span 身份证号:#{sid}
-                  span 信用额度:#{credit}
-               .second_block
-                  span.second_label  修改信息
-               hr(style='line-width:1;', width='90%', color='#1E90FF', size='1')
-               div
-                  if (errorMessage)
-                     span #{errorMessage}
-                  form( name='pwinfo_modify_form')
-                     .form-group(style='margin-left:60px')
-                        label 原密码
-                        input.form-control(type='password', style='width:40%', id='pre_pw')
-                        label 新密码
-                        input.form-control(type='password', style='width:40%',id='pw1')
-                        label 确认密码
-                        input.form-control(type='password', style='width:40%', id='pw2',onkeyup='pw();')
-                        label 电话
-                        input.form-control(type='text', style='width:40%', id='phone')
-                        label 邮箱
-                        input.form-control(type='email', style='width:40%', id='email')
-                        span(id='prompt')
-                        button.btn.btn-default(type='submit',id='submit') 修改
-               .second_block
-                  span.second_label  上传头像
-               hr(style='line-width:1;', width='90%', color='#1E90FF', size='1')
-               div
-                  form(action='###', name='head_pic_form', method='post')
-                     .form-group(style='margin-left:60px')
-                        input(type='file', name='upload_pic')
-                        button.btn.btn-default(type='submit') 上传
+block site-content
+   div: .g-container(data-module='userinfo', data-fo-help='1')
+      #g-breadcrumb
+         a(href='http://www.guahao.com') 首页
+         span > 我的预约单
+      .wrap
+         .person-left
+            p.left-head
+               img(src='http://img.guahao.cn/img/character/young-m.png', alt='男')
+               span(style='margin-left: 3px'): strong #{username}
+            ul.none-border
+               li(style='list-style-type: none;margin-top:40px;margin-left:10px;text-align:left')
+                  a.btn.btn-default.btn-lg.active(href='http://www.guahao.com/my/orderlist', role='button') 预约列表
+               li(style='list-style-type: none;margin-top:20px;margin-left:10px;text-align: left')
+                  a.btn.btn-primary.btn-lg.active(role='button', href='http://www.guahao.com/my/haoyuanlist') 个人中心
+         .person-right
+            .order-remind.g-clear
+               span.icon.gi2.gi-order-big
+               .meta: h1 个人中心
+            .second_block
+               span.second_label 账号信息
+            hr#hr_style
+            .list_content
+               span 登录名: #{uesrname}
+               span 真实姓名: #{name}
+               span 电话: #{phone}
+               span 邮箱: #{email}
+               span 身份证号:#{sid}
+               span 信用额度:#{credit}
+            .second_block
+               span.second_label 修改信息
+            hr(style='line-width:1;', width='90%', color='#1E90FF', size='1')
+            div
+               if (errorMessage)
+                  span #{errorMessage}
+               form( name='pwinfo_modify_form'): .form-group(style='margin-left:60px')
+                  label 原密码
+                  input.form-control(type='password', style='width:40%', id='pre_pw')
+                  label 新密码
+                  input.form-control(type='password', style='width:40%',id='pw1')
+                  label 确认密码
+                  input.form-control(type='password', style='width:40%', id='pw2',onkeyup='pw();')
+                  label 电话
+                  input.form-control(type='text', style='width:40%', id='phone')
+                  label 邮箱
+                  input.form-control(type='email', style='width:40%', id='email')
+                  span(id='prompt')
+                  button.btn.btn-default(type='submit',id='submit') 修改
+            .second_block: span.second_label  上传头像
+            hr(style='line-width:1;', width='90%', color='#1E90FF', size='1')
+            div: form(action='###', name='head_pic_form', method='post')
+               .form-group(style='margin-left:60px')
+                  input(type='file', name='upload_pic')
+                  button.btn.btn-default(type='submit') 上传
    div.clear

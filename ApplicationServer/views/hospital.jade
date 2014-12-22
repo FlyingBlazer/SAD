@@ -1,25 +1,121 @@
 extends layout
 
+block append stylesheets
+    link(href="/stylesheets/hospital.css", rel="stylesheet", media="all")
+
+block append scripts
+    script(src="http://api.map.baidu.com/api?v=2.0&ak=pZFhoaCvZGuO14AmE2f0Xkon")
+    script.
+        $(document).ready(function() {
+            var map = new BMap.Map("hospital-map");
+            var bottom_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_BOTTOM_LEFT});
+            var top_left_navigation = new BMap.NavigationControl();
+            map.addControl(bottom_left_control);
+            map.addControl(top_left_navigation);
+            var myGeo = new BMap.Geocoder();
+            myGeo.getPoint("#{detail.address}", function(point) {
+                if (point) {
+                    map.centerAndZoom(point, 16);
+                    map.addOverlay(new BMap.Marker(point));
+                }
+            });
+
+            $(".department-tag").click(function () {
+                var selection = $(this).html();
+                $("#select-department a").each(function () {
+                    if ($(this).html() == selection) {
+                        $(this).click();
+                    }
+                });
+                $("a[href=\"#reserve\"]").tab("show");
+            });
+
+            var departmentSelection = "";
+            var titleSelection = "";
+
+            function checkEmpty() {
+                var empty = true;
+                $(".doctor").each(function () {
+                    if (!$(this).parent(".department").hasClass("hidden") && !$(this).hasClass("hidden")) {
+                        empty = false;
+                    }
+                });
+                if (empty) {
+                    $(".empty").removeClass("hidden");
+                } else {
+                    $(".empty").addClass("hidden");
+                }
+            }
+
+            $("#select-department a").click(function() {
+                departmentSelection = $(this).html();
+                $(".department-list>.department").each(function() {
+                    if ($(this).data("name") != departmentSelection) {
+                        $(this).addClass("hidden");
+                    } else {
+                        $(this).removeClass("hidden");
+                    }
+                });
+                checkEmpty();
+                $("#select-item-department .select-item-info").html(departmentSelection);
+                $("#select-item-department").removeClass("hidden");
+                $("#select").removeClass("hidden");
+            });
+
+            $("#select-title a").click(function () {
+                titleSelection = $(this).html();
+                $(".doctor").each(function () {
+                    if ($(this).find(".title").html() != titleSelection) {
+                        $(this).addClass("hidden");
+                    } else {
+                        $(this).removeClass("hidden");
+                    }
+                });
+                checkEmpty();
+                $("#select-item-title>.select-item-info").html(titleSelection);
+                $("#select-item-title").removeClass("hidden");
+                $("#select").removeClass("hidden");
+            });
+
+            $("#select-item-department>.select-item-close").click(function () {
+                departmentSelection = "";
+                $(".department-list>.department").each(function() {
+                    $(this).removeClass("hidden");
+                });
+                checkEmpty();
+                $("#select-item-department").addClass("hidden");
+                if (titleSelection == "") {
+                    $("#select").addClass("hidden");
+                }
+            });
+
+            $("#select-item-title>.select-item-close").click(function () {
+                titleSelection = "";
+                $(".doctor").each(function () {
+                    $(this).removeClass("hidden");
+                });
+                checkEmpty();
+                $("#select-item-title").addClass("hidden");
+                if (departmentSelection == "") {
+                    $("#select").addClass("hidden");
+                }
+            });
+        });
+
 block title
     title 医院
-    link(href="/stylesheets/hospital.css", rel="stylesheet", media="all")
-    script(src="http://api.map.baidu.com/api?v=2.0&ak=pZFhoaCvZGuO14AmE2f0Xkon")
 
 block breadcrumb
-    li
-        a(href="/") 主页
-    li
-        a(href="/#{detail.province}/hospitals") #{detail.province}
+    li: a(href="/") 主页
+    li: a(href="/#{detail.province}/hospitals") #{detail.province}
     li.active #{detail.name}
 
 block header-content-extra
     h1.hospital-name #{detail.name}
     label.hospital-rating #{detail.level}
     ul.nav.nav-tabs
-        li.active(role="presentation")
-            a(href="#hospital-index", data-toggle="tab") 医院主页
-        li(role="presentation")
-            a(href="#reserve", data-toggle="tab") 预约挂号
+        li.active(role="presentation"): a(href="#hospital-index", data-toggle="tab") 医院主页
+        li(role="presentation"): a(href="#reserve", data-toggle="tab") 预约挂号
 
 block site-content
     div#site-content.tab-content
@@ -38,19 +134,16 @@ block site-content
                         a(href="#{detail.website}") #{detail.website}
 
             div.hospital-intro
-                div.intro-title
-                    h4 医院简介
+                div.intro-title: h4 医院简介
                 hr
                 div.intro-content #{detail.description}
-                div.intro-title
-                    h4 科室列表
+                div.intro-title: h4 科室列表
                 hr
                 div.departments
                     each department in departments
                         a.department-tag(href="#") #{department.name}
 
-                div.intro-title
-                    h4 医院地图
+                div.intro-title: h4 医院地图
                 hr
                 div#hospital-map
 
@@ -60,12 +153,10 @@ block site-content
                 | 您已选择：
                 span#select-item-department.select-item.hidden
                     span.select-item-info
-                    span.select-item-close
-                        i.fa.fa-close
+                    span.select-item-close: i.fa.fa-close
                 span#select-item-title.select-item.hidden
                     span.select-item-info
-                    span.select-item-close
-                        i.fa.fa-close
+                    span.select-item-close: i.fa.fa-close
 
             table.table#select-department
                 td.table-header(rowspan=100) 科室
@@ -103,113 +194,10 @@ block site-content
                             div.doctor
                                 img(src="/pictures/#{doctor.photo_url}").image
                                 div.doctor-info
-                                    div.name
-                                        a(href="/concierge/reserve/#{detail.id}/#{department_id}/#{doctor.id}") #{doctor.name}
+                                    div.name: a(href="/concierge/reserve/#{detail.id}/#{department_id}/#{doctor.id}") #{doctor.name}
                                     div.title #{doctor.title}
                                     div.department #{doctor.department}
                                 div.doctor-intro #{doctor.description}
-                                div.reservation
-                                    a.gbn.gbt-blue(href="/concierge/reserve/#{detail.id}/#{department_id}/#{doctor.id}") 挂号
+                                div.reservation: a.gbn.gbt-blue(href="/concierge/reserve/#{detail.id}/#{department_id}/#{doctor.id}") 挂号
 
-            div.empty.hidden
-                div.alert.alert-info 没有找到符合条件的结果，请尝试减少搜索条件
-
-            script.
-
-                $(document).ready(function() {
-
-                    var map = new BMap.Map("hospital-map");
-                    var bottom_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_BOTTOM_LEFT});
-                    var top_left_navigation = new BMap.NavigationControl();
-                    map.addControl(bottom_left_control);
-                    map.addControl(top_left_navigation);
-                    var myGeo = new BMap.Geocoder();
-                    myGeo.getPoint("#{detail.address}", function(point) {
-                        if (point) {
-                            map.centerAndZoom(point, 16);
-                            map.addOverlay(new BMap.Marker(point));
-                        }
-                    });
-
-                    $(".department-tag").click(function () {
-                        var selection = $(this).html();
-                        $("#select-department a").each(function () {
-                            if ($(this).html() == selection) {
-                                $(this).click();
-                            }
-                        });
-                        $("a[href=\"#reserve\"]").tab("show");
-                    });
-
-                    var departmentSelection = "";
-                    var titleSelection = "";
-
-                    function checkEmpty() {
-                        var empty = true;
-                        $(".doctor").each(function () {
-                            if (!$(this).parent(".department").hasClass("hidden") && !$(this).hasClass("hidden")) {
-                                empty = false;
-                            }
-                        });
-                        if (empty) {
-                            $(".empty").removeClass("hidden");
-                        } else {
-                            $(".empty").addClass("hidden");
-                        }
-                    }
-
-                    $("#select-department a").click(function() {
-                        departmentSelection = $(this).html();
-                        $(".department-list>.department").each(function() {
-                            if ($(this).data("name") != departmentSelection) {
-                                $(this).addClass("hidden");
-                            } else {
-                                $(this).removeClass("hidden");
-                            }
-                        });
-                        checkEmpty();
-                        $("#select-item-department .select-item-info").html(departmentSelection);
-                        $("#select-item-department").removeClass("hidden");
-                        $("#select").removeClass("hidden");
-                    });
-
-                    $("#select-title a").click(function () {
-                        titleSelection = $(this).html();
-                        $(".doctor").each(function () {
-                            if ($(this).find(".title").html() != titleSelection) {
-                                $(this).addClass("hidden");
-                            } else {
-                                $(this).removeClass("hidden");
-                            }
-                        });
-                        checkEmpty();
-                        $("#select-item-title>.select-item-info").html(titleSelection);
-                        $("#select-item-title").removeClass("hidden");
-                        $("#select").removeClass("hidden");
-                    });
-
-                    $("#select-item-department>.select-item-close").click(function () {
-                        departmentSelection = "";
-                        $(".department-list>.department").each(function() {
-                            $(this).removeClass("hidden");
-                        });
-                        checkEmpty();
-                        $("#select-item-department").addClass("hidden");
-                        if (titleSelection == "") {
-                            $("#select").addClass("hidden");
-                        }
-                    });
-
-                    $("#select-item-title>.select-item-close").click(function () {
-                        titleSelection = "";
-                        $(".doctor").each(function () {
-                            $(this).removeClass("hidden");
-                        });
-                        checkEmpty();
-                        $("#select-item-title").addClass("hidden");
-                        if (departmentSelection == "") {
-                            $("#select").addClass("hidden");
-                        }
-                    });
-
-                });
+            div.empty.hidden: div.alert.alert-info 没有找到符合条件的结果，请尝试减少搜索条件

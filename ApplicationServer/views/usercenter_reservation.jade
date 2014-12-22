@@ -1,59 +1,51 @@
 extends layout
 
-block site-content
+block append stylesheets
    link(href="/stylesheets/usercenter_reservation_list.css", rel="stylesheet", media="all")
    link(href="/stylesheets/bootstrap/css/bootstrap.min.css", rel="stylesheet", media="all")
-   div
-      .g-container(data-module='userinfo', data-fo-help='1')
-         #g-breadcrumb
-            a(href='http://www.guahao.com') 首页
-            span > 我的预约单
-         .wrap
-            .person-left
-               p.left-head
-                  img(src='http://img.guahao.cn/img/character/young-m.png', alt='男')
-                  span(style='margin-left: 3px')
-                     strong #{username}
-               ul.none-border
-                  li(style='list-style-type: none;margin-top:40px;margin-left:10px;text-align:left')
-                     a.btn.btn-primary.btn-lg.active(href='/account/manage/reservation', role='button')
-                        | 预约列表
-                  li(style='list-style-type: none;margin-top:20px;margin-left:10px;text-align: left')
-                     a.btn.btn-default.btn-lg.active(role='button', href='/account/manage')
-                        | 个人中心
-            .person-right
-               .order-remind.g-clear
-                  .meta
-                     h1 我的预约单
-               .list
-                  table.table
-                     colgroup
-                        col(width='144px;')
-                        col(width='180px;')
-                        col(width='100px;')
 
-                        col.order-cost(width='130px;')
-                        col(width='130px;')
-                     thead
-                        tr
-                           th 就诊日期
-                           th 医院
-                           th.text-left 医生
+block site-content
+   div: .g-container(data-module='userinfo', data-fo-help='1')
+      #g-breadcrumb
+         a(href='http://www.guahao.com') 首页
+         span > 我的预约单
+      .wrap
+         .person-left
+            p.left-head
+               img(src='http://img.guahao.cn/img/character/young-m.png', alt='男')
+               span(style='margin-left: 3px'): strong #{username}
+            ul.none-border
+               li(style='list-style-type: none;margin-top:40px;margin-left:10px;text-align:left')
+                  a.btn.btn-primary.btn-lg.active(href='/account/manage/reservation', role='button') 预约列表
+               li(style='list-style-type: none;margin-top:20px;margin-left:10px;text-align: left')
+                  a.btn.btn-default.btn-lg.active(role='button', href='/account/manage') 个人中心
+         .person-right
+            .order-remind.g-clear: .meta: h1 我的预约单
+            .list
+               table.table
+                  colgroup
+                     col(width='144px;')
+                     col(width='180px;')
+                     col(width='100px;')
+                     col.order-cost(width='130px;')
+                     col(width='130px;')
+                  thead
+                     tr
+                        th 就诊日期
+                        th 医院
+                        th.text-left 医生
+                        th 挂号费
+                        th 订单状态
+                        th 操作
+                  tbody
+                     if(reservations.length)
+                        tr for item in reservations
+                           td item.time
+                           td item.hospital_name
+                           td item.doctor_name
 
-                           th 挂号费
-                           th 订单状态
-                           th 操作
-                     tbody
-                        if(reservations.length)
-                           tr for item in reservations
-                              td item.time
-                              td item.hospital_name
-                              td item.doctor_name
-
-                              td item.price
-                              td item.status
-                              td
-                                 a(href='/user/reservation/#{item.reservation_id}/detail') 查看
-
-                     tbody
+                           td item.price
+                           td item.status
+                           td: a(href='/user/reservation/#{item.reservation_id}/detail') 查看
+                  tbody
    div.clear
