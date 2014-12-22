@@ -15,7 +15,7 @@ ol, ul {
 }
 
 @media all and (min-width: 980px){
-    .main-block, .process {
+    .main-block {
         width: 890px;
         margin: 0 auto;
         position: relative;
@@ -23,10 +23,16 @@ ol, ul {
 }ol
 
 @media all and (max-width: 980px){
-    .main-block, .process {
+    .main-block {
         width: 100%;
         margin: 0 auto;
         position: relative;
+    }
+}
+
+@media all and (max-width: 720px) {
+    .process {
+        display: none;
     }
 }
 
@@ -47,7 +53,7 @@ ol, ul {
     border: 1px solid #ddd;
     border-radius: 3px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    width: 890px;
+    width: 100%;
     line-height: inherit;
 }
 
@@ -121,6 +127,14 @@ ol, ul {
         font-height: 20px;
         color: #333;
     }
+    .ttitle {
+        margin: 10px 0 10px;
+        font-size: 16px;
+        font-weight: 400;
+        font-height: 20px;
+        color: #000;
+        border-bottom: 3px solid lightblue;
+    }
 }
 
 @media all and (max-width: 980px) {
@@ -131,6 +145,14 @@ ol, ul {
         font-weight: 400;
         font-height: 20px;
         color: #333;
+    }
+    .ttitle {
+        margin: 10px 0 10px;
+        font-size: 16px;
+        font-weight: 400;
+        font-height: 20px;
+        color: #000;
+        border-bottom: 3px solid lightblue;
     }
 }
 
@@ -177,11 +199,16 @@ ol, ul {
     color: #888;
 }
 
+.rcontent {
+    line-height: 20px;
+    vertical-align: middle;
+}
+
 .money {
     color: #f9a821;
 }
 
-.main-block .info .tips {
+.main-block .tips {
     background: #dff2ff;
     line-height: 20px;
     padding: 8px 20px;
@@ -376,7 +403,8 @@ ol, ul {
 }
 
 .gbt-green:hover {
-    background: #73b52d
+    background: #73b52d;
+    color: #ffffff;
 }
 
 .order-detail ul .title {
@@ -396,20 +424,18 @@ ol, ul {
 
 @media all and (min-width: 980px){
     .order-detail ul {
-        width: 890px;
         padding-left: 0;
         margin: 0 auto
     }
 
     .order-detail ul li span {
-        width: 410px;
+        width: 50%;
         display: inline-block;
     }
 }
 
 @media all and (max-width: 980px) {
     .order-detail ul {
-        width: 100%;
         padding: 0 10px;
         margin: 0 auto
     }
@@ -432,6 +458,6 @@ ol, ul {
 
 .order-detail .btn {
     display: block;
-    width: 78px;
+    width: 120px;
     margin: 15px auto 15px
 }
