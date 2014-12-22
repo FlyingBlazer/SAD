@@ -12,46 +12,40 @@ block content
          $('.pay_situation').each(function() {
             var pay_content;
             var status=$(this).data('id');
-            if (status[0]=='0'){
-               pay_content='现场';
-            }
-            else {
-               pay_content='在线';
-            }
-            if (status[1]=='0'){
-               pay_content+='_未付款';
-            }
-            else {
-               pay_content+='_已付款';
+            console.log(status);
+            if (status[0]=='1'&& status[1]=='1'){
+               pay_content='已付款:在线支付';
             }
 
+            else if(status[0]=='0'&& status[1]=='1'){
+               pay_content='已付款:现场支付';
+            }
+            else{
+               pay_content="未付款";
+            }
             $(this).html(pay_content);
          });
          $('.status').each(function(){
 
-            var status_content;
+            var status_content="进行中";
             var button_disable=true;
             var status=$(this).data('id');
             if (status[2]=='0'){
-               status_content='未确认';
                button_disable=false;
             }
-            else if(status[2]=='1'){
-               status_content='未到场';
+            if(status[2]=='2'){
+               status_content='已完成';
             }
-            else {
-               status_content='已到场';
-            }
-            if(status[3]=='0'){
-               status_content+='_未超时';
-            }
-            else {
-               status_content+='_已超时';
+            if(status[3]=='1') {
+               status_content='已超时';
                button_disable=true;
             }
+
             $(this).html(status_content);
             var button='#'+$(this).data('flag');
             if(button_disable){
+               $(button).disabled=true;
+               $(button).text("已确认到场");
                $(button).addClass("disabled-button");
             }
             $('#example').DataTable();
