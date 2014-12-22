@@ -90,7 +90,6 @@ block content
                });
             });
 
-            var dt = $('#hospitals-table').DataTable();
             $('.delete-hospital').click(function() {
                var tr = $(this).parents('tr');
                if (confirm('是否确定删除' + $(this).data('name') + '？')) {
@@ -110,6 +109,7 @@ block content
                   });
                }
             });
+            var dt = $('#hospitals-table').DataTable();
 
 
       div#panel-add.tab-pane.fade
