@@ -1,10 +1,31 @@
 extends ./sb_layout
 
 block append head
-   link(href="/stylesheets/uploadfile.min.css",rel="stylesheet", media="all")
    style.
-      .ajax-file-upload-filename {display: none;}
-
+      .ajax-file-upload-filename {
+         display: none;
+      }
+      .ajax-file-upload {
+         background-color: #35aa47;
+         padding: 3px 14px;
+         font-size: 14px;
+         color: #ffffff;
+         display: inline-block;
+         border-radius: 3px;
+         transition: all .3s ease;
+      }
+      .ajax-file-upload,
+      .ajax-file-upload form,
+      .ajax-file-upload input {
+         cursor: pointer !important;
+      }
+      .ajax-file-upload:hover {
+         background-color: #2b8b3a;
+      }
+      .ajax-file-upload-preview {
+         max-height: 200px;
+         width: auto;
+      }
 block content
    h2 医生管理
 
@@ -203,7 +224,7 @@ block content
                .prompt
                   label(for='price') 挂号价格（元）
                .control
-                  input#price.form-control(name='price', required, type='text')
+                  input#price.form-control(name='price', required, type='number', min='0', max='65535')
 
             .form-group
                .prompt
@@ -284,16 +305,19 @@ block content
                      i.fa.fa-close
                      | &nbsp;清除选择
 
-            .form-group
+            .form-group(style='margin-top:30px')
                .prompt
                   label 可预约人数
                .control
-                  label(for='morning') 上午
-                  input#morning.form-control.inline(name='morning', type='number', value='0', required)
-                  label(for='afternoon') 下午
-                  input#afternoon.form-control.inline(name='afternoon', type='number', value='0', required)
-                  label(for='evening') 晚上
-                  input#evening.form-control.inline(name='evening', type='number', value='0', required)
+                  div
+                     label(for='morning') 上午
+                     input#morning.form-control.inline(name='morning', type='number', value='0', min='0', max='65535', required)
+                  div(style='margin-top:10px')
+                     label(for='afternoon') 下午
+                     input#afternoon.form-control.inline(name='afternoon', type='number', value='0', min='0', max='65535', required)
+                  div(style='margin-top:10px;margin-bottom:10px')
+                     label(for='evening') 晚上
+                     input#evening.form-control.inline(name='evening', type='number', value='0', min='0', max='65535', required)
                   .note 详细的预约人数控制可以在添加医生之后设定。
 
             input#hospital-id(type='hidden', name='hospitalId', value='#{hospitalId}')
