@@ -1,15 +1,16 @@
 extends layout
 
+block append stylesheets
+    link(href="/stylesheets/doctor.css", rel="stylesheet", media="all")
+
 block title
     title 医生
 
 block breadcrumb
-    li
-        a(href="/") 主页
+    li: a(href="/") 主页
     //li
     //    a(href="/#{detail.province}/hospitals") #{detail.province}
-    li
-        a(href="/concierge/reserve/#{hospitalId}") #{detail.hospital}
+    li: a(href="/concierge/reserve/#{hospitalId}") #{detail.hospital}
     li #{detail.department}
     li.active #{detail.name}
 
@@ -18,10 +19,7 @@ block header-content-extra
     label.doctor-title #{detail.title}
 
 block site-content
-    link(href="/stylesheets/doctor.css", rel="stylesheet", media="all")
-
     div#site-content
-
         img.doctor-image
         div.doctor-info
             div.hospital
@@ -35,12 +33,10 @@ block site-content
                 span.price-content #{detail.price}元
 
         div.doctor-intro
-            div.intro-title
-                h4 医生简介
+            div.intro-title: h4 医生简介
             hr
             div.intro-content #{detail.description}
-            div.intro-title
-                h4 预约时间表
+            div.intro-title: h4 预约时间表
             hr
             table#timetable.table
                 tr#date
@@ -84,15 +80,13 @@ block site-content
             input(name="resvTime")
             input(name="day")
 
+block append scripts
     script.
-
         $(document).ready(function() {
-
             $("#timetable a").click(function() {
                 $("#post-form input[name='resvDate']").val($(this).parent("td").data("date"));
                 $("#post-form input[name='resvTime']").val($(this).parents("tr").attr("id"));
                 $("#post-form input[name='day']").val($(this).parent("td").data("day"));
                 $("#post-form").submit();
             });
-
         });

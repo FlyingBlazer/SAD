@@ -13,8 +13,8 @@ exports.list = function(req, res, next) {
         "AND department.hospital_id=hospital.id",
         [user_id],
         function (err, data) {
-            if(err && err.message != 'Not found') return next(err);
-            if(!data) {
+            if(err && err.message != 'Not found') throw err;
+            if(!data || data.length==0) {
                 return next(new Errors.EmptyReservation("You Don't Have Any Appointment!"));
             }
             for(var i = 0; i < data.length; i++){
@@ -40,8 +40,8 @@ exports.list_h = function(req, res, next) {
         "AND hospital.id = ? AND appointment.user_id = user.id",
         [hospital_id],
         function (err, data) {
-            if(err && err.message != 'Not found') return next(err);
-            if(!data) {
+            if(err && err.message != 'Not found') throw err;
+            if(!data || data.length==0) {
                 return next(new Errors.EmptyReservation("You Don't Have Any Appointment!"));
             }
             else{
@@ -87,7 +87,7 @@ exports.add = function(req, res, next) {
     afrequency3 = afrequency3.replaceAt(aweeknum, '1');
     var weeklist=["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
     req.models.user.get(auser_id,function(err,user){
-        if(err && err.message != 'Not found') return next(err);
+        if(err && err.message != 'Not found') throw err;
         if(!user) return next(new Errors.ReservationUserInvalidFailure('User Not Exist!'));
         else{
             req.db.driver.execQuery("SELECT COUNT(*) as number "+
@@ -97,8 +97,8 @@ exports.add = function(req, res, next) {
                 "AND time=?",
                 [adoctor_id,aperiod,adate],
                 function(err,data){
-                    if(err) return next(err);
-                    if(!data) return next(new Errors.ReservationErrorFailure('Database Error!'));
+                    if(err) throw err;
+                    if(!data || data.length==0) return next(new Errors.ReservationErrorFailure('Database Error!'));
                     req.db.driver.execQuery("SELECT "+weeklist[aweeknum-1]+", price, frequency "+
                         "FROM working,doctor "+
                         "WHERE doctor_id=doctor.id "+
@@ -108,7 +108,7 @@ exports.add = function(req, res, next) {
                         "OR (frequency like ?)) LIMIT 1",
                         [adoctor_id,aperiod,afrequency1,adate,afrequency3],
                         function(err,data1){
-                            if(err && err.message != 'Not found') return next(err);
+                            if(err && err.message != 'Not found') throw err;
                             if(!data1 || data1.length==0) return next(new Errors.ReservationPeriodFailure('No Such Working Period!'));
                             var total_app=0;
                             if(data1.length>1){
@@ -126,8 +126,8 @@ exports.add = function(req, res, next) {
                             }
                             else{
                                 req.models.appointment.find({user_id: auser_id, time: adate, period: aperiod}, function(err, appointments) {
-                                    if(err && err.message != 'Not found') return next(err);
-                                    if(!data1){}
+                                    if(err && err.message != 'Not found') throw err;
+                                    if(!data1 || data1.length==0){}
                                     appointments.forEach(function(appointment) {
                                         appointment.getDoctor(function(err, doctor){
                                            if(doctor.department_id == adepartment_id){
@@ -163,14 +163,14 @@ exports.add = function(req, res, next) {
 exports.cancel = function(req, res, next) {
     var reservation_id=req.params.reservationId;
     req.models.appointment.get(reservation_id,function(err,app){
-        if(err && err.message != 'Not found') return next(err);
+        if(err && err.message != 'Not found') throw err;
         if(!app) return next(new Errors.CancelFailure("Cannot Find Such Appointment!"));
         var date = new Date(app.time);
         var curDate = new Date(new Date().Format('yyyy-MM-dd'));
         if(date.getTime() - curDate.getTime() <= 0) return next(new Errors.AppointmentCannotBeCanceled('Appointment Cannot Be Canceled'));
         app.status = app.status.replaceAt(5, 1);
         app.save(function(err) {
-            if(err && err.message != 'Not found') return next(err);
+            if(err) throw err;
             res.json({
                 code: 0,
                 message: 'success'
@@ -182,11 +182,11 @@ exports.cancel = function(req, res, next) {
 exports.pay = function(req, res, next) {
     var reservation_id=req.params.reservationId;
     req.models.appointment.get(reservation_id,function(err,app){
-        if(err && err.message != 'Not found') return next(err);
+        if(err && err.message != 'Not found') throw err;
         if(!app) return next(new Errors.PaymentFailure("Unable To Pay For Your Appointment!"));
         app.status = app.status.replaceAt(0, '1').replaceAt(1, '1');
         app.save(function(err){
-            if(err && err.message != 'Not found') return next(err);
+            if(err) throw err;
             res.json({
                 code: 0,
                 message: 'success'
@@ -207,19 +207,19 @@ exports.detail = function(req, res, next) {
         "AND department.hospital_id=hospital.id",
         [reservation_id],
         function(err,data){
-            if(err && err.message != 'Not found') return next(err);
-            if(!data) return next(new Errors.DetailFailure("No Such Appointment!"));
+            if(err) throw err;
+            if(!data || data.length==0) return next(new Errors.DetailFailure("No Such Appointment!"));
             res.json({
                 code: 0,
                 message: "success",
                 reservation_id: data[0]['reservation'],
-                date: data[0]['time'],
+                date: data[0]['time'].Format('yyyy-MM-dd'),
                 period: data[0]['period']==1 ? 'morning' : (data[0]['period']==2 ? 'afternoon' : 'evening'),
                 doctor_id: data[0]['doctor_id'],
                 doctor_name: data[0]['doctor_name'],
                 department_name: data[0]['department_name'],
                 hospital_name: data[0]['hospital_name'],
-                submission_date: data[0]['record_time'],
+                submission_date: data[0]['record_time'].Format('yyyy-MM-dd hh:mm:ss'),
                 price: data[0]['price'],
                 status: data[0]['status'],
                 status_msg: parseStatus(data[0]['status'])
@@ -230,11 +230,11 @@ exports.detail = function(req, res, next) {
 exports.confirm = function(req, res, next) {
     var reservation_id=req.params.reservationId;
     req.models.appointment.get(reservation_id,function(err,app){
-        if(err && err.message != 'Not found') return next(err);
+        if(err && err.message != 'Not found') throw err;
         if(!app) return next(new Errors.ConfirmFailure("No Such Appointment!"));
         app.status=app.status.replaceAt(2, '2');
         app.save(function(err){
-            if(err && err.message != 'Not found') return next(err);
+            if(err) throw err;
             res.json({
                 code: 0,
                 message: "success"

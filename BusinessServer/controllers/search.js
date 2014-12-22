@@ -16,8 +16,8 @@ module.exports = function(req, res, next) {
         "WHERE a.rating_id = b.id AND a.id IN (SELECT id FROM hospital WHERE MATCH(name) AGAINST(? IN BOOLEAN MODE))",
         [keyword_set],
         function (err, data) {
-            if(err) return next(err);
-            if(!data) {
+            if(err) throw err;
+            if(!data || data.length==0) {
                 return next(new Errors.EmptySearchResult("Nothing Is Found!"));
             }
             else{

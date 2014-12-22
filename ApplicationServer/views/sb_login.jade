@@ -31,14 +31,23 @@ html
                   | 登陆 &nbsp;
                   i.fa.fa-sign-in
 
+    if locals.message
+        span#initTimestamp(data-timestamp='#{initTimestamp}')
 
     script.
-        $('input').iCheck({
-            checkboxClass: 'icheckbox_minimal-grey',
-            radioClass: 'iradio_minimal-grey'
-        });
-        $('form').on('submit', function() {
-            var $p = $('.input-password');
-            $p.val(hex_md5($p.val()));
-            return true;
+        $(function() {
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_minimal-grey',
+                radioClass: 'iradio_minimal-grey'
+            });
+            $('form').on('submit', function() {
+                var $p = $('.input-password');
+                $p.val(hex_md5($p.val()));
+                return true;
+            });
+            var timestamp = $('#initTimestamp').data('timestamp');
+            var curTimestamp = Date.now() / 1000 | 0;
+            if (curTimestamp - timestamp > 2) {
+                $('.login .error').hide();
+            }
         });

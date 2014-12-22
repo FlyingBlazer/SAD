@@ -1,16 +1,18 @@
 doctype html
 html(lang="zh-cn")
     head
-        meta(charset="utf-8")
-        meta(name="robots", content="none")
-        meta(name="viewport" content="width=device-width, initial-scale=1")
-        script(src="/javascripts/jquery-2.1.1.min.js")
-        link(href="/stylesheets/bootstrap/css/bootstrap.min.css", rel="stylesheet", media="all")
-        script(src="/stylesheets/bootstrap/js/bootstrap.min.js")
-        link(href="/stylesheets/font-awesome-4.2.0/css/font-awesome.min.css", rel="stylesheet", media="all")
-        link(href="/stylesheets/general.css", rel="stylesheet", media="all")
-        block title
-            
+        block head
+            meta(charset="utf-8")
+            meta(name="robots", content="none")
+            meta(name="viewport" content="width=device-width, initial-scale=1")
+
+            block stylesheets
+                link(href="/stylesheets/bootstrap/css/bootstrap.min.css", rel="stylesheet", media="all")
+                link(href="/stylesheets/font-awesome-4.2.0/css/font-awesome.min.css", rel="stylesheet", media="all")
+                link(href="/stylesheets/general.css", rel="stylesheet", media="all")
+
+            block title
+
     body
         div#nav
             nav.navbar.navbar-default(role="navigation")
@@ -53,15 +55,18 @@ html(lang="zh-cn")
                     block breadcrumb
                 block header-content-extra
 
-    block site-content
+        block site-content
 
-    div#footer
-        p#copyright.text-center © 2014 SRF 版权所有
+        div#footer
+            p#copyright.text-center © 2014 SRF 版权所有
 
-    script.
-        $(document).ready(function () {
-            $("#nav-search-button").click(function () {
-                var href = "/search/" + $("#nav-search-field").val();
-                window.location.href = href;
-            });
-        });
+        block scripts
+            script(src="/javascripts/jquery-2.1.1.min.js")
+            script(src="/stylesheets/bootstrap/js/bootstrap.min.js")
+            script.
+                $(document).ready(function () {
+                    $("#nav-search-button").click(function () {
+                        var href = "/search/" + $("#nav-search-field").val();
+                        window.location.href = href;
+                    });
+                });

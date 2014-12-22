@@ -32,9 +32,8 @@ exports.getRaw = function(req, res, next) {
             [0,0,0],[0,0,0],[0,0,0],[0,0,0]];
         var temp_stat=[];
         req.models.working.find({doctor_id: doctorId}, function(err, workings) {
-            if(err && err.message != 'Not found') return next(err);
+            if(err && err.message != 'Not found') throw err;
             workings.forEach(function(working){
-                console.log(working.frequency);
                 var curDate = new Date();
                 var day=(curDate.getDay()+6)%7+1;
                 switch(working.frequency.charAt(0)){
@@ -91,7 +90,7 @@ exports.addWeek = function(req, res, next) {
 
         var date=new Date();
         req.models.working.get(doctorId, function(err, workings) {
-            if(err && err.message != 'Not found') return next(err);
+            if(err && err.message != 'Not found') throw err;
             if(workings && workings.length > 0) {
                 return next(new Errors.AddingFailed("Working Arrangement Already Exists!"));
             }
@@ -109,7 +108,7 @@ exports.addWeek = function(req, res, next) {
                 saturday: parseInt(new_working[5][0]),
                 sunday:parseInt(new_working[6][0])
             }, function(err, working) {
-                if(err && err.message != 'Not found') return next(err);
+                if(err) throw err;
                 finish();
             });
             req.models.working.create({
@@ -126,7 +125,7 @@ exports.addWeek = function(req, res, next) {
                 saturday: parseInt(new_working[5][1]),
                 sunday:parseInt(new_working[6][1])
             }, function(err, working) {
-                if(err && err.message != 'Not found') return next(err);
+                if(err) throw err;
                 finish();
             });
             req.models.working.create({
@@ -143,7 +142,7 @@ exports.addWeek = function(req, res, next) {
                 saturday: parseInt(new_working[5][2]),
                 sunday:parseInt(new_working[6][2])
             }, function(err, working) {
-                if(err && err.message != 'Not found') return next(err);
+                if(err) throw err;
                 finish();
             });
         });
@@ -155,7 +154,7 @@ exports.updateWeek = function(req, res, next) {
         if(err) return next(err);
         var works=req.body.works;
         req.models.working.find({doctor_id: doctorId}, function(err, workings){
-            if(err && err.message != 'Not found') return next(err);
+            if(err) throw err;
             var m_index=0;
             var a_index=0;
             var e_index=0;
@@ -197,7 +196,7 @@ exports.updateWeek = function(req, res, next) {
                         break;
                 }
             }
-            console.log(works);
+            //console.log(works);
             for(var i = 0 ; i < works.length ; i++){
                 switch(parseInt(works[i]['period'],10)) {
                     case 1:
@@ -246,7 +245,7 @@ exports.addTemp = function(req, res, next) {
             frequency: t_frequency,
             period: t_period
         }, function (err, working) {
-            if (err && err.message != 'Not found') return next(err);
+            if (err && err.message != 'Not found') throw err;
             if (working) {
                 throw new Error.WorkingAlreadyExist("Working already Exists!");
             }
@@ -264,7 +263,7 @@ exports.addTemp = function(req, res, next) {
                 saturday: 0,
                 sunday: 0
             }, function (working) {
-                if (err && err.message != 'Not found') return next(err);
+                if (err) throw err;
                 res.json({
                     code: 0,
                     message: 'success'
@@ -284,16 +283,14 @@ exports.deleteTemp = function(req, res, next) {
             "SELECT id FROM working WHERE doctor_id=? AND date=? AND period=? AND frequency LIKE ? LIMIT 1",
             [doctorId, w_date, w_period, '0_000000'],
             function (err, w_data) {
-                if (err && err.message != 'Not found') return next(err);
-                if (!w_data||w_data.length==0) {
+                if (err) throw err;
+                if (!w_data || w_data.length==0) {
                     return next(new Errors.ArrangementNotExist("Temporary arrangement not exists!"));
                 }
                 req.db.driver.execQuery("DELETE FROM working WHERE id=?",
                     [w_data[0].id],
                     function (err) {
-                        if (err) {
-                            throw err;
-                        }
+                        if(err) throw err;
                         res.json({
                             code: 0,
                             message: 'success'
@@ -318,8 +315,8 @@ function check(req, cb) {
             "AND doctor.id=? LIMIT 1",
             [doctorId],
             function(err, data){
-                if(err && err.message != 'Not found') return cb(err);
-                if(!data) {
+                if(err && err.message != 'Not found') throw err;
+                if(!data || data.length==0) {
                     return cb(new Errors.AdminDoctorError("No Such Doctor!"));
                 }
                 if(data[0]['id']!=hospital_id){

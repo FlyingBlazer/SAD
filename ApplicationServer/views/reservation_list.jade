@@ -1,33 +1,28 @@
 extends layout
-block breadcrumb
-    li
-        a(href="/") 主页
 
-    li.active 预约列表
-block site-content
+block append stylesheets
     link(href="/stylesheets/usercenter_reservation_list.css", rel="stylesheet", media="all")
     link(href="/stylesheets/bootstrap/css/bootstrap.min.css", rel="stylesheet", media="all")
-    div
-        .g-container(data-module='userinfo', data-fo-help='1')
-            #g-breadcrumb
 
+block breadcrumb
+    li: a(href="/") 主页
+    li.active 预约列表
+
+block site-content
+    div: .g-container(data-module='userinfo', data-fo-help='1')
+            #g-breadcrumb
             .wrap
                 .person-left
                     p.left-head
                         img(src='http://img.guahao.cn/img/character/young-m.png', alt='男')
-                        span(style='margin-left: 3px')
-                            strong #{name}
+                        span(style='margin-left: 3px'): strong #{name}
                     ul.none-border
                         li(style='list-style-type: none;margin-top:40px;margin-left:10px;text-align:left')
-                            a.btn.btn-primary.btn-lg.active(href='/account/manage/reservation', role='button')
-                                | 预约列表
+                            a.btn.btn-primary.btn-lg.active(href='/account/manage/reservation', role='button') 预约列表
                         li(style='list-style-type: none;margin-top:20px;margin-left:10px;text-align: left')
-                            a.btn.btn-default.btn-lg.active(role='button', href='/account/manage/info')
-                                | 个人中心
+                            a.btn.btn-default.btn-lg.active(role='button', href='/account/manage/info') 个人中心
                 .person-right
-                    .order-remind.g-clear
-                        .meta
-                            h1 我的预约单
+                    .order-remind.g-clear: .meta: h1 我的预约单
                     .list
                         table.table
                             colgroup
@@ -53,7 +48,6 @@ block site-content
                                             td #{item.doctor_name}
                                             td #{item.price}
                                             td #{item.status}
-                                            td
-                                                a(href='/reservation/#{item.reservation_id}') 查看
+                                            td: a(href='/reservation/#{item.reservation_id}') 查看
                             tbody
     div.clear

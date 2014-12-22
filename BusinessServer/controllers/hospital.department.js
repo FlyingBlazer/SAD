@@ -2,10 +2,10 @@ var Errors = require('../lib/Errors');
 
 exports.list = function(req, res, next) {
     req.models.hospital.get(req.params.hospitalId, function(err, hospital) {
-        if(err && err.message != 'Not found') return next(err);
+        if(err && err.message != 'Not found') throw err;
         if(!hospital) return next(new Errors.HospitalNotExist("Hospital not exist"));
         hospital.getDepartments(function(err, departments) {
-            if(err) return next(err);
+            if(err) throw err;
             var ret = [];
             departments.forEach(function(department) {
                 ret.push({
@@ -47,7 +47,7 @@ exports.add = function(req, res, next) {
 
 exports.remove = function(req, res, next) {
     req.models.department.get(req.params.departmentId, function(err, department) {
-        if(err && err.message != 'Not found') return next(err);
+        if(err && err.message != 'Not found') throw err;
         if(!department) return next(new Errors.DepartmentNotExist("Department not exist"));
         res.json({
             code: 0,
@@ -56,15 +56,14 @@ exports.remove = function(req, res, next) {
         department.getDoctors().each(function(doctor) {
             doctor.remove(function(err) {
                 if(err) {
-                    console.log("Error occurred while removing doctor %s.", doctor.id);
+                    console.error("Error occurred while removing doctor %s.", doctor.id);
                     throw err;
                 }
-                console.log("Doctor %s removed.", doctor.name);
             });
         });
         department.remove(function(err) {
             if(err) {
-                console.log("Error occurred while removing department %s.", department.id);
+                console.error("Error occurred while removing department %s.", department.id);
                 throw err;
             }
         });
@@ -78,7 +77,7 @@ exports.update = function(req, res, next) {
             throw err;
         }
         if(!department) {
-            res.send(500, "Department not exist.");
+            res.send(500, "不存在这个科室.");
             return;
         }
         for(var index in req.body) {
@@ -94,7 +93,7 @@ exports.update = function(req, res, next) {
             }
         }
         department.save(function(err) {
-            if(err && err.message != 'Not found') return next(err);
+            if(err && err.message != 'Not found') throw err;
             res.json({
                 code: 0,
                 message: 'success'
@@ -105,7 +104,7 @@ exports.update = function(req, res, next) {
 
 exports.detail = function(req, res, next) {
     req.models.department.get(req.params.departmentId, function(err, department) {
-        if(err && err.message != 'Not found') return next(err);
+        if(err && err.message != 'Not found') throw err;
         if(!department) return next(new Errors.DepartmentNotExist("Department not exist"));
         res.json({
             code: 0,

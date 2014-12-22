@@ -4,28 +4,82 @@ exports.working = require('./hospital.doctor.working');
 
 exports.list = function(req, res, next) {
     var hospitalId = req.query.hospitalId;
+    var date = req.query.date;
+    var period = req.query.period == 'morning' ? 1 : (req.query.period == 'afternoon' ? 2 : 3);
+    var count = 1;
+    var ret = {};
     req.db.driver.execQuery(
         "SELECT doctor.id as id, doctor.name as name, hospital.name as hospital, department.name as department, " +
-        "doctor.title as title, doctor.info as description, doctor.photo as photo_url, department.id as department_id " +
-        "FROM doctor, department, hospital WHERE doctor.department_id = department.id AND department.hospital_id = hospital.id " +
-        "AND hospital.id = ?",
+        "doctor.title as title, doctor.info as description, doctor.photo as photo_url, department.id as department_id, " +
+        "doctor.price as price FROM doctor, department, hospital WHERE doctor.department_id = department.id " +
+        "AND department.hospital_id = hospital.id AND hospital.id = ?",
         [hospitalId],
         function(err, data) {
             if(err) throw err;
-            var ret = {};
-            data.forEach(function(line) {
-                if(!Array.isArray(ret[line.department_id])) {
-                    ret[line.department_id] = [];
+            count = data.length;
+            if(typeof date != 'undefined') {
+                date = new Date(date);
+                var day = (date.getDay()+6)%7+1;
+                var freq = '2_______'.replaceAt(day, '1');
+                if(typeof period != 'undefined') {
+                    data.forEach(function(line) {
+                        req.db.driver.execQuery(
+                            "SELECT working.* FROM doctor, working WHERE doctor.id = working.doctor_id AND doctor.id = ? " +
+                            "AND working.period = ? AND (working.frequency LIKE ? "+
+                            "OR (working.date = ? AND working.frequency LIKE '0%'))",
+                            [line.id, period, freq, req.query.date],
+                            function(err, d) {
+                                if(err) throw err;
+                                if(d.length > 0) {
+                                    if(!Array.isArray(ret[line.department_id])) {
+                                        ret[line.department_id] = [];
+                                    }
+                                    ret[line.department_id].push(line);
+                                }
+                                finish();
+                            }
+                        );
+                    });
+                } else {
+                    data.forEach(function(line) {
+                        req.db.driver.execQuery(
+                            "SELECT working.* FROM doctor, working WHERE doctor.id = working.doctor_id AND doctor.id = ? " +
+                            "AND (working.frequency LIKE ? OR (working.date = ? AND working.frequency LIKE '0%'))",
+                            [line.id, period, req.query.date, freq],
+                            function(err, data) {
+                                if(err) throw err;
+                                if(date.length > 0) {
+                                    if(!Array.isArray(ret[line.department_id])) {
+                                        ret[line.department_id] = [];
+                                    }
+                                    ret[line.department_id].push(line);
+                                }
+                                finish();
+                            }
+                        );
+                    });
                 }
-                ret[line.department_id].push(line);
-            });
+            } else {
+                count = 1;
+                data.forEach(function(line) {
+                    if (!Array.isArray(ret[line.department_id])) {
+                        ret[line.department_id] = [];
+                    }
+                    ret[line.department_id].push(line);
+                });
+                finish();
+            }
+        }
+    );
+    function finish() {
+        if(--count === 0) {
             res.json({
                 code: 0,
                 message: 'success',
                 doctors: ret
             });
         }
-    );
+    }
 };
 
 exports.add = function(req, res, next) {
@@ -40,7 +94,7 @@ exports.add = function(req, res, next) {
             price: req.body.price,
             department_id: department.id
         }, function(err, doctor) {
-            if(err && err.message != 'Not found') return next(err);
+            if(err) throw err;
             res.json({
                 code: 0,
                 message: 'success',
@@ -52,10 +106,10 @@ exports.add = function(req, res, next) {
 
 exports.remove = function(req, res, next) {
     req.models.doctor.get(req.params.doctorId, function(err, doctor) {
-        if(err && err.message != 'Not found') return next(err);
+        if(err && err.message != 'Not found') throw err;
         if(!doctor) return next(new Errors.DoctorNotExist('Doctor Not Exist'));
         doctor.remove(function(err) {
-            if(err && err.message != 'Not found') return next(err);
+            if(err) throw err;
             res.json({
                 code: 0,
                 message: 'success'
@@ -77,7 +131,7 @@ exports.update = function(req, res, next) {
         if(typeof req.body.department_id != 'undefined') {
             var department_id = req.body.department_id;
             req.models.department.get(department_id, function(err, department) {
-                if(err && err.message != 'Not found') return next(err);
+                if(err && err.message != 'Not found') throw err;
                 doctor.setDepartment(department, function(err) {
                     if(err && err.message != 'Not found') throw err;
                 });
@@ -116,10 +170,10 @@ exports.update = function(req, res, next) {
 
 exports.detail = function(req, res, next) {
     req.models.doctor.get(req.params.doctorId, function(err, doctor) {
-        if(err && err.message != 'Not found') return next(err);
+        if(err && err.message != 'Not found') throw err;
         if(!doctor) return next(new Errors.DoctorNotExist('Doctor Not Exist'));
         doctor.getWorking(function(err, workings) {
-            if(err) return next(err);
+            if(err) throw err;
             var curDate = new Date();
             var year = curDate.getFullYear();
             var month = curDate.getMonth();
@@ -245,7 +299,7 @@ exports.detail = function(req, res, next) {
                         res.send(500, "Internal error");
                         throw err;
                     }
-                    if(datas){
+                    if(datas && datas.length > 0){
                         var today=(new Date().getDay()+6)%7+1;
                         datas.forEach(function(adata){
                             slot[(6-today+adata.day)%7].slot[adata.period==1? 'morning': (adata.period==2 ? 'afternoon' : 'evening')][2] =adata.appnum;
@@ -255,9 +309,6 @@ exports.detail = function(req, res, next) {
                         if(err) throw err;
                         department.getHospital(function(err, hospital) {
                             if(err) throw err;
-                            //for(var i=0;i<7;i++){
-                            //    console.log(slot[i].slot);
-                            //}
                             res.json({
                                 code: 0,
                                 message: 'success',

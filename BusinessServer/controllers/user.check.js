@@ -15,9 +15,9 @@ exports.list = function(req, res, next) {
     req.models.user.find({
         isActivated: 0
     }, function(err, user) {
-        if(err && err.message != 'Not found') return next(err);
-        if(!user) {
-            return next(new Errors.ListEmpty("No user needs to be validated"));
+        if(err && err.message != 'Not found') throw err;
+        if(!user || user.length==0) {
+            userList['validating']=[];
         } else {
             var candidate=[];
         	for(var i=0;i<user.length;i++){
@@ -31,15 +31,15 @@ exports.list = function(req, res, next) {
                 candidate[i]["ip"]=user[i].ip;
         	}
             userList['validating']=candidate;
-            finish();
         }
+        finish();
     });
     req.models.user.find({
         isActivated: -2
     }, function(err, user) {
-        if(err && err.message != 'Not found') return next(err);
-        if(!user) {
-            return next(new Errors.ListEmpty("All Users Have Been Activated"));
+        if(err && err.message != 'Not found') throw err;
+        if(!user || user.length==0) {
+            userList['unqualified']=[];
         } else {
             var candidate=[];
             for(var i=0;i<user.length;i++){
@@ -64,13 +64,13 @@ exports.approve = function(req, res, next) {
     req.models.user.one({
         id: userId
     }, function(err, user) {
-        if(err && err.message != 'Not found') return next(err);
+        if(err && err.message != 'Not found') throw err;
         if(!user) {
             return next(new Errors.ApproveFail("Approve Fail!"));
         } else {
         	user.isActivated=1;
         	user.save(function (err) {
-                if(err && err.message != 'Not found') return next(err);
+                if(err) throw err;
     		});
             res.json({
                 code: 0,
@@ -86,13 +86,13 @@ exports.reject = function(req, res, next) {
     req.models.user.one({
         id: userId
     }, function(err, user) {
-        if(err && err.message != 'Not found') return next(err);
+        if(err && err.message != 'Not found') throw err;
         if(!user) {
             return next(new Errors.RejectFail("Reject Fail!"));
         } else {
         	user.isActivated=-1;
         	user.save(function (err) {
-                if(err && err.message != 'Not found') return next(err);
+                if(err) throw err;
     		});
             res.json({
                 code: 0,
@@ -108,7 +108,7 @@ exports.status = function(req, res, next) {
     req.models.user.one({
         name: userId
     }, function(err, user) {
-        if(err && err.message != 'Not found') return next(err);
+        if(err && err.message != 'Not found') throw err;
         if(!user) {
             return next(new Errors.FailToGetStatus("Fail To Get Status!"));
         } else {

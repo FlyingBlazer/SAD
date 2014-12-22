@@ -11,7 +11,7 @@ exports.login =function(req, res, next) {
         name: username,
         password: md5.digest("hex")
     }, function(err, user) {
-        if(err && err.message != 'Not found') return next(err);
+        if(err && err.message != 'Not found') throw err;
         if(!user) {
             return next(new Errors.LoginFail("Username or password error"));
         } else {
@@ -32,7 +32,7 @@ exports.updateInfo = function(req, res, next){
     var pass_prev=req.body.pre_pw;
     var pass_curr=req.body.new_pw;
     req.models.user.get(req.params.userId, function(err, user){
-        if(err && err.message != 'Not found') return next(err);
+        if(err && err.message != 'Not found') throw err;
         else if(!user){
             return next(new Errors.UserNotLogin("User not login"));
         }
@@ -60,7 +60,7 @@ exports.updateInfo = function(req, res, next){
         }
         user.save(function(err) {
             if(err) {
-               return next(err);
+                throw err;
             }
             res.json({
                 code: 0,
@@ -80,7 +80,7 @@ exports.signUp = function(req, res, next) {
         name = req.body.name,
         email = req.body.email,
         uip = req.body.ip || '';
-    md5.update("sad"+password);
+        md5.update("sad"+password);
     function finish(){
         req.models.user.create({
             name: username,
@@ -93,7 +93,7 @@ exports.signUp = function(req, res, next) {
             isActivated: 0,
             ip: uip
         }, function(err, user) {
-            if(err && err.message != 'Not found') return next(err);
+            if(err) throw err;
             res.json({
                 code: 0,
                 message: 'success',
@@ -112,14 +112,13 @@ exports.signUp = function(req, res, next) {
             });
         }
     });
-
 };
 
 exports.checkName = function(req, res, next) {
     var username = req.params.username;
     req.models.user.find({name: username}, function(err, users) {
-        if(err && err.message != 'Not found') return next(err);
-        if(users.length > 0) {
+        if(err && err.message != 'Not found') throw err;
+        if(users && users.length > 0) {
             users.forEach(function(user) {
                if(user.isActivated != -1){
                    return next(new Errors.UserAlreadyExisted('User Already Existed'));
@@ -139,7 +138,7 @@ exports.checkName = function(req, res, next) {
 exports.info = function(req, res, next) {
     var userId = req.params.userId;
     req.models.user.get(userId, function(err, user) {
-        if(err && err.message != 'Not found') return next(err);
+        if(err && err.message != 'Not found') throw err;
         if(!user) return next(new Errors.UserNotExist('User Not Exist'));
         var status_s;
         switch(parseInt(user.isActivated)) {

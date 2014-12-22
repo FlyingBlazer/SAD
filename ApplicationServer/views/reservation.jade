@@ -1,11 +1,12 @@
 extends layout
 
+block append stylesheets
+    link(href="/stylesheets/reservation.css", rel="stylesheet", media="all")
+
 block title
     title 预约详情
 
 block site-content
-    link(href="/stylesheets/reservation.css", rel="stylesheet", media="all")
-
     .order-detail
         ul
             li.title 取号信息
@@ -37,14 +38,13 @@ block site-content
                 button.btn.btn-xs.btn-primary(type='button', onclick='pay()') 付款
             button.btn.btn-xs.btn-danger(type='button', onclick='cancel()') 取消订单
 
-
+block append scripts
     script(type='text/javascript').
         function pay() {
             if (confirm("订单共#{doctorDetail.price}元，确认支付？")) {
                 window.location.href = '/reservation/#{resvDetail.reservation_id}/manage/pay';
             }
         }
-
         function cancel() {
             if (confirm("确认取消订单？")) {
                 window.location.href = '/reservation/#{resvDetail.reservation_id}/manage/cancel';

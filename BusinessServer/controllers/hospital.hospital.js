@@ -7,12 +7,12 @@ exports.list = function(req, res, next) {
     var ret = [];
     if(typeof req.query.province != 'undefined') {
         req.models.hospital.find({province: req.query.province}, function(err, hospitals) {
-            if(err && err.message != 'Not found') return next(err);
+            if(err) throw err;
             parse(hospitals);
         });
     } else {
         req.models.hospital.find({}, function(err, hospitals) {
-            if(err && err.message != 'Not found') return next(err);
+            if(err) throw err;
             parse(hospitals);
         });
     }
@@ -20,7 +20,7 @@ exports.list = function(req, res, next) {
         count = hospitals.length + 1;
         hospitals.forEach(function(hospital) {
             hospital.getRating(function(err, rating) {
-                if(err && err.message != 'Not found') return next(err);
+                if(err) throw err;
                 ret.push({
                     id: hospital.id,
                     name: hospital.name,
@@ -51,10 +51,10 @@ exports.list = function(req, res, next) {
 exports.detail = function(req, res, next) {
     var id = req.params.hospitalId;
     req.models.hospital.get(id, function(err, result) {
-        if(err && err.message != 'Not found') return next(err);
+        if(err && err.message != 'Not found') throw err;
         if(!result) return next(new Errors.HospitalNotExist('HospitalNotExist'));
         result.getRating(function(err, rating) {
-            if(err && err.message != 'Not found') return next(err);
+            if(err) throw err;
             res.json({
                 code: 0,
                 message: "success",
@@ -113,7 +113,7 @@ exports.add = function(req, res, next) {
 exports.remove = function(req, res, next) {
     var id = req.params.hospitalId;
     req.models.hospital.get(id, function(err, hospital) {
-        if(err && err.message != 'Not found') return next(err);
+        if(err && err.message != 'Not found') throw err;
         if(!hospital) return next(new Errors.HospitalNotExist('HospitalNotExist'));
         res.json({
             code: 0,
@@ -123,18 +123,16 @@ exports.remove = function(req, res, next) {
             department.getDoctors().each(function(doctor) {
                 doctor.remove(function(err) {
                     if(err) {
-                        console.log("Error occurred while removing doctor %s.", doctor.id);
+                        console.error("Error occurred while removing doctor %s.", doctor.id);
                         throw err;
                     }
-                    console.log("Doctor %s removed.", doctor.name);
                 });
             });
             department.remove(function(err) {
                 if(err) {
-                    console.log("Error occurred while removing department %s.", department.id);
+                    console.error("Error occurred while removing department %s.", department.id);
                     throw err;
                 }
-                console.log("Department %s removed.", department.name);
             });
         });
         var supplement = 8 - hospital.id.toString().length;
@@ -146,9 +144,10 @@ exports.remove = function(req, res, next) {
         req.models.administrator.one({
            name: admin_name
         }, function(err, admin) {
-            if(err && err.message != 'Not found') return next(err);
+            if(err && err.message != 'Not found') throw err;
             admin.remove(function(err) {
                if(err){
+                   console.log("Error occurred while removing admin %s.", admin.id);
                    throw err;
                }
             });

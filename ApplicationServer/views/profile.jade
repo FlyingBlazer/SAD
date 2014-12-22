@@ -1,130 +1,110 @@
 extends layout
-block breadcrumb
-    li
-        a(href="/") 主页
 
-    li.active 个人中心
-block site-content
+block append stylesheets
     link(href="/stylesheets/bootstrap/css/bootstrap.min.css", rel="stylesheet", media="all")
     link(href="/stylesheets/usercenter_reservation_list.css",rel="stylesheet", media="all")
     link(href="/stylesheets/usercenter_userinfo.css",rel="stylesheet", media="all")
+
+block append scripts
     script(src="/javascripts/md5.js")
     script(src='/javascripts/jquery-2.1.1.min.js')
     script(type="text/javascript").
-        var change_phone=false;
-        var change_email=false;
-        var post_content={};
-
-        function checkEmail(){
+        var change_phone = false;
+        var change_email = false;
+        var post_content = {};
+        function checkEmail() {
             re = /(\w*\.*)+@(\w?)+(\.\w{2,})+$/;
-            str=$("#email").val();
-            if (re.test(str)){
-
+            str = $("#email").val();
+            if (re.test(str)) {
                 $("#email_prompt").html("");
             }
             else {
-
                 $("#email_prompt").html("<font color='red'>格式不正确</font>");
                 $("#change_email").disable();
             }
         }
-        function validate(){
-            if ($("#pw2").val()!=$("#pw1").val())
-            {
+        function validate() {
+            if ($("#pw2").val() != $("#pw1").val()) {
                 alert("两次输入的密码不一样");
                 return false;
             }
             else
-            return  true;
+                return true;
         }
         $(document).ready(function () {
-                $("#submit").click(function ()
-                {
-                    
-                    if (validate()) {
-                        if (!$("pre_pw")) {
-                            post_content.pre_pw = hex_md5($("#pre_pw").val());
-                            post_content.new_pw = hex_md5($("#pw2").val());
-
-                        }
-                        $.post("/account/manage/info", post_content,
-                                function (data, status) {
-
-                                    location.replace("/account/manage/info/m/"+data);
-                                }
-                        );
+            $("#submit").click(function () {
+                if (validate()) {
+                    if (!$("pre_pw")) {
+                        post_content.pre_pw = hex_md5($("#pre_pw").val());
+                        post_content.new_pw = hex_md5($("#pw2").val());
                     }
-                });
+                    $.post("/account/manage/info", post_content,
+                            function (data, status) {
+                                location.replace("/account/manage/info/m/" + data);
+                            }
+                    );
+                }
+            });
         });
-        function change_status(flag){
-            if (flag=='phone')
-            {
-                change_phone=true;
-                post_content.phone=$("#phone").val();
+        function change_status(flag) {
+            if (flag == 'phone') {
+                change_phone = true;
+                post_content.phone = $("#phone").val();
             }
-            else if (flag=='email')
-            {
-                change_email=true;
-                post_content.email=$("#email").val();
+            else if (flag == 'email') {
+                change_email = true;
+                post_content.email = $("#email").val();
             }
         }
 
-    div
-        .g-container(data-module='userinfo', data-fo-help='1')
-            #g-breadcrumb
+block breadcrumb
+    li: a(href="/") 主页
+    li.active 个人中心
 
-                span(style='margin-left:240px;color:blue;font-size:12px') #{errorMessage}
-            .wrap
-                .person-left
-                    p.left-head
-                        img(src='http://img.guahao.cn/img/character/young-m.png', alt='男')
-                        span(style='margin-left: 3px')
-                            strong #{username}
-                    ul.none-border
-                        li(style='list-style-type: none;margin-top:40px;margin-left:10px;text-align:left')
-                            a.btn.btn-default.btn-lg.active(href='/account/manage/reservation', role='button')
-                                | 预约列表
-                        li(style='list-style-type: none;margin-top:20px;margin-left:10px;text-align: left')
-                            a.btn.btn-primary.btn-lg.active(role='button', href='/account/manage/info')
-                                | 个人中心
-                .person-right
-                    .order-remind.g-clear
-                        span.icon.gi2.gi-order-big
-                        .meta
-                            h1 个人中心
-                    .second_block
-                        span.second_label 账号信息
-                    hr#hr_style
-                    .list_content
-                        span 登录名: #{username}
-                        span 真实姓名: #{name}
-                        span 电话: #{phone}
-                        span 邮箱: #{email}
-                        span 身份证号:#{sid}
-                        span 信用额度:#{credit}
-                        span 状态：#{status}
-                    .second_block
-                        span.second_label  修改信息
-                    hr(style='line-width:1;', width='90%', color='#1E90FF', size='1')
-                    div
-
-
-                        form( name='pwinfo_modify_form')
-                            .form-group(style='margin-left:60px')
-                                label 原密码
-                                input.form-control(type='password', style='width:40%', id='pre_pw',placeholder='不修改密码请勿填写')
-                                label 新密码
-                                input.form-control(type='password', style='width:40%',id='pw1',placeholder='不修改密码请勿填写')
-                                label 确认密码
-                                input.form-control(type='password', style='width:40%', id='pw2',placeholder='不修改密码请勿填写',onblur='validate();')
-                                span(id='prompt')
-                                label(style='display:block') 电话
-                                input.form-control(type='text', style='width:40%;display:inline', id='phone')
-                                button.btn.btn-default(onclick='change_status(\'phone\')',type='button') 修改
-                                label(style='display:block') 邮箱
-                                input.form-control(type='email', style='width:40%;display:inline',onblur='checkEmail();' id='email')
-                                button.btn.btn-default(onclick='change_status(\'email\')',type='button',id="change_email") 修改
-                                span(id='email_prompt',style='margin-left:10px')
-                                button.btn.btn-primary(type='button',id='submit',style="display:block") 保存
-
+block site-content
+    div: .g-container(data-module='userinfo', data-fo-help='1')
+        #g-breadcrumb: span(style='margin-left:240px;color:blue;font-size:12px') #{errorMessage}
+        .wrap
+            .person-left
+                p.left-head
+                    img(src='http://img.guahao.cn/img/character/young-m.png', alt='男')
+                    span(style='margin-left: 3px'): strong #{username}
+                ul.none-border
+                    li(style='list-style-type: none;margin-top:40px;margin-left:10px;text-align:left')
+                        a.btn.btn-default.btn-lg.active(href='/account/manage/reservation', role='button') 预约列表
+                    li(style='list-style-type: none;margin-top:20px;margin-left:10px;text-align: left')
+                        a.btn.btn-primary.btn-lg.active(role='button', href='/account/manage/info') 个人中心
+            .person-right
+                .order-remind.g-clear
+                    span.icon.gi2.gi-order-big
+                    .meta: h1 个人中心
+                .second_block
+                    span.second_label 账号信息
+                hr#hr_style
+                .list_content
+                    span 登录名: #{username}
+                    span 真实姓名: #{name}
+                    span 电话: #{phone}
+                    span 邮箱: #{email}
+                    span 身份证号:#{sid}
+                    span 信用额度:#{credit}
+                    span 状态：#{status}
+                .second_block: span.second_label  修改信息
+                hr(style='line-width:1;', width='90%', color='#1E90FF', size='1')
+                div: form( name='pwinfo_modify_form'): .form-group(style='margin-left:60px')
+                    label 原密码
+                    input.form-control(type='password', style='width:40%', id='pre_pw',placeholder='不修改密码请勿填写')
+                    label 新密码
+                    input.form-control(type='password', style='width:40%',id='pw1',placeholder='不修改密码请勿填写')
+                    label 确认密码
+                    input.form-control(type='password', style='width:40%', id='pw2',placeholder='不修改密码请勿填写',onblur='validate();')
+                    span(id='prompt')
+                    label(style='display:block') 电话
+                    input.form-control(type='text', style='width:40%;display:inline', id='phone')
+                    button.btn.btn-default(onclick='change_status(\'phone\')',type='button') 修改
+                    label(style='display:block') 邮箱
+                    input.form-control(type='email', style='width:40%;display:inline',onblur='checkEmail();' id='email')
+                    button.btn.btn-default(onclick='change_status(\'email\')',type='button',id="change_email") 修改
+                    span(id='email_prompt',style='margin-left:10px')
+                    button.btn.btn-primary(type='button',id='submit',style="display:block") 保存
     div.clear
