@@ -8,6 +8,39 @@ var http = require('http');
 var settings = require('../../settings');
 var businessServerInfo = 'localhost:' + settings.port.business;
 
+var py2cn = {};
+py2cn['beijing']='北京市';
+py2cn['tianjin']='天津市';
+py2cn['hebei']='河北省';
+py2cn['shanxi']='山西省';
+py2cn['neimenggu']='内蒙古自治区';
+py2cn['liaoning']='辽宁省';
+py2cn['jilin']='吉林省';
+py2cn['heilongjiang']='黑龙江省';
+py2cn['shanghai']='上海市';
+py2cn['jiangsu']='江苏省';
+py2cn['zhejiang']='浙江省';
+py2cn['anhui']='安徽省';
+py2cn['fujian']='福建省';
+py2cn['jiangxi']='江西省';
+py2cn['jiangxi']='山东省';
+py2cn['henan']='河南省';
+py2cn['hubei']='湖北省';
+py2cn['hunan']='湖南省';
+py2cn['guangdong']='广东省';
+py2cn['guangxi']='广西省';
+py2cn['hainan']='海南省';
+py2cn['chongqing']='重庆市';
+py2cn['sichuan']='四川省';
+py2cn['guizhou']='贵州省';
+py2cn['yunnan']='云南省';
+py2cn['xizang']='西藏自治区';
+py2cn['shaanxi']='陕西省';
+py2cn['gansu']='甘肃省';
+py2cn['qinghai']='青海省';
+py2cn['ningxia']='宁夏回族自治区';
+py2cn['xinjiang']='新疆维吾尔族自治区';
+
 /**
  * 渲染主页
  * @param request
@@ -190,12 +223,15 @@ exports.hospitals = function (request, response) {
     if (!getCookie(request).username)
         response.redirect('/backstage/login');
     else {
-        var callback = function (result) {
+        var callback = function(result) {
             if (result.code == 0) {
                 //传参并渲染页面
                 var initTimestamp = request.params.initTimestamp;
                 var msgType = request.params.msgType;
                 var message = request.params.message;
+                for (var hospital in result.hospitals) {
+                    result.hospitals[hospital].province = py2cn[result.hospitals[hospital].province];
+                }
 
                 //printLogMessage('hospitals:' + JSON.stringify(result.hospitals));
 
