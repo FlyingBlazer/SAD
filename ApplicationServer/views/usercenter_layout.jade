@@ -10,6 +10,8 @@ block append stylesheets
     link(rel='stylesheet', href='/backstage/css/editable.css', media='all')
     link(rel='stylesheet', href='/backstage/css/tab.css', media='all')
     link(rel='stylesheet', href='/backstage/css/components.css', media='all')
+
+block append scripts
     script(src='/backstage/plugins/jquery/jquery-2.1.1.min.js')
     script(src='/backstage/plugins/jquery-validation/jquery.validate.min.js')
     script(src='/backstage/plugins/jquery-validation/messages_zh.js')
@@ -18,7 +20,6 @@ block append stylesheets
     script(src='/backstage/plugins/bootstrap3-editable/js/bootstrap-editable.js')
     script(src='/backstage/plugins/bootstrap3-editable/js/bootstrap-datepicker.js')
     script(src='/backstage/plugins/bootstrap3-editable/js/bootstrap-datepicker.zh-CN.js')
-block append scripts
     script(src="/javascripts/md5.js")
     script(src='/javascripts/jquery-2.1.1.min.js')
     script.
@@ -30,7 +31,7 @@ block append scripts
 
 
 
-}block breadcrumb
+block breadcrumb
     li: a(href="/") 主页
     li.active 个人中心
 
