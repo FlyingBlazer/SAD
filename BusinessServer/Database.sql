@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2014 年 12 月 22 日 09:39
+-- 生成日期: 2014 年 12 月 22 日 10:01
 -- 服务器版本: 5.5.20
 -- PHP 版本: 5.3.10
 
@@ -56,8 +56,8 @@ END$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `Revive`(IN s int, IN uid int)
 BEGIN
 	START TRANSACTION;
-    UPDATE user SET isactivated=1 WHERE id=@uid;
-    UPDATE user SET credit=@s WHERE id=@uid;
+    UPDATE user SET isactivated=1 WHERE id=uid;
+    UPDATE user SET credit=s WHERE id=uid;
     COMMIT;
 END$$
 
