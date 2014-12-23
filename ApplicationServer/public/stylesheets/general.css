@@ -1,6 +1,7 @@
 body {
     font-family: 'Open Sans', Arial, 'Hiragino Sans GB', 'Helvetica Neue', 'Helvetica', 'Microsoft YaHei', '微软雅黑', sans-serif;
     text-rendering: optimizeLegibility;
+    font-size: 14px;
 }
 
 a {
@@ -9,6 +10,10 @@ a {
 
 #nav {
     background-color: #f8f8f8;
+}
+
+* {
+    outline: none !important;
 }
 
 .navbar {

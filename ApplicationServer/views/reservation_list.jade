@@ -1,34 +1,36 @@
-extends usercenter_layout
+extends layout
 
-block right_block
+block breadcrumb
+    li: a(href='/') 主页
+    li.active 预约列表
 
-    .person-right
-        .order-remind.g-clear
-            .meta: h1 我的预约单
-        .list
+block site-content
+    style.
+
+    .container(style='padding-top: 30px')
+        .col-sm-2.row
+            .list-group
+                a.list-group-item(href='/account/manage/info') 个人中心
+                a.list-group-item.active(href='/account/manage/reservation') 预约列表
+
+        .col-sm-9.col-sm-offset-1(style='font-size: 16px;')
+            h4(style='margin-bottom:30px') 预约列表
             table.table
-                colgroup
-                    col(width='144px;')
-                    col(width='180px;')
-                    col(width='100px;')
-                    col.order-cost(width='130px;')
-                    col(width='130px;')
                 thead
                     tr
                         th 就诊日期
                         th 医院
-                        th.text-left 医生
+                        th 医生
                         th 挂号费
                         th 订单状态
                         th 操作
                 tbody
-                    if(reservations.length)
+                    if (reservations.length)
                         each item in reservations
                             tr
                                 td #{item.time}
                                 td #{item.hospital_name}
                                 td #{item.doctor_name}
-                                td #{item.price}
+                                td #{item.price} 元
                                 td #{item.status_msg}
                                 td: a(href='/reservation/#{item.reservation_id}') 查看
-                tbody
