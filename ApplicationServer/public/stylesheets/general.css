@@ -146,3 +146,16 @@ a {
     margin: 0;
     padding: 0;
 }
+
+@media screen and (max-width: 580px) {
+    .ft-links ul li {
+        margin-bottom: 10px;
+    }
+    .ft-links ul li a {
+        padding-left: 0;
+        padding-right: 20px;
+    }
+    .ft-links ul li a::after {
+        display: none;
+    }
+}
