@@ -1,112 +1,143 @@
-extends usercenter_layout
-block append scripts
-    script.
-        var post_content = {};
-        var validated=true;
-        function checkEmail() {
-            re = /(\w*\.*)+@(\w?)+(\.\w{2,})+$/;
-            str = $("#email").val();
-            if (re.test(str)) {
-                $("#email_prompt").html("");
-            }
-            else {
-                $("#email_prompt").html("<font color='red'>格式不正确</font>");
-                $("#change_email").disable();
-            }
-        }
-        function validate() {
-            if ($("#pw2").val() != $("#pw1").val()) {
-                $('#errordiv').show();
-                $('#errorMessageSpan').addClass("errorSpan");
-                $('#errorMessageSpan').html("<font color='black'>两次密码不一致</font>");
-                validated=false;
-                return false;
-            }
-            else{
-                validated=true;
-                return true;
-            }
-        }
-        $(document).ready(function () {
+extends layout
 
-            $('#phone').val("#{phone}");
-            $('#email').val("#{email}");
-            $("#submit").click(function () {
-                if (validated) {
-                    if ($("#phone").val())
-                       post_content.phone = $("#phone").val();
-                    if ($("#email").val())
-                       post_content.email = $("#email").val();
-                    if (!$("pre_pw").val()) {
-                        post_content.pre_pw = hex_md5($("#pre_pw").val());
-                        post_content.new_pw = hex_md5($("#pw2").val());
-                    }
-                    $.post("/account/manage/info", post_content,
-                            function (data, status) {
-                                location.replace("/account/manage/info/m/" + data);
-                            }
-                    );
+block append stylesheets
+    link(rel='stylesheet', href='/backstage/css/editable.css', media='all')
+
+block append scripts
+    script(src="/javascripts/md5.js")
+    script(src='/backstage/plugins/bootstrap3-editable/js/bootstrap-editable.js')
+
+block breadcrumb
+    li: a(href='/') 主页
+    li.active 个人中心
+
+block site-content
+    style.
+        .user-detail-item {
+            margin-bottom: 10px;
+        }
+        .user-detail-item .col-sm-2 {
+            font-weight: bold;
+        }
+        .form-horizontal .control-label {
+            text-align: left;
+        }
+        input.input-medium,
+        input {
+            outline: none !important;
+        }
+        .editable-cancel {
+            display: none;
+        }
+        .editable-submit {
+            padding: 3px 20px;
+            border-radius: 20px;
+            box-shadow: none;
+            background: #fff;
+            border: 1px solid #ddd;
+            color: #888 !important;
+        }
+        .editable-submit:hover {
+            background: #eee;
+        }
+    .container(style='padding-top: 30px')
+        .col-sm-2.row
+            .list-group
+                a.list-group-item.active(href='/account/manage/info') 个人中心
+                a.list-group-item(href='/account/manage/reservation') 预约列表
+        .col-sm-9.col-sm-offset-1(style='font-size: 16px;')
+            h4(style='margin-bottom:30px') 个人中心
+            if message == '更新成功'
+                .alert.alert-success 密码修改成功。
+            else if message
+                .alert.alert-warning 原密码输入错误。
+            .panel.panel-default
+                .panel-heading
+                    h3.panel-title 个人信息
+                .panel-body
+                    .row.user-detail-item
+                        .col-sm-2 登录名
+                        .col-sm-10 #{username}
+                        .clearfix
+                    .row.user-detail-item
+                        .col-sm-2 真实姓名
+                        .col-sm-10 #{name}
+                        .clearfix
+                    .row.user-detail-item
+                        .col-sm-2 电话
+                        .col-sm-10
+                            a.editable(href='#', data-item='phone') #{phone}
+                        .clearfix
+                    .row.user-detail-item
+                        .col-sm-2 邮箱
+                        .col-sm-10
+                            a.editable(href='#', data-item='email') #{email}
+                        .clearfix
+                    .row.user-detail-item
+                        .col-sm-2 身份证号
+                        .col-sm-10 #{sid}
+                        .clearfix
+                    .row.user-detail-item
+                        .col-sm-2 信用额度
+                        .col-sm-10 #{credit}
+                        .clearfix
+                    .row.user-detail-item
+                        .col-sm-2 当前账户状态
+                        .col-sm-10 #{status}
+                        .clearfix
+            .panel.panel-danger
+                .panel-heading
+                    h3.panel-title 修改密码
+                .panel-body
+                    form.form-horizontal.change-password-form(method='POST')
+                        .form-group
+                            label.col-sm-2.control-label 原密码
+                            .col-sm-10
+                                input.form-control.old-password(type='password', name='pre_pw', required)
+                        .form-group
+                            label.col-sm-2.control-label 新密码
+                            .col-sm-10
+                                input.form-control.new-password(type='password', name='new_pw', required)
+                        .form-group
+                            label.col-sm-2.control-label 确认新密码
+                            .col-sm-10
+                                input.form-control.confirm-new-password(type='password', name='new_pw2', required)
+                        .form-group
+                            .col-sm-10
+                                button.btn.btn-default 修改密码
+                                span.text-warning.errMsg(style='display:none;padding-left:15px;')
+
+    script.
+        $(function() {
+            $('.editable').editable({
+                url: '/account/manage/info',
+                type: 'text',
+                send: 'always',
+                mode: 'inline',
+                params: function(params) {
+                    var data = {};
+                    var item = $(this).data('item');
+                    data[item] = params.value;
+                    return data;
                 }
             });
-
-            if ("#{errorMessage}") {
-                $('#errordiv').show();
-                $('#errorMessageSpan').addClass("errorSpan");
-                $('#errorMessageSpan').html("<font color='black'>#{errorMessage}</font>");
-            }
-            else {
-                $('#errordiv').hide();
-            }
-
-            $(".account_info").click(function (){
-                $('#errordiv').hide();
-            });
-            $(".change_info").click(function (){
-                $('#errordiv').hide();
+            $('.change-password-form').on('submit', function() {
+                var old = $('.old-password').val();
+                var new1 = $('.new-password').val();
+                var new2 = $('.confirm-new-password').val();
+                var $msg = $('.errMsg');
+                if (new1 == '' || new2 == '' || old == '') {
+                    $msg.text('请输入密码。');
+                    $msg.show();
+                    return false;
+                } else if (new1 !== new2) {
+                    $msg.text('两次密码输入不相同，请重试。');
+                    $msg.show();
+                    return false;
+                }
+                var hashed = hex_md5($('.new-password').val());
+                $('.new-password').val(hashed);
+                $('.confirm-new-password').val(hashed);
+                return true;
             });
         });
-
-block right_block
-
-    .person-right
-        .order-remind.g-clear
-            span.icon.gi2.gi-order-big
-            .meta: h1 个人中心
-        ul.nav.nav-tabs(role='tablist')
-            li.active(role='presentation')
-                a(href='#account_info', role='tab', data-toggle='tab',class='account_info') 账号信息
-            li(role='presentation')
-                a(href='#change_info', role='tab', data-toggle='tab',class='change_info') 修改信息
-        div#errordiv.errordiv
-            span(id='errorMessageSpan')
-        div.tab-content
-            div#account_info.tab-pane.fade.in.active
-                .second_block
-                    span.second_label 账号信息
-                hr#hr_style
-                .list_content
-                    span(class="list-group-item")  登录名:&nbsp;&nbsp; &nbsp;  #{username}
-                    span(class="list-group-item")  真实姓名:&nbsp; #{name}
-                    span(class="list-group-item")  电话:&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;   #{phone}
-                    span(class="list-group-item")  邮箱:&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; #{email}
-                    span(class="list-group-item")  身份证号: #{sid}
-                    span(class="list-group-item")  信用额度: #{credit}
-                    span(class="list-group-item")  状态：&nbsp; &nbsp;&nbsp;&nbsp; #{status}
-
-            div#change_info.tab-pane.fade
-                .second_block: span.second_label  修改信息
-                hr(style='line-width:1;', width='90%', color='#1E90FF', size='1')
-                div: form( name='pwinfo_modify_form'): .form-group(style='margin-left:60px')
-                    label 原密码
-                    input.form-control(type='password', style='width:40%', id='pre_pw',placeholder='不修改密码请勿填写')
-                    label 新密码
-                    input.form-control(type='password', style='width:40%',id='pw1',placeholder='不修改密码请勿填写')
-                    label 确认密码
-                    input.form-control(type='password', style='width:40%', id='pw2',placeholder='不修改密码请勿填写',onblur='validate();')
-                    span(id='prompt')
-                    label(style='display:block') 电话
-                    input.form-control(type='text', style='width:40%;display:inline', id='phone')
-                    label(style='display:block') 邮箱
-                    input.form-control(type='email', style='width:40%;display:inline',onblur='checkEmail();' id='email')
-                    span(id='email_prompt',style='margin-left:10px')
-                    button.btn.btn-primary(type='button',id='submit',style="display:block") 保存
