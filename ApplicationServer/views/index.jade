@@ -6,7 +6,7 @@ html
         meta(name="viewport" content="width=device-width, initial-scale=1")
         script(src="/javascripts/jquery-2.1.1.min.js")
         script(src="/stylesheets/bootstrap/js/bootstrap.min.js")
-        link(href="/stylesheets/bootstrap/css/bootstrap.min.css", rel="stylesheet", media="all")
+        link(href="/stylesheets/bootstrap/css/bootstrap.paper.css", rel="stylesheet", media="all")
         link(href="/stylesheets/font-awesome-4.2.0/css/font-awesome.min.css", rel="stylesheet", media="all")
         link(href="/stylesheets/index.css", rel="stylesheet", media="all")
         title 主页
@@ -39,7 +39,7 @@ html
                                 li: a(href="/account/register") 注册
         .jumbotron
             .container
-                h1(style='font-weight:bold;margin-bottom:50px') SRF 挂号平台
+                h1(style='font-weight:bold;margin-bottom:50px;color:white') SRF 挂号平台
                 p SRF 挂号平台是一款面向全国用户的线上挂号平台
                 p 无论是在家中还是通过手机都可以体验到简单便捷的挂号服务
                 .row(style='margin-bottom: 20px')
@@ -47,7 +47,7 @@ html
                         .input-group
                             input#search-field.form-control
                             span.input-group-btn
-                                button#search-button.btn.btn-default 搜索
+                                button#search-button.btn.btn-default 搜索医院
 
         .container
             div#locations.main-section.col-md-6

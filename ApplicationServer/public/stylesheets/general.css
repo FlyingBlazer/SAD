@@ -11,75 +11,57 @@ a {
     background-color: #f8f8f8;
 }
 
-/*@media all and (min-width: 980px) {*/
-    .navbar {
-        /*width: 960px;*/
-        margin-left: auto;
-        margin-right: auto;
-        margin-bottom: 0;
-        border-width: 0;
-        border-radius: 0;
-    }
+.navbar {
+    box-shadow: none;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0;
+    border-width: 0;
+    border-radius: 0;
+}
 
-    #header-content {
-        /*width: 960px;*/
-        margin-left: auto;
-        margin-right: auto;
-    }
+#nav-search-field {
+    border: 1px solid #eee;
+    padding: 4px 10px;
+    background: #fff;
+    box-shadow: none;
+}
+#nav-search-field:focus {
+    box-shadow: none;
+}
+#nav-search-button {
+    box-shadow: none;
+    border:1px solid #eee;
+}
 
-    #site-content {
-        /*width: 960px;*/
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 20px;
-    }
-/*}*/
+#header-content {
+    margin-left: auto;
+    margin-right: auto;
+}
 
-/*@media all and (max-width: 980px) {*/
-    /*.navbar {*/
-        /*width: 100%;*/
-        /*margin-left: auto;*/
-        /*margin-right: auto;*/
-        /*margin-bottom: 0;*/
-        /*border-width: 0;*/
-        /*border-radius: 0;*/
-    /*}*/
-
-    /*#header-content {*/
-        /*width: 100%;*/
-        /*margin-left: auto;*/
-        /*margin-right: auto;*/
-    /*}*/
-
-    /*#site-content {*/
-        /*width: 100%;*/
-        /*margin-left: auto;*/
-        /*margin-right: auto;*/
-        /*margin-top: 20px;*/
-    /*}*/
-/*}*/
+#site-content {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+}
 
 #header {
-    background-color: #f8f8f8;
     border-bottom: 1px solid #dddddd;
+}
+
+#header, nav.navbar, ol.breadcrumb {
+    background: #fafafa;
 }
 
 .breadcrumb {
     padding-left: 0;
     margin-bottom: 10px;
-    background-color: #f8f8f8;
+    background: #fff;
 }
 
-.nav-tabs>li>a {
+.nav-tabs > li > a {
     border-radius: 0;
     border-top-width: 2px;
-    border-bottom: none;
-}
-
-.nav-tabs>li.active>a,
-.nav-tabs>li.active>a:hover,
-.nav-tabs>li.active>a:focus {
-    border-top: 2px solid #377bee;
     border-bottom: none;
 }
 
@@ -100,6 +82,10 @@ a {
 .table>tfoot>tr>td {
     text-align: center;
     vertical-align: middle;
+}
+
+#footer {
+    background: white;
 }
 
 .ft-links ul {

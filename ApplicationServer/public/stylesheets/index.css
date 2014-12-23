@@ -15,6 +15,14 @@ a {
     display: none;
 }
 
+#search-field {
+    background: #fff;
+    padding-left: 10px;
+    height: 36px;
+    border-bottom-left-radius: 4px;
+    border-top-left-radius: 4px;
+}
+
 .jumbotron {
     margin-bottom: 20px;
     background: url(/images/1.png) no-repeat;
@@ -40,6 +48,15 @@ a {
     text-align: center;
 }
 
+.nav-tabs {
+    border-bottom: 1px solid #ddd;
+}
+
+.nav-tabs > li > a {
+    box-shadow: none;
+    transition: none !important;
+}
+
 .choose-location-label {
     margin: 20px 0 20px;
     color: #555;
@@ -47,9 +64,6 @@ a {
     font-weight: bold;
 }
 
-.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
-    border-top: 1px solid #ddd !important;
-}
 
 .table > thead > tr > th,
 .table > tbody > tr > th,
@@ -66,24 +80,6 @@ a {
 
 .right {
     float: right;
-}
-
-.nav-tabs {
-    border-bottom: 1px solid #ddd;
-}
-
-.nav-tabs li.active {
-    border-bottom: 1px solid #fff;
-}
-
-.nav-tabs li a {
-    margin: 0 !important;
-    padding: 10px 13px !important;
-}
-
-.nav-tabs li a:hover {
-    background-color: #fff;
-    border-bottom: 0;
 }
 
 .tab-content {
@@ -166,7 +162,7 @@ a {
 }
 
 .ft-alt-notes {
-    color: #ddd;
+    color: #ccc;
 }
 
 .site-ft-title {
@@ -181,18 +177,6 @@ a {
     font-size: 20px;
 }
 
-.nav-tabs>li>a {
-    border-radius: 0;
-    border-top-width: 2px;
-    border-bottom: none;
-}
-
-.nav-tabs>li.active>a,
-.nav-tabs>li.active>a:hover,
-.nav-tabs>li.active>a:focus {
-    border-top: 2px solid #377bee;
-    border-bottom: none;
-}
 
 @media screen and (max-width: 995px) {
     footer .container .col-sm-3 {

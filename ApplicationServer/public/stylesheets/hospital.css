@@ -2,6 +2,7 @@
     display: inline-block;
     margin-top: 10px;
     float: left;
+    font-size: 36px;
 }
 
 .hospital-rating {
@@ -280,4 +281,10 @@
 
 nav.paging {
     text-align: center;
+}
+
+.page-number a,
+.prev-page a,
+.next-page a {
+    cursor: pointer;
 }
