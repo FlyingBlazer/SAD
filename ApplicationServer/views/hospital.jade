@@ -114,7 +114,7 @@ block site-content
                                     div.department #{doctor.department}
                                 div.doctor-intro #{doctor.description}
                                 div.reservation
-                                    a.gbn.gbt-blue(href="/concierge/reserve/#{detail.id}/#{department_id}/#{doctor.id}") 挂号
+                                    a.btn.btn-primary(href="/concierge/reserve/#{detail.id}/#{department_id}/#{doctor.id}") 挂号
 
                 div.empty.hidden
                     div.alert.alert-info 没有找到符合条件的结果，请尝试减少筛选条件
@@ -122,9 +122,9 @@ block site-content
                 nav.paging.hidden
                     ul.pagination
                         li.prev-page
-                            a(href='#') «
+                            a «
                         li.next-page
-                            a(href='#') »
+                            a »
 
             script.
 
@@ -136,18 +136,20 @@ block site-content
                     var currentPage = 1;
                     updateAll();
 
-                    var map = new BMap.Map("hospital-map");
-                    var bottom_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_BOTTOM_LEFT});
-                    var top_left_navigation = new BMap.NavigationControl();
-                    map.addControl(bottom_left_control);
-                    map.addControl(top_left_navigation);
-                    var myGeo = new BMap.Geocoder();
-                    myGeo.getPoint("#{detail.address}", function(point) {
-                        if (point) {
-                            map.centerAndZoom(point, 16);
-                            map.addOverlay(new BMap.Marker(point));
-                        }
-                    });
+                    if (typeof BMap !== 'undefined') {
+                        var map = new BMap.Map("hospital-map");
+                        var bottom_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_BOTTOM_LEFT});
+                        var top_left_navigation = new BMap.NavigationControl();
+                        map.addControl(bottom_left_control);
+                        map.addControl(top_left_navigation);
+                        var myGeo = new BMap.Geocoder();
+                        myGeo.getPoint("#{detail.address}", function(point) {
+                            if (point) {
+                                map.centerAndZoom(point, 16);
+                                map.addOverlay(new BMap.Marker(point));
+                            }
+                        });
+                    }
 
                     $(".department-tag").click(function () {
                         var selection = $(this).html();
@@ -237,7 +239,7 @@ block site-content
                         $(".page-number").remove();
                         if (pageCount > 1) {
                             for (var i = 1; i <= pageCount; i++) {
-                                $("li.next-page").before("<li id=\"page-" + i + "\" class=\"page-number\"><a href='#'>" + i + "</a></li>");
+                                $("li.next-page").before("<li id=\"page-" + i + "\" class=\"page-number\"><a>" + i + "</a></li>");
                             }
                             $("#page-1").addClass("active");
                             $("li.prev-page").addClass("disabled");
