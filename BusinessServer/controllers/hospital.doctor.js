@@ -4,10 +4,6 @@ exports.working = require('./hospital.doctor.working');
 
 exports.list = function(req, res, next) {
     var hospitalId = req.query.hospitalId;
-    var date = req.query.date;
-    var period = req.query.period == 'morning' ? 1 : (req.query.period == 'afternoon' ? 2 : 3);
-    var count = 1;
-    var ret = {};
     req.db.driver.execQuery(
         "SELECT doctor.id as id, doctor.name as name, hospital.name as hospital, department.name as department, " +
         "doctor.title as title, doctor.info as description, doctor.photo as photo_url, department.id as department_id, " +
@@ -16,70 +12,62 @@ exports.list = function(req, res, next) {
         [hospitalId],
         function(err, data) {
             if(err) throw err;
-            count = data.length;
-            if(typeof date != 'undefined') {
-                date = new Date(date);
-                var day = (date.getDay()+6)%7+1;
-                var freq = '2_______'.replaceAt(day, '1');
-                if(typeof period != 'undefined') {
-                    data.forEach(function(line) {
-                        req.db.driver.execQuery(
-                            "SELECT working.* FROM doctor, working WHERE doctor.id = working.doctor_id AND doctor.id = ? " +
-                            "AND working.period = ? AND (working.frequency LIKE ? "+
-                            "OR (working.date = ? AND working.frequency LIKE '0%'))",
-                            [line.id, period, freq, req.query.date],
-                            function(err, d) {
-                                if(err) throw err;
-                                if(d.length > 0) {
-                                    if(!Array.isArray(ret[line.department_id])) {
-                                        ret[line.department_id] = [];
-                                    }
-                                    ret[line.department_id].push(line);
-                                }
-                                finish();
-                            }
-                        );
-                    });
-                } else {
-                    data.forEach(function(line) {
-                        req.db.driver.execQuery(
-                            "SELECT working.* FROM doctor, working WHERE doctor.id = working.doctor_id AND doctor.id = ? " +
-                            "AND (working.frequency LIKE ? OR (working.date = ? AND working.frequency LIKE '0%'))",
-                            [line.id, period, req.query.date, freq],
-                            function(err, data) {
-                                if(err) throw err;
-                                if(date.length > 0) {
-                                    if(!Array.isArray(ret[line.department_id])) {
-                                        ret[line.department_id] = [];
-                                    }
-                                    ret[line.department_id].push(line);
-                                }
-                                finish();
-                            }
-                        );
-                    });
+            var ret = {};
+            var len = data.length;
+            var dayLen = 24*60*60*1000;
+            var curDate = new Date(new Date().Format('yyyy-MM-dd'));
+            var curDay = (curDate.getDay()+6)%7;
+
+            data.forEach(function(line) {
+                if (!Array.isArray(ret[line.department_id])) {
+                    ret[line.department_id] = [];
                 }
-            } else {
-                count = 1;
-                data.forEach(function(line) {
-                    if (!Array.isArray(ret[line.department_id])) {
-                        ret[line.department_id] = [];
+                req.db.driver.execQuery(
+                    "SELECT * FROM working WHERE doctor_id = ?",
+                    [line.id], function(err, d) {
+                        if(err) throw err;
+                        var stack = [];
+                        line.working = [0, 0, 0, 0, 0, 0, 0];
+                        function parsePeriod(p) {
+                            if(p == '1') return 1;
+                            if(p == '2') return 2;
+                            if(p == '3') return 4;
+                            return 0;
+                        }
+                        d.forEach(function(row) {
+                            if(row.frequency.charAt(0) == '0') {
+                                stack.push(row);
+                                return;
+                            }
+                            for(var i = 1; i <= 7; i++) {
+                                if(row.frequency.charAt(i) == '1') {
+                                    line.working[(i+12-curDay)%7] |= parsePeriod(row.period);
+                                }
+                            }
+                        });
+                        if(stack.length > 0)
+                            stack.forEach(function(row) {
+                                var tarDate = new Date(row.date);
+                                var i = curDate.getDateOffset(tarDate);
+                                if(i > 0 && i <= 7) {
+                                    row.frequency.charAt(1) == '1' ?
+                                        line.working[(i+12-curDay)%7] |= parsePeriod(row.period) :
+                                        line.working[(i+12-curDay)%7] &= ~parsePeriod(row.period);
+                                }
+                            });
+                        ret[line.department_id].push(line);
+                        if(--len === 0) {
+                            res.json({
+                                code: 0,
+                                message: 'success',
+                                doctors: ret
+                            });
+                        }
                     }
-                    ret[line.department_id].push(line);
-                });
-                finish();
-            }
-        }
-    );
-    function finish() {
-        if(--count === 0) {
-            res.json({
-                code: 0,
-                message: 'success',
-                doctors: ret
+                )
             });
         }
-    }
+    );
 };
 
 exports.add = function(req, res, next) {
