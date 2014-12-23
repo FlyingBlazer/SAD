@@ -82,8 +82,15 @@ block site-content
                         .col-sm-10 #{credit}
                         .clearfix
                     .row.user-detail-item
-                        .col-sm-2 当前账户状态
-                        .col-sm-10 #{status}
+                        .col-sm-2 账户状态
+                        if status == 'Accepted'
+                            .col-sm-10 正常
+                        else if status == 'Rejected'
+                            .col-sm-10 未通过审核
+                        else if status == 'Validating'
+                            .col-sm-10 系统审核中
+                        else
+                            .col-sm-10 #{status}
                         .clearfix
             .panel.panel-danger
                 .panel-heading
@@ -102,7 +109,7 @@ block site-content
                             label.col-sm-2.control-label 确认新密码
                             .col-sm-10
                                 input.form-control.confirm-new-password(type='password', name='new_pw2', required)
-                        .form-group
+                        .form-group(style='margin-bottom:0')
                             .col-sm-10
                                 button.btn.btn-default 修改密码
                                 span.text-warning.errMsg(style='display:none;padding-left:15px;')
