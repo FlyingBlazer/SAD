@@ -298,6 +298,7 @@ exports.showUserInformation = function (request, response) {
         //设置用户名、信用等级
             getUserInfo(userId, function (result) {
                 response.render('profile', {
+                    code: result.code,
                     username: result.username,
                     status: result.status,
                     sid: result.sid,
@@ -307,9 +308,6 @@ exports.showUserInformation = function (request, response) {
                     credit: result.credit,
                     errorMessage: errorMessage
                 });
-            }, function (errorMessage) {
-                //TODO 404页面
-
             });
     }
 };
@@ -429,7 +427,8 @@ function getUserIdFromCookie(request) {
         return null;
 
     //从base64编码的cookie中解析userId
-    return JSON.parse(new Buffer(userInfo, 'base64').toString()).userId;
+    var temp = new Buffer(userInfo, 'hex').toString();
+    return JSON.parse(temp).userId;
 
     //return request.cookies.userId;
 }
@@ -446,7 +445,7 @@ function setCookie(response, userInfo) {
     printLogMessage('set cookie user info : ' + JSON.stringify(userInfo));
 
     //对user info进行base64编码，
-    var userInfoInBase64 = new Buffer(JSON.stringify(userInfo)).toString('base64');
+    var userInfoInBase64 = new Buffer(JSON.stringify(userInfo)).toString('hex');
 
     response.cookie('userInfo', userInfoInBase64, {
         expires: new Date(Date.now() + 900000000),

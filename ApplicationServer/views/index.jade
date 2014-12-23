@@ -39,8 +39,8 @@ html
                                 li: a(href="/account/register") 注册
         .jumbotron
             .container
-                h1 SRF挂号平台
-                p SRF挂号平台是一款面向全国用户的线上挂号平台
+                h1(style='font-weight:bold;margin-bottom:50px') SRF 挂号平台
+                p SRF 挂号平台是一款面向全国用户的线上挂号平台
                 p 无论是在家中还是通过手机都可以体验到简单便捷的挂号服务
                 .row
                     .col-lg-6
@@ -48,21 +48,6 @@ html
                             input#search-field.form-control
                             span.input-group-btn
                                 button#search-button.btn.btn-default 搜索
-        .container
-            .tiles(style={margin: '30px 0 20px'})
-                .col-sm-4
-                    img(src='/images/index_pic1.png', style={height: '128px', width: 'auto'})
-                    h2.tile-title 名医加盟
-                    p 足不出户，预定国内知名医师门诊服务
-                .col-sm-4
-                    img(src='/images/index_pic2.png', style={height: '128px', width: 'auto'})
-                    h2.tile-title 全国医院数据
-                    p 网站医院数据实时更新，挂号更方便
-                .col-sm-4
-                    img(src='/images/index_pic3.png', style={height: '128px', width: 'auto'})
-                    h2.tile-title 低廉的价格
-                    p 价格低于同类网站，同样的价钱不一样的体验
-                .clearfix
 
         .container
             div#locations.main-section.left.col-md-6
@@ -211,10 +196,30 @@ html
                         a.hospital-link(href='/concierge/reserve/49') 吉林省人民医院
                         a.hospital-link(href='/concierge/reserve/50') 吉林大学第四医院
 
+        .featured(style='border-top: 1px solid #eee; margin: 30px auto 0')
+            .container(style={margin: '20px auto 20px'})
+                h3(style='text-align:center') 国际领先的移动医疗服务平台
+                p
+            .container(style={margin: '20px auto 20px'})
+                .tiles(style={margin: '30px 0 20px'})
+                    .col-sm-4
+                        i.fa.fa-user-md.feature
+                        h2.tile-title 名医加盟
+                        p 足不出户，预定国内知名医师门诊服务
+                    .col-sm-4
+                        i.fa.fa-hospital-o.feature
+                        h2.tile-title 全国医院数据
+                        p 网站医院数据实时更新，挂号更方便
+                    .col-sm-4
+                        i.fa.fa-cny.feature
+                        h2.tile-title 低廉的价格
+                        p 价格低于同类网站，同样的价钱不一样的体验
+                    .clearfix
+
         footer.site-footer(style={
             'background': '#fff',
             'border-top': '1px solid #eee',
-            'margin-top': '20px',
+            'margin-top': '0',
             'padding': '20px 0 10px'
         })
             .container

@@ -78,17 +78,6 @@ exports.HospitalNotExist = function HospitalNotExist(message) {
 };
 util.inherits(exports.HospitalNotExist, restify.RestError);
 
-exports.ListEmpty = function ListEmpty(message) {
-    restify.RestError.call(this, {
-        restCode: '8',
-        statusCode: 404,
-        message: message,
-        constructorOpt: ListEmpty
-    });
-    this.name = 'ListEmpty';
-};
-util.inherits(exports.ListEmpty, restify.RestError);
-
 exports.ApproveFail = function ApproveFail(message) {
     restify.RestError.call(this, {
         restCode: '9',
@@ -121,17 +110,6 @@ exports.FailToGetStatus = function FailToGetStatus(message) {
     this.name = 'FailToGetStatus';
 };
 util.inherits(exports.FailToGetStatus, restify.RestError);
-
-exports.EmptyReservation = function EmptyReservation(message) {
-    restify.RestError.call(this, {
-        restCode: '12',
-        statusCode: 404,
-        message: message,
-        constructorOpt: EmptyReservation
-    });
-    this.name = 'EmptyReservation';
-};
-util.inherits(exports.EmptyReservation, restify.RestError);
 
 exports.ReservationUserInvalidFailure = function ReservationUserInvalidFailure(message) {
     restify.RestError.call(this, {
