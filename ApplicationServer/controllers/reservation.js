@@ -521,6 +521,7 @@ exports.showDoctor = function(request, response) {
             if (res.code != 0) {
                 code = res.code;
             }
+            console.log(status);
             response.render('doctor', {
                 code: code,
                 message: res.message,
