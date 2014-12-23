@@ -454,9 +454,13 @@ ol, ul {
 }
 
 
+.operation {
+    text-align: center;
+    margin: 15px auto;
+}
 
 .order-detail .btn {
-    display: block;
-    width: 120px;
-    margin: 15px auto 15px
+    display: inline-block;
+    width: 100px;
+    margin: 20px;
 }

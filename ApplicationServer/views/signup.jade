@@ -70,9 +70,9 @@ block site-content
                     .checkbox
                         label
                             input#eula(type="checkbox")
-                            | 我同意SAD挂号平台的
+                            | 我同意 SRF 挂号平台的
                             a(data-toggle="modal", data-target="#eula-modal") 服务许可协议
-            button#submit-button.btn.btn-lg.btn-primary.btn-block 确认注册
+            button#submit-button.btn.btn-lg.btn-primary.btn-block 开启在线挂号之旅
 
             .modal.fade#eula-modal
                 .modal-dialog.modal-lg
@@ -191,33 +191,31 @@ block site-content
                             button.btn.btn-default(type="button", data-dismiss="modal") 关闭
                             button#agree-eula-button.btn.btn-primary(type="button") 同意
 
-    script(type="text/javascript").
+    script.
+        var timer, maxtime = 60;
 
-        $(document).ready(function() {
+        function StartCountDown() {
+            $("#msg").attr("disabled", true);
+            maxtime = 60;
+            timer = setInterval("CountDown()", 1000);
+        }
 
+        function CountDown() {
+            if (maxtime >= 0) {
+                var minutes = Math.floor(maxtime / 60);
+                var seconds = Math.floor(maxtime % 60);
+                $("#msg").html(minutes + "分" + seconds + "秒后可以再次发送");
+                maxtime--;
+            } else {
+                $("#msg").attr("disabled", false);
+                clearInterval(timer);
+                $("#msg").html("重新发送");
+            }
+        }
+
+        $(function() {
             if ($(".alert-message").html() != "") {
                 $(".alert").removeClass("hidden");
-            }
-
-            var maxtime = 60;
-
-            function StartCountDown() {
-                $("#msg").attr("disabled", true);
-                maxtime = 60;
-                timer = setInterval("CountDown()", 1000);
-            }
-
-            function CountDown() {
-                if (maxtime >= 0) {
-                    var minutes = Math.floor(maxtime / 60);
-                    var seconds = Math.floor(maxtime % 60);
-                    $("#msg").html(minutes + "分" + seconds + "秒后可以再次发送");
-                    maxtime--;
-                } else {
-                    $("#msg").attr("disabled", false);
-                    clearInterval(timer);
-                    $("#msg").html("重新发送");
-                }
             }
 
             $("#agree-eula-button").click(function() {
@@ -302,11 +300,9 @@ block site-content
                     $("#form-register").submit();
                 }
             });
-
             $("#form-register").submit(function() {
                 $("#password").val(hex_md5($("#password").val()));
                 $("#password2").val(hex_md5($("#password2").val()));
                 return true;
             });
-
         });

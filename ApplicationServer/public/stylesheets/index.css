@@ -23,12 +23,27 @@ a {
     border-top-left-radius: 4px;
 }
 
+#search-button {
+    background: #53b481;
+    border: 1px solid #53b481 !important;
+    border-width: 1px 0 0 !important;
+    outline: none !important;
+    box-shadow: none !important;
+    margin-left: 0 !important;
+    transition: background .4s ease !important;
+}
+
+#search-button:hover {
+    background: #4ba575;
+}
+
 .jumbotron {
     margin-bottom: 20px;
-    background: url(/images/1.png) no-repeat;
+    background-image: url(/images/1.png);
+    background-repeat: no-repeat;
     background-size: cover;
-    color: #ffffff;
     background-color: #3e3d49;
+    color: #ffffff;
 }
 
 .jumbotron h1 {
@@ -92,6 +107,7 @@ a {
     display: inline-block;
     padding: 6px 13px;
     color: #333;
+    text-decoration: none !important;
 }
 
 .featured .feature {
@@ -104,14 +120,16 @@ a {
 
 .feature.fa-user-md {
     padding: 35px 41px;
+    padding: 35.5px 41px;
 }
 
 .feature.fa-hospital-o {
     padding: 35px 41px;
+    padding: 35.5px 41px;
 }
 
 .feature.fa-cny {
-    padding: 35px 48px;
+    padding: 41px 48px 32px;
 }
 
 .ft-links ul {
@@ -177,20 +195,6 @@ a {
     font-size: 20px;
 }
 
-
-/*.nav-tabs>li>a {*/
-    /*border-radius: 0;*/
-    /*border-top-width: 1px;*/
-    /*border-bottom: none;*/
-/*}*/
-
-/*.nav-tabs>li.active>a,*/
-/*.nav-tabs>li.active>a:hover,*/
-/*.nav-tabs>li.active>a:focus {*/
-    /*border-top: 1px solid #377bee;*/
-    /*border-bottom: none;*/
-/*}*/
-
 @media screen and (max-width: 995px) {
     footer .container .col-sm-3 {
         display: none;
@@ -210,6 +214,9 @@ a {
     }
     .ft-links ul li a::after {
         display: none;
+    }
+    footer .col-sm-9 {
+        text-align: center;
     }
 }
 

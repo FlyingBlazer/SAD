@@ -265,25 +265,18 @@ var serialize = function(obj) {
 };
 
 var fireRequest = function(method, path, data, callback, noErrCodeCheck) {
-    var options;
     var callbackSent = false;
+    var options = {
+        host: 'localhost',
+        port: settings.port.business,
+        method: method,
+        path: path
+    };
     if (method == 'POST')
-        options = {
-            host: 'localhost',
-            port: settings.port.business,
-            method: method,
-            path: path,
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
+        options['headers'] = {
+            'Content-Type': 'application/x-www-form-urlencoded'
         };
-    else
-        options = {
-            host: 'localhost',
-            port: settings.port.business,
-            method: method,
-            path: path
-        };
+
 
     var http = require('http');
     var responseData = '';

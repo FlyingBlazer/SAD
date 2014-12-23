@@ -17,30 +17,37 @@ block breadcrumb
 block site-content
     .container
         #site-content.row
-            .left-content.col-lg-6.col-md-6.col-sm-6.col-xs-12
+            .left-content.col-sm-6
                 form.form-login(role="form", action="/account/login", name="postLoginMessage", method="post")
-                    div.text-center
-                        h2 登 录
-                    .alert.alert-warning.alert-dismissible.hidden
-                        button.close(type="button", data-dismiss="alert")
-                            span ×
-                        strong.alert-message #{errorMessage}
-                    input#username.input-lg.form-control(type="text", name="username", placeholder="用户名", required, autofocus)
-                    input#password.input-lg.form-control(type="password", name="password", placeholder="密码", required)
-                    .checkbox
-                        label
-                            input(type="checkbox", value="remember-me")
-                            | 记住我
+                    .main-content
+                        if errorMessage && errorMessage != ' '
+                            .alert.alert-warning.alert-dismissible.hidden
+                                strong.alert-message #{errorMessage}
+                        else
+                            .text-center
+                                h3 登录账号
+                        input#username.input-lg.form-control(type="text", name="username", placeholder="用户名", required, autofocus)
+                        input#password.input-lg.form-control(type="password", name="password", placeholder="密码", required)
+                        .checkbox
+                            label
+                                input(type="checkbox", value="remember-me")
+                                | 记住我
                     button.btn.btn-lg.btn-primary.btn-block(type="submit") 登录
-
-            .right-content.col-lg-6.col-md-6.col-sm-6.col-xs-12
-                div.text-center
-                    h2 还没有账号？
-                    h2 快加入SRF！
-                h4.text-center 全国各大医院聚集
-                h4.text-center 顶尖专家在线挂号
-                h4.text-center 便捷省心的挂号体验
-                a.btn.btn-lg.btn-success.btn-block(href="/account/register") 注册
+            .right-content.col-sm-6
+                .join-now
+                    .main-content.text-center
+                        h3 现在加入
+                        ul
+                            li
+                                i.fa.fa-check
+                                span 全国各大医院聚集
+                            li
+                                i.fa.fa-check
+                                span 顶尖专家在线挂号
+                            li
+                                i.fa.fa-check
+                                span 便捷省心的挂号体验
+                    a.btn.btn-lg.btn-success.btn-block(href="/account/register") 注册
 
     script.
 
