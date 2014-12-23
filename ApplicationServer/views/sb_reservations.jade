@@ -44,6 +44,7 @@ block content
             var status_content;
             var button_disable;
             var passtime=false;
+            var isCancel=false;
             var status=$(this).data('id').toString();
             if(status[2]=='2'){
 
@@ -59,6 +60,11 @@ block content
                button_disable=true;
                passtime=true;
             }
+            if(status[5]=='1'){
+               status_content='已取消';
+               button_disable=true;
+               isCancel=true;
+            }
 
             $(this).text(status_content);
             var button='#'+$(this).data('flag');
@@ -68,6 +74,9 @@ block content
                if (passtime)
                {
                   $(button).text("已超时");
+               }
+               if (isCancel){
+                  $(button).text("已取消");
                }
                $(button).addClass("disabled-button");
 
