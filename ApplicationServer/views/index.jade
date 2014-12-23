@@ -29,9 +29,9 @@ html
                     #navbar-collapse.collapse.navbar-collapse
                         if username
                             ul.nav.navbar-nav.navbar-right
-                                li: a(href="#") #{username}
+                                li: a(href="/account/manage/info") #{username}
                                 li: a(href="/account/manage/info") 个人中心
-                                li: a(href="/account/manage/reservation") 预约单
+                                li: a(href="/account/manage/reservation") 预约列表
                                 li: a(href="/account/logout") 退出
                         else
                             ul.nav.navbar-nav.navbar-right
@@ -239,12 +239,14 @@ html
                         p 国际领先的移动医疗服务平台
                         p &copy; 2014 SRF Working Group
                     .ft-alt-notes
-                        p VERSION: 0.9.0 rev #634
+                        p VERSION: 0.9.3 rev #788
                 .col-sm-3
                     h2.pull-right.site-ft-title SRF 挂号预约平台
         script.
             $(function () {
                 $('#search-button').click(function () {
-                    window.location.href = '/search/' + $('#search-field').val();
+                    var searchText = $('#search-field').val();
+                    if (!empty(searchText))
+                        window.location.href = '/search/' + $('#search-field').val();
                 });
             });

@@ -145,6 +145,7 @@ block site-content
                 var hashed = hex_md5($('.new-password').val());
                 $('.new-password').val(hashed);
                 $('.confirm-new-password').val(hashed);
+                $('.old-password').val(hex_md5($('.old-password').val()));
                 return true;
             });
         });
