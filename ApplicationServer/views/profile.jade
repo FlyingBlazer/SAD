@@ -58,7 +58,10 @@ block append scripts
                 $('#errordiv').hide();
             }
 
-            $("#account_info").click(function (){
+            $(".account_info").click(function (){
+                $('#errordiv').hide();
+            });
+            $(".change_info").click(function (){
                 $('#errordiv').hide();
             });
         });
@@ -71,9 +74,9 @@ block right_block
             .meta: h1 个人中心
         ul.nav.nav-tabs(role='tablist')
             li.active(role='presentation')
-                a(href='#account_info', role='tab', data-toggle='tab',id='account_info') 账号信息
+                a(href='#account_info', role='tab', data-toggle='tab',class='account_info') 账号信息
             li(role='presentation')
-                a(href='#change_info', role='tab', data-toggle='tab') 修改信息
+                a(href='#change_info', role='tab', data-toggle='tab',class='change_info') 修改信息
         div#errordiv.errordiv
             span(id='errorMessageSpan')
         div.tab-content

@@ -11,28 +11,11 @@
     float: left;
     width: 175px;
 }
-.gi-order {
-    background-position: 0 0;
-    width: 14px;
-}
-.gi-plus {
-    background:  no-repeat scroll 0 0 rgba(0, 0, 0, 0);
-}
-.gi2 {
-    background:  no-repeat scroll 0 0 rgba(0, 0, 0, 0);
-    display: inline-block;
-    height: 16px;
-    overflow: hidden;
-    vertical-align: middle;
-    width: 16px;
-}
-.gi-order:hover {
-    background-position: 0 -16px;
-}
+
 #g-breadcrumb {
     font-size: 12px;
     margin: 0 auto;
-    padding: 10px 0;
+
     width: 980px;
 }
 .left-head {
@@ -58,8 +41,8 @@
 }
 
 .none-border li:hover{
-   background-color: #017ebc;
-
+    background-color: #017ebc;
+    color:#ffffff;
 }
 
 .current {
@@ -109,7 +92,5 @@
 }
 .g-container {
     margin: 0 auto 40px;
-    position: relative;
     width: 980px;
-    height:1000px;
 }
