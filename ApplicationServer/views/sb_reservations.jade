@@ -26,7 +26,7 @@ block content
                         span(class='time_span',data-time='#{item.time}')
                      td
                         span(data-id='#{item.status}',class='pay_situation')
-                     td
+                     td(class='status_td')
                         span(data-id='#{item.status}',class='status',data-flag='#{item.reservation_id}')
                      td ￥#{item.price}
                      td
@@ -44,6 +44,7 @@ block content
             var status_content;
             var button_disable;
             var passtime=false;
+            var isCancel=false;
             var status=$(this).data('id').toString();
             if(status[2]=='2'){
 
@@ -59,6 +60,11 @@ block content
                button_disable=true;
                passtime=true;
             }
+            if(status[5]=='1'){
+               status_content='已取消';
+               button_disable=true;
+               isCancel=true;
+            }
 
             $(this).text(status_content);
             var button='#'+$(this).data('flag');
@@ -68,6 +74,9 @@ block content
                if (passtime)
                {
                   $(button).text("已超时");
+               }
+               if (isCancel){
+                  $(button).text("已取消");
                }
                $(button).addClass("disabled-button");
 
@@ -96,26 +105,30 @@ block content
 
 
          $('.confirm').click(function() {
+            if(!$(this).hasClass("disabled-button")){
+               var reservationId = $(this).data('id');
+               var button=$(this);
+               $.ajax({
+                  url: 'http://#{businessServer}/hospital/reservation/' + reservationId + '/confirm',
+                  type: 'POST'
 
-            var reservationId = $(this).data('id');
-            $.ajax({
-               url: 'http://#{businessServer}/hospital/reservation/' + reservationId + '/confirm',
-               type: 'POST',
-               success:function (data){
-                  location.reload(true);
-               }
-            }).done(function(data) {
-               if (data.code == 0) {
-                  toastr.success('确认到场', '成功');
+               }).done(function(data) {
+                  if (data.code == 0) {
+                     toastr.success('确认到场', '成功');
+                     var status_td=button.parent().siblings(".status_td").children('.status');
 
-               } else {
-                  toastr.error('系统错误。错误代码：' + data.code, '失败');
-               }
-            }).error(function(jqXHR, textStatus, errorThrown) {
-               toastr.error('系统发生致命错误 ' + textStatus + '。错误信息：' + errorThrown, '失败');
-            });
+                     status_td.text("已完成");
+                     button.text("已确认到场");
+                     button.addClass("disabled-button");
 
+                  } else {
+                     toastr.error('系统错误。错误代码：' + data.code, '失败');
+                  }
+               }).error(function(jqXHR, textStatus, errorThrown) {
+                  toastr.error('系统发生致命错误 ' + textStatus + '。错误信息：' + errorThrown, '失败');
+               });
 
+            }
          });
 
          $('#example').DataTable();
