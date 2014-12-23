@@ -18,15 +18,15 @@
 }
 
 .doctor-image {
-    display: inline-block;
-    width: 200px;
-    height: 150px;
+    margin-left: 20px;
+    margin-bottom: 20px;
 }
 
 .doctor-info {
     display: inline-block;
     vertical-align: top;
     margin-left: 20px;
+    margin-bottom: 20px;
 }
 
 .doctor-info>.hospital,
@@ -42,7 +42,6 @@
 }
 
 .doctor-intro {
-    margin-top: 20px;
     border: 1px solid #eeeeee;
     padding: 15px;
 }
@@ -55,8 +54,8 @@
     margin-bottom: 40px;
 }
 
-.table>thead>tr>th,
-.table>tbody>tr>th,
-.table>tfoot>tr>th {
-    border-top: none;
-}
+/*.table>thead>tr>th,*/
+/*.table>tbody>tr>th,*/
+/*.table>tfoot>tr>th {*/
+    /*border-top: none;*/
+/*}*/
