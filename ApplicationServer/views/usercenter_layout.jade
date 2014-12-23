@@ -1,19 +1,17 @@
 extends layout
 
+block prepend stylesheets
+    link(rel='stylesheet', href='/backstage/css/tab.css', media='all')
+
 block append stylesheets
-    link(href="/stylesheets/bootstrap/css/bootstrap.min.css", rel="stylesheet", media="all")
     link(href="/stylesheets/usercenter_reservation_list.css",rel="stylesheet", media="all")
     link(href="/stylesheets/usercenter_userinfo.css",rel="stylesheet", media="all")
     link(rel='stylesheet', href='/backstage/plugins/toastr-notifications/toastr.css', media='all')
-    link(rel='stylesheet', href='/backstage/css/tab.css', media='all')
 
 block append scripts
-    script(src='/backstage/plugins/jquery/jquery-2.1.1.min.js')
     script(src='/backstage/plugins/jquery-validation/jquery.validate.min.js')
     script(src='/backstage/plugins/jquery-validation/messages_zh.js')
-    script(src='/backstage/plugins/bootstrap/bootstrap.min.js')
     script(src="/javascripts/md5.js")
-    script(src='/javascripts/jquery-2.1.1.min.js')
 
 
 block breadcrumb
