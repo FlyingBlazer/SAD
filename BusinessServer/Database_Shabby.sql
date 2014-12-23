@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2014 年 12 月 23 日 18:56
+-- 生成日期: 2014 年 12 月 23 日 19:07
 -- 服务器版本: 5.5.20
 -- PHP 版本: 5.3.10
 
@@ -83,10 +83,10 @@ CREATE TABLE IF NOT EXISTS `administrator` (
 --
 
 INSERT INTO `administrator` (`id`, `name`, `pass`, `auth`) VALUES
-(1, 'sabbyszm001', '8b6a93fbde09e3b50f675261f01c4648', 0),
-(2, 'sabbyszm002', 'dd93dd8a9dcb3e29c685806c5ffcd67b', 0),
-(3, 'sabbyszm003', 'f119097d137d58efe492d77a39376380', 0),
-(4, 'sabbyszm004', 'ed9c53a561e699e2e8a841247fbd8d1a', 0),
+(1, 'sysadmin001', '701b2cb9d875ceb6891059c10893403f', 0),
+(2, 'sysadmin002', 'f6b747623c4649bd76b88b35545807c6', 0),
+(3, 'sysadmin003', 'fa038bcafbad6415d156cae42f9aac20', 0),
+(4, 'sysadmin004', 'c5026b34e516530accd7180fc031f8f2', 0),
 (5, 'admin00000001', '6241a9defafffb0bfaa35dab1c7423d7', 1),
 (6, 'admin00000002', '72f003396fb851566dfc901e960c51e0', 1),
 (7, 'admin00000003', '0dab4f759f26d365d30b96de713e9aea', 1),
