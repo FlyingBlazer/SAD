@@ -60,10 +60,10 @@ block site-content
                 if status == "Validating"
                     .alert.alert-warning
                         strong.alert-message 您的帐号还没有通过审核，暂时无法预约。
-<<<<<<< Updated upstream
+
                 .table-responsive
                     table#timetable.table
-                        thead: tr#date
+                        tr#date
                             th 时间
                             each time in detail.time_slots
                                 th
@@ -84,30 +84,7 @@ block site-content
                                                 | 预约
                                                 br
                                                 | 余#{time.slot.morning[1] - time.slot.morning[2]}
-=======
-                table#timetable.table
-                    tr#date
-                        th
-                        each time in detail.time_slots
-                            th
-                                | #{time.date.month}/#{time.date.date}
-                                br
-                                | #{time.date.day}
-                    tr#morning
-                        td 上午
-                        each time in detail.time_slots
-                            td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}", data-day="#{time.date.day}")
-                                if time.slot.morning[0]
-                                    if time.slot.morning[2] != time.slot.morning[1]
-                                        if status == "Accepted"
-                                            a(href="#") 预约
-                                            br
-                                            | 余#{time.slot.morning[1] - time.slot.morning[2]}
->>>>>>> Stashed changes
-                                        else
-                                            | 已满
                                     else
-<<<<<<< Updated upstream
                                         | -
                         tr#afternoon
                             th 下午
@@ -123,25 +100,8 @@ block site-content
                                                 | 预约
                                                 br
                                                 | 余#{time.slot.afternoon[1] - time.slot.afternoon[2]}
-=======
                                         | 已满
-                                else
-                                    | -
-                    tr#afternoon
-                        td 下午
-                        each time in detail.time_slots
-                            td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}", data-day="#{time.date.day}")
-                                if time.slot.afternoon[0]
-                                    if time.slot.afternoon[2] != time.slot.afternoon[1]
-                                        if status == "Accepted"
-                                            a(href="#") 预约
-                                            br
-                                            | 余#{time.slot.afternoon[1] - time.slot.afternoon[2]}
->>>>>>> Stashed changes
-                                        else
-                                            | 已满
                                     else
-<<<<<<< Updated upstream
                                         | -
                         tr#evening
                             th 晚间
@@ -157,23 +117,7 @@ block site-content
                                                 | 预约
                                                 br
                                                 | 余#{time.slot.evening[1] - time.slot.evening[2]}
-=======
                                         | 已满
-                                else
-                                    | -
-                    tr#evening
-                        td 晚上
-                        each time in detail.time_slots
-                            td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}", data-day="#{time.date.day}")
-                                if time.slot.evening[0]
-                                    if time.slot.evening[2] != time.slot.evening[1]
-                                        if status == "Accepted"
-                                            a(href="#") 预约
-                                            br
-                                            | 余#{time.slot.evening[1] - time.slot.evening[2]}
->>>>>>> Stashed changes
-                                        else
-                                            | 已满
                                     else
                                         | -
 
