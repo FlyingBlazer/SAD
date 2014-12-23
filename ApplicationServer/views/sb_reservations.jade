@@ -12,7 +12,7 @@ block content
          $('.pay_situation').each(function() {
             var pay_content;
             var status=$(this).data('id');
-            console.log(status);
+
             if (status[0]=='1'&& status[1]=='1'){
                pay_content='已付款:在线支付';
             }
@@ -27,25 +27,35 @@ block content
          });
          $('.status').each(function(){
 
-            var status_content="进行中";
-            var button_disable=true;
+            var status_content;
+            var button_disable;
+            var passtime=false;
             var status=$(this).data('id');
-            if (status[2]=='0'){
-               button_disable=false;
-            }
+
             if(status[2]=='2'){
+
                status_content='已完成';
+               button_disable=true;
+            }
+            else {
+                status_content = '进行中';
+                button_disable = false;
             }
             if(status[3]=='1') {
                status_content='已超时';
                button_disable=true;
+               passtime=true;
             }
 
-            $(this).html(status_content);
+            $(this).text(status_content);
             var button='#'+$(this).data('flag');
             if(button_disable){
                $(button).disabled=true;
                $(button).text("已确认到场");
+               if (passtime)
+               {
+                  $(button).text("已超时");
+               }
                $(button).addClass("disabled-button");
 
             }
@@ -67,6 +77,7 @@ block content
                }).done(function(data) {
                   if (data.code == 0) {
                      toastr.success('确认到场', '成功');
+
                   } else {
                      toastr.error('系统错误。错误代码：' + data.code, '失败');
                   }
@@ -106,7 +117,7 @@ block content
                      td
                         span(data-id='#{item.status}',class='pay_situation')
                      td
-                        span(data-id='#{item.status}',class='status',data-flag='#{item.reservation_id}',id='status_#{item.reservation_id}')
+                        span(data-id='#{item.status}',class='status',data-flag='#{item.reservation_id}')
                      td ￥#{item.price}
                      td
                         button.button.blue-button.xs-button.delete-hospital(class='confirm',data-id='#{item.reservation_id}',id='#{item.reservation_id}') 确认到场

@@ -16,7 +16,6 @@ a {
 }
 
 .jumbotron {
-    height: 400px;
     margin-bottom: 20px;
     background: url(/images/1.png) no-repeat;
     background-size: cover;
@@ -184,13 +183,53 @@ a {
 
 .nav-tabs>li>a {
     border-radius: 0;
-    border-top-width: 2px;
+    border-top-width: 1px;
     border-bottom: none;
 }
 
 .nav-tabs>li.active>a,
 .nav-tabs>li.active>a:hover,
 .nav-tabs>li.active>a:focus {
-    border-top: 2px solid #377bee;
+    border-top: 1px solid #377bee;
     border-bottom: none;
+}
+
+@media screen and (max-width: 995px) {
+    footer .container .col-sm-3 {
+        display: none;
+    }
+    footer .container .col-sm-9 {
+        width: 100% !important;
+    }
+}
+
+@media screen and (max-width: 580px) {
+    .ft-links ul li {
+        margin-bottom: 10px;
+    }
+    .ft-links ul li a {
+        padding-left: 0;
+        padding-right: 20px;
+    }
+    .ft-links ul li a::after {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .nav-tabs li a {
+        padding: 10px 5px !important;
+    }
+}
+
+@media screen and (max-width: 380px) {
+    #all a, li.all {
+        display: none;
+    }
+    #all span {
+        display: block !important;
+    }
+    .province-link, .hospital-link {
+        padding: 6px 26px 6px 0;
+    }
 }
