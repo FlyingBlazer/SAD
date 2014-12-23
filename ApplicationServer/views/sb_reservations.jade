@@ -1,96 +1,6 @@
 extends ./sb_layout
 block content
 
-   script.
-      $(document).ready(function () {
-
-         $('.time_span').each(function(){
-            var time=$(this).data('time');
-            var array=time.split('T');
-            $(this).html(array[0]);
-         });
-         $('.pay_situation').each(function() {
-            var pay_content;
-            var status=$(this).data('id');
-
-            if (status[0]=='1'&& status[1]=='1'){
-               pay_content='已付款:在线支付';
-            }
-
-            else if(status[0]=='0'&& status[1]=='1'){
-               pay_content='已付款:现场支付';
-            }
-            else{
-               pay_content="未付款";
-            }
-            $(this).html(pay_content);
-         });
-         $('.status').each(function(){
-
-            var status_content;
-            var button_disable;
-            var passtime=false;
-            var status=$(this).data('id');
-
-            if(status[2]=='2'){
-
-               status_content='已完成';
-               button_disable=true;
-            }
-            else {
-                status_content = '进行中';
-                button_disable = false;
-            }
-            if(status[3]=='1') {
-               status_content='已超时';
-               button_disable=true;
-               passtime=true;
-            }
-
-            $(this).text(status_content);
-            var button='#'+$(this).data('flag');
-            if(button_disable){
-               $(button).disabled=true;
-               $(button).text("已确认到场");
-               if (passtime)
-               {
-                  $(button).text("已超时");
-               }
-               $(button).addClass("disabled-button");
-
-            }
-
-
-         });
-
-
-
-         $('.confirm').click(function() {
-
-               var reservationId = $(this).data('id');
-               $.ajax({
-                  url: 'http://#{businessServer}/hospital/reservation/' + reservationId + '/confirm',
-                  type: 'POST',
-                  success:function (data){
-                     location.reload(true);
-                  }
-               }).done(function(data) {
-                  if (data.code == 0) {
-                     toastr.success('确认到场', '成功');
-
-                  } else {
-                     toastr.error('系统错误。错误代码：' + data.code, '失败');
-                  }
-               }).error(function(jqXHR, textStatus, errorThrown) {
-                  toastr.error('系统发生致命错误 ' + textStatus + '。错误信息：' + errorThrown, '失败');
-               });
-
-
-         });
-
-         $('#example').DataTable();
-
-      });
    h2 预约单管理
    div
       table#example.table.table-bordered.table-striped.table-hover(cellspacing='0', width='80%')
@@ -122,3 +32,90 @@ block content
                      td
                         button.button.blue-button.xs-button.delete-hospital(class='confirm',data-id='#{item.reservation_id}',id='#{item.reservation_id}') 确认到场
 
+      script.
+         $('.time_span').each(function(){
+            var time=$(this).data('time');
+            var array=time.split('T');
+            $(this).html(array[0]);
+         });
+
+         $('.status').each(function(){
+
+            var status_content;
+            var button_disable;
+            var passtime=false;
+            var status=$(this).data('id').toString();
+            if(status[2]=='2'){
+
+               status_content='已完成';
+               button_disable=true;
+            }
+            else {
+               status_content = '进行中';
+               button_disable = false;
+            }
+            if(status[3]=='1') {
+               status_content='已超时';
+               button_disable=true;
+               passtime=true;
+            }
+
+            $(this).text(status_content);
+            var button='#'+$(this).data('flag');
+            if(button_disable){
+               $(button).disabled=true;
+               $(button).text("已确认到场");
+               if (passtime)
+               {
+                  $(button).text("已超时");
+               }
+               $(button).addClass("disabled-button");
+
+            }
+
+
+         });
+         $('.pay_situation').each(function() {
+            var pay_content;
+            var status=$(this).data('id').toString();
+
+            if (status[0]=='1'&& status[1]=='1'){
+               pay_content='已付款:在线支付';
+            }
+
+            else if(status[0]=='0'&& status[1]=='1'){
+               pay_content='已付款:现场支付';
+            }
+            else{
+               pay_content="未付款";
+            }
+            $(this).html(pay_content);
+         });
+
+
+
+
+         $('.confirm').click(function() {
+
+            var reservationId = $(this).data('id');
+            $.ajax({
+               url: 'http://#{businessServer}/hospital/reservation/' + reservationId + '/confirm',
+               type: 'POST',
+               success:function (data){
+                  location.reload(true);
+               }
+            }).done(function(data) {
+               if (data.code == 0) {
+                  toastr.success('确认到场', '成功');
+
+               } else {
+                  toastr.error('系统错误。错误代码：' + data.code, '失败');
+               }
+            }).error(function(jqXHR, textStatus, errorThrown) {
+               toastr.error('系统发生致命错误 ' + textStatus + '。错误信息：' + errorThrown, '失败');
+            });
+
+
+         });
+
+         $('#example').DataTable();
