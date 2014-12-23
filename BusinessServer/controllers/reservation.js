@@ -43,6 +43,9 @@ exports.list_h = function(req, res, next) {
                 for(var i = 0; i < data.length; i++){
                     data[i]['status_msg']=parseStatus(data[i]['status']);
                 }
+                data.forEach(function(line) {
+                    data.time = new Date(data.time).Format('yyyy-MM-dd');
+                })
                 res.json({
                     code: 0,
                     message: 'success',
