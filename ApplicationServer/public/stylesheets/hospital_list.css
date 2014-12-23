@@ -20,7 +20,8 @@
     display: inline-block;
     vertical-align: top;
     width: 120px;
-    height: auto;
+    height: 120px;
+    box-sizing: content-box;
 }
 
 .hospital .reservation {

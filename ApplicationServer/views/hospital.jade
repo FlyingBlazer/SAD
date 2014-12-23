@@ -52,9 +52,9 @@ block site-content
                     hr
                     div.departments
                         each department in departments
-                            a.department-tag(href="#") #{department.name}
-
-                    div.intro-title(style='margin-top:20px;')
+                            a.department-tag(href="#", data-toggle="tooltip", data-placement="top", title="#{department.description}")
+                                | #{department.name}
+                    div.intro-title
                         h4 医院地图
                     hr
                     div#hospital-map
@@ -128,13 +128,13 @@ block site-content
                             data-working5="#{doctor.working[4]}", data-working6="#{doctor.working[5]}", data-working7="#{doctor.working[6]}")
                                 div.row
                                     img(src="/pictures/#{doctor.photo_url}").image.col-lg-2.col-md-2.col-sm-3.col-xs-3
-                                    div.doctor-info.col-lg-1.col-md-2.col-sm-6.col-xs-6
+                                    div.doctor-info.col-lg-1.col-md-2.col-sm-8.col-xs-6
                                         div.name
                                             a(href="/concierge/reserve/#{detail.id}/#{department_id}/#{doctor.id}") #{doctor.name}
                                         div.title #{doctor.title}
                                         div.department #{doctor.department}
-                                    div.doctor-intro.col-lg-7.col-md-6 #{doctor.description}
-                                    div.reservation.col-lg-1.col-md-1.col-sm-3.col-xs-3
+                                    div.doctor-intro.col-lg-8.col-md-7 #{doctor.description}
+                                    div.reservation.col-lg-1.col-md-1.col-sm-1.col-xs-1
                                         div.vertical-middle-table
                                             div.vertical-middle-cell
                                                 a.btn.btn-primary(href="/concierge/reserve/#{detail.id}/#{department_id}/#{doctor.id}") 挂号
@@ -152,6 +152,12 @@ block site-content
             script.
 
                 $(document).ready(function() {
+
+                    $(".doctor .doctor-intro").each(function() {
+                        $(this).html($(this).html().replace("&lt;br&gt;", "").replace("&lt;br&gt;", ""));
+                    })
+
+                    $("[data-toggle=\"tooltip\"]").tooltip();
 
                     var selectedDepartment = "all";
                     var selectedTitle = "all";

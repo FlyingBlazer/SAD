@@ -60,6 +60,16 @@
     margin-bottom: 40px;
 }
 
+.hospital-intro>.departments {
+    margin-bottom: 20px;
+}
+
+.tooltip-inner {
+    padding: 8px 16px;
+    text-align: justify;
+    font-size: 14px;
+}
+
 .hospital-intro>.departments>.department-tag {
     display: inline-block;
     margin-left: 10px;
@@ -134,8 +144,8 @@ select {
 .doctor .image {
     display: inline-block;
     vertical-align: top;
-    width: 100px;
-    height: auto;
+    width: auto;
+    max-height: 100px;
 }
 
 .doctor .doctor-info {
@@ -160,7 +170,7 @@ select {
 
 @media (min-width: 992px) and (max-width: 1200px) {
     .doctor .reservation {
-        height: 150px;
+        height: 125px;
     }
 }
 
