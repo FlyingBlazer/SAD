@@ -153,7 +153,15 @@ block append scripts
                 doctor: $('#data-doctor').data('doctor'),
                 price: $('#data-price').data('price')
             };
-            var code = base64.encode(JSON.stringify(info));
-            $('#print-rg').attr('href', '/service/certificate/registry/' + code);
-            $('#print-rv').attr('href', '/service/certificate/reservation/' + code);
+
+            //var code = base64.encode(JSON.stringify(info));
+
+            var code = JSON.stringify(info), hex, result = '', ix;
+            for (ix = 0; ix < code.length; ++ix) {
+                hex = code.charCodeAt(ix).toString(16);
+                result += ('000' + hex).slice(-4);
+            }
+
+            $('#print-rg').attr('href', '/service/certificate/registry/' + result);
+            $('#print-rv').attr('href', '/service/certificate/reservation/' + result);
         });

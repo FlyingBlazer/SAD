@@ -726,7 +726,11 @@ exports.cancel = function(request, response) {
 
 exports.reservationCertificate = function(request, response) {
     var key = request.params.key;
-    var obj = JSON.parse(base64.decode(key));
+    var back = '', j, hexes = key.match(/.{1,4}/g) || [];
+    for (j = 0; j < hexes.length; ++j) {
+        back += String.fromCharCode(parseInt(hexes[j], 16));
+    }
+    var obj = JSON.parse(back);
     var gender = obj.sid.length == 17 ? (obj.sid[16] % 2 == 0 ? '女' : '男') : '男';
     var age = 2014 - parseInt(obj.sid.substr(6, 4));
     var now = new Date();
@@ -751,7 +755,11 @@ exports.reservationCertificate = function(request, response) {
 
 exports.registryCertificate = function(request, response) {
     var key = request.params.key;
-    var obj = JSON.parse(base64.decode(key));
+    var back = '', j, hexes = key.match(/.{1,4}/g) || [];
+    for (j = 0; j < hexes.length; ++j) {
+        back += String.fromCharCode(parseInt(hexes[j], 16));
+    }
+    var obj = JSON.parse(back);
     var gender = obj.sid.length == 17 ? (obj.sid[16] % 2 == 0 ? '女' : '男') : '男';
     var age = 2014 - parseInt(obj.sid.substr(6, 4));
     var now = new Date();
