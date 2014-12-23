@@ -2,19 +2,20 @@ extends ./sb_layout
 block content
    script.
       $(document).ready(function() {
-         $('#example').DataTable();
+         var data_table=$('#example').DataTable();
          $('.accept_button').click(function() {
 
             var userId = $(this).data('id');
+            var tr = $(this).parents('tr');
             $.ajax({
                url: 'http://#{businessServer}/user/check/' + userId + '/approve',
-               type: 'POST',
-               success:function (data){
-                  location.reload(true);
-               }
+               type: 'POST'
+
             }).done(function(data) {
                if (data.code == 0) {
                   toastr.success('确认审核', '成功');
+                  data_table.row(tr).remove().draw();
+
                } else {
                   toastr.error('系统错误。错误代码：' + data.code, '失败');
                }
