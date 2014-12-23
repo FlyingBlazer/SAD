@@ -54,8 +54,8 @@
     margin-bottom: 40px;
 }
 
-/*.table>thead>tr>th,*/
-/*.table>tbody>tr>th,*/
-/*.table>tfoot>tr>th {*/
-    /*border-top: none;*/
-/*}*/
+.table>thead>tr>th,
+.table>tbody>tr>th,
+.table>tfoot>tr>th {
+    border-top: none;
+}

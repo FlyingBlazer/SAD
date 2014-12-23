@@ -60,9 +60,10 @@ block site-content
                 if status == "Validating"
                     .alert.alert-warning
                         strong.alert-message 您的帐号还没有通过审核，暂时无法预约。
+
                 .table-responsive
                     table#timetable.table
-                        thead: tr#date
+                        tr#date
                             th 时间
                             each time in detail.time_slots
                                 th
@@ -83,8 +84,6 @@ block site-content
                                                 | 预约
                                                 br
                                                 | 余#{time.slot.morning[1] - time.slot.morning[2]}
-                                        else
-                                            | 已满
                                     else
                                         | -
                         tr#afternoon
@@ -101,8 +100,7 @@ block site-content
                                                 | 预约
                                                 br
                                                 | 余#{time.slot.afternoon[1] - time.slot.afternoon[2]}
-                                        else
-                                            | 已满
+                                        | 已满
                                     else
                                         | -
                         tr#evening
@@ -119,8 +117,7 @@ block site-content
                                                 | 预约
                                                 br
                                                 | 余#{time.slot.evening[1] - time.slot.evening[2]}
-                                        else
-                                            | 已满
+                                        | 已满
                                     else
                                         | -
 
