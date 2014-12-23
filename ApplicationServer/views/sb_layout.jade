@@ -35,7 +35,10 @@ html
          div.inner
             h1.site-title
                a.site-title-link(href='/backstage') SRF 后台管理系统
-            span(style="color: #aaa") 当前用户：#{username} 所属医院：#{hospitalName}
+            if hospitalId == 0
+               span(style='color: #aaa') 当前用户：#{username} (系统管理员)
+            else
+               span(style="color: #aaa") 当前用户：#{username} 所属医院：#{hospitalName}
             a.log-out(href='/backstage/logout', title='登出')
                i.fa.fa-sign-out
                | &nbsp;登出
@@ -46,27 +49,29 @@ html
                block content
          #secondary.site-sidebar
             ul.site-navigation
+               if hospitalId == 0
+                  li.module-navigation-item
+                     a(href='/backstage/users')
+                        i.fa.fa-lg.fa-fw.fa-users
+                        | &nbsp;用户审核
+                  li.module-navigation-item
+                     a(href='/backstage/manage-hospitals')
+                        i.fa.fa-lg.fa-fw.fa-plus-square
+                        | &nbsp;医院管理
+               else
+                  li.module-navigation-item
+                     a(href='/backstage/departments')
+                        i.fa.fa-lg.fa-fw.fa-hospital-o
+                        | &nbsp;科室管理
+                  li.module-navigation-item
+                     a(href='/backstage/doctors')
+                        i.fa.fa-lg.fa-fw.fa-user-md
+                        | &nbsp;医生管理
+                  li.module-navigation-item
+                     a(href='/backstage/reservations')
+                        i.fa.fa-lg.fa-fw.fa-table
+                        | &nbsp;预约管理
 
-               li.module-navigation-item
-                  a(href='/backstage/users')
-                     i.fa.fa-lg.fa-fw.fa-users
-                     | &nbsp;用户审核
-               li.module-navigation-item
-                  a(href='/backstage/manage-hospitals')
-                     i.fa.fa-lg.fa-fw.fa-plus-square
-                     | &nbsp;医院管理
-               li.module-navigation-item
-                  a(href='/backstage/departments')
-                     i.fa.fa-lg.fa-fw.fa-hospital-o
-                     | &nbsp;科室管理
-               li.module-navigation-item
-                  a(href='/backstage/doctors')
-                     i.fa.fa-lg.fa-fw.fa-user-md
-                     | &nbsp;医生管理
-               li.module-navigation-item
-                  a(href='/backstage/reservations')
-                     i.fa.fa-lg.fa-fw.fa-table
-                     | &nbsp;预约管理
                li.module-navigation-item
                   a(href='/backstage/account')
                      i.fa.fa-lg.fa-fw.fa-lock

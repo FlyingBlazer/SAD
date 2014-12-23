@@ -10,7 +10,7 @@ block content
 
    div.tab-content
       div#panel-manage.tab-pane.fade.in.active
-         h3 现有医院管理
+         h3 现有科室管理
          table#department-table.table.table-striped.table-bordered.table-hover
             thead
                tr
@@ -30,7 +30,7 @@ block content
                         a.x-editable(href='#', data-id='#{department.id}')= department.description
                      td.operation
                         button.button.xs-button.red-button.delete-department(data-id='#{department.id}', data-name='#{department.name}')
-                           i.fa.fa-trash 删除
+                           i.fa.fa-trash &nbsp;删除
 
          script.
             $('#panel-manage .description a.x-editable').each(function(index, element) {
@@ -62,7 +62,26 @@ block content
                });
             });
 
-            var dt = $('#department-table').DataTable();
+            var dt = $('#department-table').DataTable({
+               language: {
+                  "sProcessing":   "处理中...",
+                  "sLengthMenu":   "每页 _MENU_ 项结果",
+                  "sZeroRecords":  "没有匹配结果",
+                  "sInfo":         "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                  "sInfoEmpty":    "显示第 0 至 0 项结果，共 0 项",
+                  "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                  "sInfoPostFix":  "",
+                  "sSearch":       "搜索:",
+                  "sUrl":          "",
+                  "sEmptyTable":     "表中数据为空",
+                  "sLoadingRecords": "载入中...",
+                  "sInfoThousands":  ",",
+                  "oAria": {
+                     "sSortAscending":  ": 以升序排列此列",
+                     "sSortDescending": ": 以降序排列此列"
+                  }
+               }
+            });
             $('.delete-department').click(function() {
                var tr = $(this).parents('tr');
                if (confirm('是否确定删除' + $(this).data('name') + '？')) {
