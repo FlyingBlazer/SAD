@@ -12,6 +12,10 @@ a {
     background-color: #f8f8f8;
 }
 
+* {
+    outline: none !important;
+}
+
 .navbar {
     box-shadow: none;
     margin-left: auto;
