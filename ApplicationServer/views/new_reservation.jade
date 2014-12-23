@@ -4,44 +4,48 @@ block title
     title 新的预约单
 block site-content
     link(href="/stylesheets/reservation.css", rel="stylesheet", media="all")
-    .main-block: form(method='POST', action='/concierge/reserve-submit', onsubmit='return confirm()')
+    .main-block.container: form(method='POST', action='/concierge/reserve-submit', onsubmit='return confirm()')
         input(type='hidden', name='hospitalId', value='#{detail.hospitalId}')
         input(type='hidden', name='departmentId', value='#{detail.departmentId}')
         input(type='hidden', name='doctorId', value='#{detail.doctorId}')
         input(type='hidden', name='resvDate', value='#{detail.date}')
         input(type='hidden', name='resvTime', value='#{detail.time}')
         input(type='hidden', name='day', value='#{detail.day}')
-        .info
+        .info.row
             .title 确认预约订单信息
-            table.table
-                thead: tr
-                    th: p 医生信息
-                    th: p 门诊类型
-                    th: p 就诊时间
-                    th: p 挂号费
-                tbody: tr
-                    td: .doc-info: dl
+            .col-md-5
+                p.ttitle.text-center 医生信息
+                .doc-info.rcontent
+                    dl
                         dt
                             a(href="/concierge/reserve/#{detail.hospitalId}/#{detail.departmentId}/#{detail.doctorId}",target="_blank") #{detail.doctor}
                             span  #{detail.doctorTitle}
                         dd
                             p: a(href="/concierge/reserve/#{detail.hospitalId}",target="_blank") #{detail.hospital}
                             p: a #{detail.department}
-                    td 专家门诊
-                    - switch (detail.time) {case 'morning': period='上午';break; case 'afternoon': period='下午';break; case 'evening': period='晚上';break;}
-                    td #{detail.date} #{period}
-                    td.money ￥#{detail.price}
-            p.tips 温馨提醒：SRF免费提供预约挂号服务，实际挂号费由医院收取，请放心使用。
+            .col-md-2
+                p.ttitle.text-center 门诊类型
+                p.rcontent.text-center 专家门诊
+            .col-md-3
+                p.ttitle.text-center 就诊时间
+                - switch (detail.time) {case 'morning': period='上午';break; case 'afternoon': period='下午';break; case 'evening': period='晚上';break;}
+                p.rcontent.text-center #{detail.date} #{period}
+            .col-md-2
+                p.ttitle.text-center 挂号费
+                p.money.text-center.rcontent ￥#{detail.price}
+
+        p.tips 温馨提醒：SRF免费提供预约挂号服务，实际挂号费由医院收取，请放心使用。
+
         .bookinfo
             div
                 .title 就诊人信息
                 .user-boxes
                     dl.on
-                        dt #{detail.userRealName}
+                        dt 姓名：#{detail.userRealName}
                         dd
-                            | #{detail.userSocialId}
+                            | 身份证号：#{detail.userSocialId}
                             br
-                            | #{detail.userTelephone}
+                            | 联系电话：#{detail.userTelephone}
             .verify: .knowit: label
                 input#check(type='checkbox')
                 |  我已了解：如遇专家停诊，您的订单会被取消，我们会以短信通知到您，请保持手机畅通，并及时关注订单状态。
