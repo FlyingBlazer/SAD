@@ -313,9 +313,12 @@ var fireRequest = function(method, path, data, callback, noErrCodeCheck) {
             if (srcObject) {
                 if (srcObject.code != 0) {
                     logError('Warning: Unsuccessful response returned from business server.',
+                        ' > Request Method: ' + method,
                         ' > Request URL: ' + path,
+                        ' > Request Data: ' + data,
                         ' > Server response: ' + responseData);
                 }
+                callbackSent = true;
                 callback(srcObject);
             }
         });
@@ -339,7 +342,10 @@ var fireRequest = function(method, path, data, callback, noErrCodeCheck) {
             callbackSent = true;
             callback(null);
             logError('Request timed out when requesting Business server.',
-                ' > Request URL: ' + path);
+                ' > Request Method: ' + method,
+                ' > Request URL: ' + path,
+                ' > Request Data: ' + data,
+                ' > Server response: ' + responseData);
         }
     }, 5000);
 };
@@ -521,6 +527,7 @@ exports.showDoctor = function(request, response) {
             if (res.code != 0) {
                 code = res.code;
             }
+            console.log(status);
             response.render('doctor', {
                 code: code,
                 message: res.message,

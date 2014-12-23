@@ -22,7 +22,7 @@ block site-content
                 div.alert.alert-info.hidden 没有找到符合条件的结果
                 each hospital in list
                     div.hospital
-                        img(src="/images/3.jpg").image
+                        img(src="/pictures/#{hospital.photo}").image
                         div.hospital-info
                             div.name
                                 a(href="/concierge/reserve/#{hospital.id}") #{hospital.name}

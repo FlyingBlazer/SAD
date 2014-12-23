@@ -41,7 +41,7 @@ block site-content
                 div.intro-title
                     h4 预约时间表
                 hr
-                if status == "validating"
+                if status == "Validating"
                     .alert.alert-warning.alert-dismissible
                         button.close(type="button", data-dismiss="alert")
                             span ×
@@ -63,7 +63,7 @@ block site-content
                             td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}", data-day="#{time.date.day}")
                                 if time.slot.morning[0]
                                     if time.slot.morning[2] != time.slot.morning[1]
-                                        if status != "validating"
+                                        if status != "Validating"
                                             a(href="#") 预约
                                             br
                                             | 余#{time.slot.morning[1] - time.slot.morning[2]}
@@ -80,7 +80,7 @@ block site-content
                             td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}", data-day="#{time.date.day}")
                                 if time.slot.afternoon[0]
                                     if time.slot.afternoon[2] != time.slot.afternoon[1]
-                                        if status != "validating"
+                                        if status != "Validating"
                                             a(href="#") 预约
                                             br
                                             | 余#{time.slot.afternoon[1] - time.slot.afternoon[2]}
@@ -97,7 +97,7 @@ block site-content
                             td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}", data-day="#{time.date.day}")
                                 if time.slot.evening[0]
                                     if time.slot.evening[2] != time.slot.evening[1]
-                                        if status != "validating"
+                                        if status != "Validating"
                                             a(href="#") 预约
                                             br
                                             | 余#{time.slot.evening[1] - time.slot.evening[2]}
