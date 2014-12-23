@@ -71,6 +71,26 @@ block site-content
                         span.select-item-info
                         span.select-item-close
                             i.fa.fa-close
+                    span#select-item-date.select-item.hidden
+                        span.select-item-info
+                        span.select-item-close
+                            i.fa.fa-close
+
+                span#select-date-title 时间
+                select#select-date
+                    option(value=1, selected) 1
+                    option(value=2) 2
+                    option(value=3) 3
+                    option(value=4) 4
+                    option(value=5) 5
+                    option(value=6) 6
+                    option(value=7) 7
+                select#select-time
+                    option(value="all", selected) 不限
+                    option(value="morning") 上午
+                    option(value="afternoon") 下午
+                    option(value="evening") 晚间
+                button#apply-selection.btn.btn-primary.btn-xs 过滤时间
 
                 table.table#select-department
                     td.table-header(rowspan=100) 科室
@@ -103,9 +123,10 @@ block site-content
 
                 div.doctor-list
                     each department, department_id in doctors
-                        //div.department(data-name="#{department[0].department}")
                         each doctor in department
-                            div.doctor(data-department="#{doctor.department}", data-title="#{doctor.title}")
+                            div.doctor(data-department="#{doctor.department}", data-title="#{doctor.title}", data-working1="#{doctor.working[0]}",
+                            data-working2="#{doctor.working[1]}", data-working3="#{doctor.working[2]}", data-working4="#{doctor.working[3]}",
+                            data-working5="#{doctor.working[4]}", data-working6="#{doctor.working[5]}", data-working7="#{doctor.working[6]}")
                                 img(src="/pictures/#{doctor.photo_url}").image
                                 div.doctor-info
                                     div.name
@@ -132,9 +153,19 @@ block site-content
 
                     var selectedDepartment = "all";
                     var selectedTitle = "all";
+                    var selectedDate = "all";
+                    var selectedTime = "all";
                     var pageCount = 1;
                     var currentPage = 1;
                     updateAll();
+
+                    for (var i = 1; i <= 7; i++) {
+                        var date = new Date();
+                        date.setDate(date.getDate() + i);
+                        var day = ["日", "一", "二", "三", "四", "五", "六"];
+                        $("#select-date option:nth-child(" + i + ")").html(date.getFullYear() + "年" + (date.getMonth() + 1) +
+                                "月" + date.getDate() + "日 " + "星期" + day[date.getDay()]);
+                    }
 
                     if (typeof BMap !== 'undefined') {
                         var map = new BMap.Map("hospital-map");
@@ -169,25 +200,89 @@ block site-content
                             } else {
                                 $(this).addClass("hidden");
                             }
+                            if (selectedDate != "all") {
+                                var working = $(this).data("working" + selectedDate);
+                                if (selectedTime == "all") {
+                                    if (working != 0) {
+                                        $(this).removeClass("hidden");
+                                    } else {
+                                        $(this).addClass("hidden");
+                                    }
+                                }
+                                if (selectedTime == "morning") {
+                                    switch (working) {
+                                        case 1:
+                                        case 3:
+                                        case 5:
+                                        case 7:
+                                            $(this).removeClass("hidden");
+                                            break;
+                                        default:
+                                            $(this).addClass("hidden");
+                                            break;
+                                    }
+                                }
+                                if (selectedTime == "afternoon") {
+                                    switch (working) {
+                                        case 2:
+                                        case 3:
+                                        case 6:
+                                        case 7:
+                                            $(this).removeClass("hidden");
+                                            break;
+                                        default:
+                                            $(this).addClass("hidden");
+                                            break;
+                                    }
+                                }
+                                if (selectedTime == "evening") {
+                                    switch (working) {
+                                        case 4:
+                                        case 5:
+                                        case 6:
+                                        case 7:
+                                            $(this).removeClass("hidden");
+                                            break;
+                                        default:
+                                            $(this).addClass("hidden");
+                                            break;
+                                    }
+                                }
+                            }
                         });
                     }
 
                     function updateSelectionItem() {
                         $("#select-item-department>.select-item-info").html(selectedDepartment);
                         $("#select-item-title>.select-item-info").html(selectedTitle);
-                        if (selectedDepartment == "all" && selectedTitle == "all") {
+                        if (selectedDate != "all") {
+                            if (selectedTime == "all") {
+                                $("#select-item-date>.select-item-info").html($("#select-date option:nth-child(" + selectedDate + ")").html());
+                            } else {
+                                var time = {"morning": "上午", "afternoon": "下午", "evening": "晚间"};
+                                $("#select-item-date>.select-item-info").html($("#select-date option:nth-child(" + selectedDate + ")").html() +
+                                " " + time[selectedTime]);
+                            }
+                        }
+                        if (selectedDepartment == "all" && selectedTitle == "all" && selectedDate == "all") {
                             $("#select").addClass("hidden");
-                        } else if (selectedDepartment == "all") {
+                        } else {
+                            $("#select").removeClass("hidden");
+                        }
+                        if (selectedDepartment == "all") {
                             $("#select-item-department").addClass("hidden");
-                            $("#select-item-title").removeClass("hidden");
-                            $("#select").removeClass("hidden");
-                        } else if (selectedTitle == "all") {
-                            $("#select-item-title").addClass("hidden");
-                            $("#select-item-department").removeClass("hidden");
-                            $("#select").removeClass("hidden");
                         } else {
                             $("#select-item-department").removeClass("hidden");
+                        }
+                        if (selectedTitle == "all") {
+                            $("#select-item-title").addClass("hidden");
+                        } else {
                             $("#select-item-title").removeClass("hidden");
+                        }
+                        if (selectedDate == "all") {
+                            $("#select-item-date").addClass("hidden");
+                        } else {
+                            $("#select-item-date").removeClass("hidden");
                         }
                     }
 
@@ -204,26 +299,6 @@ block site-content
                             $(".empty").addClass("hidden");
                         }
                     }
-
-                    $("#select-department a").click(function() {
-                        selectedDepartment = $(this).html();
-                        updateAll();
-                    });
-
-                    $("#select-title a").click(function () {
-                        selectedTitle = $(this).html();
-                        updateAll();
-                    });
-
-                    $("#select-item-department>.select-item-close").click(function () {
-                        selectedDepartment = "all";
-                        updateAll();
-                    });
-
-                    $("#select-item-title>.select-item-close").click(function () {
-                        selectedTitle = "all";
-                        updateAll();
-                    });
 
                     function updatePageCount() {
                         var doctorCount = 0;
@@ -252,7 +327,7 @@ block site-content
                     }
 
                     function updatePage() {
-                        $(".doctor").each(function (i) {
+                        $(".doctor").each(function () {
                             $(this).addClass("hidden");
                         });
                         for (var i = (currentPage - 1) * 10 + 1; i <= currentPage * 10; i++) {
@@ -272,6 +347,46 @@ block site-content
                         }
                     }
 
+                    function updateAll() {
+                        updateSelection();
+                        updateSelectionItem()
+                        checkEmpty();
+                        updatePageCount();
+                        updatePage();
+                    }
+
+                    $("#select-department a").click(function() {
+                        selectedDepartment = $(this).html();
+                        updateAll();
+                    });
+
+                    $("#select-title a").click(function () {
+                        selectedTitle = $(this).html();
+                        updateAll();
+                    });
+
+                    $("#select-item-department>.select-item-close").click(function () {
+                        selectedDepartment = "all";
+                        updateAll();
+                    });
+
+                    $("#select-item-title>.select-item-close").click(function () {
+                        selectedTitle = "all";
+                        updateAll();
+                    });
+
+                    $("#select-item-date>.select-item-close").click(function () {
+                        selectedDate = "all";
+                        selectedTime = "all";
+                        updateAll();
+                    });
+
+                    $("#apply-selection").click(function() {
+                        selectedDate = $("#select-date").val();
+                        selectedTime = $("#select-time").val();
+                        updateAll();
+                    })
+
                     $(".pagination").on("click", "li.page-number>a", function() {
                         currentPage = $(this).html();
                         updatePage();
@@ -279,7 +394,7 @@ block site-content
 
                     $(".pagination>li.prev-page>a").click(function() {
                         if (currentPage > 1) {
-                            currentPage = currentPage - 1;
+                            currentPage--;
                         } else {
                             return;
                         }
@@ -288,18 +403,11 @@ block site-content
 
                     $(".pagination>li.next-page>a").click(function() {
                         if (currentPage < pageCount) {
-                            currentPage = currentPage + 1;
+                            currentPage++;
                         } else {
                             return;
                         }
                         updatePage();
                     });
 
-                    function updateAll() {
-                        updateSelection();
-                        updateSelectionItem()
-                        checkEmpty();
-                        updatePageCount();
-                        updatePage();
-                    }
                 });
