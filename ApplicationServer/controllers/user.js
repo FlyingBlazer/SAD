@@ -298,6 +298,7 @@ exports.showUserInformation = function (request, response) {
         //设置用户名、信用等级
             getUserInfo(userId, function (result) {
                 response.render('profile', {
+                    code: result.code,
                     username: result.username,
                     status: result.status,
                     sid: result.sid,
@@ -307,9 +308,6 @@ exports.showUserInformation = function (request, response) {
                     credit: result.credit,
                     errorMessage: errorMessage
                 });
-            }, function (errorMessage) {
-                //TODO 404页面
-
             });
     }
 };
