@@ -19,8 +19,8 @@
 
 .doctor-image {
     display: inline-block;
-    width: 200px;
-    height: 150px;
+    width: 150px;
+    height: auto;
 }
 
 .doctor-info {
