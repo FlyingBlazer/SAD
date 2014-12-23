@@ -30,7 +30,8 @@ exports.list = function(req, res, next) {
                     address: hospital.addr,
                     telephone: hospital.tel,
                     website: hospital.site,
-                    description: hospital.info
+                    description: hospital.info,
+                    photo: hospital.photo
                 });
                 finish();
             });
@@ -66,7 +67,8 @@ exports.detail = function(req, res, next) {
                 address: result.addr,
                 telephone: result.tel,
                 website: result.site,
-                description: result.info
+                description: result.info,
+                photo: result.photo
             });
         });
     });
@@ -84,7 +86,8 @@ exports.add = function(req, res, next) {
             tel: req.body.telephone,
             site: req.body.website,
             info: req.body.description,
-            rating_id: rating.id
+            rating_id: rating.id,
+            photo: req.body.photo
         }, function(err, hospital) {
             if(err) throw err;
             var supplement = 8 - hospital.id.toString().length;

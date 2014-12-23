@@ -3454,6 +3454,7 @@ CREATE TABLE IF NOT EXISTS `hospital` (
   `tel` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `info` text COLLATE utf8_bin NOT NULL,
   `site` varchar(200) COLLATE utf8_bin DEFAULT NULL,
+  `photo` varchar(50) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   FULLTEXT KEY `name_2` (`name`) WITH PARSER mysqlcft

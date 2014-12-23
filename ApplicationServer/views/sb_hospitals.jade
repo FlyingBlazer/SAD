@@ -1,4 +1,38 @@
 extends ./sb_layout
+
+block append head
+   style.
+      .operation {
+         width: 60px;
+      }
+      .level {
+         width: 60px;
+      }
+      .ajax-file-upload-filename {
+         display: none;
+      }
+      .ajax-file-upload {
+         background-color: #35aa47;
+         padding: 3px 14px;
+         font-size: 14px;
+         color: #ffffff;
+         display: inline-block;
+         border-radius: 3px;
+         transition: all .3s ease;
+      }
+      .ajax-file-upload,
+      .ajax-file-upload form,
+      .ajax-file-upload input {
+         cursor: pointer !important;
+      }
+      .ajax-file-upload:hover {
+         background-color: #2b8b3a;
+      }
+      .ajax-file-upload-preview {
+         max-height: 200px;
+         width: auto;
+      }
+
 block content
    h2 医院管理
 
@@ -120,12 +154,21 @@ block content
 
       div#panel-add.tab-pane.fade
          h3 添加医院
-         form(method='post', action='/backstage/api/add/hospitals', id='add-hospitals')
+
+         form
             .form-group
                .prompt
-                  label(for='name') 医院名称
+                  label(for='name-alt') 医院名称
                .control
-                  input#name.form-control(name='name', required, type='text')
+                  input#name-alt.form-control(name='name-alt', type='text')
+
+            .form-group
+               .prompt
+                  label(for='picture') 照片
+               .control
+                  #fileuploader 上传照片
+
+         form(method='post', action='/backstage/api/add/hospitals', id='add-hospitals')
 
             .form-group
                .prompt
@@ -208,13 +251,35 @@ block content
                i.fa.fa-plus
                | &nbsp;添加医院
 
-   script.
-      $('#add-hospitals').validate();
+            input#picture(type='hidden', name='photo', value='')
+            input#name.form-control(type='hidden', name='name', required)
 
-   style.
-      .operation {
-         width: 60px;
-      }
-      .level {
-         width: 60px;
-      }
+   script(src='/javascripts/jquery.uploadfile.min.js')
+   script.
+      $('#add-hospitals').on('submit', function() {
+         $('#name').val($('#name-alt').val());
+         return $('#name-alt').valid();
+      });
+      $('#add-hospitals').validate();
+      $("#fileuploader").uploadFile({
+         url:"/upload",
+         fileName:"picture",
+         dragDrop: false,
+         multiple: false,
+         acceptFiles: 'image/*',
+         showStatusAfterSuccess:true,
+         dragDropStr: "<span><b>拖拽文件到此处上传</b></span>",
+         abortStr:"终止",
+         cancelStr:"取消",
+         doneStr:"完成",
+         showPreview: true,
+         showDone: false,
+         showProgress: true,
+         multiDragErrorStr: "不允许拖拽多个文件",
+         uploadErrorStr:"上传失败",
+         onSuccess:function(files, data) {
+            $("div.ajax-file-upload").hide();
+            $(".ajax-file-upload-progress").hide();
+            $("input#picture").val(data.name);
+         }
+      });

@@ -9,6 +9,7 @@ exports.setup = function(db) {
         addr: {type: 'text', size: 100, required: true},
         tel: {type: 'text', size: 50, required: true},
         info: {type: 'commonText', required: true},
-        site: {type: 'text', size: 200, required: true}
+        site: {type: 'text', size: 200, required: true},
+        photo: {type: 'text', size: 50}
     }).hasOne('rating', db.models.hospital_rating);
 };

@@ -17,7 +17,14 @@ exports.list = function(req, res, next) {
             var dayLen = 24*60*60*1000;
             var curDate = new Date(new Date().Format('yyyy-MM-dd'));
             var curDay = (curDate.getDay()+6)%7;
-
+            if(data.length == 0) {
+                res.json({
+                    code: 0,
+                    message: 'success',
+                    doctors: []
+                });
+                return;
+            }
             data.forEach(function(line) {
                 if (!Array.isArray(ret[line.department_id])) {
                     ret[line.department_id] = [];

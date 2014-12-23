@@ -6,7 +6,7 @@ exports.setup = function(db) {
         name: {type: 'text', size: 20, required: true},
         info: {type: 'commonText', required: true},
         title: {type: 'text', size: 50, required: true},
-        photo: {type: 'text', size: 50, required: true},
+        photo: {type: 'text', size: 50},
         price: {type: 'number', required: true}
     }).hasOne('department', db.models.department, {reverse: 'doctors'});
 };
