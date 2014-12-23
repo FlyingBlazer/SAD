@@ -84,6 +84,8 @@ block site-content
                                                 | 预约
                                                 br
                                                 | 余#{time.slot.morning[1] - time.slot.morning[2]}
+                                        else
+                                            | 已满
                                     else
                                         | -
                         tr#afternoon
@@ -100,7 +102,8 @@ block site-content
                                                 | 预约
                                                 br
                                                 | 余#{time.slot.afternoon[1] - time.slot.afternoon[2]}
-                                        | 已满
+                                        else
+                                            | 已满
                                     else
                                         | -
                         tr#evening
@@ -117,7 +120,8 @@ block site-content
                                                 | 预约
                                                 br
                                                 | 余#{time.slot.evening[1] - time.slot.evening[2]}
-                                        | 已满
+                                        else
+                                            | 已满
                                     else
                                         | -
 
