@@ -16,9 +16,9 @@ block content
                tr
                   th id
                   th.title 名称
-                  th.tel 电话
-                  th 简介
-                  th.operation 操作
+                  th.nosort.tel 电话
+                  th.nosort 简介
+                  th.nosort.operation 操作
             tbody
                each department in list
                   tr
@@ -63,6 +63,10 @@ block content
             });
 
             var dt = $('#department-table').DataTable({
+               aoColumnDefs: [{
+                  bSortable: false,
+                  aTargets: ['nosort']
+               }],
                language: {
                   "sProcessing":   "处理中...",
                   "sLengthMenu":   "每页 _MENU_ 项结果",

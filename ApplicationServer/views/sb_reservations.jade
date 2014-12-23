@@ -13,15 +13,14 @@ block content
                th 支付情况
                th 状态
                th 价格
-               th 操作
+               th.nosort 操作
          tbody
             if (list.length)
                each item in list
-
                   tr
-                     td  #{item.department_name}
-                     td  #{item.user_name}
-                     td  #{item.user_sid}
+                     td #{item.department_name}
+                     td #{item.user_name}
+                     td #{item.user_sid}
                      td
                         span(class='time_span',data-time='#{item.time}')
                      td.pay_status
@@ -126,6 +125,18 @@ block content
          });
 
          $('#example').DataTable({
+            pageLength: 15,
+            lengthMenu: [
+               [15, 25, 50, -1],
+               [15, 25, 50, "所有"]
+            ],
+            order: [
+               [1, "desc"]
+            ],
+            aoColumnDefs: [{
+               bSortable: false,
+               aTargets: ['nosort']
+            }],
             language: {
                "sProcessing":   "处理中...",
                "sLengthMenu":   "每页 _MENU_ 项结果",
