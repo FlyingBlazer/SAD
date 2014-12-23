@@ -134,7 +134,8 @@ select {
 .doctor .image {
     display: inline-block;
     vertical-align: top;
-    max-height: 100px;
+    width: 100px;
+    height: auto;
 }
 
 .doctor .doctor-info {

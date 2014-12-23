@@ -18,8 +18,9 @@
 
 .hospital .image {
     display: inline-block;
-    max-height: 120px;
     vertical-align: top;
+    width: 120px;
+    height: auto;
 }
 
 .hospital .reservation {
