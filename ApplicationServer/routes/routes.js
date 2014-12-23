@@ -66,6 +66,7 @@ router.route('/reservation/:reservation_id/manage/pay').get(controllers.reservat
 router.route('/reservation/:reservation_id/manage/cancel').get(controllers.reservation.cancel);
 
 // Search
+router.route('/search').get(controllers.reservation.search);
 router.route('/search/:q').get(controllers.reservation.search);
 
 // pdf generation
