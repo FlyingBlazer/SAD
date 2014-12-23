@@ -84,10 +84,6 @@ a {
     vertical-align: middle;
 }
 
-#footer {
-    background: white;
-}
-
 .ft-links ul {
     margin: 0 0 20px;
     padding: 0;
@@ -136,7 +132,7 @@ a {
 }
 
 .ft-alt-notes {
-    color: #ddd;
+    color: #ccc;
 }
 
 .site-ft-title {
@@ -145,6 +141,19 @@ a {
     font-size: 16px;
     margin: 0;
     padding: 0;
+}
+
+.tile-title {
+    font-size: 20px;
+}
+
+@media screen and (max-width: 995px) {
+    footer .container .col-sm-3 {
+        display: none;
+    }
+    footer .container .col-sm-9 {
+        width: 100% !important;
+    }
 }
 
 @media screen and (max-width: 580px) {
@@ -158,13 +167,25 @@ a {
     .ft-links ul li a::after {
         display: none;
     }
+    footer .col-sm-9 {
+        text-align: center;
+    }
 }
 
-@media screen and (max-width: 995px) {
-    #footer .container .col-sm-3 {
+@media screen and (max-width: 480px) {
+    .nav-tabs li a {
+        padding: 10px 5px !important;
+    }
+}
+
+@media screen and (max-width: 380px) {
+    #all a, li.all {
         display: none;
     }
-    #footer .container .col-sm-9 {
-        width: 100% !important;
+    #all span {
+        display: block !important;
+    }
+    .province-link, .hospital-link {
+        padding: 6px 26px 6px 0;
     }
 }
