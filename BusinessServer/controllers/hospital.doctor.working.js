@@ -1,4 +1,4 @@
-var Errors = require('../lib/errors');
+var Errors = require('../lib/Errors');
 
 exports.getRaw = function(req, res, next) {
     function getApp(working,day){
