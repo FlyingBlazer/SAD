@@ -21,6 +21,16 @@ block header-content-extra
 block site-content
     div.container
         div#site-content
+            if code == "22"
+                .alert.alert-warning.alert-dismissible
+                    button.close(type="button", data-dismiss="alert")
+                        span ×
+                    strong.alert-message 您已预约了这个时间段，请不要重复预约。
+            else if code
+                .alert.alert-warning.alert-dismissible
+                    button.close(type="button", data-dismiss="alert")
+                        span ×
+                    strong.alert-message #{message}
             img.doctor-image
             div.doctor-info
                 div.hospital
@@ -41,16 +51,15 @@ block site-content
                 div.intro-title
                     h4 预约时间表
                 hr
+                if !status
+                    .alert.alert-warning
+                        strong.alert-message 您必须登陆后才能预约。
+                if status == "Rejected"
+                    .alert.alert-warning
+                        strong.alert-message 您的帐号已被系统拒绝，无法预约。
                 if status == "Validating"
-                    .alert.alert-warning.alert-dismissible
-                        button.close(type="button", data-dismiss="alert")
-                            span ×
+                    .alert.alert-warning
                         strong.alert-message 您的帐号还没有通过审核，暂时无法预约。
-                if errCode == "22"
-                    .alert.alert-warning.alert-dismissible
-                        button.close(type="button", data-dismiss="alert")
-                            span ×
-                        strong.alert-message 您已预约了这个时间段，请不要重复预约。
                 table#timetable.table
                     tr#date
                         each time in detail.time_slots
@@ -63,7 +72,7 @@ block site-content
                             td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}", data-day="#{time.date.day}")
                                 if time.slot.morning[0]
                                     if time.slot.morning[2] != time.slot.morning[1]
-                                        if status != "Validating"
+                                        if status == "Accepted"
                                             a(href="#") 预约
                                             br
                                             | 余#{time.slot.morning[1] - time.slot.morning[2]}
@@ -80,7 +89,7 @@ block site-content
                             td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}", data-day="#{time.date.day}")
                                 if time.slot.afternoon[0]
                                     if time.slot.afternoon[2] != time.slot.afternoon[1]
-                                        if status != "Validating"
+                                        if status == "Accepted"
                                             a(href="#") 预约
                                             br
                                             | 余#{time.slot.afternoon[1] - time.slot.afternoon[2]}
@@ -97,7 +106,7 @@ block site-content
                             td(data-date="#{time.date.year}-#{time.date.month}-#{time.date.date}", data-day="#{time.date.day}")
                                 if time.slot.evening[0]
                                     if time.slot.evening[2] != time.slot.evening[1]
-                                        if status != "Validating"
+                                        if status == "Accepted"
                                             a(href="#") 预约
                                             br
                                             | 余#{time.slot.evening[1] - time.slot.evening[2]}

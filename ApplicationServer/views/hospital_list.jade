@@ -18,8 +18,13 @@ block breadcrumb
 block site-content
     div.container
         div#site-content
+
+            if code
+                .alert.alert-warning
+                    strong #{message}
+
             div.hospital-list
-                div.alert.alert-info.hidden 没有找到符合条件的结果
+                div.alert.alert-warning.hidden 没有找到符合条件的结果
                 each hospital in list
                     div.hospital
                         img(src="/pictures/#{hospital.photo}").image
