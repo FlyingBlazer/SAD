@@ -54,7 +54,7 @@ block site-content
                 .col-sm-10
                     input#phone.form-control(type="text", placeholder="请输入您的手机号", name="phone", required)
                     span.glyphicon.glyphicon-warning-sign.form-control-feedback.hidden
-                    button#msg.btn.btn-link(onclick="StartCountDown()") 发送验证短信
+                    a#msg.btn.btn-link(onclick="StartCountDown()") 发送验证短信
             .form-group
                 label.col-sm-2.control-label(for="vallidationCode") 验证码
                 .col-sm-10

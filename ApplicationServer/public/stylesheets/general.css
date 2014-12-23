@@ -159,3 +159,12 @@ a {
         display: none;
     }
 }
+
+@media screen and (max-width: 995px) {
+    #footer .container .col-sm-3 {
+        display: none;
+    }
+    #footer .container .col-sm-9 {
+        width: 100% !important;
+    }
+}
