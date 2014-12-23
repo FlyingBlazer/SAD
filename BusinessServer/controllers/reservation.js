@@ -256,7 +256,11 @@ exports.confirm = function(req, res, next) {
 };
 
 function parseStatus(code) {
-    if(code.charAt(5) == '1') return '订单已取消';
+    if (code.charAt(5) == '1') return '订单已取消';
+    if (code.charAt(2) == '2') return '已完成';
+    if (code.charAt(0) == '1' && code.charAt(1) == '1') return '已在线支付';
+    if (code.charAt(0) != '1') return '尚未支付';
+
     var ret = '';
     if(code.charAt(0) == '1') {
         ret += '在线支付';

@@ -24,9 +24,9 @@ block content
                      td  #{item.user_sid}
                      td
                         span(class='time_span',data-time='#{item.time}')
-                     td
+                     td.pay_status
                         span(data-id='#{item.status}',class='pay_situation')
-                     td(class='status_td')
+                     td.status_td
                         span(data-id='#{item.status}',class='status',data-flag='#{item.reservation_id}')
                      td ￥#{item.price}
                      td
@@ -40,14 +40,12 @@ block content
          });
 
          $('.status').each(function(){
-
             var status_content;
             var button_disable;
             var passtime=false;
             var isCancel=false;
             var status=$(this).data('id').toString();
             if(status[2]=='2'){
-
                status_content='已完成';
                button_disable=true;
             }
@@ -79,30 +77,26 @@ block content
                   $(button).text("已取消");
                }
                $(button).addClass("disabled-button");
-
             }
-
-
          });
          $('.pay_situation').each(function() {
             var pay_content;
             var status=$(this).data('id').toString();
-
-            if (status[0]=='1'&& status[1]=='1'){
-               pay_content='已付款:在线支付';
-            }
-
-            else if(status[0]=='0'&& status[1]=='1'){
-               pay_content='已付款:现场支付';
-            }
-            else{
+            if (status[2] == '2') {
+               if (status[0] == '1' && status[1] == '1') {
+                  pay_content='在线支付';
+               } else {
+                  pay_content='现场支付';
+               }
+            } else if (status[0] == '1' && status[1] == '1') {
+               pay_content='在线支付';
+            } else if (status[0] == '0' && status[1] == '1') {
+               pay_content='现场支付';
+            } else {
                pay_content="未付款";
             }
             $(this).html(pay_content);
          });
-
-
-
 
          $('.confirm').click(function() {
             if(!$(this).hasClass("disabled-button")){
@@ -111,16 +105,16 @@ block content
                $.ajax({
                   url: 'http://#{businessServer}/hospital/reservation/' + reservationId + '/confirm',
                   type: 'POST'
-
                }).done(function(data) {
                   if (data.code == 0) {
                      toastr.success('确认到场', '成功');
-                     var status_td=button.parent().siblings(".status_td").children('.status');
-
+                     var status_td = button.parent().siblings(".status_td").children('.status');
+                     var pay_status = button.parent().siblings(".pay_status").children('.pay_situation');
                      status_td.text("已完成");
+                     if (pay_status.text() == '未付款')
+                        pay_status.text('现场支付');
                      button.text("已确认到场");
                      button.addClass("disabled-button");
-
                   } else {
                      toastr.error('系统错误。错误代码：' + data.code, '失败');
                   }

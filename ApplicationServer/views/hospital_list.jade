@@ -23,6 +23,9 @@ block site-content
                 .alert.alert-warning
                     strong #{message}
 
+            if search
+                h4(style='margin-bottom:40px;margin-top:30px;') #{searchText} 的搜索结果
+
             div.hospital-list
                 div.alert.alert-warning.hidden 没有找到符合条件的结果
                 each hospital in list
