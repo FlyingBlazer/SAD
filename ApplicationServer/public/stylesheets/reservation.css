@@ -16,7 +16,6 @@ ol, ul {
 
 @media all and (min-width: 980px){
     .main-block {
-        width: 890px;
         margin: 0 auto;
         position: relative;
     }

@@ -12,27 +12,28 @@ block site-content
         input(type='hidden', name='resvTime', value='#{detail.time}')
         input(type='hidden', name='day', value='#{detail.day}')
         .info.row
-            .title 确认预约订单信息
-            .col-md-5
-                p.ttitle.text-center 医生信息
-                .doc-info.rcontent
-                    dl
-                        dt
-                            a(href="/concierge/reserve/#{detail.hospitalId}/#{detail.departmentId}/#{detail.doctorId}",target="_blank") #{detail.doctor}
-                            span  #{detail.doctorTitle}
-                        dd
-                            p: a(href="/concierge/reserve/#{detail.hospitalId}",target="_blank") #{detail.hospital}
-                            p: a #{detail.department}
-            .col-md-2
-                p.ttitle.text-center 门诊类型
-                p.rcontent.text-center 专家门诊
-            .col-md-3
-                p.ttitle.text-center 就诊时间
-                - switch (detail.time) {case 'morning': period='上午';break; case 'afternoon': period='下午';break; case 'evening': period='晚上';break;}
-                p.rcontent.text-center #{detail.date} #{period}
-            .col-md-2
-                p.ttitle.text-center 挂号费
-                p.money.text-center.rcontent ￥#{detail.price}
+            .container
+                .title 确认预约订单信息
+                .col-md-5
+                    p.ttitle.text-center 医生信息
+                    .doc-info.rcontent
+                        dl
+                            dt
+                                a(href="/concierge/reserve/#{detail.hospitalId}/#{detail.departmentId}/#{detail.doctorId}",target="_blank") #{detail.doctor}
+                                span  #{detail.doctorTitle}
+                            dd
+                                p: a(href="/concierge/reserve/#{detail.hospitalId}",target="_blank") #{detail.hospital}
+                                p: a #{detail.department}
+                .col-md-2
+                    p.ttitle.text-center 门诊类型
+                    p.rcontent.text-center 专家门诊
+                .col-md-3
+                    p.ttitle.text-center 就诊时间
+                    - switch (detail.time) {case 'morning': period='上午';break; case 'afternoon': period='下午';break; case 'evening': period='晚上';break;}
+                    p.rcontent.text-center #{detail.date} #{period}
+                .col-md-2
+                    p.ttitle.text-center 挂号费
+                    p.money.text-center.rcontent ￥#{detail.price}
 
         p.tips 温馨提醒：SRF免费提供预约挂号服务，实际挂号费由医院收取，请放心使用。
 
