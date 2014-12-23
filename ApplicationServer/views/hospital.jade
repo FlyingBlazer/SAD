@@ -203,9 +203,7 @@ block site-content
                             if (selectedDate != "all") {
                                 var working = $(this).data("working" + selectedDate);
                                 if (selectedTime == "all") {
-                                    if (working != 0) {
-                                        $(this).removeClass("hidden");
-                                    } else {
+                                    if (working == 0) {
                                         $(this).addClass("hidden");
                                     }
                                 }
@@ -215,7 +213,6 @@ block site-content
                                         case 3:
                                         case 5:
                                         case 7:
-                                            $(this).removeClass("hidden");
                                             break;
                                         default:
                                             $(this).addClass("hidden");
@@ -228,7 +225,6 @@ block site-content
                                         case 3:
                                         case 6:
                                         case 7:
-                                            $(this).removeClass("hidden");
                                             break;
                                         default:
                                             $(this).addClass("hidden");
@@ -241,7 +237,6 @@ block site-content
                                         case 5:
                                         case 6:
                                         case 7:
-                                            $(this).removeClass("hidden");
                                             break;
                                         default:
                                             $(this).addClass("hidden");
