@@ -102,7 +102,7 @@ block site-content
                     p
                         span 证件号：#{userSocialId}
 
-            div
+            div.operation
                 if resvDetail.status[1] == '1' && resvDetail.status[5] == '0'
                     a#print-rg.btn.btn-success(href='', target='_blank') 打印挂号单
                 if resvDetail.status[1] == '0' && resvDetail.status[5] == '0'
