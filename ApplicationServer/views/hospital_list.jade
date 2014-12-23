@@ -30,19 +30,24 @@ block site-content
                 div.alert.alert-warning.hidden 没有找到符合条件的结果
                 each hospital in list
                     div.hospital
-                        img(src="/pictures/#{hospital.photo}").image
-                        div.hospital-info
-                            div.name
-                                a(href="/concierge/reserve/#{hospital.id}") #{hospital.name}
-                            div.rating #{hospital.level}
-                            div.tel
-                                i.fa.fa-phone.fa-fw
-                                | #{hospital.telephone}
-                            div.addr
-                                i.fa.fa-map-marker.fa-fw
-                                | #{hospital.address}
-                        div.reservation
-                            a.btn.btn-primary(href="/concierge/reserve/#{hospital.id}") 挂号
+                        div.row
+                            img(src="/pictures/#{hospital.photo}").image.col-lg-2.col-md-2.col-sm-3.col-xs-3
+                            div.hospital-info.col-lg-8.col-md-8.col-sm-6.col-xs-6
+                                div.name
+                                    a(href="/concierge/reserve/#{hospital.id}") #{hospital.name}
+                                div.rating
+                                    i.fa.fa-hospital-o.fa-fw
+                                    | #{hospital.level}
+                                div.tel
+                                    i.fa.fa-phone.fa-fw
+                                    | #{hospital.telephone}
+                                div.addr
+                                    i.fa.fa-map-marker.fa-fw
+                                    | #{hospital.address}
+                            div.reservation.col-lg-1.col-md-1.col-sm-3.col-xs-3
+                                div.vertical-middle-table
+                                    div.vertical-middle-cell
+                                        a.btn.btn-primary(href="/concierge/reserve/#{hospital.id}") 挂号
 
     script.
 

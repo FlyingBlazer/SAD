@@ -123,7 +123,7 @@ select {
 .doctor {
     border: 2px solid #dddddd;
     padding: 10px;
-    height: 124px;
+    min-height: 124px;
 }
 
 .doctor:hover {
@@ -131,156 +131,67 @@ select {
     border-color: dodgerblue;
 }
 
-.doctor:last-child {
-    border-bottom-color: #dddddd;
-}
-
-.doctor:last-child:hover {
-    border-bottom-color: dodgerblue;
-}
-
-.doctor>.image {
+.doctor .image {
     display: inline-block;
-    width: 100px;
-    height: 100px;
+    vertical-align: top;
+    max-height: 100px;
+}
+
+.doctor .doctor-info {
+    display: inline-block;
     vertical-align: top;
 }
 
-.doctor>.doctor-info {
-    display: inline-block;
-    width: 100px;
-    vertical-align: top;
-    margin-left: 20px;
-}
-
-.doctor>.doctor-intro {
+.doctor .doctor-intro {
     display: inline-block;
     vertical-align: top;
-    width: 550px;
-    margin-left: 20px;
 }
 
-.doctor>.reservation {
+.doctor .reservation {
     display: inline-block;
-    margin-left: 40px;
-    margin-top: 34px;
 }
 
-/*@media all and (max-width: 980px){*/
-    /*.doctor>.doctor-info {*/
-        /*display: inline-block;*/
-        /*width: 120px;*/
-        /*margin-left: 20px;*/
-    /*}*/
+@media (min-width: 1200px) {
+    .doctor .reservation {
+        height: 100px;
+    }
+}
 
-    /*.doctor>.doctor-intro {*/
-        /*display: inline-block;*/
-        /*width: 400px;*/
-        /*margin-left: 20px;*/
-    /*}*/
-/*}*/
+@media (min-width: 992px) and (max-width: 1200px) {
+    .doctor .reservation {
+        height: 150px;
+    }
+}
 
-/*@media all and (max-width: 850px){*/
-    /*.doctor>.doctor-info {*/
-        /*display: inline-block;*/
-        /*width: 150px;*/
-        /*margin-left: 20px;*/
-    /*}*/
+@media (min-width: 768px) and (max-width: 992px) {
+    .doctor .doctor-intro {
+        display: none;
+    }
 
-    /*.doctor>.doctor-intro {*/
-        /*display: inline-block;*/
-        /*width: 300px;*/
-        /*margin-left: 20px;*/
-    /*}*/
-/*}*/
+    .doctor .reservation {
+        height: 100px;
+    }
+}
 
-/*@media all and (max-width: 750px){*/
-    /*.doctor>.doctor-info {*/
-        /*display: inline-block;*/
-        /*width: 150px;*/
-        /*margin-left: 20px;*/
-    /*}*/
+@media (max-width: 768px) {
+    .doctor .doctor-intro {
+        display: none;
+    }
 
-    /*.doctor>.doctor-intro {*/
-        /*display: inline-block;*/
-        /*width: 150px;*/
-        /*margin-left: 20px;*/
-    /*}*/
-/*}*/
+    .doctor .reservation {
+        height: 100px;
+    }
+}
 
-/*@media all and (max-width: 608px){*/
-    /*.doctor>.doctor-info {*/
-        /*display: inline-block;*/
-        /*width: 150px;*/
-        /*margin-left: 20px;*/
-    /*}*/
+.vertical-middle-table {
+    display: table;
+    height: 100%;
+}
 
-    /*.doctor>.doctor-intro {*/
-        /*display: inline-block;*/
-        /*width: 200px;*/
-        /*margin-left: 20px;*/
-    /*}*/
-
-    /*.doctor>.reservation {*/
-        /*width: 100%;*/
-        /*margin-top: 10px;*/
-        /*text-align: center;*/
-        /*vertical-align: middle;*/
-    /*}*/
-/*}*/
-
-/*@media all and (max-width: 543px){*/
-    /*.doctor>.image {*/
-        /*display: none;*/
-    /*}*/
-
-    /*.doctor>.doctor-info {*/
-        /*display: inline-block;*/
-        /*width: 100%;*/
-        /*margin-left: 20px;*/
-        /*margin-top: 10px;*/
-    /*}*/
-
-    /*.doctor>.doctor-intro {*/
-        /*display: inline-block;*/
-        /*width: 100%;*/
-        /*margin-left: 20px;*/
-        /*margin-top: 10px;*/
-    /*}*/
-
-    /*.doctor>.reservation {*/
-        /*width: 100%;*/
-        /*margin-top: 10px;*/
-        /*text-align: center;*/
-        /*vertical-align: 50%;*/
-    /*}*/
-/*}*/
-
-.gbn {
-    padding: 0 16px;
+.vertical-middle-cell {
+    display: table-cell;
+    vertical-align: middle;
     text-align: center;
-    display: inline-block;
-    height: 32px;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 32px;
-    border-radius: 3px;
-    transition: all .3s ease-out 0s
-}
-
-.gbt-blue {
-    background: #dff2ff;
-    color: #377bee;
-    transition: none
-}
-
-.gbn:hover {
-    text-decoration: none
-}
-
-.gbt-blue:hover {
-    background: #377bee;
-    color: #fff
 }
 
 nav.paging {

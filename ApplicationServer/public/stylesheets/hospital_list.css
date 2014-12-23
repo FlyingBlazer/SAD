@@ -16,85 +16,15 @@
     border-bottom-color: dodgerblue;
 }
 
-.hospital>.image {
+.hospital .image {
     display: inline-block;
-    width: 100px;
-    height: 100px;
+    max-height: 120px;
     vertical-align: top;
 }
 
-.hospital>.reservation {
+.hospital .reservation {
     display: inline-block;
-    vertical-align: 50%;
-}
-
-@media all and (min-width: 980px){
-
-
-    .hospital>.hospital-info {
-        display: inline-block;
-        width: 700px;
-        margin-left: 20px;
-    }
-}
-
-@media all and (max-width: 980px){
-    .hospital>.hospital-info {
-        display: inline-block;
-        width: 600px;
-        margin-left: 20px;
-    }
-}
-
-@media all and (max-width: 850px){
-    .hospital>.hospital-info {
-        display: inline-block;
-        width: 500px;
-        margin-left: 20px;
-    }
-}
-
-@media all and (max-width: 750px){
-    .hospital>.hospital-info {
-        display: inline-block;
-        width: 400px;
-        margin-left: 20px;
-    }
-}
-
-@media all and (max-width: 608px){
-    .hospital>.hospital-info {
-        display: inline-block;
-        width: 400px;
-        margin-left: 20px;
-    }
-
-    .hospital>.reservation {
-        width: 100%;
-        margin-top: 10px;
-        text-align: center;
-        vertical-align: 50%;
-    }
-}
-
-@media all and (max-width: 543px){
-    .hospital>.image {
-        display: none;
-    }
-
-    .hospital>.hospital-info {
-        display: inline-block;
-        width: 100%;
-        margin-left: 20px;
-        margin-top: 10px;
-    }
-
-    .hospital>.reservation {
-        width: 100%;
-        margin-top: 10px;
-        text-align: center;
-        vertical-align: 50%;
-    }
+    height: 120px;
 }
 
 .hospital-info>.name {
@@ -103,49 +33,24 @@
 }
 
 .hospital-info>.rating {
-    display: inline-block;
-    font-size: 12px;
-    margin-left: 10px;
     margin-top: 5px;
 }
 
 .hospital-info>.tel {
     margin-top: 5px;
-    font-size: 12px;
-    color: grey;
 }
 
 .hospital-info>.addr {
     margin-top: 5px;
-    font-size: 12px;
-    color: grey;
 }
 
-.gbt-blue {
-    background: #dff2ff;
-    color: #377bee;
-    transition: none
+.vertical-middle-table {
+    display: table;
+    height: 100%;
 }
 
-.gbt-blue:hover {
-    background: #377bee;
-    color: #fff
-}
-
-.gbn {
-    padding: 0 16px;
+.vertical-middle-cell {
+    display: table-cell;
+    vertical-align: middle;
     text-align: center;
-    display: inline-block;
-    height: 32px;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 32px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    transition: all .3s ease-out 0s
-}
-
-.gbn:hover {
-    text-decoration: none
 }

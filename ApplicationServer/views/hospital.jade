@@ -91,7 +91,7 @@ block site-content
                     option(value="evening") 晚间
                 button#apply-selection.btn.btn-primary.btn-xs 按时间筛选
 
-                table.table#select-department
+                table.table.table-responsive#select-department
                     td.table-header(rowspan=100) 科室
                     - var col = 5;
                     each department in departments
@@ -106,7 +106,7 @@ block site-content
                         td.table-content
                         - col--;
 
-                table.table#select-title
+                table.table.table-responsive#select-title
                     tr
                         td.table-header 医生职称
                         td.table-content
@@ -126,15 +126,18 @@ block site-content
                             div.doctor(data-department="#{doctor.department}", data-title="#{doctor.title}", data-working1="#{doctor.working[0]}",
                             data-working2="#{doctor.working[1]}", data-working3="#{doctor.working[2]}", data-working4="#{doctor.working[3]}",
                             data-working5="#{doctor.working[4]}", data-working6="#{doctor.working[5]}", data-working7="#{doctor.working[6]}")
-                                img(src="/pictures/#{doctor.photo_url}").image
-                                div.doctor-info
-                                    div.name
-                                        a(href="/concierge/reserve/#{detail.id}/#{department_id}/#{doctor.id}") #{doctor.name}
-                                    div.title #{doctor.title}
-                                    div.department #{doctor.department}
-                                div.doctor-intro #{doctor.description}
-                                div.reservation
-                                    a.btn.btn-primary(href="/concierge/reserve/#{detail.id}/#{department_id}/#{doctor.id}") 挂号
+                                div.row
+                                    img(src="/pictures/#{doctor.photo_url}").image.col-lg-2.col-md-2.col-sm-3.col-xs-3
+                                    div.doctor-info.col-lg-1.col-md-2.col-sm-6.col-xs-6
+                                        div.name
+                                            a(href="/concierge/reserve/#{detail.id}/#{department_id}/#{doctor.id}") #{doctor.name}
+                                        div.title #{doctor.title}
+                                        div.department #{doctor.department}
+                                    div.doctor-intro.col-lg-7.col-md-6 #{doctor.description}
+                                    div.reservation.col-lg-1.col-md-1.col-sm-3.col-xs-3
+                                        div.vertical-middle-table
+                                            div.vertical-middle-cell
+                                                a.btn.btn-primary(href="/concierge/reserve/#{detail.id}/#{department_id}/#{doctor.id}") 挂号
 
                 div.empty.hidden
                     div.alert.alert-info 没有找到符合条件的结果，请尝试减少筛选条件
