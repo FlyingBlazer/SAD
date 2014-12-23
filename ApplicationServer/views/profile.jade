@@ -16,7 +16,9 @@ block append scripts
         }
         function validate() {
             if ($("#pw2").val() != $("#pw1").val()) {
-                alert("两次输入的密码不一样");
+                $('#errordiv').show();
+                $('#errorMessageSpan').addClass("errorSpan");
+                $('#errorMessageSpan').html("<font color='black'>两次密码不一致</font>");
                 validated=false;
                 return false;
             }
@@ -29,12 +31,13 @@ block append scripts
 
             $('#phone').val("#{phone}");
             $('#email').val("#{email}");
-
             $("#submit").click(function () {
                 if (validated) {
-                    post_content.phone = $("#phone").val();
-                    post_content.email = $("#email").val();
-                    if (!$("pre_pw")) {
+                    if ($("#phone").val())
+                       post_content.phone = $("#phone").val();
+                    if ($("#email").val())
+                       post_content.email = $("#email").val();
+                    if (!$("pre_pw").val()) {
                         post_content.pre_pw = hex_md5($("#pre_pw").val());
                         post_content.new_pw = hex_md5($("#pw2").val());
                     }
@@ -44,6 +47,19 @@ block append scripts
                             }
                     );
                 }
+            });
+
+            if ("#{errorMessage}") {
+                $('#errordiv').show();
+                $('#errorMessageSpan').addClass("errorSpan");
+                $('#errorMessageSpan').html("<font color='black'>#{errorMessage}</font>");
+            }
+            else {
+                $('#errordiv').hide();
+            }
+
+            $("#account_info").click(function (){
+                $('#errordiv').hide();
             });
         });
 
@@ -55,9 +71,11 @@ block right_block
             .meta: h1 个人中心
         ul.nav.nav-tabs(role='tablist')
             li.active(role='presentation')
-                a(href='#account_info', role='tab', data-toggle='tab') 账号信息
+                a(href='#account_info', role='tab', data-toggle='tab',id='account_info') 账号信息
             li(role='presentation')
                 a(href='#change_info', role='tab', data-toggle='tab') 修改信息
+        div#errordiv.errordiv
+            span(id='errorMessageSpan')
         div.tab-content
             div#account_info.tab-pane.fade.in.active
                 .second_block

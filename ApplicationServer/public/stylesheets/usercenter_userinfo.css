@@ -31,3 +31,14 @@
     height: 0;
     overflow: hidden;
 }
+#errordiv{
+    width:80%;
+    height:20px;
+    text-align: center;
+    background-color: #AFF2F7;
+
+}
+.errorSpan{
+    font-family:"华文细黑",Georgia,Serif;
+    font-style:oblique;
+}
