@@ -41,6 +41,29 @@
     color: #888888;
 }
 
+@media (max-width: 768px) {
+    .hospital-name {
+        font-size: 20px;
+    }
+
+    .hospital-rating {
+        display: block;
+        margin-left: 0;
+        width: 67px;
+        height: 29px;
+        padding: 5px 5px;
+        margin-top: 46px;
+        margin-bottom: 5px;
+        line-height: 14px;
+    }
+
+    .hospital-info {
+        display: block;
+        margin-left: 0;
+        margin-top: 10px;
+    }
+}
+
 .nav-tabs {
     margin-top: 20px;
     border: none;
@@ -185,6 +208,13 @@ select {
 }
 
 @media (max-width: 768px) {
+    .doctor .image {
+        display: inline-block;
+        vertical-align: top;
+        width: auto;
+        max-height: 80px;
+    }
+
     .doctor .doctor-intro {
         display: none;
     }

@@ -31,8 +31,8 @@ block site-content
                 each hospital in list
                     div.hospital
                         div.row
-                            img(src="/pictures/#{hospital.photo}").image.col-lg-2.col-md-2.col-sm-3.col-xs-3
-                            div.hospital-info.col-lg-9.col-md-8.col-sm-7.col-xs-6
+                            img(src="/pictures/#{hospital.photo}").image.col-lg-2.col-md-2.col-sm-3
+                            div.hospital-info.col-lg-9.col-md-8.col-sm-7.col-xs-8
                                 div.name
                                     a(href="/concierge/reserve/#{hospital.id}") #{hospital.name}
                                 div.rating

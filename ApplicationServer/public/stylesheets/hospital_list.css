@@ -19,9 +19,16 @@
 .hospital .image {
     display: inline-block;
     vertical-align: top;
-    width: 120px;
     height: 120px;
+    width: 120px;
     box-sizing: content-box;
+}
+
+
+@media (max-width: 768px) {
+    .hospital .image {
+        display: none;
+    }
 }
 
 .hospital .reservation {
