@@ -44,7 +44,8 @@ exports.updateInfo = function(req, res, next){
                 return next(new Errors.UpdatePasswordFail("Incorrect password"));
             }
             else if(pass_curr){
-                md5.update("sad"+pass_prev);
+                md5 = crypto.createHash('md5');
+                md5.update("sad"+pass_curr);
                 user.password=md5.digest("hex");
             }
             else{
