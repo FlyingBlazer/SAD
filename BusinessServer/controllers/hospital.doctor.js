@@ -269,7 +269,7 @@ exports.detail = function(req, res, next) {
                             if(working.frequency.charAt(j) == '1'&&hasTemp[(6-day+j)%7][key] == 0) {
                                 slot[(6-day+j)%7].slot[key][0] = true;
                                 var app;
-                                slot[(6-day+j)%7].slot[key][1] = getApp(working, (6-day+j)%7+1);
+                                slot[(6-day+j)%7].slot[key][1] = getApp(working, j);
                             }
                         }
                         break;
