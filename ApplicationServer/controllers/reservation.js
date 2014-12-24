@@ -408,7 +408,7 @@ exports.search = function(request, response) {
 
     var username = userInfo.username ? userInfo.username : '';
     var query = request.params.q;
-    var url = '/search?q=' + query;
+    var url = '/search?q=' + encodeURIComponent(query);
 
     fireRequest('GET', url, null, function(res) {
         if (res == null) {
