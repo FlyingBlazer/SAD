@@ -24,7 +24,10 @@ block site-content
                     strong #{message}
 
             if search
-                h4(style='margin-bottom:40px;margin-top:30px;') #{searchText} 的搜索结果
+                if searchText
+                    h4(style='margin-bottom:40px;margin-top:30px;') #{searchText} 的搜索结果
+                else
+                    h4(style='margin-bottom:40px;margin-top:30px;') 没有搜索词
 
             div.hospital-list
                 div.alert.alert-warning.hidden 没有找到符合条件的结果

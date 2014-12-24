@@ -245,6 +245,8 @@ html
         script.
             $(function () {
                 $('#search-button').click(function () {
-                    window.location.href = '/search/' + $('#search-field').val();
+                    var searchText = $('#search-field').val();
+                    if (!empty(searchText))
+                        window.location.href = '/search/' + $('#search-field').val();
                 });
             });
