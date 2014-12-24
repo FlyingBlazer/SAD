@@ -55,11 +55,14 @@ block site-content
                     .alert.alert-warning
                         strong.alert-message 您必须登陆后才能预约。
                 if status == "Rejected"
-                    .alert.alert-warning
+                    .alert.alert-danger
                         strong.alert-message 您的帐号已被系统拒绝，无法预约。
                 if status == "Validating"
                     .alert.alert-warning
                         strong.alert-message 您的帐号还没有通过审核，暂时无法预约。
+                if status == "Out of credit"
+                    .alert.alert-danger
+                        strong.alert-message 由于爽约次数太多，您的帐号已被系统自动禁用，目前无法预约。
 
                 .table-responsive
                     table#timetable.table

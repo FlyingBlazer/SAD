@@ -1,18 +1,18 @@
 extends ./sb_layout
 block content
 
-   h2 预约单管理
+   h2 预约管理
    div
-      table#example.table.table-bordered.table-striped.table-hover(cellspacing='0', width='80%')
+      table#example.table.table-bordered.table-striped.table-hover
          thead
             tr
                th 科室
                th 患者姓名
                th 身份证号
-               th 时间
+               th 预约日期
                th 支付情况
                th 状态
-               th 价格
+               th 挂号价格
                th.nosort 操作
          tbody
             if (list.length)
@@ -131,7 +131,7 @@ block content
                [15, 25, 50, "所有"]
             ],
             order: [
-               [1, "desc"]
+               [3, "desc"]
             ],
             aoColumnDefs: [{
                bSortable: false,

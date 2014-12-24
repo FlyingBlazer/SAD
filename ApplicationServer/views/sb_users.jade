@@ -51,7 +51,7 @@ block content
                type: 'POST'
             }).done(function(data) {
                if (data.code == 0) {
-                  toastr.success('拒绝', '该用户');
+                  toastr.success('该用户已经被拒绝。', '成功');
                } else {
                   toastr.error('系统错误。错误代码：' + data.code, '失败');
                }
@@ -97,7 +97,7 @@ block content
          table#example.table.table-striped.table-bordered.table-hover(cellspacing='0', width='60%')
             thead
                tr
-
+                  th 登录名
                   th 真实姓名
                   th 身份证
                   th 电话
@@ -108,8 +108,8 @@ block content
             tbody
                if (validatingList.length)
                   each item in validatingList
-
                      tr
+                        td #{item.username}
                         td #{item.name}
                         td #{item.id}
                         td #{item.phone}
@@ -125,7 +125,7 @@ block content
          table#credit_table.table.table-striped.table-bordered.table-hover(cellspacing='0', width='60%')
             thead
                tr
-
+                  th 登录名
                   th 真实姓名
                   th 身份证
                   th 电话
@@ -137,6 +137,7 @@ block content
                 if (unqualifiedList.length)
                     each item in unqualifiedList
                        tr
+                          td #{item.username}
                           td #{item.name}
                           td #{item.id}
                           td #{item.phone}

@@ -86,9 +86,11 @@ block site-content
                         if status == 'Accepted'
                             .col-sm-10 正常
                         else if status == 'Rejected'
-                            .col-sm-10 未通过审核
+                            .col-sm-10.text-warning 未通过审核
+                        else if status == 'Out of credit'
+                            .col-sm-10.text-danger 信用额度已耗尽
                         else if status == 'Validating'
-                            .col-sm-10 系统审核中
+                            .col-sm-10.text-info 系统审核中
                         else
                             .col-sm-10 #{status}
                         .clearfix
