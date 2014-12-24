@@ -29,9 +29,9 @@ html
                     #navbar-collapse.collapse.navbar-collapse
                         if username
                             ul.nav.navbar-nav.navbar-right
-                                li: a(href="#") #{username}
+                                li: a(href="/account/manage/info") #{username}
                                 li: a(href="/account/manage/info") 个人中心
-                                li: a(href="/account/manage/reservation") 预约单
+                                li: a(href="/account/manage/reservation") 预约列表
                                 li: a(href="/account/logout") 退出
                         else
                             ul.nav.navbar-nav.navbar-right
